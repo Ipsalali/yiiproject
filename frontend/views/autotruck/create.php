@@ -8,7 +8,10 @@ use common\models\SupplierCountry;
 use frontend\models\ExpensesManager;
 use common\models\User;
 
+$roleexpenses = 'autotruck/addexpenses';
 $expensesManager = new ExpensesManager;
+$AutotruckExpenses =ExpensesManager::getAutotruckExpenses($autotruck->id);
+
 ?>
 
 <div class="container">
@@ -75,29 +78,57 @@ $expensesManager = new ExpensesManager;
 			</div>
 		</div>
 	</div>
-
-	<div class="apps_data">
-		<h3>Информация о наименованиях</h3>
-		<div class="row">
-			<div class="col-xs-12 autotruck_btns">
-				<button class="btn btn-primary" id='add_app_item'>Добавить наименование</button>
-				<button class="btn btn-primary" id="add_service_item">Добавить услугу</button>
+	<?php if(Yii::$app->user->can($roleexpenses)){?>
+		<ul class="nav nav-tabs">
+		  	<li class="active"><a data-toggle="tab" href="#apps">Наименования</a></li>
+		  	<li><a data-toggle="tab" href="#expenses">Расходы</a></li>
+		</ul>
+	<?php } ?>
+	<div class="tab-content">
+		<div id="apps" class="tab-pane fade in active">
+			<div class="apps_data">
+				<h3>Информация о наименованиях</h3>
+				<div class="row">
+					<div class="col-xs-12 autotruck_btns">
+						<button class="btn btn-primary" id='add_app_item'>Добавить наименование</button>
+						<button class="btn btn-primary" id="add_service_item">Добавить услугу</button>
+					</div>
+				</div>
+				<table id="app_table" class="table table-striped table-hover table-bordered table-condensed">
+					<tr>
+						<th>№</th>
+						<th class="app_client">Клиент</th>
+						<th class="app_info">Информация</th>
+						<th class="app_weigth">Вес (кг)</th>
+						<th class="app_rate">Ставка ($)</th>
+						<th>Сумма ($)</th>
+						<th>Сумма (руб)</th>
+						<!-- <th>Статус</th> -->
+						<th>Комментарий</th>
+						<th>Удаление</th>
+					</tr>
+				</table>
 			</div>
 		</div>
-		<table id="app_table" class="table table-striped table-hover table-bordered table-condensed">
-			<tr>
-				<th>№</th>
-				<th class="app_client">Клиент</th>
-				<th class="app_info">Информация</th>
-				<th class="app_weigth">Вес (кг)</th>
-				<th class="app_rate">Ставка ($)</th>
-				<th>Сумма ($)</th>
-				<th>Сумма (руб)</th>
-				<!-- <th>Статус</th> -->
-				<th>Комментарий</th>
-				<th>Удаление</th>
-			</tr>
-		</table>
+		<div id="expenses" class="tab-pane fade in">
+			<div class="exp_data">
+				<h3>Информация о расходах</h3>
+				<div class="row">
+					<div class="col-xs-12 autotruck_btns">
+						<button class="btn btn-primary" id='add_expenses_item'>Добавить расход</button>
+					</div>
+				</div>
+				<table id="exp_table" class="table table-striped table-hover table-bordered table-condensed">
+					<tr>
+						<th>№</th>
+						<th class="exp_manager_id">Менеджер</th>
+						<th>Сумма ($)</th>
+						<th>Комментарий</th>
+						<th>Удаление</th>
+					</tr>
+				</table>
+			</div>
+		</div>
 	</div>
 
 <?php ActiveForm::end(); ?>
@@ -140,10 +171,33 @@ $expensesManager = new ExpensesManager;
 
 	}
 
+	var geberate_exp_row = function(n){
+		var ntr = '<tr class="exp_row"><td>-</td>';
+		var	ntd_client = '<td><select name="ExpensesManager['+n+'][manager_id]" class=\'manager_id form-control\'>';
+			ntd_client +='<option value="">Выберите менеджера</option>';
+			<?php foreach (User::getExpensesManagers() as $key => $cl) { ?>
+
+				ntd_client += '<option value="<?=$cl->id?>"><?=$cl->name?></option>';
+
+			<?php } ?>
+			ntd_client +='</select></td>';
+
+		var ntd_info = "<td><input type='text' name='ExpensesManager["+n+"][cost]' class=\'cost form-control\'></td>";
+		var ntd_comment = "<td><input type='text' name='ExpensesManager["+n+"][comment]' class=\'exp_comment form-control\'></td>";
+
+		ntr += ntd_client+ntd_info+ntd_comment
+		ntr+="<td><a class='btn btn-danger remove_exp'>X</a></td>";
+
+		ntr +='</tr>';
+
+		return ntr;
+	}
+
 
 	$(function(){
 
 		var row_count = 0;
+		var exp_row_c = 0;
 
 		$("#add_app_item").click(function(event){
 			event.preventDefault();
@@ -156,9 +210,21 @@ $expensesManager = new ExpensesManager;
 			row_count +=1;
 			$("#app_table").append(generate_app_row(row_count,1));
 		});
+
+		$("#add_expenses_item").click(function(event){
+			event.preventDefault();
+			exp_row_c +=1;
+			$("#exp_table").append(geberate_exp_row(exp_row_c));
+		});
+
+		
 		
 		$("#app_table").on("click",'.remove_app',function(){
 			$(this).parents('.app_row').remove();
+		});
+
+		$("#exp_table").on("click",'.remove_exp',function(){
+			$(this).parents('.exp_row').remove();
 		});
 
 

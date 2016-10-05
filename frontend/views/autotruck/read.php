@@ -24,9 +24,7 @@ $Autotrucks = Autotruck::find()->orderBy('id')->all();
 	<div class="row">
 		<div class="col-xs-12">
 			<h1>Заявка: <?=$autotruck->name?></h1>
-			 <div class="new_app">
-				<?php echo Html::a('Добавить заявку', array('autotruck/create'), array('class' => 'btn btn-primary')); ?>
-			 </div>
+			 
 		</div>
 	</div>
 	<?php if(Yii::$app->session->hasFlash('ExpensesManagerAddSuccess')): ?>
@@ -125,74 +123,88 @@ $Autotrucks = Autotruck::find()->orderBy('id')->all();
 									<?php echo Html::submitButton('Записать расход',['id'=>'expensesManager_submit','class' => 'btn btn-primary', 'name' => 'expensesManager-create-button']); ?>
 								</div>
 								<?php ActiveForm::end(); ?>
-								<div class="row">
-									<div class="col-xs-5 col-xs-offset-6">
-										<?php 
-										if(count($AutotruckExpenses)){
-											$dataProvider = new ActiveDataProvider([
-           										'query' => ExpensesManager::find()->where(['autotruck_id'=>$autotruck->id]),
-            								]);
-            								echo GridView::widget([
-            										'dataProvider' => $dataProvider,
-            										'summary'=>"Расходы",
-            										'columns'=>[
-            											['class'=>'yii\grid\SerialColumn'],
-            											[
-            												'attribute'=>'manager_id',
-            												'value'=>'manager.name'
-            											],
-            											'cost',
-            											'comment'
-            										]
-            									]);
-										} ?>
-									</div>
-								</div>
+								
 								<?php } //если есть права на расход ?>
 							</div>
 							<div class="app_update_btn">
-								<?php echo Html::a('Редактировать', array('autotruck/update','id'=>$autotruck->id), array('class' => 'btn btn-default')); ?>
+											<?php echo Html::a('Редактировать', array('autotruck/update','id'=>$autotruck->id), array('class' => 'btn btn-default')); ?>
 							</div>
+							<ul class="nav nav-tabs">
+  								<li class="active"><a data-toggle="tab" href="#apps">Наименования</a></li>
+  								<li><a data-toggle="tab" href="#expenses">Расходы</a></li>
+							</ul>
+							<div class="tab-content">
+								<div id="apps" class="tab-pane fade in active">
+										
 
-							<div class="table autotruck_apps">
-								<table class="table table-striped table-hover table-bordered">
-								<tbody>
-									<tr>
-										<th>№</th>
-										<th class="app_client">Клиент</th>
-										<th class="app_info">Информация</th>
-										<th>Вес (кг)</th>
-										<th>Ставка ($)</th>
-										<th>Сумма ($)</th>
-										<th>Сумма (руб)</th>
-										<th>Комментарий</th>
-									</tr>
-							<?php $cweight=0; $total = 0; $total_us = 0;
-							foreach ($autotruck->getApps() as $key => $app) { ?>
-									<tr>
-										<td><?=$key+1?></td>
-										<td><?=$app->buyer->name?></td>
-										<td><?=$app->info?></td>
-										<td><? echo $app->type?'':$app->weight?></td>
-										<td><?=$app->rate?></td>
-										<td><? echo $app->type ? $app->rate*$autotruck->course :$app->weight*$app->rate*$autotruck->course?> руб</td>
-										<td><? echo $app->type ? $app->rate:$app->weight*$app->rate?> $</td>
-										<td><?=$app->comment?></td>
-									</tr>
-							<?php 
-								$cweight += $app->type ? 0 : $app->weight; $total+= $app->type?$app->rate*$autotruck->course:$app->weight*$app->rate*$autotruck->course;
-								$total_us+=$app->type?$app->rate:$app->weight*$app->rate;
-							 }?>
-							<tr>
-									<td colspan="3"><strong>Итого</strong></td>
-									<td><strong><?php echo $cweight;?> кг.</strong></td>
-									<td></td>
-									<td><strong><?php echo $total_us;?> $</strong></td>
-									<td><strong><?php echo $total;?> руб.</strong></td>
-									<td></td>
-								</tr>
-								</tbody>
-								</table>
+										<div class="table autotruck_apps">
+											<table class="table table-striped table-hover table-bordered">
+											<tbody>
+												<tr>
+													<th>№</th>
+													<th class="app_client">Клиент</th>
+													<th class="app_info">Информация</th>
+													<th>Вес (кг)</th>
+													<th>Ставка ($)</th>
+													<th>Сумма ($)</th>
+													<th>Сумма (руб)</th>
+													<th>Комментарий</th>
+												</tr>
+										<?php $cweight=0; $total = 0; $total_us = 0;
+										foreach ($autotruck->getApps() as $key => $app) { ?>
+												<tr>
+													<td><?=$key+1?></td>
+													<td><?=$app->buyer->name?></td>
+													<td><?=$app->info?></td>
+													<td><? echo $app->type?'':$app->weight?></td>
+													<td><?=$app->rate?></td>
+													<td><? echo $app->type ? $app->rate*$autotruck->course :$app->weight*$app->rate*$autotruck->course?> руб</td>
+													<td><? echo $app->type ? $app->rate:$app->weight*$app->rate?> $</td>
+													<td><?=$app->comment?></td>
+												</tr>
+										<?php 
+											$cweight += $app->type ? 0 : $app->weight; $total+= $app->type?$app->rate*$autotruck->course:$app->weight*$app->rate*$autotruck->course;
+											$total_us+=$app->type?$app->rate:$app->weight*$app->rate;
+										 }?>
+										<tr>
+												<td colspan="3"><strong>Итого</strong></td>
+												<td><strong><?php echo $cweight;?> кг.</strong></td>
+												<td></td>
+												<td><strong><?php echo $total_us;?> $</strong></td>
+												<td><strong><?php echo $total;?> руб.</strong></td>
+												<td></td>
+											</tr>
+											</tbody>
+											</table>
+										</div>
+								</div> <!-- Контент наименования -->
+								<div id="expenses" class="tab-pane fade in">
+									<div class="row">
+										<?php if(Yii::$app->user->can($roleexpenses)){?>
+										<div class="col-xs-12">
+											<?php 
+											if(count($AutotruckExpenses)){
+												$dataProvider = new ActiveDataProvider([
+	           										'query' => ExpensesManager::find()->where(['autotruck_id'=>$autotruck->id]),
+	            								]);
+	            								echo GridView::widget([
+	            										'dataProvider' => $dataProvider,
+	            										'summary'=>"",
+	            										'columns'=>[
+	            											['class'=>'yii\grid\SerialColumn'],
+	            											[
+	            												'attribute'=>'manager_id',
+	            												'value'=>'manager.name'
+	            											],
+	            											'cost',
+	            											'comment'
+	            										]
+	            									]);
+											} ?>
+										</div>
+										<?php }?>
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>
