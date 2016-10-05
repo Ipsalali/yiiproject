@@ -1,0 +1,576 @@
+html,
+body {
+    height: 100%;
+}
+
+.clear{
+    display: block;
+    clear: both;
+}
+
+
+.wrap {
+    min-height: 100%;
+    height: auto;
+    margin: 0 auto -60px;
+    padding: 50px 0 0px;
+}
+
+.wrap > .container {
+    padding: 70px 15px 20px;
+}
+
+.footer {
+    height: 60px;
+    background-color: #f5f5f5;
+    border-top: 1px solid #ddd;
+    padding-top: 20px;
+}
+
+.jumbotron {
+    text-align: center;
+    background-color: transparent;
+}
+
+.jumbotron .btn {
+    font-size: 21px;
+    padding: 14px 24px;
+}
+
+.not-set {
+    color: #c55;
+    font-style: italic;
+}
+
+/* add sorting icons to gridview sort links */
+a.asc:after, a.desc:after {
+    position: relative;
+    top: 1px;
+    display: inline-block;
+    font-family: 'Glyphicons Halflings';
+    font-style: normal;
+    font-weight: normal;
+    line-height: 1;
+    padding-left: 5px;
+}
+
+a.asc:after {
+    content: /*"\e113"*/ "\e151";
+}
+
+a.desc:after {
+    content: /*"\e114"*/ "\e152";
+}
+
+.sort-numerical a.asc:after {
+    content: "\e153";
+}
+
+.sort-numerical a.desc:after {
+    content: "\e154";
+}
+
+.sort-ordinal a.asc:after {
+    content: "\e155";
+}
+
+.sort-ordinal a.desc:after {
+    content: "\e156";
+}
+
+.grid-view th {
+    white-space: nowrap;
+}
+
+.hint-block {
+    display: block;
+    margin-top: 5px;
+    color: #999;
+}
+
+.error-summary {
+    color: #a94442;
+    background: #fdf7f7;
+    border-left: 3px solid #eed3d7;
+    padding: 10px 20px;
+    margin: 0 0 15px 0;
+}
+
+
+.main{
+    width: 100%;
+}
+
+.main:before{
+    content:"";
+    display: block;
+    clear:both;
+}
+
+.left_bar{
+    display: inline-block;
+    width: 20%;
+    padding: 20px 10px;
+    float: left;
+    border-right: 1px solid #dddddd;
+    background: #f4f4f4;
+}
+
+.base_content{
+    display:block;
+    width: 90%;
+    margin: 0px auto;
+    padding: 20px;
+}
+
+.app_tabs{
+    cursor: pointer;
+    transition: all 1s ease 0s;
+}
+
+.app_tabs li{
+}
+
+.app_tabs li.active_tab{
+    background: #f4f4f4;
+}
+
+.app_tabs li a{
+        color: #000;
+}
+
+.app_block{
+    display: none;
+    transition: all 1s ease 0s;
+}
+
+.active_block{
+    display: block;
+}
+
+.app_update_btn{
+    margin: 10px 0px;
+}
+
+.date_status_block{
+    position: relative;
+    display: inline-block;
+        margin: 25px 20px 0px;
+}
+
+.field-app-status{
+   display: inline-block;
+   width: 100px;
+}
+
+.date_status_block label{
+    position: absolute;
+    left: 0px;
+     background-image: url(../images/icon/cal.png);
+    background-position:0px 0px;
+    background-size:100% 100%;
+    display: block;
+        width: 32px;
+    height: 48px;
+}
+
+
+.date_status_block input{
+    border:none;
+    outline:none;
+    width: 32px;
+    height: 32px;
+}
+
+.date_status_block input::-webkit-datetime-edit { display:none; }
+.date_status_block input::-webkit-datetime-edit-fields-wrapper { display:none; }
+.date_status_block input::-webkit-datetime-edit-text { display:none; }
+.date_status_block input::-webkit-datetime-edit-month-field { display:none; }
+.date_status_block input::-webkit-datetime-edit-day-field { display:none; }
+.date_status_block input::-webkit-datetime-edit-year-field { display:none; }
+.date_status_block input::-webkit-inner-spin-button { display: none; }
+.date_status_block input::-webkit-calendar-picker-indicator {
+    background: #fff; 
+    margin:0px; 
+    padding:0px; 
+    width:30px;
+    height:30px;
+    cursor:pointer;
+    -webkit-appearance: none !important;
+    opacity: 0;
+    display:block;
+    position:absolute;
+    left:0px;
+}
+
+.date_status_block input::-webkit-calendar-picker-indicator:before {
+    background-image: url(../images/icon/cal_16.png);
+    background-position:0px 0px;
+    background-size:100% 100%;
+    box-shadow: 0 1px 1px rgba(0,0,0,0.1);
+    border-radius: 24px;
+    content: '';
+    display: block;
+    height: 16px;
+/*    left: -2px;
+    position: absolute;
+    top: -5px;*/
+    width: 16px;
+    z-index: -1;
+}
+
+.date_status_block input::-webkit-calendar-picker-indicator:hover {
+
+}
+.date_status_block input:focus {
+
+}
+
+.status_td{
+    width: 150px;
+}
+
+.status_td:after{
+    clear:both;
+}
+
+.autotruck_apps .form-group{
+    margin-bottom: 0px;
+}
+
+.gen{
+    margin-left: 5px;
+}
+
+
+li.active_status{
+    color:#3ca03c;
+    text-decoration: underline;
+}
+
+li.app_status{
+    font-size: 13px;
+}
+
+.post_block{
+    margin: 50px 100px 10px;
+}
+
+.post_block ul{
+    padding: 0px 0px 0px 0px;
+}
+
+.post_block ul li{
+    list-style-type: decimal;
+    margin: 0px 0px 5px 0px;
+}
+
+.post_block ul li a{
+    color:#000;
+    font-family: arial;
+    font-size: 15px;
+}
+
+.check{
+    color:#fff;
+    position: relative;
+    line-height: normal;
+    padding-left: 20px;
+}
+
+.check:before{
+    content: "\e025";
+    font-family: 'Glyphicons Halflings';
+    display: block;
+    position: absolute;
+    left: 2px;
+}
+
+.search_block{
+    position: fixed;
+    top: 6px;
+    right: 150px;
+    z-index: 1031;
+}
+
+.top:after{
+    display: block;
+    content: "";
+    clear: both;
+}
+
+.search_block small{
+    color:#fff;
+}
+
+.search_block input[type=text]{
+    width: 400px;
+}
+
+
+.search_result{
+    display: none;
+    background: rgba(230, 230, 230, 0.96);
+    color: #000;
+}
+
+.results{
+    padding: 5px;
+}
+
+.results > div{
+    margin: 10px 0px;
+}
+
+.results > div > h4{
+   margin: 0px;
+    font-size: 13px;
+    font-weight: bold;
+    text-transform: capitalize;
+    font-family: arial;
+    padding: 0px;
+}
+
+.results > div > ul{
+    margin: 0px;
+    padding: 0px;
+    border: 1px solid rgba(0, 8, 56, 0.1);
+    border-radius: 2px; 
+    display: block;
+}
+
+.results > div > ul li{
+    border-bottom: 1px solid rgba(0, 8, 56, 0.1);
+    list-style: none;
+    padding-left:10px;
+    padding-top: 2px; 
+}
+
+.results > div > ul li:last-child{
+    border-bottom:none; 
+}
+
+
+.results > div > ul > li > div{
+    
+}
+
+.results .autotruck_name{
+    margin: 0px;
+    padding: 0px;
+}
+
+.results .autotruck_name a{
+    text-decoration: underline;
+    font-family: arial;
+    font-size: 13px;
+    font-weight: bold;
+    color: #000;
+}
+
+.results small{
+    display: block;
+    color:#4e4d4d;
+}
+
+.app_info{
+    width: 355px;
+}
+
+.app_client{
+     width: 150px;
+}
+
+.right_content{
+        width: 79%;
+    float: left;
+    margin-left: 10px;
+    padding: 10px;
+}
+
+.left_bar_head:after{
+    clear: both;
+    display: block;
+    content: "";
+}
+
+
+.left_bar_head{
+
+}
+
+.left_bar_head .new_app{
+    float: left;
+}
+
+.left_bar_head .filter_app{
+    float: right;
+}
+
+
+.autotrUcks_list .grid-view{
+    margin-top: 10px;
+}
+
+
+.autotrUcks_list .grid-view .summary{
+    display: none;
+}
+
+
+.autotruck_data{
+    padding:10px;
+}
+
+
+#app_table td{
+    padding: 2px !important;
+}
+
+.form-actions{
+    margin-top: 10px;
+}
+
+#autotruck_and_app:after{
+    clear:both;
+    content: "";
+    display: block;
+}
+
+
+.app_blocks .panel-heading{
+    padding: 5px 2px 5px 10px; 
+}
+
+.app_blocks .panel-heading h4{
+    margin:0px;
+}
+
+.app_blocks .panel-heading h4 a{
+    color:#fff;
+}
+.app_blocks .panel-heading p{
+    margin:0px;
+}
+
+.panel-body.autotruck_info p{
+    margin:0px;
+}
+
+.search_result{
+    height: 80vh;
+    overflow: scroll;
+}
+
+.td_client_name{
+    width: 330px;
+}
+
+.td_client_category{
+    width: 80px;
+}
+
+select#client_category_id{
+    width: 55px;
+}
+
+.app_weigth,.app_rate{
+    width: 80px;
+}
+
+.field-autotruck-date > label{
+    display: block;
+}
+
+input#autotruck-date{
+    width:170px; 
+}
+
+.autotruck_btns{
+    margin-bottom: 10px;
+}
+
+#add_app_item{
+}
+
+.change_status_info{
+    color:#f00;
+    font-size: 12px;
+}
+
+.td_client_manager{
+    width: 150px;
+}
+
+
+.icon-edit{
+    background: #337ab7;
+    width: 30px;
+    height: 30px;
+    display: block;
+    float: left;
+    text-align: center;
+    color: #fff;
+    border-radius: 3px;
+    margin-right: 3px;
+}
+
+.icon-edit span{
+    position: relative;
+    top: 8px;
+}
+
+.icon-edit:hover{
+    background-color: #1d5c92;
+    color:#FFF;
+}
+
+.icon-edit span:hover{
+    color:#FFF;
+}
+
+.client_manager{
+    position: relative;
+}
+
+.main:after{
+    clear: both;
+    content: "";
+    display: block;
+}
+
+@media screen and (max-width:1275px){
+    .left_bar_head .new_app{
+        float: inherit !important;
+    }
+    .filter_app{
+        float: inherit !important;
+        clear: both;
+        margin-top: 10px;
+    }
+
+    .autotrUcks_list .grid-view table tr td{
+        font-size: 12px;
+    }
+
+    .left_bar{
+        min-width: 230px !important;
+    }
+
+    .right_content{
+        min-width: 909px;
+    }
+
+    .main{
+        min-width: 1170px !important;
+    }
+}
+
+.field-customerpayment-autotruck_id,.field-customerpayment-client_id{
+    margin-top: 0px !important;
+    margin-bottom: 0px !important;
+}
+
+.new_app{
+    margin-bottom: 10px;
+}
