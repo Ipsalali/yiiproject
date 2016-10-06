@@ -131,7 +131,10 @@ $Autotrucks = Autotruck::find()->orderBy('id')->all();
 							</div>
 							<ul class="nav nav-tabs">
   								<li class="active"><a data-toggle="tab" href="#apps">Наименования</a></li>
-  								<li><a data-toggle="tab" href="#expenses">Расходы</a></li>
+
+								<?php if(Yii::$app->user->can($roleexpenses)){?>
+  									<li><a data-toggle="tab" href="#expenses">Расходы</a></li>
+  								<?php } ?>
 							</ul>
 							<div class="tab-content">
 								<div id="apps" class="tab-pane fade in active">
@@ -178,9 +181,9 @@ $Autotrucks = Autotruck::find()->orderBy('id')->all();
 											</table>
 										</div>
 								</div> <!-- Контент наименования -->
+								<?php if(Yii::$app->user->can($roleexpenses)){?>
 								<div id="expenses" class="tab-pane fade in">
 									<div class="row">
-										<?php if(Yii::$app->user->can($roleexpenses)){?>
 										<div class="col-xs-12">
 											<?php 
 											if(count($AutotruckExpenses)){
@@ -202,9 +205,9 @@ $Autotrucks = Autotruck::find()->orderBy('id')->all();
 	            									]);
 											} ?>
 										</div>
-										<?php }?>
 									</div>
 								</div>
+								<?php }?>
 							</div>
 						</div>
 					</div>

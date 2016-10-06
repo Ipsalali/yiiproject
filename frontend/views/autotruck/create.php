@@ -231,20 +231,40 @@ $AutotruckExpenses =ExpensesManager::getAutotruckExpenses($autotruck->id);
 		$("#autotruck_and_app").submit(function(event){
 
 			var valid = true;
-
+			//Проверяем на заполненность имени наименовании
 			$('input.app_info').each(function(e,i){
-				
 				if($(this).val() == ''){
 					$(this).css('outline','1px solid #f00');
 					$(this).attr('placeholder','Заполните имя!');
-
 					valid = false;
-
 				}else{
 					$(this).css('outline','1px solid #0f0');
 				}
-
 			})
+			//Проверяем на заполненность менеджера расхода, если расходы доступны
+			if($("select.manager_id").length){
+				$("select.manager_id").each(function(e,i){
+					if($(this).val() == '' || !$(this).val()){
+						$(this).css('outline','1px solid #f00');
+						$(this).attr('placeholder','Выберите менеджера!');
+						valid = false;
+					}else{
+						$(this).css('outline','1px solid #0f0');
+					}
+				})
+			}
+			//Проверяем cost
+			if($("input.cost").length){
+				$("input.cost").each(function(e,i){
+					if($(this).val() == '' || !$(this).val()){
+						$(this).css('outline','1px solid #f00');
+						$(this).attr('placeholder','Укажите сумму');
+						valid = false;
+					}else{
+						$(this).css('outline','1px solid #0f0');
+					}
+				})
+			}
 
 			if(!valid)
 				event.preventDefault();

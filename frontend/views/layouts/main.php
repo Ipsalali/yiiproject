@@ -93,9 +93,7 @@ AppAsset::register($this);
 
 
 <div class="clear"></div>
-<footer class="footer">
-    
-</footer>
+
 
 <?php $this->endBody() ?>
 </body>

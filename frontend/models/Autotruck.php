@@ -13,6 +13,7 @@ use frontend\models\AutotruckNotification;
 use yii\db\Query;
 use frontend\helpers\Mail;
 use common\models\SupplierCountry;
+use frontend\models\ExpensesManager;
 
 /**
 *
@@ -81,6 +82,10 @@ class Autotruck extends ActiveRecord
 
     public function getApps(){
         return App::find()->where('autotruck_id='.$this->id)->all();
+    }
+
+    public function getExpensesManager(){
+        return ExpensesManager::find()->where('autotruck_id='.$this->id)->all();
     }
 
     public function getTraceStory(){

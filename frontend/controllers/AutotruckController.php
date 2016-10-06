@@ -84,6 +84,11 @@ class AutotruckController extends Controller{
                         'actions' => ['addexpenses', 'index'],
                         'allow' => true,
                         'roles' => ['autotruck/addexpenses'],
+                    ],
+                    [
+                        'actions' => ['removeexpajax', 'index'],
+                        'allow' => true,
+                        'roles' => ['autotruck/addexpenses'],
                     ]
                 ],
             ]
@@ -112,7 +117,7 @@ class AutotruckController extends Controller{
 		$post = Yii::$app->request->post();
 
 		$eDate = new EDateTime;
-		
+
 		if(isset($post['Autotruck'])){
 			$autotruck->name = $post['Autotruck']['name'];
 			$autotruck->course = ($post['Autotruck']['course'])?$post['Autotruck']['course']:0;
@@ -122,7 +127,7 @@ class AutotruckController extends Controller{
 			$autotruck->status = $post['Autotruck']['status']?$post['Autotruck']['status']:0;
 
 			if($autotruck->save()){
-
+				//Добавление статуса
 				if($autotruck->id && $autotruck->status){
 					$apptrace = new AppTrace;
 					$apptrace->autotruck_id = $autotruck->id;
@@ -135,7 +140,21 @@ class AutotruckController extends Controller{
 
 					$apptrace->save();		
 				}
-				
+
+				//Добавление расхода
+				if(isset($post['ExpensesManager']) && count($post['ExpensesManager']) && $autotruck->id){
+					foreach ($post['ExpensesManager'] as $key => $item) {
+						$exp = new ExpensesManager;
+						$exp->manager_id = (int)$item['manager_id'];
+						$exp->cost = $item['cost'];
+						$exp->autotruck_id = $autotruck->id;
+						$exp->comment = trim(strip_tags($item['comment']));
+
+						$exp->save();
+					}
+				}
+
+				//Добавление наименовании
 				if(isset($post['App']) && count($post['App']) && $autotruck->id){
 
 					foreach ($post['App'] as $key => $item) {
@@ -245,7 +264,7 @@ class AutotruckController extends Controller{
 			
 
 			if($autotruck->save()){
-
+				// статус заявки
 				if($autotruck->id && $status_update){
 					$apptrace = new AppTrace;
 					$apptrace->autotruck_id = $autotruck->id;
@@ -261,7 +280,32 @@ class AutotruckController extends Controller{
 				}else{
 					Yii::$app->session->setFlash("AppTraceCreatedError");
 				}
+
+
+				//Добавление расхода
+				if(isset($post['ExpensesManager']) && count($post['ExpensesManager']) && $autotruck->id){
+					foreach ($post['ExpensesManager'] as $key => $item) {
+						
+						if(isset($item['id']) && (int)$item['id']){
+							$exp = ExpensesManager::findOne((int)$item['id']);
+							if ($exp->id === NULL)
+        						throw new HttpException(404, 'App Not Exist');
+						}else{
+							$exp = new ExpensesManager;
+						}
+						
+						$exp->manager_id = (int)$item['manager_id'];
+						$exp->cost = $item['cost'];
+						$exp->autotruck_id = $autotruck->id;
+						$exp->comment = trim(strip_tags($item['comment']));
+
+						$exp->save();
+
+					}
+				}
 				
+
+				//Добавление наименовании
 				if(isset($post['App']) && count($post['App']) && $autotruck->id){
 					
 					foreach ($post['App'] as $key => $item) {
@@ -270,21 +314,10 @@ class AutotruckController extends Controller{
 							
 							$a = App::findOne((int)$item['id']);
 							
-							if ($a === NULL)
+							if ($a->id === NULL)
         						throw new HttpException(404, 'App Not Exist');
-
-        					$update = true;
-
-        					//$status_update = ($a->status == $item['status'])? false : true;
-        					//$save_prevstatus = $status_update;
-        					//$prev_status = $a->status;
-        					
 						}else{
 							$a = new App;
-							//$update = false;
-							//$status_update = true;
-							//$save_prevstatus = false;
-							//$prev_status = 0;
 						}
 
 						$a->client = ($item['client'])?(int)$item['client']:0;
@@ -298,7 +331,6 @@ class AutotruckController extends Controller{
 						}
 						$a->rate = ($item['rate']) ? $item['rate'] : 0;
 						
-						//$a->status = $item['status']?$item['status']:0;
 						$a->comment = $item['comment'];
 						$a->autotruck_id = $autotruck->id;
 
@@ -368,6 +400,38 @@ class AutotruckController extends Controller{
 					$answer['result'] = (int)$post['id'];
 
 					$app->delete();
+
+				}else{
+					$answer['error']['text'] = 'not found app';
+				}
+			}else{
+				$answer['result'] = 0;
+			}
+		
+			\Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+			
+			return $answer;
+		}
+	}
+
+
+	public function actionRemoveexpajax(){
+
+		if(Yii::$app->request->isAjax){
+
+			$post = Yii::$app->request->post();
+
+			$answer = array();
+
+			if($post['id']){
+			
+				$id = (int)$post['id'];
+
+				$exp = ExpensesManager::findOne($id);
+				if($exp){
+					$answer['result'] = (int)$post['id'];
+
+					$exp->delete();
 
 				}else{
 					$answer['error']['text'] = 'not found app';

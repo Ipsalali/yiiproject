@@ -7,7 +7,19 @@ use common\models\Client;
 use common\models\Status;
 use yii\widgets\Pjax;
 use common\models\SupplierCountry;
+use frontend\models\ExpensesManager;
+use common\models\User;
 
+$roleexpenses = 'autotruck/addexpenses';
+$expensesManager = new ExpensesManager;
+$AutotruckExpenses =ExpensesManager::getAutotruckExpenses($autotruck->id);
+$expManagers = User::getExpensesManagers();
+$apps= $autotruck->getApps();
+$expenses = $autotruck->getExpensesManager();
+$apps_count = count($apps);
+$expenses_count = count($expenses);
+
+$clients = Client::find()->all();
 ?>
 
 
@@ -23,20 +35,6 @@ use common\models\SupplierCountry;
 <!-- <div class="left_bar"> -->
 	<?php //echo Html::a('Добавить заявку', array('autotruck/create'), array('class' => 'btn btn-primary')); ?>
 
-	<?php if($listAutotruck && 00){?>
-		<ul class="list-group app_links">
-			<?php foreach ($listAutotruck as $key => $app){
-					 $active=($app->id == $autotruck->id)? "active_link" : "";
-				?>
-				<li class="list-group-item <?=$active?>" data-id="<?=$app->id?>">
-					<span class="badge"><?=count($app->getApps())?></span>
-					<?php echo Html::a($app->id.' от '.date("d.m.Y",strtotime($app->date)), array('autotruck/update','id'=>$app->id), array('class' => 'app_link','id'=>"app_<?=$app->id?>")); ?>
-				</li>
-			<?php $active=''; } ?>
-		</ul>
-	<?php } ?>
-<!-- </div> -->
-
 <div class="autotruck_update">
 
 	<?php if(Yii::$app->session->hasFlash('AutotruckSaved')): ?>
@@ -44,7 +42,6 @@ use common\models\SupplierCountry;
     	Заявка сохранена!
 	</div>
 	<?php endif; ?>
-
 
 	<?php if($autotruck){?>
 		<div class="app_blocks">
@@ -121,67 +118,115 @@ use common\models\SupplierCountry;
     						</div>
     					</div>
 				  		</div>
-    					<div class="panel panel-default">
-    						<div class="panel-heading">
-    							Информация о наименованиях
-    							<div class="row">
-									<div class="col-xs-12 autotruck_btns">
-										<button class="btn btn-primary" id='add_app_item'>Добавить наименование</button>
-										<button class="btn btn-primary" id="add_service_item">Добавить услугу</button>
+				  		<?php if(Yii::$app->user->can($roleexpenses)){?>
+							<ul class="nav nav-tabs">
+		  						<li class="active"><a data-toggle="tab" href="#apps">Наименования</a></li>
+		  						<li><a data-toggle="tab" href="#expenses">Расходы</a></li>
+							</ul>
+						<?php } ?>
+						<div class="tab-content">
+							<div id="apps" class="tab-pane fade in active">
+	    						<div class="panel panel-default">
+		    						<div class="panel-heading">
+		    							Информация о наименованиях
+		    							<div class="row">
+											<div class="col-xs-12 autotruck_btns">
+												<button class="btn btn-primary" id='add_app_item'>Добавить наименование</button>
+												<button class="btn btn-primary" id="add_service_item">Добавить услугу</button>
+											</div>
+										</div>
+		    							<div class="clearfix"></div>
+		    						</div>
+									<div class="panel-body autotruck_info">
+										<div class="table autotruck_apps">
+											<table id="app_table" class="table table-striped table-hover table-bordered">
+											<tbody>
+												<tr>
+													<th>№</th>
+													<th class="app_client">Клиент</th>
+													<th class="app_info">Информация</th>
+													<th class="app_weigth">Вес (кг)</th>
+													<th class="app_rate">Ставка ($)</th>
+													<th>Сумма (руб)</th>
+													<th>Сумма ($)</th>
+													<th>Комментарий</th>
+													<th>Удалить</th>
+												</tr>
+										<?php 
+										foreach ($apps as $key => $app) {
+											$type_class = !$app->type ? "type_app" :"type_service";
+										 ?>
+												<tr class="app_row <?php echo $type_class;?>">
+													<td><?=$key+1?> <input type="hidden" name="App[<?=$key?>][id]" value="<?=$app->id?>"><input type="hidden" name="App[<?=$key?>][type]" value="<?=$app->type?>"> </td>
+													<td> 
+													<?php echo $form->field($app,'client',['inputOptions'=>['name'=>'App['.$key.'][client]']])->dropDownList(ArrayHelper::map($clients,'id','name'),['prompt'=>'Выберите клиента'])->label(false)?>
+													 
+													</td>
+													<td><? echo $form->field($app,'info',['inputOptions'=>['name'=>'App['.$key.'][info]']])->textInput(['class'=>'form-control app_info'])->label(false)?></td>
+													<td><? echo $app->type ? '<input type="hidden" name="App['.$key.'][weight]" value="1">' : $form->field($app,'weight',['inputOptions'=>['name'=>'App['.$key.'][weight]']])->textInput(array('class'=>'form-control compute_sum compute_weight'))->label(false)?></td>
+													<td><? echo $form->field($app,'rate',['inputOptions'=>['name'=>'App['.$key.'][rate]']])->textInput(array('class'=>'form-control compute_sum compute_rate'))->label(false)?></td>
+													<td class="summa_usa"><?php echo !$app->type ?  $app->weight*$app->rate : $app->rate?> $</td>
+													<td class="summa"><?php echo !$app->type ? $app->weight*$app->rate*$autotruck->course : $app->rate*$autotruck->course ?> руб</td>
+													
+													
+
+													<td><? echo $form->field($app,'comment',['inputOptions'=>['name'=>'App['.$key.'][comment]']])->textInput()->label(false)?></td>
+
+													<td>
+														<a class='btn btn-danger remove_exists_app' data-id="<?=$app->id?>">X</a>
+													</td>
+												
+												</tr>
+										<?php } ?>
+											</tbody>
+											</table>
+										</div>
 									</div>
 								</div>
-    							<div class="clearfix"></div>
-    						</div>
-						<div class="panel-body autotruck_info">
-							
-							
-							
-							<div class="table autotruck_apps">
-								<table id="app_table" class="table table-striped table-hover table-bordered">
-								<tbody>
-									<tr>
-										<th>№</th>
-										<th class="app_client">Клиент</th>
-										<th class="app_info">Информация</th>
-										<th class="app_weigth">Вес (кг)</th>
-										<th class="app_rate">Ставка ($)</th>
-										<th>Сумма (руб)</th>
-										<th>Сумма ($)</th>
-										<th>Комментарий</th>
-										<th>Удалить</th>
-									</tr>
-							<?php 
-							foreach ($autotruck->getApps() as $key => $app) {
-								$type_class = !$app->type ? "type_app" :"type_service"
-							 ?>
-									<tr class="app_row <?php echo $type_class;?>">
-										<td><?=$key+1?> <input type="hidden" name="App[<?=$key?>][id]" value="<?=$app->id?>"><input type="hidden" name="App[<?=$key?>][type]" value="<?=$app->type?>"> </td>
-										<td> 
-										<?php echo $form->field($app,'client',['inputOptions'=>['name'=>'App['.$key.'][client]']])->dropDownList(ArrayHelper::map(Client::find()->all(),'id','name'),['prompt'=>'Выберите клиента'])->label(false)?>
-										 
-										</td>
-										<td><? echo $form->field($app,'info',['inputOptions'=>['name'=>'App['.$key.'][info]']])->textInput()->label(false)?></td>
-										<td><? echo $app->type ? '<input type="hidden" name="App['.$key.'][weight]" value="1">' : $form->field($app,'weight',['inputOptions'=>['name'=>'App['.$key.'][weight]']])->textInput(array('class'=>'form-control compute_sum compute_weight'))->label(false)?></td>
-										<td><? echo $form->field($app,'rate',['inputOptions'=>['name'=>'App['.$key.'][rate]']])->textInput(array('class'=>'form-control compute_sum compute_rate'))->label(false)?></td>
-										<td class="summa_usa"><?php echo !$app->type ?  $app->weight*$app->rate : $app->rate?> $</td>
-										<td class="summa"><?php echo !$app->type ? $app->weight*$app->rate*$autotruck->course : $app->rate*$autotruck->course ?> руб</td>
-										
-										
+							</div>
+							<!-- Расходы таб -->
+							<div id="expenses" class="tab-pane fade in">
+								<div class="exp_data">
+									<h3>Информация о расходах</h3>
+									<div class="row">
+										<div class="col-xs-12 autotruck_btns">
+											<button class="btn btn-primary" id='add_expenses_item'>Добавить расход</button>
+										</div>
+									</div>
+									<table id="exp_table" class="table table-striped table-hover table-bordered table-condensed">
+										<tr>
+											<th>№</th>
+											<th class="exp_manager_id">Менеджер</th>
+											<th>Сумма ($)</th>
+											<th>Комментарий</th>
+											<th>Удаление</th>
+										</tr>
+										<?php 
+										foreach ($expenses as $key => $exp) {
+										 ?>
+												<tr class="exp_row">
+													<td><?=$key+1?> <input type="hidden" name="ExpensesManager[<?=$key?>][id]" value="<?=$exp->id?>"></td>
+													<td> 
+													<?php echo $form->field($exp,'manager_id',['inputOptions'=>['name'=>'ExpensesManager['.$key.'][manager_id]']])->dropDownList(ArrayHelper::map($expManagers,'id','name'),['class'=>'manager_id form-control','prompt'=>'Выберите менеджера'])->label(false)?>
+													 
+													</td>
+													<td><? echo $form->field($exp,'cost',['inputOptions'=>['name'=>'ExpensesManager['.$key.'][cost]']])->textInput(array('class'=>'form-control cost'))->label(false)?></td>
+													
+													
 
-										<td><? echo $form->field($app,'comment',['inputOptions'=>['name'=>'App['.$key.'][comment]']])->textInput()->label(false)?></td>
+													<td><? echo $form->field($exp,'comment',['inputOptions'=>['name'=>'ExpensesManager['.$key.'][comment]']])->textInput()->label(false)?></td>
 
-										<td>
-											<a class='btn btn-danger remove_exists_app' data-id="<?=$app->id?>">X</a>
-										</td>
-									
-									</tr>
-							<?php } ?>
-								</tbody>
-								</table>
+													<td>
+														<a class='btn btn-danger remove_exists_exp' data-id="<?=$exp->id?>">X</a>
+													</td>
+												
+												</tr>
+										<?php } ?>
+									</table>
+								</div>
 							</div>
 						</div>
-						</div>
-						<?php  ActiveForm::end()?>
+					<?php  ActiveForm::end()?>
 					</div>
 				</div>
 
@@ -237,10 +282,32 @@ use common\models\SupplierCountry;
 
 	}
 
+	var geberate_exp_row = function(n){
+		var ntr = '<tr class="exp_row"><td>-</td>';
+		var	ntd_client = '<td><select name="ExpensesManager['+n+'][manager_id]" class=\'manager_id form-control\'>';
+			ntd_client +='<option value="">Выберите менеджера</option>';
+			<?php foreach (User::getExpensesManagers() as $key => $cl) { ?>
+
+				ntd_client += '<option value="<?=$cl->id?>"><?=$cl->name?></option>';
+
+			<?php } ?>
+			ntd_client +='</select></td>';
+
+		var ntd_info = "<td><input type='text' name='ExpensesManager["+n+"][cost]' class=\'cost form-control\'></td>";
+		var ntd_comment = "<td><input type='text' name='ExpensesManager["+n+"][comment]' class=\'exp_comment form-control\'></td>";
+
+		ntr += ntd_client+ntd_info+ntd_comment
+		ntr+="<td><a class='btn btn-danger remove_exp'>X</a></td>";
+
+		ntr +='</tr>';
+
+		return ntr;
+	}
 
 	$(function(){
 
-		var row_count = <?=count($autotruck->getApps())?>;
+		var row_count = <?=$apps_count?>;
+		var exp_row_c = <?=$expenses_count?>;
 
 		$("#add_app_item").click(function(event){
 			event.preventDefault();
@@ -253,13 +320,23 @@ use common\models\SupplierCountry;
 			row_count +=1;
 			$("#app_table").append(generate_app_row(row_count,1));
 		});
+
+		$("#add_expenses_item").click(function(event){
+			event.preventDefault();
+			exp_row_c +=1;
+			$("#exp_table").append(geberate_exp_row(exp_row_c));
+		});
 		
 		$("#app_table").on("click",'.remove_app',function(){
 			$(this).parents('.app_row').remove();
 		});
 
+		$("#exp_table").on("click",'.remove_exp',function(){
+			$(this).parents('.exp_row').remove();
+		});
 
-		$("#autotruck_and_app").submit(function(event){
+
+		$("#autotruck_and_app_update").submit(function(event){
 
 			var valid = true;
 
@@ -277,17 +354,41 @@ use common\models\SupplierCountry;
 
 			})
 
+			//Проверяем на заполненность менеджера расхода, если расходы доступны
+			if($("select.manager_id").length){
+				$("select.manager_id").each(function(e,i){
+					if($(this).val() == '' || !$(this).val()){
+						$(this).css('outline','1px solid #f00');
+						$(this).attr('placeholder','Выберите менеджера!');
+						valid = false;
+					}else{
+						$(this).css('outline','1px solid #0f0');
+					}
+				})
+			}
+			//Проверяем cost
+			if($("input.cost").length){
+				$("input.cost").each(function(e,i){
+					if($(this).val() == '' || !$(this).val()){
+						$(this).css('outline','1px solid #f00');
+						$(this).attr('placeholder','Укажите сумму');
+						valid = false;
+					}else{
+						$(this).css('outline','1px solid #0f0');
+					}
+				})
+			}
+
 			if(!valid)
 				event.preventDefault();
 			
 		})
 
 
+		//Удаление наименовании
 		$("#app_table").on("click",".remove_exists_app",function(){
 			var id = parseInt($(this).data("id"));
-			
 			var r_rw = $(this).parents('.app_row');
-
 			if(id && window.confirm('Вы действительно хотите удалить выделенный объект?')){
 				$.ajax({
 					url:"index.php?r=autotruck/removeappajax",
@@ -314,10 +415,41 @@ use common\models\SupplierCountry;
 					complete:function(){
 						console.log('complete');
 					}
-
 				});
 			}
+		})
 
+		$("#exp_table").on("click",".remove_exists_exp",function(){
+			var id = parseInt($(this).data("id"));
+			var r_rw = $(this).parents('.exp_row');
+			if(id && window.confirm('Вы действительно хотите удалить выделенный объект?')){
+				$.ajax({
+					url:"index.php?r=autotruck/removeexpajax",
+					type:"POST",
+					data:'id='+id,
+					datetype:'json',
+					beforeSend:function(){
+						console.log('before');
+					},
+					success:function(json){
+						console.log('success');
+						console.log(json);
+						if(json['error']){
+							alert(json['error']['text']);
+						}else{
+							console.log('Deleted');
+							r_rw.remove();
+						}
+					},
+					error:function(msg){
+						console.log(msg.StatusText);
+						console.log(msg.responsive);
+					},
+					complete:function(){
+						console.log('complete');
+					}
+				});
+			}
 		})
 
 	})
