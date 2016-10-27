@@ -106,22 +106,13 @@ class ClientController extends Controller{
 
 	public function actionIndex(){
 
-		$get = Yii::$app->request->get();
-		$filters = (array_key_exists('filters', $get)) ? $get['filters'] : array();
-
-		$client = new Client;
-		if(count($filters)){
-			$data = $client->findByFilter($filters);
-		}else{
-			$data = $client->find()->all();
-		}
-
-		return $this->render('index',array('data'=>$data,'filters'=>$filters));
+        $clientSearch = new ClientSearch;
+		$dataProvider = $clientSearch->search(Yii::$app->request->queryParams);
+		return $this->render('index',array('dataProvider'=>$dataProvider,'clientSearch'=>$clientSearch));
 	}
 
 	public function actionCreate(){
 		$client = new Client;
-
 
 		$user = new SignupForm();
 
@@ -172,7 +163,7 @@ class ClientController extends Controller{
 			throw new HttpException(404,'Not Found!');
 
 		$client = Client::findOne($id);
-
+        
 		if($client === NULL)
 			throw new HttpException(404,'Document Does Not Exist');
 
@@ -454,6 +445,7 @@ class ClientController extends Controller{
                 $cPayment->autotruck_id = (int)$post['CustomerPayment']['autotruck_id'];
                 $cPayment->client_id = (int)$post['CustomerPayment']['client_id'];
                 $cPayment->payment_state_id = (int)$post['CustomerPayment']['payment_state_id'];
+                $cPayment->sum = round($post['CustomerPayment']['sum'],2);
                 $cPayment->comment = trim(strip_tags($post['CustomerPayment']['comment']));
 
                 if($cPayment->save()){

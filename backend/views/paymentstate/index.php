@@ -21,7 +21,7 @@ use yii\bootstrap\ActiveForm;
 <div class="status_create_page">
 <div class="row">
 <?php $form = ActiveForm::begin(['id' => 'paymentsate_create','action'=>Url::to(['paymentstate/create','id'=>$model->id])]); ?>
-    <div class="col-xs-4">
+    <div class="col-xs-2">
         <?php echo $form->field($model, 'title')->textInput(array('class' => 'form-control')); ?>
     </div>
     <div class="col-xs-2">
@@ -30,7 +30,13 @@ use yii\bootstrap\ActiveForm;
     <div class="col-xs-2">
         <?php echo $form->field($model, 'default')->checkbox(array('value'=>'1')); ?>
     </div>
-    <div class="col-xs-4" style="padding-top:25px; ">
+    <div class="col-xs-2">
+        <?php echo $form->field($model, 'end_state')->checkbox(array('value'=>'1')); ?>
+    </div>
+    <div class="col-xs-2">
+        <?php echo $form->field($model, 'sum_state')->checkbox(array('value'=>'1')); ?>
+    </div>
+    <div class="col-xs-2" style="padding-top:25px; ">
         <?php echo Html::submitButton('Сохранить',['class' => 'btn btn-primary', 'name' => 'country-create-button']); ?>
     </div>
     
@@ -43,7 +49,7 @@ use yii\bootstrap\ActiveForm;
 <table class="table table-striped table-hover">
     <tr>
         <td colspan="2">Код</td>
-        <td colspan="2">Название</td>
+        <td colspan="4">Название</td>
         <td>Управление</td>
     </tr>
     <?php foreach ($list as $state): ?>
@@ -53,7 +59,9 @@ use yii\bootstrap\ActiveForm;
             </td>
             <td style="background-color: <?php echo $state->color?>"></td>
             <td><?php echo Html::encode($state->title); ?></td>
-            <td><?php echo Html::encode($state->default?"По умолчанию":''); ?></td>
+            <td><?php echo Html::encode($state->default? "По умолчанию":''); ?></td>
+            <td><?php echo Html::encode($state->end_state? "Конечное состояние":''); ?></td>
+            <td><?php echo Html::encode($state->sum_state? "Промежуточное состояние":''); ?></td>
             <td>
                 <?php echo Html::a("Редактировать", array('paymentstate/create', 'id'=>$state->id), array('class'=>'icon icon-edit')); ?>
                 <?php echo Html::a("Удалить", array('paymentstate/delete', 'id'=>$state->id), array('class'=>'icon icon-trash remove_check')); ?>

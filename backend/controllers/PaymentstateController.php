@@ -63,9 +63,20 @@ class PaymentstateController extends Controller{
             $model->title = trim(strip_tags($_POST['PaymentState']['title']));
             $model->color = $_POST['PaymentState']['color'];
             $model->default = (int)$_POST['PaymentState']['default'];
+            $model->end_state = (int)$_POST['PaymentState']['end_state'];
+            $model->sum_state = (int)$_POST['PaymentState']['sum_state'];
+            //$model->filter = ((int)$_POST['PaymentState']['filter'])? 1 : 0 ;
             if($model->save()){
                 if((int)$_POST['PaymentState']['default']){
                     PaymentState::setDefault($model);
+                }
+
+                if((int)$_POST['PaymentState']['end_state']){
+                    PaymentState::setEndState($model);
+                }
+
+                if((int)$_POST['PaymentState']['sum_state']){
+                    PaymentState::setSumState($model);
                 }
                 Yii::$app->response->redirect(array("paymentstate/index"));
             } 

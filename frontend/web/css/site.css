@@ -13,7 +13,7 @@ body {
     min-height: 100%;
     height: auto;
     margin: 0 auto -60px;
-    padding: 50px 0 0px;
+    padding: 50px 0 100px;
 }
 
 .wrap > .container {
@@ -118,7 +118,7 @@ a.desc:after {
 
 .base_content{
     display:block;
-    width: 90%;
+        width: 98%;
     margin: 0px auto;
     padding: 20px;
 }
@@ -580,4 +580,8 @@ input#autotruck-date{
     clear: both;
     content: "";
     display: block;
+}
+
+.payment-state-select{
+    margin-top: 25px;
 }

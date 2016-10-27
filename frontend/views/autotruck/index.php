@@ -10,6 +10,9 @@ use frontend\models\Autotruck;
 use yii\helpers\Url;
 use common\models\SupplierCountry;
 use common\models\Status;
+use common\models\PaymentState;
+use frontend\modules\PaymentStateFilter;
+
 
 ?>
 
@@ -25,7 +28,7 @@ use common\models\Status;
 		<div class="col-xs-12">
 			<h1>Заявки</h1>
 			 <div class="new_app">
-				<?php echo Html::a('Добавить заявку', array('autotruck/create'), array('class' => 'btn btn-primary')); ?>	
+				<?php echo Html::a('Добавить заявку', array('autotruck/create'), array('class' => 'btn btn-primary')); ?>
 			 </div>
 		</div>
 	</div>
@@ -71,7 +74,15 @@ HTML;
 						])
 				],
 				'name',
-				'course',
+				[
+	                'attribute'=>'Статус реализации',
+	                'value'=>function($c){
+	                    //$p = $c->getIpay();
+	                    return "-";//"<span style='color:".$p->color."'>".$p->title."<span>";
+	                },
+	                'format'=>'raw',
+	                'filter'=>Html::activeDropDownList($autotruckSearch,'implements_state',Arrayhelper::map(PaymentStateFilter::getFilters(),'id','title'),['class'=>'form-control','prompt'=>'Статус платежа'])
+            	],
 				[
 					'attribute'=>"status",
 					'value'=>'activeStatus.title',

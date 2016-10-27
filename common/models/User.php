@@ -10,6 +10,8 @@ use common\models\Post;
 use common\models\Client;
 use developeruz\db_rbac\interfaces\UserRbacInterface;
 use yii\db\Query;
+use frontend\models\ExpensesManager;
+use frontend\models\PaymentsExpenses;
 
 /**
  * User model
@@ -302,5 +304,67 @@ class User extends ActiveRecord implements IdentityInterface, UserRbacInterface
 
 
         parent::afterDelete();
+    }
+
+    public function getExpenses($start,$end){
+        if(!$start || !$end) return null;
+
+        $start = date("Y.m.d H:i:s",strtotime($start));
+        $end = date("Y.m.d H:i:s",strtotime($end));
+        
+
+        return ExpensesManager::find()->where("'{$start}'<=`date` AND `date`<='{$end}' AND `manager_id` = ".$this->id)->all();
+
+    }
+
+    public function getPayments($start,$end){
+        if(!$start || !$end) return null;
+
+        $start = date("Y.m.d H:i:s",strtotime($start));
+        $end = date("Y.m.d H:i:s",strtotime($end));
+        
+        return PaymentsExpenses::find()->where("'{$start}'<=`date` AND `date`<='{$end}' AND `manager_id` = ".$this->id)->all();
+
+    }
+
+    public function getPaymentsAndExpenses($start,$end){
+        if(!$start || !$end) return null;
+
+        $start = date("Y.m.d H:i:s",strtotime($start));
+        $end = date("Y.m.d H:i:s",strtotime($end));
+        
+        $sql = "SELECT id,manager_id,ex.date,ex.cost as sum, ex.comment, 0 as type 
+                FROM expenses_manager ex 
+                WHERE '{$start}'<=`date` AND   `date`<='{$end}' AND `manager_id` = ".$this->id." 
+                UNION ALL
+                SELECT id,manager_id,pe.date,pe.sum as sum, pe.comment, 1 as type 
+                FROM payments_expenses pe 
+                WHERE '{$start}'<=`date` AND `date`<='{$end}' AND `manager_id` = ".$this->id."
+                order by date";
+        
+        $connection = Yii::$app->getDb();
+        $command = $connection->createCommand($sql);
+
+        return $command->queryAll();
+    }
+
+
+    public function getManagerSverka(){
+        $sql = "SELECT SUM( sum ) as sum
+                FROM (
+                    SELECT SUM( ex.cost ) AS sum
+                    FROM expenses_manager ex
+                    WHERE  `manager_id` = ".$this->id."
+                    UNION ALL 
+                    SELECT SUM( 0 - pe.sum ) AS sum
+                    FROM payments_expenses pe
+                    WHERE  `manager_id` = ".$this->id."
+                ) AS v";
+
+        $connection = Yii::$app->getDb();
+        $command = $connection->createCommand($sql);
+        $row = $command->queryOne();
+        
+        return $row['sum'];
     }
 }

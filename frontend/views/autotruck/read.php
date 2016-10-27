@@ -20,7 +20,7 @@ $Autotrucks = Autotruck::find()->orderBy('id')->all();
 
 
 
-<div class="container">
+<div class="base_content">
 	<div class="row">
 		<div class="col-xs-12">
 			<h1>Заявка: <?=$autotruck->name?></h1>
@@ -69,25 +69,7 @@ $Autotrucks = Autotruck::find()->orderBy('id')->all();
 								<div class="col-xs-3">
 									<p>Курс: <span><?php echo $autotruck->course?> руб.</span></p>
 								</div>
-								<?php if(Yii::$app->user->can($roleexpenses)){?>
-								<div class="col-xs-6">
-
-								<?php $form = ActiveForm::begin(['id'=>'expensesManager','action'=>array("autotruck/addexpenses")]); ?>
-									<div class="row">
-										<div class="col-xs-6">
-											<h4>Расход</h4>
-										</div>
-									</div>
-									<div class="row">
-										<div class="col-xs-6">
-											<?php echo $form->field($expensesManager,'manager_id')->dropDownList(ArrayHelper::map(User::getExpensesManagers(),'id','name'),['prompt'=>'Выберите менеджера'])?>
-										</div>
-										<div class="col-xs-4">
-											<?php echo $form->field($expensesManager,'cost')->textInput(array('class'=>'form-control'))?>
-										</div>
-									</div>
-								</div>
-								<?php } ?>
+								
 							</div>
 							<div class="row" style="margin-top:20px;">
 								<div class="col-xs-3">
@@ -114,17 +96,7 @@ $Autotrucks = Autotruck::find()->orderBy('id')->all();
 										<?=$autotruck->description?>
 									</div>
 								</div>
-								<?php if(Yii::$app->user->can($roleexpenses)){?>
-								<div class="col-xs-3">
-									<?php echo $form->field($expensesManager,'comment')->textarea(array('class'=>'form-control'))?>
-								</div>
-								<div class="col-xs-3">
-									<?php echo $form->field($expensesManager, "autotruck_id")->hiddenInput(['value' => $autotruck->id,'class'=>"hid"])->label(false);?>
-									<?php echo Html::submitButton('Записать расход',['id'=>'expensesManager_submit','class' => 'btn btn-primary', 'name' => 'expensesManager-create-button']); ?>
-								</div>
-								<?php ActiveForm::end(); ?>
 								
-								<?php } //если есть права на расход ?>
 							</div>
 							<div class="app_update_btn">
 											<?php echo Html::a('Редактировать', array('autotruck/update','id'=>$autotruck->id), array('class' => 'btn btn-default')); ?>
@@ -157,12 +129,13 @@ $Autotrucks = Autotruck::find()->orderBy('id')->all();
 										foreach ($autotruck->getApps() as $key => $app) { ?>
 												<tr>
 													<td><?=$key+1?></td>
-													<td><?=$app->buyer->name?></td>
+													<td><?php echo Html::a($app->buyer->name,['client/read','id'=>$app->client],array('target'=>'_blank'));?></td>
 													<td><?=$app->info?></td>
 													<td><? echo $app->type?'':$app->weight?></td>
 													<td><?=$app->rate?></td>
-													<td><? echo $app->type ? $app->rate*$autotruck->course :$app->weight*$app->rate*$autotruck->course?> руб</td>
 													<td><? echo $app->type ? $app->rate:$app->weight*$app->rate?> $</td>
+													<td><? echo $app->type ? $app->rate*$autotruck->course :$app->weight*$app->rate*$autotruck->course?> руб</td>
+													
 													<td><?=$app->comment?></td>
 												</tr>
 										<?php 

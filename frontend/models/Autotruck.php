@@ -235,4 +235,26 @@ class Autotruck extends ActiveRecord
         AppTrace::deleteAll("autotruck_id=".$this->id);
         parent::afterDelete();
     }
+
+    public static function getReport(){
+        $sql = "SELECT  atr.id, atr.name, atr.date,atr.country, atr.course,
+            SUM(case when ap.type = '0' then ap.weight else 0 end) as weight,
+            SUM(case when ap.type = '0' then ap.weight*ap.rate else ap.rate end) as sum_us,
+            SUM(case when ap.type = '0' then atr.course*ap.weight*ap.rate else atr.course*ap.rate end) as sum_ru,
+            atr.expenses
+        FROM `app` ap
+            RIGHT JOIN (
+                SELECT a.id, a.name, a.date,c.country, a.course,SUM(exp.cost) as expenses
+                FROM `autotruck` as a 
+                LEFT JOIN `expenses_manager` exp ON exp.autotruck_id = a.id 
+                LEFT JOIN supplier_countries c ON c.id = a.country 
+                GROUP BY a.`id`
+                ) atr ON ap.autotruck_id = atr.`id` 
+        GROUP BY atr.`id` ORDER BY ap.id DESC";
+
+        $connection = Yii::$app->getDb();
+        $command = $connection->createCommand($sql);
+
+        return $command->queryAll();
+    }
 }

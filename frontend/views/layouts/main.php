@@ -51,6 +51,12 @@ AppAsset::register($this);
             if(Yii::$app->user->can("client/index"))
                 $menuItems[] = ['label' => 'Клиенты', 'url' => ['/client/index']];
 
+            if(Yii::$app->user->can("autotruck/index"))
+                $menuItems[] = ['label' => 'Отчет', 'url' => ['/autotruck/report']];
+
+            if(Yii::$app->user->can("autotruck/index"))
+                $menuItems[] = ['label' => 'Сверка', 'url' => ['/site/sverka']];
+
         }elseif(Yii::$app->user->identity->role->name == "client"){
             $menuItems[] = ['label' => 'Профиль', 'url' => ['/client/profile']];
         }

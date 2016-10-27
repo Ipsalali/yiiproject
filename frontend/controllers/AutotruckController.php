@@ -18,6 +18,7 @@ use frontend\modules\ListAction;
 use frontend\modules\AutotruckSearch;
 use yii\data\ActiveDataProvider;
 use frontend\models\ExpensesManager;
+use yii\data\ArrayDataProvider;
 
 class AutotruckController extends Controller{
 
@@ -89,6 +90,11 @@ class AutotruckController extends Controller{
                         'actions' => ['removeexpajax', 'index'],
                         'allow' => true,
                         'roles' => ['autotruck/addexpenses'],
+                    ],
+                    [
+                    	'actions'=>['report','index'],
+                    	'allow' => true,
+                    	'roles'=>['autotruck/addexpenses']
                     ]
                 ],
             ]
@@ -99,7 +105,6 @@ class AutotruckController extends Controller{
 
 	public function actionIndex(){
 
-		$autotruck = new Autotruck;
 		$autotruckSearch = new AutotruckSearch;
 		$dataProvider = $autotruckSearch->search(Yii::$app->request->queryParams);
 		$this->layout = "main.php";
@@ -120,7 +125,7 @@ class AutotruckController extends Controller{
 
 		if(isset($post['Autotruck'])){
 			$autotruck->name = $post['Autotruck']['name'];
-			$autotruck->course = ($post['Autotruck']['course'])?$post['Autotruck']['course']:0;
+			$autotruck->course = ($post['Autotruck']['course'])?round($post['Autotruck']['course'],2):0;
 			$autotruck->country = ($post['Autotruck']['country'])? $post['Autotruck']['country']:0;
 			$autotruck->date = ($post['Autotruck']['date'])?date('Y-m-d',strtotime($post['Autotruck']['date'])):date("Y-m-d");
 			$autotruck->description = $post['Autotruck']['description'];
@@ -145,8 +150,9 @@ class AutotruckController extends Controller{
 				if(isset($post['ExpensesManager']) && count($post['ExpensesManager']) && $autotruck->id){
 					foreach ($post['ExpensesManager'] as $key => $item) {
 						$exp = new ExpensesManager;
+						$exp->date = $autotruck->date;
 						$exp->manager_id = (int)$item['manager_id'];
-						$exp->cost = $item['cost'];
+						$exp->cost = round($item['cost'],2);
 						$exp->autotruck_id = $autotruck->id;
 						$exp->comment = trim(strip_tags($item['comment']));
 
@@ -169,7 +175,7 @@ class AutotruckController extends Controller{
 							$a->weight = ($item['weight']) ? $item['weight'] : 0;
 							$a->type = 0;
 						}
-						$a->rate = ($item['rate']) ? $item['rate'] : 0;
+						$a->rate = ($item['rate']) ? round($item['rate'],2) : 0;
 						$a->comment = $item['comment'];
 						$a->autotruck_id = $autotruck->id;
 
@@ -247,7 +253,7 @@ class AutotruckController extends Controller{
 		if($post['Autotruck']){
 
 			$autotruck->name = $post['Autotruck']['name'];
-			$autotruck->course = ($post['Autotruck']['course'])?$post['Autotruck']['course']:0;
+			$autotruck->course = ($post['Autotruck']['course'])?round($post['Autotruck']['course'],2):0;
 			$autotruck->country = $post['Autotruck']['country'];
 			$autotruck->date = ($post['Autotruck']['date'])
 									? date('Y-m-d',strtotime($post['Autotruck']['date']))
@@ -295,7 +301,8 @@ class AutotruckController extends Controller{
 						}
 						
 						$exp->manager_id = (int)$item['manager_id'];
-						$exp->cost = $item['cost'];
+						$exp->date = $autotruck->date;
+						$exp->cost = round($item['cost'],2);
 						$exp->autotruck_id = $autotruck->id;
 						$exp->comment = trim(strip_tags($item['comment']));
 
@@ -329,7 +336,7 @@ class AutotruckController extends Controller{
 							$a->weight = ($item['weight']) ? $item['weight'] : 0;
 							$a->type = 0;
 						}
-						$a->rate = ($item['rate']) ? $item['rate'] : 0;
+						$a->rate = ($item['rate']) ? round($item['rate'],2) : 0;
 						
 						$a->comment = $item['comment'];
 						$a->autotruck_id = $autotruck->id;
@@ -453,7 +460,7 @@ class AutotruckController extends Controller{
 			&& $post['ExpensesManager']['autotruck_id']){
 			$model = new ExpensesManager;
 			$model->manager_id = (int)$post['ExpensesManager']['manager_id'];
-			$model->cost = $post['ExpensesManager']['cost'];
+			$model->cost =round($post['ExpensesManager']['cost'],2);
 			$model->autotruck_id = (int)$post['ExpensesManager']['autotruck_id'];
 			$model->comment = trim(strip_tags($post['ExpensesManager']['comment']));
 
@@ -466,6 +473,25 @@ class AutotruckController extends Controller{
 		}else{
 			Yii::$app->response->redirect(array("autotruck/index"));
 		}
+	}
+
+	public function actionReport(){
+		$report = Autotruck::getReport();
+
+		$dataProvider = new ArrayDataProvider([
+        		'key'=>'id',
+        		'allModels' => $report,
+        		'sort' => [
+            		'attributes' => ['id', 'name','course','country','weight','sum_us','sum_ru','expenses'],
+        		],
+        		'pagination' => [
+        			'pageSize' => 10,
+    			],
+		]);
+
+		return $this->render('report', array(
+        	'dataProvider' => $dataProvider
+    	));
 	}
 
 }

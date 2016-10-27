@@ -6,8 +6,7 @@ use Yii;
 use yii\db\ActiveRecord;
 use yii\db\Expression;
 use frontend\models\Autotruck;
-use common\models\PaymentState;
-use common\models\Client;
+use common\models\User;
 
 /**
 *
@@ -15,14 +14,15 @@ use common\models\Client;
 *
 */
 
-class CustomerPayment extends ActiveRecord
+class PaymentsExpenses extends ActiveRecord
 {
 
 
 	public function rules(){
 		return [
             // name, email, subject and body are required
-            //[['info'], 'required']
+            [['manager_id','sum'], 'required'],
+            ['sum','double']
         ];
 	}
 
@@ -43,7 +43,7 @@ class CustomerPayment extends ActiveRecord
      */
 
 	public static function tableName(){
-		return '{{%customer_payment}}';
+		return '{{%payments_expenses}}';
 	}
 
 	/**
@@ -60,33 +60,17 @@ class CustomerPayment extends ActiveRecord
     public function attributeLabels(){
     	return array(
     		'id'=>'Номер',
-    		'autotruck_id'=>'Заявка',
-            'payment_state_id'=>'Статус оплаты',
-    		'client_id'=>'Клиент',
-            'sum'=>'Сумма $',
+            'manager_id'=>'Менеджер',
+            'sum'=>'Сумма ($)',
             'date'=>'Дата',
             'comment'=>'Комментарии'
     		);
     }
 
 
-    public function getAutotruck(){
-        return $this->hasOne(Autotruck::className(),["id"=>'autotruck_id']);
+    public function getManager(){
+        return $this->hasOne(User::className(),["id"=>'manager_id']);
     }
 
-    public function getPaymentState(){
-        return $this->hasOne(PaymentState::className(),["id"=>'payment_state_id']);
-    }
-
-    public function getClient(){
-        return $this->hasOne(Client::className(),["id"=>'client_id']);
-    }
-
-
-    public static function getCustomerPayment($client,$autotruck){
-        $state = CustomerPayment::find()->where("`client_id`=".(int)$client." AND `autotruck_id`=".(int)$autotruck)->one();
-
-        return $state->id ? $state : new CustomerPayment;
-    }
 
 }

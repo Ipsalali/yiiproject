@@ -17,6 +17,10 @@ use common\models\Post;
 use common\models\Client;
 use frontend\models\App;
 use frontend\models\Autotruck;
+use common\models\User;
+use frontend\models\PaymentsExpenses;
+use frontend\models\ExpensesManager;
+
 
 /**
  * Site controller
@@ -52,10 +56,20 @@ class SiteController extends Controller
                         'roles' => ['admin','manager'],
                     ],
                     [
+                        'actions' => ['sverka'],
+                        'allow' => true,
+                        'roles' => ['site/sverka'],
+                    ],
+                    [
                         'actions' => ['login'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
+                    [
+                        'actions'=>['addpaymentsmanager'],
+                        'allow' => true,
+                        'roles' => ['admin','manager'],
+                    ]
                 ],
             ],
             'verbs' => [
@@ -291,6 +305,119 @@ class SiteController extends Controller
                 $answer['html'] = $html;
                 $answer['keywords'] = $keywords;
 
+            }else{
+                $answer['result'] = 0;
+            }
+        
+            \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+            
+            return $answer;
+        }
+    }
+
+
+    public function actionSverka(){
+
+        $params = Yii::$app->request->get();
+        $expenses = array();
+        $data_params = array();
+        $manager = new User;
+        if($params && (int)$params['manager']){
+            $data_params['date_from'] = $params['date_from'];
+            $data_params['date_to'] = $params['date_to'];
+            $data_params['manager'] = (int)$params['manager'];
+            $manager = User::findOne($data_params['manager']);
+            $expenses = $manager->getExpenses($data_params['date_from'],$data_params['date_to']);
+            $payments = $manager->getPayments($data_params['date_from'],$data_params['date_to']);
+            $sverka = $manager->getPaymentsAndExpenses($data_params['date_from'],$data_params['date_to']);
+        }
+        return $this->render('sverka', ["sverka"=>$sverka,"manager"=>$manager,"expenses"=>$expenses,"data_params"=>$data_params,'payments'=>$payments]);
+    }
+
+
+    public function actionAddpaymentsmanager(){
+
+        $answer = array();
+        $answer['result'] = 0;
+
+        if(Yii::$app->request->isAjax){
+            $post = Yii::$app->request->post();
+            $answer['data'] = $post;
+            if($post['PaymentsExpenses'] && count($post['PaymentsExpenses'])){
+                
+                foreach ($post['PaymentsExpenses'] as $key => $item) {
+                    if(isset($item['id']) && (int)$item['id']){
+
+                        $pm = PaymentsExpenses::findOne((int)$item['id']);
+                        if ($pm->id === NULL){
+                            $answer['messages'][] = "Оплата с суммой ".$item['sum'].' не добавлена';
+                            continue;
+                        }
+                    }else{
+                       $pm = new PaymentsExpenses;
+                       $pm->date = ($item['date']) ? date("Y-m-d",strtotime($item['date'])) :date("Y-m-d"); 
+                       $pm->manager_id = (int)$item['manager_id'];
+                    }
+                     
+                    $pm->sum = round(trim(strip_tags($item['sum'])),2);
+                    $pm->comment = trim(strip_tags($item['comment']));
+                    if($pm->save()){
+                        $answer['messages'][] = "Оплата с суммой ".$item['sum'].' добавлена';
+                        $answer['result'] = 1;
+                    }else{
+                        $answer['messages'][] = "Оплата с суммой ".$item['sum'].' не добавлена';
+                    }
+                } 
+            }
+
+            //Редактирование если есть расход
+            if($post['ExpensesManager'] && count($post['ExpensesManager'])){
+                
+                foreach ($post['ExpensesManager'] as $key => $item) {
+                    if(isset($item['id']) && (int)$item['id']){
+
+                        $em = ExpensesManager::findOne((int)$item['id']);
+                        if ($em->id === NULL){
+                            $answer['messages'][] = "Оплата с суммой ".$item['sum'].' не добавлена';
+                            continue;
+                        }
+
+                        $em->cost = round(trim(strip_tags($item['sum'])),2);
+                        $em->comment = trim(strip_tags($item['comment']));
+                        if($em->save())
+                            $answer['result'] = 1;
+                    }
+                     
+                } 
+            }  
+        }
+        
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+            
+        return $answer;
+    }
+
+
+    public function actionRemovepayajax(){
+        if(Yii::$app->request->isAjax){
+
+            $post = Yii::$app->request->post();
+
+            $answer = array();
+
+            if($post['id']){
+            
+                $id = (int)$post['id'];
+
+                $exp = PaymentsExpenses::findOne($id);
+                if($exp){
+                    $answer['result'] = (int)$post['id'];
+
+                    $exp->delete();
+
+                }else{
+                    $answer['error']['text'] = 'not found app';
+                }
             }else{
                 $answer['result'] = 0;
             }

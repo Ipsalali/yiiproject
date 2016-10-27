@@ -9,7 +9,7 @@ use common\models\PaymentState;
 	<div class="row">
 	 	<div class="col-xs-7">
 	 		<div class="row">
-			<div class="col-xs-5 client_manager">
+				<div class="col-xs-5 client_manager">
 					<h4>Ваш менеджер:</h4>
 					<?php $class=""; if($client->managerUser){ 
 						$class="manager_info";
@@ -95,6 +95,10 @@ use common\models\PaymentState;
 								<div class="col-xs-4">
 									<div class="col-xs-12">
 										<p>Текущий статус: <span style="color:<?=$paymentState->color?>"><?php echo $paymentState->title; ?></span></p>
+										<?php
+											if($paymentState->id == PaymentState::getSumState()->id){
+										?><p>Сумма: <?php echo $CustomerPayment->sum?> $</p><?php }?>
+										<p>Комментраий: <?php echo $CustomerPayment->comment?></p>
 									</div> 
 								</div>
 							</div>
@@ -110,24 +114,30 @@ use common\models\PaymentState;
 										<th>Информация</th>
 										<th>Вес (кг)</th>
 										<th>Ставка ($)</th>
+										<th>Сумма $</th>
 										<th>Сумма (руб)</th>
 										<th>Комментарий</th>
 									</tr>
-							<?php $cweight=0;$crate=0; $total = 0;
+							<?php $cweight=0;$crate=0; $total = 0; $totalUs = 0;
 							foreach ($a['apps'] as $i=> $app) { ?>
 									<tr>
 										<td><?=$i+1?></td>
 										<td><?=$app->info?></td>
 										<td><?=$app->weight?></td>
 										<td><?=$app->rate?></td>
+										<td><?=$app->weight*$app->rate?> $</td>
 										<td><?=$app->weight*$app->rate*$autotruck->course?> руб</td>
 										<td><?=$app->comment?></td>
 									</tr>
-							<?php  $cweight += $app->weight; $total+=$app->weight*$app->rate*$autotruck->course; }?>
+							<?php   $cweight += $app->weight; 
+									$totalUs+=$app->weight*$app->rate;
+									$total+=$app->weight*$app->rate*$autotruck->course; 
+								}?>
 								<tr>
 									<td colspan="2"><strong>Итого</strong></td>
 									<td><strong><?php echo $cweight;?> кг.</strong></td>
 									<td></td>
+									<td><strong><?php echo $totalUs;?> $</strong></td>
 									<td><strong><?php echo $total;?> руб.</strong></td>
 									<td></td>
 								</tr>

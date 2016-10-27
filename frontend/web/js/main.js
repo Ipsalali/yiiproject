@@ -44,7 +44,7 @@ $(function(){
 
 	//Запрет ввода букв для вычисляемых полей; разрешаем точку код 46
 	$("body").on("keypress",".compute_sum",function(key) {
-        if((key.charCode < 48 || key.charCode > 57) && key.charCode != 46) return false;
+        if((key.charCode < 48 || key.charCode > 57) && key.charCode != 46 && key.charCode != 45) return false;
     });
 
 
@@ -57,7 +57,9 @@ $(function(){
 
     	var s_ru = course* rate * weight;
         var s_usa = rate * weight;
-    	if(course >0 && rate >0 && weight > 0 && s_ru > 0 && s_usa>0){
+    	
+        console.log(rate);
+        if(course >0 && weight > 0){
     		parent_row.find(".summa").text(s_ru.toFixed(2)+" руб");
             parent_row.find(".summa_usa").text(s_usa.toFixed(2)+" $");
     	}else{
@@ -78,7 +80,7 @@ $(function(){
 
     		var s_ru = course* rate * weight;
             var s_usa = rate * weight;
-    		if(course >0 && rate >0 && weight > 0 && s_ru > 0 && s_usa>0){
+    		if(course >0 && weight > 0){
     			parent_row.find(".summa").text(s_ru.toFixed(2)+" руб");
                 parent_row.find(".summa_usa").text(s_usa.toFixed(2)+" $");
     		}else{

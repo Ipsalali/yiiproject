@@ -6,7 +6,7 @@ use yii\bootstrap\ActiveForm;
 use frontend\models\CustomerPayment;
 use common\models\PaymentState;
 
-
+$sum_state = PaymentState::getSumState();
 ?>
 
 <div class="client_page">
@@ -75,11 +75,17 @@ use common\models\PaymentState;
 					<div id="grafik_info"></div>
 				<?php } ?>
 		</div>
-
+		</div>
+		<div class="row">
+			<div class="col-xs-12">
+				<p>Задолженность: <?php echo $client->getDebt() - $client->getSumStateSum();?> $</p>
+			</div>
+		</div>
 		<div class="row">
 				<div class="col-xs-12">
 					<?php if($autotrucks){?>
 					<div class="app_blocks">
+					<input type="hidden" name="sum_state_id" id="sum_state_id" value="<?php echo $sum_state->id?>" />
 						<?php  foreach ($autotrucks as $key => $a){
 							if($autotruck = Autotruck::find()->where("id=".$key)->one()){
 							}else continue;
@@ -118,7 +124,7 @@ use common\models\PaymentState;
 										<?php echo Html::encode($autotruck->description); ?>
 									</div>
 								</div>
-								<div class="col-xs-4">
+								<div class="col-xs-3">
 									<h4>Статус:</h4>
 										<ul>
 											<?
@@ -137,22 +143,28 @@ use common\models\PaymentState;
 											?>
 										</ul>
 								</div>
-								<div class="col-xs-4">
+								<div class="col-xs-5">
 									<div class="row">
 										<div class="col-xs-12">
-											<p>Текущий статус: <span style="color:<?=$paymentState->color?>"><?php echo $paymentState->title; ?></span></p>
+											<p><strong>Статус оплаты</strong>: <span style="color:<?=$paymentState->color?>"><?php echo $paymentState->title; ?></span></p>
 										</div>
 									</div>
 									<?php $form = ActiveForm::begin(['id'=>"paymentStateFor".$autotruck->id,'class'=>'paymentStateForm','action'=>['client/autotruckpayment','id'=>$CustomerPayment->id]])?>
 									<div class="row">
-									<div class="col-xs-6">
+									<div class="col-xs-4">
 									<?php 
 										echo $form->field($CustomerPayment, "autotruck_id",array('attribute'=>['class'=>"hid"]))->hiddenInput(['value' => $autotruck->id,'class'=>"hid"])->label(false);
 										echo $form->field($CustomerPayment, "client_id")->hiddenInput(['value' => $client->id,'class'=>"hid"])->label(false);
 									?>
-									<?php echo $form->field($CustomerPayment,'payment_state_id',['inputOptions'=>["class"=>"form-control"]])->label(false)->dropDownList(ArrayHelper::map(PaymentState::find()->orderBy(['id'=>SORT_ASC])->all(),'id','title'),['prompt'=>'Статус оплаты','options'=>[$paymentState->id=>['selected'=>true]]]);?>
+									<?php echo $form->field($CustomerPayment,'payment_state_id',['inputOptions'=>["class"=>"form-control payment-state-select"]])->label(false)->dropDownList(ArrayHelper::map(PaymentState::find()->orderBy(['id'=>SORT_ASC])->all(),'id','title'),['prompt'=>'Статус оплаты','options'=>[$paymentState->id=>['selected'=>true]]]);?>
 									</div>
-									<div class="col-xs-2">
+									<?php 
+										$display = ($paymentState->id == $sum_state->id)?"block":"none";
+									?>
+									<div class="col-xs-4 sum_state_block" style="display: <?php echo $display;?>;">
+									<?php echo $form->field($CustomerPayment, "sum",array('attribute'=>['class'=>"sum_hid"]))->textInput(['id' => 'sum_hid_'.$autotruck->id,'class'=>"form-control hid",'value'=>$CustomerPayment->sum]); ?>
+									</div>
+									<div class="col-xs-4">
 									<?php echo Html::submitButton('Сохранить',['id'=>'submit_payment','class' => 'btn btn-primary', 'name' => 'customer-payment-autotruck']); ?>
 									</div>
 									</div>
@@ -191,8 +203,9 @@ use common\models\PaymentState;
 										<td><?=$app->info?></td>
 										<td><? echo $app->type?'':$app->weight?></td>
 										<td><?=$app->rate?></td>
-										<td><? echo $app->type ? $app->rate*$autotruck->course :$app->weight*$app->rate*$autotruck->course?> руб</td>
+										
 										<td><? echo $app->type ? $app->rate:$app->weight*$app->rate?> $</td>
+										<td><? echo $app->type ? $app->rate*$autotruck->course :$app->weight*$app->rate*$autotruck->course?> руб</td>
 										<td><?=$app->comment?></td>
 									</tr>
 							<?php 
@@ -219,7 +232,7 @@ use common\models\PaymentState;
 	<?php } ?>
 				</div>
 			</div>
-		</div>
+		
 		
 			<script id="source" language="javascript" type="text/javascript">
 				$(function () {
@@ -234,22 +247,34 @@ use common\models\PaymentState;
 					label:" Количество веса по месяцам"
 				}];
 
-		var plot = $.plot("#placeholder", data, {
-			series: {
-				// bars: {
-				// 	show: true,
-				// 	barWidth: 0.2,
-				// 	align: "center"
-				// }
-				lines: { show: true },
-        		points: { show: true }
-			},
-			grid: {clickable: true },
-			xaxis: {
-				mode: "categories",
-				tickLength: 0
-			}
-		});
+				var plot = $.plot("#placeholder", data, {
+					series: {
+						// bars: {
+						// 	show: true,
+						// 	barWidth: 0.2,
+						// 	align: "center"
+						// }
+						lines: { show: true },
+		        		points: { show: true }
+					},
+					grid: {clickable: true },
+					xaxis: {
+						mode: "categories",
+						tickLength: 0
+					}
+				});
+
+				//при выборе статуса оплаты проверяем, если выбран частично оплачен. то отображаем поле для суммы
+				$(".payment-state-select").change(function(){
+					var sum_state = parseInt($("#sum_state_id").val());
+					var this_val = parseInt($(this).val());
+					if(sum_state == this_val){
+						$(this).parent().parent().siblings(".sum_state_block").show();
+					}else{
+						$(this).parent().parent().siblings(".sum_state_block").hide();
+						$(this).parent().parent().siblings(".sum_state_block").find('input').val(0);
+					}
+				});
 
 			$("#placeholder").bind("plotclick", function (event, pos, item) {
         		if (item) {

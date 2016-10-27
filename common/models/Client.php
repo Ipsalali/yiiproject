@@ -11,6 +11,7 @@ use frontend\models\App;
 use frontend\models\Autotruck;
 use yii\db\Query;
 use yii\db\Command;
+use common\models\PaymentState;
 
 /**
 *
@@ -21,6 +22,7 @@ use yii\db\Command;
 class Client extends ActiveRecord
 {
 
+    public $ipay;
 
 	public function rules(){
 		return [
@@ -76,6 +78,7 @@ class Client extends ActiveRecord
             'email'=>'E-mail',
             'categoryTitle'=>'Категория',
             'managerName'=>'Ответственный',
+            'ipay'=>'Статус оплаты заявок'
     	);
     }
 
@@ -166,7 +169,6 @@ class Client extends ActiveRecord
 
     //Формирует данные для графика по соотношению времени и веса заявок
     public function getDataForGrafik(){
-
         $sql= "SELECT at.`date`,SUM(a.`weight`) com_weight FROM app a INNER JOIN autotruck at ON (a.`autotruck_id` = at.`id`) WHERE a.`client` = " . $this->id . " GROUP by at.date ORDER BY at.date ASC ";
         //App::find()->leftJoin("autotrucks ON ")->where("client=".$this->id)->orderBy(["id"=>SORT_DESC])->all();
         $connection = Yii::$app->getDb();
@@ -179,7 +181,65 @@ class Client extends ActiveRecord
                 $data[$month]['weight'] +=$value['com_weight']; 
             }
         }
-        
         return $data;
+    }
+
+
+    //Статус оплаты заявок клиента
+    public function getIpay(){
+        $subsql1 = "(SELECT COUNT(DISTINCT a.id) FROM autotruck a 
+                    INNER JOIN customer_payment cp ON a.id = cp.autotruck_id
+                    INNER JOIN payment_state ps  ON ps.id = cp.payment_state_id
+                    WHERE cp.client_id = ".$this->id." AND ps.end_state = 1)";
+
+            $subsql2 = "(SELECT COUNT(DISTINCT a.id) FROM autotruck a
+                INNER JOIN app ap ON ap.autotruck_id = a.id
+                WHERE ap.client = ".$this->id.")";
+        $sql = "SELECT DISTINCT CASE WHEN {$subsql1} = {$subsql2} THEN 1 ELSE 0 END as payed FROM client";
+
+        $connection = Yii::$app->getDb();
+        $command = $connection->createCommand($sql);
+        $res = $command->queryOne();
+        
+        $this->ipay = ($res['payed'])? PaymentState::getEndState() : PaymentState::getDefaultState();
+
+        return $this->ipay;
+    }
+
+
+
+    public function getDebt(){
+        $sql = "select SUM(ap.rate * ap.weight) as sum
+                FROM autotruck a
+                INNER JOIN app ap ON ap.autotruck_id = a.id
+                WHERE ap.client = {$this->id} AND 
+                    (ap.autotruck_id in (
+                        SELECT cp.autotruck_id 
+                        FROM customer_payment cp
+                        INNER JOIN payment_state ps ON ps.id = cp.payment_state_id
+                        WHERE cp.client_id = {$this->id} AND cp.autotruck_id = ap.autotruck_id AND (ps.default = 1 OR ps.sum_state = 1))
+                        OR 
+                        NOT exists (SELECT cp2.autotruck_id FROM customer_payment cp2 WHERE cp2.autotruck_id  = ap.autotruck_id  AND cp2.client_id = {$this->id})
+                        )";
+
+        $connection = Yii::$app->getDb();
+        $command = $connection->createCommand($sql);
+        $res = $command->queryOne();
+
+        return ($res['sum'])? $res['sum'] : 0;
+    }
+
+    //получаем частично оплаченную сумму
+    public function getSumStateSum(){
+        $sql = "select SUM(cp.sum) as sum
+                FROM customer_payment cp
+                LEFT JOIN payment_state ps ON ps.id = cp.payment_state_id
+                WHERE cp.client_id = {$this->id} AND ps.sum_state = 1;";
+
+        $connection = Yii::$app->getDb();
+        $command = $connection->createCommand($sql);
+        $res = $command->queryOne();
+
+        return ($res['sum'])? $res['sum'] : 0;
     }
 }

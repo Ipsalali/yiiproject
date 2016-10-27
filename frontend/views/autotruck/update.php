@@ -23,13 +23,11 @@ $clients = Client::find()->all();
 ?>
 
 
-<div class="container">
+<div class="base_content">
 	<div class="row">
 		<div class="col-xs-12">
 			<h1>Заявка: <?=$autotruck->name?></h1>
-			 <div class="new_app">
-				<?php echo Html::a('Добавить заявку', array('autotruck/create'), array('class' => 'btn btn-primary')); ?>
-			 </div>
+			
 		</div>
 	</div>
 <!-- <div class="left_bar"> -->
@@ -381,6 +379,7 @@ $clients = Client::find()->all();
 
 			if(!valid)
 				event.preventDefault();
+			
 			
 		})
 

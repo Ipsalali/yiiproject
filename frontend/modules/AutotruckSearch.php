@@ -6,6 +6,10 @@ use frontend\models\Autotruck;
 use yii\data\ActiveDataProvider;
 use yii\data\Pagination;
 use frontend\modules\FilterModelBase;
+use common\models\PaymentState;
+use frontend\models\CustomerPayment;
+use frontend\modules\PaymentStateFilter;
+use yii\db\Query;
 
 class AutotruckSearch extends Autotruck
 {
@@ -15,6 +19,7 @@ class AutotruckSearch extends Autotruck
 
     public $date_from;
     public $date_to;
+    public $implements_state;
     public $page_size = 15;
     public $filterPosition = FILTER_POS_BODY;
 
@@ -27,9 +32,8 @@ class AutotruckSearch extends Autotruck
         return [
             // Обязательное поле
             ['id','integer'],
-            ['course','double'],
             // Только числа, значение как минимум должна равняться единице
-            [['date','date_from','date_to','country','status','name'],'safe']
+            [['date','date_from','date_to','country','status','name','implements_state'],'safe']
         ];
     }
 
@@ -45,7 +49,7 @@ class AutotruckSearch extends Autotruck
     {
         // Создаём запрос на получение продуктов вместе категориями
         $query = Autotruck::find();
-
+        $query->orderBy(['id' => SORT_DESC]);
         /**
          * Создаём DataProvider, указываем ему запрос, настраиваем пагинацию
          */
@@ -55,9 +59,48 @@ class AutotruckSearch extends Autotruck
                     'pageSize' => $this->page_size
                 ])
         ]);
-       
+        
         if(!($this->load($params) && $this->validate())){
             return $dataProvider;
+        }
+
+        if($this->implements_state){
+
+            $subquery = new Query;
+            $subquery->select("id")->from("autotruck");
+            $subsql1 = "(SELECT COUNT(DISTINCT cp.id) FROM app a 
+                    INNER JOIN customer_payment cp ON a.client = cp.client_id
+                    INNER JOIN payment_state ps  ON ps.id = cp.payment_state_id
+                    WHERE a.autotruck_id = autotruck.id AND ps.end_state = 1 AND cp.autotruck_id = autotruck.id)";
+
+            //Количество клиентов в заявке
+            $subsql2 = "(SELECT COUNT(DISTINCT c.id) FROM app a
+                INNER JOIN client c ON a.client = c.id
+                WHERE a.autotruck_id = autotruck.id)";
+
+            if(PaymentStateFilter::getDefaultState()->id == $this->implements_state){
+                $subquery->where("{$subsql1} != {$subsql2}");
+                
+                
+                //Если не существуют наименования без клиентов в заявке
+                $query->where("NOT EXISTS (SELECT a.id FROM app a WHERE a.autotruck_id = autotruck.id AND a.client = 0)");
+                $query->andFilterWhere(["id"=>$subquery]);
+
+            }elseif(PaymentStateFilter::getEndState()->id == $this->implements_state){
+               $subquery->where("{$subsql1} = {$subsql2}");
+              
+               
+               //Если не существуют наименования без клиентов в заявке
+               $query->where("NOT EXISTS (SELECT a.id FROM app a WHERE a.autotruck_id = autotruck.id AND a.client = 0)");
+
+                $query->andFilterWhere(["id"=>$subquery]);
+            }elseif($this->implements_state == "none"){
+                //print_r("none");
+                //Если существуют наименования без клиентов в заявке(т.е нереализованные)
+                $query->where("EXISTS (SELECT a.id FROM app a WHERE a.autotruck_id = autotruck.id AND a.client =0)");
+            }
+
+            
         }
         
         // Если ошибок нет, фильтруем по цене
@@ -75,7 +118,7 @@ class AutotruckSearch extends Autotruck
 
         $query->andFilterWhere(['like','name',$this->name]);
         
-
+       
         return $dataProvider;
     }
 
