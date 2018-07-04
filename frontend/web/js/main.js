@@ -59,12 +59,12 @@ $(function(){
         var s_usa = rate * weight;
     	
         console.log(rate);
-        if(course >0 && weight > 0){
+        if(course >=0 && weight > 0){
     		parent_row.find(".summa").text(s_ru.toFixed(2)+" руб");
-            parent_row.find(".summa_usa").text(s_usa.toFixed(2)+" $");
+            parent_row.find(".summa_usa").find("input.summa_us").val(s_usa.toFixed(2)+" $");
     	}else{
     		parent_row.find(".summa").text("");
-            parent_row.find(".summa_usa").text("");
+            parent_row.find(".summa_usa").find("input.summa_us").val("");
     	}
     })
 
@@ -80,15 +80,36 @@ $(function(){
 
     		var s_ru = course* rate * weight;
             var s_usa = rate * weight;
-    		if(course >0 && weight > 0){
+    		if(course >=0 && weight > 0){
     			parent_row.find(".summa").text(s_ru.toFixed(2)+" руб");
-                parent_row.find(".summa_usa").text(s_usa.toFixed(2)+" $");
+                parent_row.find(".summa_usa").find("input.summa_us").val(s_usa.toFixed(2)+" $");
     		}else{
     			parent_row.find(".summa").text("");
-                parent_row.find(".summa_usa").text("");
+                parent_row.find(".summa_usa").find("input.summa_us").val("");
     		}
     	});
     	
+    })
+
+
+    $("body").on("keyup",".summa_usa input.summa_us",function(event){
+
+        var summa_us =  parseFloat($(this).val());
+        var parent_row = $(this).parents(".app_row");
+        var course =  parseFloat($(".compute_course").val());
+        var rate =  parent_row.find(".compute_rate");
+        var weight =  parent_row.hasClass("type_service")? 1 :parseFloat(parent_row.find(".compute_weight").val());
+
+        var rate_vl = summa_us/weight;
+        var s_ru = course* rate_vl * weight;
+        if(summa_us >0 && weight > 0){
+            parent_row.find(".summa").text(s_ru.toFixed(2)+" руб");
+            rate.val(rate_vl.toFixed(2));
+        }else{
+            parent_row.find(".summa").text("");
+            rate.val(0);
+        }
+        
     })
 
 

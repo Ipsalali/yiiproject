@@ -99,6 +99,7 @@ a.desc:after {
 
 .main{
     width: 100%;
+    padding: 0px 10px;
 }
 
 .main:before{
@@ -155,7 +156,7 @@ a.desc:after {
 .date_status_block{
     position: relative;
     display: inline-block;
-        margin: 25px 20px 0px;
+        margin: 25px 12px 0px;
 }
 
 .field-app-status{
@@ -293,6 +294,9 @@ li.app_status{
     z-index: 1031;
 }
 
+.search_block form{
+    float: right;
+}
 .top:after{
     display: block;
     content: "";
@@ -305,6 +309,7 @@ li.app_status{
 
 .search_block input[type=text]{
     width: 400px;
+    margin-top: 3px;
 }
 
 
@@ -374,11 +379,11 @@ li.app_status{
 }
 
 .app_info{
-    width: 355px;
+    /*width: 355px;*/
 }
 
 .app_client{
-     width: 150px;
+    width: 150px;
 }
 
 .right_content{
@@ -460,6 +465,7 @@ li.app_status{
 .search_result{
     height: 80vh;
     overflow: scroll;
+    clear: both;
 }
 
 .td_client_name{
@@ -474,8 +480,11 @@ select#client_category_id{
     width: 55px;
 }
 
-.app_weigth,.app_rate{
+.app_weigth{
     width: 80px;
+}
+.app_rate{
+   /*width: 30px;*/
 }
 
 .field-autotruck-date > label{
@@ -571,8 +580,39 @@ input#autotruck-date{
     margin-bottom: 0px !important;
 }
 
+
 .new_app{
     margin-bottom: 10px;
+}
+
+
+.autotruck_head{}
+
+
+.autotruck_head:after{
+    clear: both;
+    display: block;
+    content: "";
+}
+
+.autotruck_title{
+    float: left;
+}
+
+.new_autotruck{
+    margin-top: 32px;
+    margin-left: 20px;
+    float: left;
+}
+
+.new_autotruck a{
+    height: 21px;
+    border-radius: 2px;
+    font-size: 12px;
+    line-height: normal;
+    padding: 3px 13px;
+    text-transform: lowercase;
+    font-family: arial;
 }
 
 
@@ -584,4 +624,331 @@ input#autotruck-date{
 
 .payment-state-select{
     margin-top: 25px;
+}
+
+.logout_block{
+    position: fixed;
+    right: 0px;
+    top: 0px;
+    z-index: 1031;
+}
+
+.logout_block a{
+    color: #fff;
+    background: #515ea7;
+    text-transform: uppercase;
+    padding: 17px;
+    line-height: 51px;
+    letter-spacing: 2px;
+}
+
+.navbar-brand {
+    padding: 15px 10px 0px 0px !important;
+    font-size: 30px !important;
+    color: #ffffff !important;
+}
+
+
+.autotruck_apps table th,#table_pay th{
+    white-space: nowrap;
+    padding: 0px;
+    font-size: 13px;
+}
+
+.autotruck_apps table td,#table_pay td{
+    padding: 0px !important;
+    font-size: 13px;
+}
+
+.app_out_stock{
+    display: block;
+    width: 16px;
+    height: 16px;
+}
+
+.app_out_stock.ok{
+    background-image: url(../images/ok.png);
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    float: right;
+}
+
+#table_pay .btn{
+    padding: 2px 4px !important;
+    font-size: 10px !important;
+}
+
+
+.table_update{
+        white-space: normal;
+    font-size: 12px;
+    table-layout: fixed;
+    
+}
+
+.table_update th{
+    white-space: normal !important;
+    word-wrap: break-word;
+}
+.table_update th,.table_update td{
+    padding: 3px !important;
+}
+
+.table_update .form-control{
+    border:none;
+    padding:3px;
+    font-size: 12px;
+    height: 20px;
+}
+
+.table_update .btn{
+    padding: 0px 6px;
+    font-size: 10px;
+}
+
+.panel-primary{
+    border:none;
+}
+
+
+nav .container{
+    width: 100% !important;
+    padding: 0px 25px;
+}
+
+.as_index{
+        font-size: 12px;
+    white-space: nowrap;
+}
+
+.as_index thead .form-control,.as_index thead select{
+    font-size: 11px;
+    height: 26px;
+    padding: 1px;
+    border-radius: 1px;
+    border-color: rgb(185, 185, 185);
+}
+
+.as_index tbody td{
+    font-size: 12px;
+        padding: 4px !important;
+}
+
+.table-hover > tbody > tr:hover {
+    background-color: rgba(34, 68, 189, 0.22);
+}
+
+.client_phone_column{
+    white-space: normal;
+}
+
+
+.ignor_block{
+    position: relative;
+}
+#ignor_list{
+    display: none;
+    position: absolute;
+    background: #fff;
+    margin: 7px 0px;
+    padding: 4px;
+    border: 1px solid #ccc;
+    width: 100%;
+    border-radius: 4px;
+    box-shadow: 0px 0px 2px -1px;
+    -webkit-box-shadow: 0px 0px 2px -1px;
+}
+
+    #ignor_list li{
+        cursor: pointer;
+        list-style: none;
+        padding: 4px;
+    }
+
+    #ignor_list li:hover{
+        background:#b3b8d6;
+    }
+
+
+.ignored_clients{
+    margin-bottom: 40px;
+}
+
+    .ignored_clients label{
+        font-size: 20px;
+    }
+
+    .ignored_item{
+        display: inline-block;
+        font-size: 13px;
+        color: #305bd8;
+        font-weight: bold;
+        margin-right: 10px;
+    }
+
+        .remove_ignore{
+            cursor: pointer;
+            color: #f00;
+            font-size: 16px;
+        }
+
+
+.block_send-letter-button{
+    margin-top: 150px;
+    text-align: center;
+}
+
+.block_send-letter-button button{
+    font-size: 30px;
+    padding: 20px 60px;
+}
+
+.load_block{
+    display: none;
+    position: absolute;
+    top:0px;
+    left: 0px;
+    z-index: 1000;
+    background: rgba(0,0,0,0);
+    width: 100%;
+    height: 100%;
+}
+
+    .load_gif{
+        position: relative;
+        margin: 200px auto;
+        display: table;
+    }
+
+    .load_gif img{
+
+    }
+
+
+.spender_result{
+    margin: 30px 0px 0px;
+    text-align: center;
+}
+
+    .spender_result .ok{
+        color:#0e8c0e;
+    }
+
+    .spender_result .error{
+        color:#d20f28;
+    }
+    
+    
+.navbar-toggle{
+    float:inherit !important;
+}
+
+
+.app_rate{
+    max-width:100px;
+}
+
+table th.app_info{
+    width:32%;
+}
+
+table th.app_place{
+    width: 4%;
+}
+
+table th.app_sumus{
+    width: 4%;
+}
+
+table th.app_sumru{
+    width: 4%;
+}
+
+table th.app_package{
+    width: 6%;
+}
+
+@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+
+}
+
+.profile_autotruck_head{
+    padding: 0px !important;
+}
+
+.profile_autotruck_body{
+        padding: 0px 0px;
+}
+
+
+#autocomplete_block{
+
+}
+
+    #manager_data_key{
+
+    }
+
+    .autocomplete_data{
+    position: absolute;
+    display: none;
+    height: 300px;
+    min-width: 300px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    padding: 5px;
+    z-index: 1000;
+    }
+
+        #autocomplete_items{
+            position: absolute;
+            z-index: 199;
+            height: 285px;
+            min-width: 300px;
+            overflow-y: scroll;
+            overflow-x: hidden;
+            margin: 0px;
+            padding: 0px;
+            background: #fff;
+        }
+
+            #autocomplete_items li{
+                list-style: none;
+                cursor: pointer;
+            }
+
+            #autocomplete_items li:hover{
+                background-color: #ccc;
+            }
+            
+.ali_table{
+    
+}
+
+.ali_table th{
+    
+}
+
+.ali_table tr{
+    
+}
+
+.ali_table thead .form-control, .ali_table thead select {
+    font-size: 11px;
+    height: 26px;
+    padding: 1px;
+    border-radius: 1px;
+    border-color: rgb(185, 185, 185);
+}
+
+.ali_table thead td{
+}
+
+.ali_table tbody td{
+    font-size: 12px;
+    padding: 4px !important;
+}
+
+.ali_table input,.ali_table select{
+    
 }
