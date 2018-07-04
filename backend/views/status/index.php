@@ -27,6 +27,7 @@ use yii\helpers\Html;
         <td>Заголовок</td>
         <td>Описание</td>
         <td>Порядок</td>
+        <td>Отправлять счет?</td>
         <td>Управление</td>
     </tr>
     <?php foreach ($data as $status): ?>
@@ -37,6 +38,7 @@ use yii\helpers\Html;
             <td><?php echo Html::a($status->title, array('status/read', 'id'=>$status->id)); ?></td>
             <td><?php echo $status->description; ?></td>
             <td><?php echo $status->sort; ?></td>
+            <td><?php echo $status->send_check ? "Да": "Нет"; ?></td>
             <td>
                 <?php echo Html::a("Редактировать", array('status/update', 'id'=>$status->id), array('class'=>'icon icon-edit')); ?>
                 <?php echo Html::a("Удалить", array('status/delete', 'id'=>$status->id), array('class'=>'icon icon-trash remove_check')); ?>

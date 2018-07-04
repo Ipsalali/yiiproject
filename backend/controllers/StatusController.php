@@ -21,27 +21,7 @@ class StatusController extends Controller{
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['index', 'index'],
-                        'allow' => true,
-                        'roles' => ['admin'],
-                    ],
-                    [
-                        'actions' => ['create', 'index'],
-                        'allow' => true,
-                        'roles' => ['admin'],
-                    ],
-                    [
-                        'actions' => ['update', 'index'],
-                        'allow' => true,
-                        'roles' => ['admin'],
-                    ],
-                    [
-                        'actions' => ['read', 'index'],
-                        'allow' => true,
-                        'roles' => ['admin'],
-                    ],
-                    [
-                        'actions' => ['delete', 'index'],
+                        'actions' => ['index', 'create','update','read','delete'],
                         'allow' => true,
                         'roles' => ['admin'],
                     ]
@@ -50,6 +30,8 @@ class StatusController extends Controller{
         ];
     }
     
+
+
     public function actionIndex(){
 
         $status = new Status;
@@ -60,12 +42,16 @@ class StatusController extends Controller{
         return $this->render('index',array('data'=>$data));
     }
 
+
+
+
     public function actionCreate(){
         $model = new Status;
 
         if(isset($_POST['Status'])){
             $model->title = $_POST['Status']['title'];
             $model->sort = ($_POST['Status']['sort'])?(int)$_POST['Status']['sort']:0;
+            $model->send_check = (isset($_POST['Status']['send_check']))? $_POST['Status']['send_check']: 0;
             $model->description = $_POST['Status']['description'];
             $model->notification_template = $_POST['Status']['notification_template'];
             if($model->save()){
@@ -75,6 +61,8 @@ class StatusController extends Controller{
 
         return $this->render('create',array('model'=>$model));
     }
+
+
 
     public function actionRead($id = NULL){
 
@@ -90,6 +78,9 @@ class StatusController extends Controller{
 
     }
 
+
+
+
     public function actionUpdate($id = null){
         if($id == null)
             throw new HttpException(404, 'Not Found');
@@ -103,6 +94,7 @@ class StatusController extends Controller{
         {
             $status->title = $_POST['Status']['title'];
             $status->sort = ($_POST['Status']['sort'])?(int)$_POST['Status']['sort']:0;
+            $status->send_check = (isset($_POST['Status']['send_check']))? $_POST['Status']['send_check']: 0;
             $status->description = $_POST['Status']['description'];
             $status->notification_template = $_POST['Status']['notification_template'];
             
@@ -115,6 +107,9 @@ class StatusController extends Controller{
         ));
 
     }
+
+
+
 
     public function actionDelete($id = NULL){
 
@@ -137,5 +132,7 @@ class StatusController extends Controller{
        // Yii::$app->getResponse->redirect(array("status/index"));
         Yii::$app->response->redirect(array("status/index"));
     }
+
+    
 
 }

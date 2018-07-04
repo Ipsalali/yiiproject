@@ -4,6 +4,8 @@ use yii\bootstrap\NavBar;
 use yii\helpers\Html;
 use frontend\models\Autotruck;
 
+$this->title = "Клиент ".$client->name;
+
 ?>
 
 <div>

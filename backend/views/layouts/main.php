@@ -37,7 +37,7 @@ AppAsset::register($this);
     $menuItems = [
         ['label' => 'Главная', 'url' => ['/site/index']],
         ['label' => 'Настройки', 'url' => ['/setting/index']],
-        ['label' => 'Пользователи', 'url' => ['site/list']],
+        ['label' => 'Пользователи', 'url' => ['/site/list']],
     ];
     if (Yii::$app->user->isGuest) {
         $menuItems[] = ['label' => 'Login', 'url' => ['/site/login']];
@@ -63,6 +63,7 @@ AppAsset::register($this);
 
                 $menuItems = [
                 ['label' => 'Организация', 'url' => ['/organisation/index']],
+                ['label' => 'Управление заявками', 'url' => ['/autotruck/index']],
                 ['label' => 'Управление ролями', 'url' => ['/permit/access/role']],
                 ['label' => 'Управление правами доступа', 'url' => ['/permit/access/permission']],
                 ['label' => 'Пользователи', 'url' => ['/site/list']],
@@ -70,6 +71,9 @@ AppAsset::register($this);
                 ['label' => 'Категория клиентов', 'url' => ['/clientcategory/index']],
                 ['label' => 'Страны поставок', 'url' => ['/suppliercountry/index']],
                 ['label' => 'Статус оплаты', 'url' => ['/paymentstate/index']],
+                // ['label' => 'Виды оплат', 'url' => ['/payment/index']],
+                ['label' => 'Тип упаковки', 'url' => ['/typepackaging/index']],
+                ['label' => 'Отправители', 'url' => ['/sender/index']],
                 ];
                     echo Nav::widget([
                         'options' => ['class' => 'nav nav-list'],

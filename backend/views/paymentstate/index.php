@@ -28,7 +28,7 @@ use yii\bootstrap\ActiveForm;
         <?php echo $form->field($model, 'color')->input('text',array('class' => 'form-control colorPicker')); ?>
     </div>
     <div class="col-xs-2">
-        <?php echo $form->field($model, 'default')->checkbox(array('value'=>'1')); ?>
+        <?php echo $form->field($model, 'default_value')->checkbox(array('value'=>'1')); ?>
     </div>
     <div class="col-xs-2">
         <?php echo $form->field($model, 'end_state')->checkbox(array('value'=>'1')); ?>
@@ -59,7 +59,7 @@ use yii\bootstrap\ActiveForm;
             </td>
             <td style="background-color: <?php echo $state->color?>"></td>
             <td><?php echo Html::encode($state->title); ?></td>
-            <td><?php echo Html::encode($state->default? "По умолчанию":''); ?></td>
+            <td><?php echo Html::encode($state->default_value? "По умолчанию":''); ?></td>
             <td><?php echo Html::encode($state->end_state? "Конечное состояние":''); ?></td>
             <td><?php echo Html::encode($state->sum_state? "Промежуточное состояние":''); ?></td>
             <td>

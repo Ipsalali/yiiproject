@@ -22,17 +22,7 @@ class PaymentstateController extends Controller{
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['index', 'index'],
-                        'allow' => true,
-                        'roles' => ['admin'],
-                    ],
-                    [
-                        'actions' => ['create', 'index'],
-                        'allow' => true,
-                        'roles' => ['admin'],
-                    ],
-                    [
-                        'actions' => ['delete', 'index'],
+                        'actions' => ['index', 'create','delete'],
                         'allow' => true,
                         'roles' => ['admin'],
                     ]
@@ -62,12 +52,12 @@ class PaymentstateController extends Controller{
 
             $model->title = trim(strip_tags($_POST['PaymentState']['title']));
             $model->color = $_POST['PaymentState']['color'];
-            $model->default = (int)$_POST['PaymentState']['default'];
+            $model->default_value = (int)$_POST['PaymentState']['default_value'];
             $model->end_state = (int)$_POST['PaymentState']['end_state'];
             $model->sum_state = (int)$_POST['PaymentState']['sum_state'];
             //$model->filter = ((int)$_POST['PaymentState']['filter'])? 1 : 0 ;
             if($model->save()){
-                if((int)$_POST['PaymentState']['default']){
+                if((int)$_POST['PaymentState']['default_value']){
                     PaymentState::setDefault($model);
                 }
 
@@ -75,9 +65,9 @@ class PaymentstateController extends Controller{
                     PaymentState::setEndState($model);
                 }
 
-                if((int)$_POST['PaymentState']['sum_state']){
-                    PaymentState::setSumState($model);
-                }
+                // if((int)$_POST['PaymentState']['sum_state']){
+                //     PaymentState::setSumState($model);
+                // }
                 Yii::$app->response->redirect(array("paymentstate/index"));
             } 
         }

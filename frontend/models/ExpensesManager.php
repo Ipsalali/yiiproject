@@ -7,6 +7,7 @@ use yii\db\ActiveRecord;
 use yii\db\Expression;
 use frontend\models\Autotruck;
 use common\models\User;
+use common\models\Organisation;
 
 /**
 *
@@ -21,8 +22,9 @@ class ExpensesManager extends ActiveRecord
 	public function rules(){
 		return [
             // name, email, subject and body are required
-            [['manager_id','cost','autotruck_id'], 'required'],
-            ['cost','double']
+            [['manager_id','cost','autotruck_id','date'], 'required'],
+            ['cost','double'],
+            ['organisation','default','value'=>0]
         ];
 	}
 
@@ -63,7 +65,9 @@ class ExpensesManager extends ActiveRecord
     		'autotruck_id'=>'Заявка',
             'manager_id'=>'Менеджер',
             'cost'=>'Сумма ($)',
-            'comment'=>'Комментарии'
+            'comment'=>'Комментарии',
+            'organisation'=>'Организация',
+            'date'=>'Дата'
     		);
     }
 
@@ -74,6 +78,10 @@ class ExpensesManager extends ActiveRecord
 
     public function getManager(){
         return $this->hasOne(User::className(),["id"=>'manager_id']);
+    }
+
+    public function getOrg(){
+        return $this->hasOne(Organisation::className(),["id"=>'organisation']);
     }
 
     public static function getAutotruckExpenses($autotruck_id){

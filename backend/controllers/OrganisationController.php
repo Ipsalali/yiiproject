@@ -22,32 +22,7 @@ class OrganisationController extends Controller{
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['index', 'index'],
-                        'allow' => true,
-                        'roles' => ['admin'],
-                    ],
-                    [
-                        'actions' => ['create', 'index'],
-                        'allow' => true,
-                        'roles' => ['admin'],
-                    ],
-                    [
-                        'actions' => ['update', 'index'],
-                        'allow' => true,
-                        'roles' => ['admin'],
-                    ],
-                    [
-                        'actions' => ['read', 'index'],
-                        'allow' => true,
-                        'roles' => ['admin'],
-                    ],
-                    [
-                        'actions' => ['remove', 'index'],
-                        'allow' => true,
-                        'roles' => ['admin'],
-                    ],
-                    [
-                        'actions' => ['toactive', 'index'],
+                        'actions' => ['index','create','update','read','remove','toactive','stop'],
                         'allow' => true,
                         'roles' => ['admin'],
                     ]
@@ -56,6 +31,9 @@ class OrganisationController extends Controller{
         ];
     }
     
+
+
+
     public function actionIndex(){
 
         $org = new Organisation;
@@ -65,31 +43,37 @@ class OrganisationController extends Controller{
         return $this->render('index',array('orgs'=>$orgs));
     }
 
+
+
+
     public function actionCreate(){
         $model = new Organisation;
 
         if(isset($_POST['org_id']) && (int)$_POST['org_id']){
-            $model = Organisation::findOne((int)$_POST['org_id']);
+            $model = Organisation::findOne((int)$_POST['org_id']); 
         }
 
         if(isset($_POST['Organisation'])){
-            $model->bank_name = trim(strip_tags($_POST['Organisation']['bank_name']));
-            $model->org_name = trim(strip_tags($_POST['Organisation']['org_name']));
-            $model->org_address = trim(strip_tags($_POST['Organisation']['org_address']));
-            $model->headman = trim(strip_tags($_POST['Organisation']['headman']));
-            $model->bik = (int)$_POST['Organisation']['bik'];
-            $model->inn = (int)$_POST['Organisation']['inn'];
-            $model->kpp = (int)$_POST['Organisation']['kpp'];
-            $model->bank_check = (int)$_POST['Organisation']['bank_check'];
-            $model->org_check = (int)$_POST['Organisation']['org_check'];
-
-            if($model->save()){
-                Yii::$app->response->redirect(array("organisation/index"));
+            
+            if(isset($_POST['Organisation']['payment']) && (int)$_POST['Organisation']['payment']){
+                $model->scenario = Organisation::SCENARIO_CASH;
+            }
+            else{
+                $model->scenario = 'default';
             } 
+
+            if($model->load($_POST) && $model->save()){
+                Yii::$app->response->redirect(array("organisation/index"));
+            }
         }
+
+        $model->scenario = Organisation::SCENARIO_CASH;
 
         return $this->render('create',array('model'=>$model));
     }
+
+
+
 
     public function actionRead(){
 
@@ -110,6 +94,9 @@ class OrganisationController extends Controller{
 
         return $this->render('read',array('org'=>$org));
     }
+
+
+
 
     public function actionRemove(){
 
@@ -135,6 +122,9 @@ class OrganisationController extends Controller{
         Yii::$app->response->redirect(array("organisation/index"));
     }
 
+
+
+
     public function actionToactive(){
         if(Yii::$app->request->isAjax){
             $post = Yii::$app->request->post();
@@ -144,7 +134,7 @@ class OrganisationController extends Controller{
                 if($org->id){
                     if(!$org->active){
                         $org->active = 1;
-                        if($org->save()){
+                        if($org->save(false)){
                             Organisation::updateAll(['active' => 0],'id <> '.$org->id);
                             $response['text'] = $org->org_name." назначена активной.";
                             $response['result'] = 1;
@@ -161,5 +151,42 @@ class OrganisationController extends Controller{
             return $response;
         }
     }
+
+
+    public function actionStop(){
+        if(Yii::$app->request->isAjax){
+            $post = Yii::$app->request->post();
+            $response['result'] = 0;
+            if((int)$post['stop_org']){
+                $org = Organisation::findOne((int)$post['stop_org']);
+                if($org->id){
+                    $toStope = isset($post['stop_org_status']) && (int)$post['stop_org_status'] ? true : false;
+                    
+                    $org->is_stoped = $toStope;
+                    if($org->save(false)){
+                        
+                        $response['result'] = 1;
+                    }
+
+                    if($org->is_stoped){
+                        $response['text'] = "Организация '{$org->org_name}' приостановлена."; 
+                    }else{ 
+                        $response['text'] = "Организация '{$org->org_name}' возобновлена."; 
+                    }
+
+
+                }else{
+                    $response['text'] = "Организация не была найдена.";
+                }
+            }else{
+                $response['text'] = "Не переданы необходимые данные от клиента.";
+            }
+
+            Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+            return $response;
+        }
+    }
+
+    
 
 }

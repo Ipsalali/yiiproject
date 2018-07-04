@@ -3,7 +3,7 @@
 namespace frontend\modules;
 
 use common\models\Client;
-use yii\data\ActiveDataProvider;
+use yii\data\ArrayDataProvider;
 use yii\data\Pagination;
 use frontend\modules\FilterModelBase;
 use common\models\PaymentState;
@@ -16,8 +16,9 @@ class ClientSearch extends Client
      * Принимаемые моделью входящие данные
      */
 
-    public $page_size = 10;
+    public $page_size = 50;
 
+    public static $total_sverka = 0;
 
     /**
      * Правила валидации модели
@@ -42,50 +43,62 @@ class ClientSearch extends Client
     public function search($params)
     {   
 
-        $query = Client::find();
+        // $query = Client::find();
+        // $query->orderBy(['name' => SORT_ASC]);
+       
+         
 
-        /**
-             * Создаём DataProvider, указываем ему запрос, настраиваем пагинацию
-             */
-            $dataProvider = new ActiveDataProvider([
-                'query' => $query,
-                'pagination' => new Pagination([
-                        'pageSize' => $this->page_size
-                ])
-            ]);
-
+            $conditions = array();
         //если данные не фильтра не переданы или переданы не валидные данныеы
-        if(!($this->load($params) && $this->validate())){
+        if($this->load($params) && $this->validate()){
 
-            
-            return $dataProvider;
-        }
+            if($this->manager)
+                array_push($conditions, "`manager` = {$this->manager}");
 
-        if($this->ipay){
-            $subquery = new Query;
-            $subquery->select("id")->from("client");
-            $subsql1 = "(SELECT COUNT(DISTINCT a.id) FROM autotruck a 
-                    INNER JOIN customer_payment cp ON a.id = cp.autotruck_id
-                    INNER JOIN payment_state ps  ON ps.id = cp.payment_state_id
-                    WHERE cp.client_id = client.id AND ps.end_state = 1)";
+            if($this->client_category_id)
+                array_push($conditions, "`client_category_id` = {$this->client_category_id}");
+        }   
 
-            $subsql2 = "(SELECT COUNT(DISTINCT a.id) FROM autotruck a
-                INNER JOIN app ap ON ap.autotruck_id = a.id
-                WHERE ap.client = client.id)";
-            if(PaymentState::getDefaultState()->id == $this->ipay){
-                $subquery->where("{$subsql1} != {$subsql2}");
-            }elseif(PaymentState::getEndState()->id == $this->ipay){
-               $subquery->where("{$subsql1} = {$subsql2}");
-            }
-            $query->andFilterWhere(["id"=>$subquery]);
-        }
+        
+
+        // if($this->ipay){
+        //     $subquery = new Query;
+        //     $subquery->select("id")->from("client");
+        //     $subsql1 = "(SELECT COUNT(DISTINCT a.id) FROM autotruck a 
+        //             INNER JOIN customer_payment cp ON a.id = cp.autotruck_id
+        //             INNER JOIN payment_state ps  ON ps.id = cp.payment_state_id
+        //             WHERE cp.client_id = client.id AND ps.end_state = 1)";
+
+        //     $subsql2 = "(SELECT COUNT(DISTINCT a.id) FROM autotruck a
+        //         INNER JOIN app ap ON ap.autotruck_id = a.id
+        //         WHERE ap.client = client.id)";
+        //     if(PaymentState::getDefaultState()->id == $this->ipay){
+        //         $subquery->where("{$subsql1} != {$subsql2}");
+        //     }elseif(PaymentState::getEndState()->id == $this->ipay){
+        //        $subquery->where("{$subsql1} = {$subsql2}");
+        //     }
+        //     $query->andFilterWhere(["id"=>$subquery]);
+        // }
 
         // Если ошибок нет, фильтруем по цене
-        $query->andFilterWhere([
-                'manager' => $this->manager,
-                'client_category_id' => $this->client_category_id,
-                ]);
+        // $query->andFilterWhere([
+        //         'manager' => $this->manager,
+        //         'client_category_id' => $this->client_category_id,
+        //         ]);
 
+        $condition = is_array($conditions) && count($conditions) ? implode(" AND ", $conditions) : "";
+        //$sql = "CALL get_client_list('{$condition}',{$this->page_size}, 1)";
+        $sql = "SELECT id,name,user_email,manager_name,phone,category_title,sverka_sum FROM client_list ORDER BY name ASC LIMIT 50";
+        $connection = \Yii::$app->getDb();
+        $command = $connection->createCommand($sql);
+        $result = $command->queryAll();
+
+        $dataProvider = new ArrayDataProvider([
+            'allModels' => $result,
+            'pagination' => new Pagination([
+                'pageSize' => $this->page_size
+            ])
+        ]);
         
         return $dataProvider;
     }

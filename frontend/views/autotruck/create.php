@@ -7,14 +7,32 @@ use yii\helpers\ArrayHelper;
 use common\models\SupplierCountry;
 use frontend\models\ExpensesManager;
 use common\models\User;
+use common\models\Sender;
+use common\models\TypePackaging;
+
+
+$this->title = "Новая заявка";
 
 $roleexpenses = 'autotruck/addexpenses';
 $expensesManager = new ExpensesManager;
 $AutotruckExpenses =ExpensesManager::getAutotruckExpenses($autotruck->id);
 
+
+$user = \Yii::$app->user->identity;
+
+if(\Yii::$app->user->can("clientExtended")){
+	$countries =  SupplierCountry::find()->all();
+	$clients[] = $user->client;
+}else{
+	$countries = $user->countries;
+	$clients = Client::find()->orderBy(['name'=>'DESC'])->all();
+}
+
+$senders = Sender::find()->orderBy(['name'=>'DESC'])->all();
+$packages = TypePackaging::find()->all();
 ?>
 
-<div class="container">
+<div class="">
 	<div class="row">
 		
 	</div>
@@ -30,7 +48,7 @@ $AutotruckExpenses =ExpensesManager::getAutotruckExpenses($autotruck->id);
 </div>
 <?php endif; ?>
 
-<?php $form = ActiveForm::begin(['id'=>'autotruck_and_app']); ?>
+<?php $form = ActiveForm::begin(['id'=>'autotruck_and_app','options' => ['enctype' => 'multipart/form-data']]); ?>
 	
 	<div class="form-actions">
         <?php echo Html::submitButton('Сохранить заявку',['id'=>'submit_create','class' => 'btn btn-primary pull-right', 'name' => 'autotruck-create-button']); ?>
@@ -40,7 +58,7 @@ $AutotruckExpenses =ExpensesManager::getAutotruckExpenses($autotruck->id);
 		<h3>Информация о заявке</h3>
 		<div class="row">
 			
-			<div class="col-xs-3">
+			<div class="col-xs-4">
 				<?php echo $form->field($autotruck,'name')->textInput(array()); ?>
 			</div>
 
@@ -52,12 +70,15 @@ $AutotruckExpenses =ExpensesManager::getAutotruckExpenses($autotruck->id);
 				<?php echo $form->field($autotruck,'course')->textInput(array('class'=>'form-control compute_sum compute_course')); ?>
 			</div>
 			<div class="col-xs-2">
-				<?php echo $form->field($autotruck,'country')->dropDownList(ArrayHelper::map(SupplierCountry::find()->all(),'id','country'),['prompt'=>'Выберите страну']);?>
+				<?php echo $form->field($autotruck,'country')->dropDownList(ArrayHelper::map($countries,'id','country'),['prompt'=>'Выберите страну']);?>
+			</div>
+			<div class="col-xs-3">
+				<?php echo $form->field($autotruck,'auto_number')->textInput()?>
 			</div>
 		</div>
 		<div class="row">	
 			<div class="col-xs-3">
-			<div class="status">
+				<div class="status">
     			<div style="float:left;">
 				<?php echo $form->field($autotruck,'status',['inputOptions'=>["class"=>"form-control"]])->dropDownList(ArrayHelper::map(Status::find()->orderBy(['sort'=>SORT_ASC])->all(),'id','title'),['prompt'=>'Выберите статус']);?>
 				<?php 
@@ -73,8 +94,18 @@ $AutotruckExpenses =ExpensesManager::getAutotruckExpenses($autotruck->id);
 					<label class="change_status_info"></label>
 				</div>
 			</div>
-			<div class="col-xs-5">
+			
+			
+			<div class="col-xs-3">
 				<?php echo $form->field($autotruck,'description')->textarea();?>
+			</div>
+			<div class="col-xs-3">
+				<?php echo $form->field($autotruck,'file[]')->fileInput(['multiple' => true]);?>
+			</div>
+			<div class="col-xs-3">
+				<?php echo $form->field($autotruck,'auto_name')->textInput()?>
+				<?php echo $form->field($autotruck,'gtd')->textInput()?>
+				<?php echo $form->field($autotruck,'decor')->textInput()?>
 			</div>
 		</div>
 	</div>
@@ -98,14 +129,17 @@ $AutotruckExpenses =ExpensesManager::getAutotruckExpenses($autotruck->id);
 					<tr>
 						<th>№</th>
 						<th class="app_client">Клиент</th>
-						<th class="app_info">Информация</th>
+						<th class="app_sender">Отправитель</th>
+						<th class="app_info">Наименование</th>
+						<th class="app_place">Кол-во мест</th>
+						<th class="app_package">Упаковка</th>
 						<th class="app_weigth">Вес (кг)</th>
 						<th class="app_rate">Ставка ($)</th>
 						<th>Сумма ($)</th>
 						<th>Сумма (руб)</th>
 						<!-- <th>Статус</th> -->
 						<th>Комментарий</th>
-						<th>Удаление</th>
+						<th></th>
 					</tr>
 				</table>
 			</div>
@@ -121,10 +155,11 @@ $AutotruckExpenses =ExpensesManager::getAutotruckExpenses($autotruck->id);
 				<table id="exp_table" class="table table-striped table-hover table-bordered table-condensed">
 					<tr>
 						<th>№</th>
+						<th>Дата</th>
 						<th class="exp_manager_id">Менеджер</th>
 						<th>Сумма ($)</th>
 						<th>Комментарий</th>
-						<th>Удаление</th>
+						<th></th>
 					</tr>
 				</table>
 			</div>
@@ -140,29 +175,52 @@ $AutotruckExpenses =ExpensesManager::getAutotruckExpenses($autotruck->id);
 		var ntr = '<tr class="app_row '+type_class+'"><td>-<input type="hidden" name="App['+n+'][type]" value="'+type+'"></td>';
 		var	ntd_client = '<td><select name="App['+n+'][client]" class=\'app_client form-control\'>';
 			ntd_client +='<option value="">Выберите клиента</option>';
-			<?php foreach (Client::find()->all() as $key => $cl) { ?>
+			<?php foreach ($clients as $key => $cl) { ?>
 
-				ntd_client += '<option value="<?=$cl->id?>"><?=$cl->name?></option>';
+				ntd_client += '<option value="<?=$cl->id?>"><?php echo Html::encode($cl->name)?></option>';
 
 			<?php } ?>
 			ntd_client +='</select></td>';
+
+		var	ntd_sender = '<td><select name="App['+n+'][sender]" class=\'app_sender form-control\'>';
+			ntd_sender +='<option value="">Выберите отправителя</option>';
+			<?php foreach ($senders as $key => $cl) { ?>
+
+				ntd_sender += '<option value="<?=$cl->id?>"><?php echo Html::encode($cl->name)?></option>';
+
+			<?php } ?>
+			ntd_sender +='</select></td>';
+
+		var	ntd_package = '<td><select name="App['+n+'][package]" class=\'app_package form-control\'>';
+			ntd_package +='<option value="">Выберите упаковку</option>';
+			<?php foreach ($packages as $key => $cl) { ?>
+
+				ntd_package += '<option value="<?=$cl->id?>"><?php echo Html::encode($cl->title)?></option>';
+
+			<?php } ?>
+			ntd_package +='</select></td>';
 
 		// var	ntd_status = '<td><select name="App['+n+'][status]" class=\'app_status form-control\'>';
 		// 	ntd_status +='<option value="">Выберите статус</option>';
 		// 	<?php foreach (Status::find()->all() as $key => $cl) { ?>
 
-		// 		ntd_status += '<option value="<?=$cl->id?>"><?=$cl->title?></option>';
+		// 		ntd_status += '<option value="<?=$cl->id?>"><?php echo Html::encode($cl->title)?></option>';
 
 		// 	<?php } ?>
 		// 	ntd_status +='</select></td>';
 
+		var ntd_place = "<td><input type='text' name='App["+n+"][count_place]' class=\'app_place form-control\'></td>";
+		
 		var ntd_info = "<td><input type='text' name='App["+n+"][info]' class=\'app_info form-control\'></td>";
+		
 		var ntd_weight = (!type)? "<td><input type='text' name='App["+n+"][weight]' class=\'app_weight compute_sum compute_weight form-control\'></td>" : "<td><input type='hidden' name='App["+n+"][weight]' value='1'></td>";
 		var ntd_rate = "<td><input type='text' name='App["+n+"][rate]' class=\'app_rate compute_sum compute_rate form-control\'></td>";
 		//var ntd_course = "<td><input type='text' name='App["+n+"][course]' class=\'app_course form-control\'></td>";
 		var ntd_comment = "<td><input type='text' name='App["+n+"][comment]' class=\'app_comment form-control\'></td>";
-
-		ntr += ntd_client+ntd_info+ntd_weight+ntd_rate+"<td class='summa_usa'></td><td class='summa'></td>"+ntd_comment;/*ntd_status+*/
+        
+        var addition_fields = (!type)? ntd_sender+ntd_info+ntd_place+ntd_package : "<td></td>"+ntd_info+"<td colspan='2'></td>";
+        
+		ntr += ntd_client+addition_fields+ntd_weight+ntd_rate+"<td class='summa_usa'><input name='App["+n+"][summa_us]' class='form-control summa_us' type='text'/></td><td class='summa'></td>"+ntd_comment;/*ntd_status+*/
 		ntr+="<td><a class='btn btn-danger remove_app'>X</a></td>";
 
 		ntr +='</tr>';
@@ -173,11 +231,12 @@ $AutotruckExpenses =ExpensesManager::getAutotruckExpenses($autotruck->id);
 
 	var geberate_exp_row = function(n){
 		var ntr = '<tr class="exp_row"><td>-</td>';
+		ntr += '<td><input type="date" class="form-control" name="ExpensesManager['+n+'][date]"></td>';
 		var	ntd_client = '<td><select name="ExpensesManager['+n+'][manager_id]" class=\'manager_id form-control\'>';
 			ntd_client +='<option value="">Выберите менеджера</option>';
-			<?php foreach (User::getExpensesManagers() as $key => $cl) { ?>
+			<?php foreach (User::getSellers() as $key => $cl) { ?>
 
-				ntd_client += '<option value="<?=$cl->id?>"><?=$cl->name?></option>';
+				ntd_client += '<option value="<?=$cl->id?>"><?php echo Html::encode($cl->name)?></option>';
 
 			<?php } ?>
 			ntd_client +='</select></td>';

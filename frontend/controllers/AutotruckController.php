@@ -16,9 +16,12 @@ use common\models\Status;
 use common\helper\EDateTime;
 use frontend\modules\ListAction;
 use frontend\modules\AutotruckSearch;
+use frontend\modules\AutotruckReport;
 use yii\data\ActiveDataProvider;
 use frontend\models\ExpensesManager;
 use yii\data\ArrayDataProvider;
+use frontend\helpers\ExcelAutotruck;
+use yii\web\UploadedFile;
 
 class AutotruckController extends Controller{
 
@@ -57,17 +60,17 @@ class AutotruckController extends Controller{
                         'roles' => ['autotruck/index'],
                     ],
                     [
-                        'actions' => ['create', 'index'],
+                        'actions' => ['create'],
                         'allow' => true,
                         'roles' => ['autotruck/create'],
                     ],
                     [
-                        'actions' => ['read', 'index'],
+                        'actions' => ['read', 'to-excel','download'],
                         'allow' => true,
                         'roles' => ['autotruck/read'],
                     ],
                     [
-                        'actions' => ['update', 'index'],
+                        'actions' => ['update','unlinkfile','download', 'index'],
                         'allow' => true,
                         'roles' => ['autotruck/update'],
                     ],
@@ -77,7 +80,7 @@ class AutotruckController extends Controller{
                         'roles' => ['autotruck/delete'],
                     ],
                     [
-                        'actions' => ['removeappajax', 'index'],
+                        'actions' => ['removeappajax', 'set-out-stock','set-all-out-stock','index'],
                         'allow' => true,
                         'roles' => ['autotruck/update'],
                     ],
@@ -94,7 +97,12 @@ class AutotruckController extends Controller{
                     [
                     	'actions'=>['report','index'],
                     	'allow' => true,
-                    	'roles'=>['autotruck/addexpenses']
+                    	'roles'=>['autotruck/report']
+                    ],
+                    [
+                    	'actions'=>['addown'],
+                    	'allow' => true,
+                    	'roles'=>['autotruck/create']
                     ]
                 ],
             ]
@@ -112,8 +120,21 @@ class AutotruckController extends Controller{
 		return $this->render('index',array('autotruckSearch'=>$autotruckSearch,'dataProvider'=>$dataProvider));
 	}
 
+
+
+
+
+
+
+
+
+
+
+
+
 	public function actionCreate(){
 		$autotruck = new Autotruck;
+		$autotruck->scenario = Autotruck::SCENARIO_CREATE;
 		$app = new App;
 
 		$filters = (array_key_exists('filters', $_GET)) ? $_GET['filters'] : array();
@@ -122,16 +143,31 @@ class AutotruckController extends Controller{
 		$post = Yii::$app->request->post();
 
 		$eDate = new EDateTime;
-
+        
+        
+        
 		if(isset($post['Autotruck'])){
 			$autotruck->name = $post['Autotruck']['name'];
-			$autotruck->course = ($post['Autotruck']['course'])?round($post['Autotruck']['course'],2):0;
+			$autotruck->course = ($post['Autotruck']['course'])?round($post['Autotruck']['course'],4):0;
 			$autotruck->country = ($post['Autotruck']['country'])? $post['Autotruck']['country']:0;
 			$autotruck->date = ($post['Autotruck']['date'])?date('Y-m-d',strtotime($post['Autotruck']['date'])):date("Y-m-d");
 			$autotruck->description = $post['Autotruck']['description'];
-			$autotruck->status = $post['Autotruck']['status']?$post['Autotruck']['status']:0;
+			$autotruck->status = $post['Autotruck']['status']? $post['Autotruck']['status']: 0;
+
+			$autotruck->auto_number = strip_tags($post['Autotruck']['auto_number']);
+			$autotruck->auto_name = strip_tags($post['Autotruck']['auto_name']);
+			$autotruck->gtd = strip_tags($post['Autotruck']['gtd']);
+			$autotruck->decor = strip_tags($post['Autotruck']['decor']);
+
+			$autotruck->file = UploadedFile::getInstances($autotruck, 'file');
+			if ($autotruck->file && $fName = $autotruck->uploadFile()) {
+                $autotruck->file = $fName;
+            }else{
+            	Yii::$app->session->setFlash("FileUploadError");	
+            }
 
 			if($autotruck->save()){
+			    
 				//Добавление статуса
 				if($autotruck->id && $autotruck->status){
 					$apptrace = new AppTrace;
@@ -150,7 +186,7 @@ class AutotruckController extends Controller{
 				if(isset($post['ExpensesManager']) && count($post['ExpensesManager']) && $autotruck->id){
 					foreach ($post['ExpensesManager'] as $key => $item) {
 						$exp = new ExpensesManager;
-						$exp->date = $autotruck->date;
+						$exp->date = isset($item['date']) && $item['date'] ? date("Y-m-d",strtotime($item['date'])) : $autotruck->date;
 						$exp->manager_id = (int)$item['manager_id'];
 						$exp->cost = round($item['cost'],2);
 						$exp->autotruck_id = $autotruck->id;
@@ -167,6 +203,12 @@ class AutotruckController extends Controller{
 						
 						$a = new App;
 						$a->client = ($item['client'])?(int)$item['client']:0;
+						
+						$a->sender = ($item['sender'])?(int)$item['sender']:null;
+						$a->package = ($item['package'])?(int)$item['package']:null;
+						$a->count_place = $item['count_place']? (int)$item['count_place'] : null;
+						
+						$a->info = $item['info'];
 						$a->info = $item['info'];
 						if((int)$item['type']){
 							$a->weight = 1;
@@ -175,6 +217,8 @@ class AutotruckController extends Controller{
 							$a->weight = ($item['weight']) ? $item['weight'] : 0;
 							$a->type = 0;
 						}
+
+						$a->summa_us = ($item['summa_us']) ? round($item['summa_us'],2) : 0;
 						$a->rate = ($item['rate']) ? round($item['rate'],2) : 0;
 						$a->comment = $item['comment'];
 						$a->autotruck_id = $autotruck->id;
@@ -184,16 +228,28 @@ class AutotruckController extends Controller{
 							
 					
 					Yii::$app->session->setFlash("AutotruckSaved");
-					Yii::$app->response->redirect(array("autotruck/index"));
 
+					if(Yii::$app->user->can("clientExtended")){
+						Yii::$app->response->redirect(array("site/profile"));
+					}
+					else{
+						Yii::$app->response->redirect(array("autotruck/index"));
+					}
 				}else{
 					Yii::$app->session->setFlash("AutotruckEmpty");
 					Yii::$app->response->redirect(array("autotruck/create"));
 				}
 
-				Yii::$app->response->redirect(array('autotruck/index'));
+                if($autotruck->status){
+				    $autotruck->sendNotification();
+                }
 
-				$autotruck->sendNotification();
+                if(Yii::$app->user->can("clientExtended")){
+					Yii::$app->response->redirect(array("client/profile"));
+				}
+				else{
+					Yii::$app->response->redirect(array("autotruck/index"));
+				}
 
 			}else{
 				Yii::$app->session->setFlash("AutotruckCreateError");
@@ -207,27 +263,79 @@ class AutotruckController extends Controller{
 	}
 
 
+
+
+
+
+
+
+
+
+
+
 	public function actionRead($id = NULL){
 
 		$filters = (array_key_exists('filters', $_GET)) ? $_GET['filters'] : array();
 		Yii::$app->view->params['filters'] = $filters;
+
 
 		if($id == null)
 			throw new HttpException(404,'Not Found!');
 
 		$autotruck = Autotruck::findOne($id);
 
-		
 		if($autotruck === NULL)
 			throw new HttpException(404,'Document Does Not Exist');
 
 		$this->layout = "main.php";
 		
+		
+
 		$query = $autotruck->find()->orderBy(['id'=>SORT_DESC]);
 		Yii::$app->view->params['query'] = $query;
 		return $this->render('read',array("autotruck"=>$autotruck));
 
 	}
+
+
+
+
+
+
+
+
+
+	public function actionToExcel($id = null){
+		if($id == null)
+			throw new HttpException(404,'Not Found!');
+
+		$autotruck = Autotruck::findOne($id);
+
+		if($autotruck === NULL)
+			throw new HttpException(404,'Document Does Not Exist');
+
+		$ExcelAutotruck = new ExcelAutotruck();
+		
+		
+		$file = $ExcelAutotruck->export($autotruck);
+
+        if(file_exists($file)){
+            Yii::$app->response->SendFile($file)->send();
+        }
+		else{
+            Yii::$app->response->redirect(array("autotruck/read",'id'=>$id));
+        }
+	}
+
+
+
+
+
+
+
+
+
+
 
 	
 	public function actionUpdate($id = null){
@@ -253,7 +361,7 @@ class AutotruckController extends Controller{
 		if($post['Autotruck']){
 
 			$autotruck->name = $post['Autotruck']['name'];
-			$autotruck->course = ($post['Autotruck']['course'])?round($post['Autotruck']['course'],2):0;
+			$autotruck->course = ($post['Autotruck']['course'])?round($post['Autotruck']['course'],4):0;
 			$autotruck->country = $post['Autotruck']['country'];
 			$autotruck->date = ($post['Autotruck']['date'])
 									? date('Y-m-d',strtotime($post['Autotruck']['date']))
@@ -265,8 +373,24 @@ class AutotruckController extends Controller{
         	$autotruck->status = (!$status_update) ? $autotruck->status: (int)$post['Autotruck']['status'];
         	$save_prevstatus = $status_update;
         	
-
+        	$autotruck->auto_number = strip_tags($post['Autotruck']['auto_number']);
+			$autotruck->auto_name = strip_tags($post['Autotruck']['auto_name']);
+			$autotruck->gtd = strip_tags($post['Autotruck']['gtd']);
+			$autotruck->decor = strip_tags($post['Autotruck']['decor']);
+			
 			$autotruck->description = $post['Autotruck']['description'];
+			
+			if($_FILES['Autotruck']['name']['file'][0]){
+
+				$autotruck->tempFiles = $autotruck->file;
+				$autotruck->file = UploadedFile::getInstances($autotruck, 'file');
+				
+	            if ($autotruck->file && $fName = $autotruck->uploadFile()) {
+	                $autotruck->file = $fName;
+	            }else{
+	            	Yii::$app->session->setFlash("FileUploadError");	
+	            }
+        	}
 			
 
 			if($autotruck->save()){
@@ -283,6 +407,13 @@ class AutotruckController extends Controller{
 
 					$apptrace->save();
 					Yii::$app->session->setFlash("AppTraceCreated");			
+				}elseif($autotruck->id && $autotruck->activeStatusTrace->trace_id){
+
+					$apptrace = AppTrace::findOne($autotruck->activeStatusTrace->trace_id);
+					$apptrace->trace_date = ($post['Autotruck']['date_status'])
+									? date('Y-m-d',strtotime($post['Autotruck']['date_status'])):date("Y-m-d");
+
+					$apptrace->save();
 				}else{
 					Yii::$app->session->setFlash("AppTraceCreatedError");
 				}
@@ -301,7 +432,8 @@ class AutotruckController extends Controller{
 						}
 						
 						$exp->manager_id = (int)$item['manager_id'];
-						$exp->date = $autotruck->date;
+						
+						$exp->date = isset($item['date']) && $item['date'] ? date("Y-m-d",strtotime($item['date'])) : $autotruck->date;
 						$exp->cost = round($item['cost'],2);
 						$exp->autotruck_id = $autotruck->id;
 						$exp->comment = trim(strip_tags($item['comment']));
@@ -328,6 +460,11 @@ class AutotruckController extends Controller{
 						}
 
 						$a->client = ($item['client'])?(int)$item['client']:0;
+
+						$a->sender = ($item['sender'])?(int)$item['sender']:0;
+						$a->package = ($item['package'])?(int)$item['package']:0;
+						$a->count_place = $item['count_place']? (int)$item['count_place'] : 0;
+						
 						$a->info = $item['info'];
 						if((int)$item['type']){
 							$a->weight = 1;
@@ -338,6 +475,7 @@ class AutotruckController extends Controller{
 						}
 						$a->rate = ($item['rate']) ? round($item['rate'],2) : 0;
 						
+						$a->summa_us = ($item['summa_us']) ? round($item['summa_us'],2) : 0;
 						$a->comment = $item['comment'];
 						$a->autotruck_id = $autotruck->id;
 
@@ -351,15 +489,22 @@ class AutotruckController extends Controller{
 				}
 				Yii::$app->session->setFlash("AutotruckUpdated");
 
-				$autotruck->sendNotification();	
+				if($autotruck->status){
+				    $autotruck->sendNotification();
+                }
 
 			}else{
 				Yii::$app->session->setFlash("AutotruckUpdatedError");
 			}
 
 			
-
-			Yii::$app->response->redirect(array('autotruck/read', 'id' => $autotruck->id,'query'=>$query));
+			if(Yii::$app->user->can("clientExtended")){
+					Yii::$app->response->redirect(array("client/profile"));
+			}
+			else{
+				return Yii::$app->response->redirect(array('autotruck/read', 'id' => $autotruck->id,'query'=>$query));
+			}
+			
     	}
 
     	//$this->layout = "/main";
@@ -370,25 +515,37 @@ class AutotruckController extends Controller{
 
 	}
 
+
+
+
+
+
+
+
+
 	public function actionDelete($id = NULL){
 
 		if($id == NULL){
 			Yii::$app->session->setFlash("PostDeleteError");
-			Yii::$app->response->redirect(array("post/index"));
+			return Yii::$app->response->redirect(array("post/index"));
 		}
 
-		$post = Post::findOne($id);
+		$post = Autotruck::findOne($id);
 
 		if($post === NULL){
 			Yii::$app->session->setFlash("PostDeleteError");
-			Yii::$app->response->redirect(array("post/index"));
+			return Yii::$app->response->redirect(array("post/index"));
 		}
 
 		$post->delete();
 
 		Yii::$app->session->setFlash("PostDeleted");
-		Yii::$app->response->redirect(array("post/index"));
+		return Yii::$app->response->redirect(array("post/index"));
 	}
+
+
+
+	
 
 	public function actionRemoveappajax(){
 
@@ -422,6 +579,15 @@ class AutotruckController extends Controller{
 	}
 
 
+
+
+
+
+
+
+
+
+
 	public function actionRemoveexpajax(){
 
 		if(Yii::$app->request->isAjax){
@@ -453,6 +619,17 @@ class AutotruckController extends Controller{
 		}
 	}
 
+
+
+
+
+
+
+
+
+
+
+
 	public function actionAddexpenses(){
 		$post = Yii::$app->request->post();
 
@@ -475,23 +652,129 @@ class AutotruckController extends Controller{
 		}
 	}
 
-	public function actionReport(){
-		$report = Autotruck::getReport();
 
-		$dataProvider = new ArrayDataProvider([
-        		'key'=>'id',
-        		'allModels' => $report,
-        		'sort' => [
-            		'attributes' => ['id', 'name','course','country','weight','sum_us','sum_ru','expenses'],
-        		],
-        		'pagination' => [
-        			'pageSize' => 10,
-    			],
-		]);
+
+
+
+
+
+
+
+
+	public function actionReport(){
+
+
+		$autotruckReport = new AutotruckReport;
+
+
+		$params = Yii::$app->request->queryParams;
+		$dataProvider = $autotruckReport->search($params);
 
 		return $this->render('report', array(
-        	'dataProvider' => $dataProvider
+        	'dataProvider' => $dataProvider,
+        	'autotruckReport'=>$autotruckReport,
     	));
 	}
+
+
+	
+
+
+
+
+
+
+
+
+
+
+
+	public function actionUnlinkfile($id=null,$file = null){
+		if($id == null || $file == null)
+			throw new HttpException(404, 'Not Found');
+
+		$autotruck = Autotruck::findOne((int)$id);
+
+		if($autotruck === null){
+			throw new HttpException(404, 'Not Found');
+		}
+
+
+		$autotruck->unlinkFile($file);
+
+		return Yii::$app->response->redirect(array("autotruck/read",'id'=>$autotruck->id));
+	}
+
+
+
+
+
+
+
+
+
+
+	public function actionDownload($id=null,$file = null){
+		if($id == null || $file == null)
+			throw new HttpException(404, 'Not Found');
+
+		$autotruck = Autotruck::findOne((int)$id);
+
+		if($autotruck === null){
+			throw new HttpException(404, 'Not Found');
+		}
+
+		if($autotruck->fileExists($file) && file_exists('uploads/'.$file)){
+			Yii::$app->response->SendFile('uploads/'.$file)->send();
+		}else{
+			Yii::$app->session->setFlash("NotFoundedFile");
+			return Yii::$app->response->redirect(array("autotruck/read",'id'=>$autotruck->id));
+		}
+
+	}
+
+
+
+
+
+	public function actionSetOutStock(){
+		Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+		$get = Yii::$app->request->get();
+		$answer['result'] = 0;
+		if(isset($get['id']) && (int)$get['id']){
+			$App = App::findOne((int)$get['id']);
+			if(isset($App->id) && $App->id){
+				$App->out_stock = (isset($get['value']) && (int)$get['value']) ? 1 : 0;
+				if($App->save()){
+					$answer['result'] = 1;
+				}
+			}
+		}
+		return $answer;
+	}
+
+
+
+
+	public function actionSetAllOutStock(){
+		Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+		$get = Yii::$app->request->get();
+		$answer['result'] = 0;
+		if(isset($get['id']) && (int)$get['id']){
+			$Autotruck = Autotruck::findOne((int)$get['id']);
+			if(isset($Autotruck->id) && $Autotruck->id){
+				
+				$value = (isset($get['value']) && (int)$get['value']) ? 1 : 0;
+				
+				$answer['result'] = 1;$Autotruck->setAllAppOutStock($value);
+				
+				
+			}
+		}
+		return $answer;
+	}
+
 
 }

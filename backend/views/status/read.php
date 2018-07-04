@@ -11,5 +11,6 @@
 <h1>Заголовок: <?php echo $status->title; ?></h1>
 <p>Описание: <?php echo $status->description; ?></p>
 <p>Прядок: <?php echo $status->sort; ?></p>
+<p>Отправка счета вместе с уведомлением: <?php echo $status->send_check ? "Да": "Нет"; ?></p>
 <div>Шаблон письма: <div><?php echo $status->notification_template; ?></div></div>
 </div>

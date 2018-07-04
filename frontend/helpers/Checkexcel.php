@@ -90,7 +90,9 @@ class Checkexcel{
 		$this->objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(15);
 		$this->objPHPExcel->getActiveSheet()->getColumnDimension('L')->setWidth(15);
 		$this->objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(15);
-
+        
+        $this->objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(15);
+        
 		$this->objPHPExcel->getActiveSheet()->getColumnDimension('K')->setWidth(3);
 		$this->objPHPExcel->getActiveSheet()->getColumnDimension('M')->setWidth(3);
 	}
@@ -101,8 +103,25 @@ class Checkexcel{
 			return false;
 		}
 
-		$org = Organisation::find()->where(['active'=>1])->one();
+
+
+		$org = $client->organisation->id ? $client->organisation : Organisation::find()->where(['active'=>1])->one();
+		
 		if(!$org->id) return;
+
+		if($org->is_stoped || $org->payment == Organisation::PAY_CASH){
+
+			if($org->is_stoped)
+				$org->org_name = " ";
+
+			$org->inn = " ";
+			$org->kpp = " ";
+			$org->bank_name = " ";
+			$org->bik = " ";
+			$org->bank_check = " ";
+			$org->org_check = " ";
+		}
+
 		//044525555 ПАО "ПРОМСВЯЗЬБАНК" Г. МОСКВА
 		$objRichText = new \PHPExcel_RichText();
 		$objRichText->createText($org->bank_name);
@@ -169,14 +188,14 @@ class Checkexcel{
 
 		//Сч. №
 		$objRichText = new \PHPExcel_RichText();
-		$objRichText->createText('Сч. №');
+		$objRichText->createText('Кор.счет');
 		$this->objPHPExcel->getActiveSheet()->getCell('I7')->setValue($objRichText);
 		$this->objPHPExcel->getActiveSheet()->mergeCells('I7:I8');
 		$this->objPHPExcel->getActiveSheet()->getStyle('I7:I8')->applyFromArray($this->styleArray);
 
 		//Сч. №
 		$objRichText = new \PHPExcel_RichText();
-		$objRichText->createText('Сч. №');
+		$objRichText->createText('Расчетный счет');
 		$this->objPHPExcel->getActiveSheet()->getCell('I9')->setValue($objRichText);
 		$this->objPHPExcel->getActiveSheet()->mergeCells('I9:I12');
 		$this->objPHPExcel->getActiveSheet()->getStyle('I9:I12')->applyFromArray($this->styleArray);
@@ -206,7 +225,7 @@ class Checkexcel{
 
 
 		//Счет на оплату по договору № 57/15 от 23.07.2015
-		$contract_check = 'Счет на оплату по договору № '.$client->contract_number;
+		$contract_check = 'Счет на оплату по договору № '.$client->actualContractNumber;
 		$this->setText($contract_check,'B14',1,0,15,0,1);
 		$this->objPHPExcel->getActiveSheet()->getStyle('B14:M15')->getAlignment()->setVertical(\PHPExcel_Style_Alignment::VERTICAL_CENTER);
 		$this->objPHPExcel->getActiveSheet()->mergeCells('B14:M15');
@@ -250,9 +269,10 @@ class Checkexcel{
 		$this->objPHPExcel->getActiveSheet()->mergeCells($coords);
 	}
 
-	public function setSeller($seller=""){
+	public function setSeller($client=""){
 
-		$org = Organisation::find()->where(['active'=>1])->one();
+		$org = $client->organisation->id ? $client->organisation : Organisation::find()->where(['active'=>1])->one();
+		
 		if(!$org->id) return;
 		$objPHPExcel = $this->objPHPExcel;
 		//Поставщик
@@ -265,7 +285,9 @@ class Checkexcel{
 
 
 
-		$seller = $org->org_name.", ИНН ".$org->inn.", КПП ".$org->kpp.' , '.$org->org_address;
+		$seller = $org->is_stoped ? " " : $org->org_name.", ИНН ".$org->inn.", КПП ".$org->kpp.' , '.$org->org_address;
+		$seller = $org->payment == Organisation::PAY_CASH ? $org->org_name : $seller;
+
 		$this->setText($seller,'D18',1);
 		$objPHPExcel->getActiveSheet()->getStyle('D18')->getAlignment()->setWrapText(true);
 		$this->objPHPExcel->getActiveSheet()->mergeCells('D18:M18');
@@ -321,7 +343,7 @@ class Checkexcel{
 
 			//Наименование
 			$D="D$endRow";
-			$this->setText($a->info,$D);
+			$this->setText($a->description,$D);
 			$Dmerge = "D$endRow:G$endRow";
 			$this->objPHPExcel->getActiveSheet()->mergeCells($Dmerge);
 
@@ -345,28 +367,35 @@ class Checkexcel{
 
 			//Сумма
 			$L = "L$endRow";
-			$this->setText($a->weight*$a->rate,$L);
+			//$s = round($a->summa_us,2)*100;
+			$s = sprintf("%.2f", $a->summa_us);
+			$this->setText($s,$L);
 
 			$M = "M$endRow";
 			$this->setText('$',$M);
 
-			$total += $a->weight*$a->rate; 
+			//$total += $a->weight*$a->rate;
+			$total += $s;
 			// $Lmerge = "L$endRow:M$endRow";
 			// $this->objPHPExcel->getActiveSheet()->mergeCells($Lmerge);
 		}
 
 		if($a instanceof App){
 			$autotruck = $a->autotruck;
-			$course = $autotruck->course;
+			$course = round($autotruck->course,4);
 		}else{
-			$course = 65.0539;
+			$course = 0;
 		}
 
-		//$total = 2624.33;
-		$totalNds = round($total/118*18,2);
+
+		//$s = sprintf("%.2f", $a->summa_us);
+		$totalNds = sprintf("%.2f",$total/118*18);
+		//$totalNds = round($total/118*18,2);
 		
 		//$course = 65.0539;
-
+		//$total = round($total,2);
+		$total = sprintf("%.2f",$total);
+		
 		$block = "B$startRow:M$endRow";
 		$this->objPHPExcel->getActiveSheet()->getStyle($block)->applyFromArray($this->styles['border-thick']);
 
@@ -495,8 +524,8 @@ class Checkexcel{
 		$this->merge($td);
 		$this->objPHPExcel->getActiveSheet()->getStyle($td)->applyFromArray($this->border_bottom);
 
-		$org = Organisation::find()->where(['active'=>1])->one();
-		$headman = $org->id ? $org->headman : "";
+		$org = $client->organisation->id ? $client->organisation : Organisation::find()->where(['active'=>1])->one();
+		$headman = $org->id && $org->payment == Organisation::PAY_CARD ? $org->headman : " ";
 		$startRow +=2;
 		$this->setText("Руководитель","B$startRow",1);
 		$this->merge("B$startRow:D$startRow");
@@ -525,7 +554,7 @@ class Checkexcel{
 
 		$this->leadup_sheet();
 		$this->setHeader($client);
-		$this->setSeller();
+		$this->setSeller($client);
 		$this->setBuyer($client);
 		$this->setProducts($apps,$client);
 

@@ -8,12 +8,15 @@ use yii\db\Expression;
 use frontend\models\App;
 use common\models\Status;
 use common\models\Client;
+use common\models\User;
 use frontend\models\AppTrace;
 use frontend\models\AutotruckNotification;
 use yii\db\Query;
 use frontend\helpers\Mail;
 use common\models\SupplierCountry;
 use frontend\models\ExpensesManager;
+use frontend\helpers\Checkexcel;
+
 
 /**
 *
@@ -24,14 +27,23 @@ use frontend\models\ExpensesManager;
 class Autotruck extends ActiveRecord
 {
 
+    public $tempFiles = null;
+
+    const SCENARIO_CREATE = "create";
 
 	public function rules(){
 		return [
             // name, email, subject and body are required
-            [['name','status'], 'required']
+            [['name'], 'required'],
+            [['file'], 'file', 'skipOnEmpty' => true,'checkExtensionByMimeType'=>false, 'extensions' => 'xls,xlsx,doc,docx,pdf,jpeg,jpg,png','maxFiles'=>20],
+            ['creator','default','value'=>\Yii::$app->user->identity->id,'on'=>self::SCENARIO_CREATE]
         ];
 	}
 
+
+    public function scenarios(){
+        return array_merge(parent::scenarios(),['SCENARIO_CREATE'=>[]]);
+    }
 
 	/**
      * Returns the static model of the specified AR class.
@@ -75,10 +87,36 @@ class Autotruck extends ActiveRecord
             'country'=>'Страна',
             'countryName'=>'Страна поставки',
             'ruDate'=>'Дата',
-            'countryCode'=>'Страна'
+            'countryCode'=>'Страна',
+            'common_weight'=>'Вес',
+            'file'=>'Файл',
+            'auto_number'=>'Номер машины',
+            'auto_name'=>'Транспорт',
+            'gtd'=>'ГТД',
+            'decor'=>'Оформление',
+            'creator'=>'Автор'
     		);
     }
 
+    public function uploadFile()
+    {
+        if ($this->validate()) {
+
+            $files = explode('|', $this->tempFiles);
+            
+            foreach ($this->file as $key => $file) {
+                $basename = $file->basename;
+                $fName = $basename . '_'.time().'.' . $file->extension;
+                $file->saveAs('uploads/' . $fName);
+                $files[] = $fName;
+            }
+            
+            return implode('|', $files);
+        } else {
+            return false;
+        }
+
+    }
 
     public function getApps(){
         return App::find()->where('autotruck_id='.$this->id)->all();
@@ -98,6 +136,10 @@ class Autotruck extends ActiveRecord
         return $this->hasOne(Status::className(),["id"=>'status']);
     }
 
+    public function getCreatorUser(){
+        return $this->hasOne(User::className(),["id"=>'creator']);
+    }
+
     public function getActiveStatusTrace(){
         $status = $this->getActiveStatus();
 
@@ -107,11 +149,21 @@ class Autotruck extends ActiveRecord
     public static function searchByKey($keyword){
         $query = new Query();
         
+        $user = \Yii::$app->user->identity;
+        $u_countries = \yii\helpers\ArrayHelper::map($user->accessCountry,'country_id','country_id');
+
         $where = "`description` LIKE '%$keyword%' OR `name` LIKE '%$keyword%'";
-        $query->select("`id`,`name`,`number`,`date`,`description`,`status`")->from(self::tableName())->where($where)->limit(5);
+        $query->select("`id`,`name`,`number`,`date`,`description`,`status`")->from(self::tableName())->where($where)->andWhere(['in','country',$u_countries])->limit(5);
         
         return $query->all();
     }
+
+
+
+
+
+
+
 
     public function checkNotificationClent($client,$app){
         if(!$client) return false;
@@ -121,11 +173,24 @@ class Autotruck extends ActiveRecord
         return ($notification->nid)?false:true;
     }
 
+
+
+
+
+
+
+
+
+
+
+
+
     public function sendNotification(){
 
 
         $apps = $this->getApps();
         $client_apps = array();
+        
         if(count($apps)){
             foreach ($apps as $key => $app) {
                 if($app->client){
@@ -142,20 +207,18 @@ class Autotruck extends ActiveRecord
         $activeTrace =  $this->activeStatusTrace;
         $autotruck_model = $this;
         if(count($client_apps)){
+            
             foreach ($client_apps as $key => $client) {
 
-                
-
                  $client_model = Client::findOne($client['client']);
-                 $mail = $client_model->user->email;
-                 $apps = $client['apps'];
+                 
+                 $mail = count($client_model->emails) ? $client_model->emails : $client_model->user->email;
+                 
 
+                 $apps = $client['apps'];
+                 $from = $client_model->managerUser->email ? $client_model->managerUser->email: "info@tedrans.com";
 
                 if(count($apps)){
-                    ob_start();
-                    include '../views/modelview/notification.php';
-                    $output = ob_get_clean();
-                    $letter = $output;
 
                     $data= array(
                         'apps' => $apps,
@@ -163,78 +226,141 @@ class Autotruck extends ActiveRecord
                         "activeTrace"=>$activeTrace,
                         "autotruck_model"=>$autotruck_model
                     );
-                    foreach ($apps as $k => $app) {
-                        if(!$app->id) continue;
-                        $this->MailSend($mail,$letter);
-                        $not = new AutotruckNotification();
-                        $not->autotruck_id = $this->id;
-                        $not->status_id = $this->activeStatus->id;
-                        $not->client_id = $client_model->id;
-                        $not->app_id = $app->id;
-                        $not->save();
-                    }
-                    
-                    // Yii::$app->mailer->compose('layouts/notification',$data)
-                    //     ->setFrom('magomedaliev.93@mail.ru')
-                    //     ->setTo($mail)
-                    //     ->setSubject("Notification Yii mailer")
-                    //     ->send();
+
+
+                        if(is_array($mail) && count($mail)){
+                            foreach ($mail as $key => $e) {
+                               $e = trim(strip_tags($e));
+                               if($e){
+                               $message = Yii::$app->mailer->compose('layouts/notification',$data)
+                                ->setFrom($from)
+                                ->setTo($e)
+                                ->setSubject("Статус груза");
+                                //Преверяем нужно ли отправлять чек для активного статуса
+                                if($activeStatus->send_check){
+                                    $checkexcel = new Checkexcel();
+                                    $checkApps =  $client_model->getAutotruckApps($this->id);
+                                    $file = $checkexcel->generateCheck($checkApps,$client_model);
+
+                                    if(file_exists($file)){
+                                        $message->attach($file);
+                                    }
+                                }
+
+                                $message->send();
+                                   
+                               }
+                            }
+
+                        }elseif($mail != ""){
+                            $message = Yii::$app->mailer->compose('layouts/notification',$data)
+                            ->setFrom($from)
+                            ->setTo($mail)
+                            ->setSubject("Статус груза");
+
+                            //Преверяем нужно ли отправлять чек для активного статуса
+                            if($activeStatus->send_check){
+                                $checkexcel = new Checkexcel();
+                                $checkApps =  $client_model->getAutotruckApps($this->id);
+                                $file = $checkexcel->generateCheck($checkApps,$client_model);
+
+                                if(file_exists($file)){
+                                    $message->attach($file);
+                                }
+                            }
+
+                            $message->send();
+                        }else{
+                            continue;
+                        }
+                        
+
+
+                        
+
+                        foreach ($apps as $k => $app) {
+                            if(!$app->id) continue;
+                            
+                            $not = new AutotruckNotification();
+                            $not->autotruck_id = $this->id;
+                            $not->status_id = $this->activeStatus->id;
+                            $not->client_id = $client_model->id;
+                            $not->app_id = $app->id;
+                            $not->save();
+                        }
                 }
             }
         }
     }
 
-    function MailSend($tomail,$html,$files=null){
-            
-            $sender="Notification";
-            $subject="Notification";
-            $text="Notification";
+    
 
-            $mail = new Mail();
 
-            $mail->protocol = 'mail';
-            $mail->parameter = '';
-            $mail->hostname = '';
-            $mail->username = '';
-            $mail->password = '';
-            $mail->port = 25;
-            $mail->timeout = 5;
-            
-            //$mail->setTo($this->config->get('config_email'));
-            //$mail->setTo('web-ali@yandex.ru');
-            
-            $mail->setTo($tomail);
-            $mail->setFrom("magomedaliev.93@mail.ru");
-            $mail->setSender($sender);
-            $mail->setSubject(html_entity_decode($subject, ENT_QUOTES, 'UTF-8'));
-            $mail->setHtml($html);
-            $mail->setText(html_entity_decode($text, ENT_QUOTES, 'UTF-8'));
-            $mail->setAttachment($files);
-            $mail->send();
-            
-            return 1;//$mail->send();
-    }
+
+
+
+
+
 
     public function getSupplierCountry(){
         return $this->hasOne(SupplierCountry::className(),['id'=>'country']);
     }
 
+
+
+
+
+
+
+
+
     public function getCountryName(){
         return $this->supplierCountry->country;
     }
+
+
+
+
+
+
+
 
     public function getRuDate(){
         return date("d.m.Y",strtotime($this->date));
     }
 
+
+
+
+
+
+
+
     public function getCountryCode(){
         return $this->supplierCountry->code;//substr(, 0,1);
     }
+
+
+
+
+
+
+
+
+
+
 
     public function afterDelete(){
         AppTrace::deleteAll("autotruck_id=".$this->id);
         parent::afterDelete();
     }
+
+
+
+
+
+
+
 
     public static function getReport(){
         $sql = "SELECT  atr.id, atr.name, atr.date,atr.country, atr.course,
@@ -257,4 +383,141 @@ class Autotruck extends ActiveRecord
 
         return $command->queryAll();
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+    public function unlinkFile($file = null){
+       
+        if(!$file || !file_exists('uploads/'.$file)) return null;
+    
+
+        if($this->file != ''){
+
+            $files = explode('|', $this->file);
+            if(count($files)){
+                $new_files = array();
+                foreach($files as $key => $item) {
+                    if($file == $item){
+                        if(file_exists('uploads/'.$file)){
+                            unlink('uploads/'.$file);
+                        }
+                    }else{
+                        $new_files[] = $item;
+                    }
+                }
+
+                $this->file = implode('|', $new_files);
+                return $this->save();
+                
+            }
+        }
+    }
+
+
+    public function fileExists($file){
+        if(!$file || !$this->file) return null;
+
+        $files = explode("|", $this->file);
+        if(count($files)){
+            return in_array($file,$files);
+        }
+        return 0;
+    }
+
+
+    public function getCommon_weight(){
+
+        $sql = "SELECT SUM(a.weight) as common_weight  FROM autotruck at
+                INNER JOIN app a ON a.autotruck_id = at.id
+                WHERE at.id = ".$this->id." AND a.type = '0'";
+
+        $connection = Yii::$app->getDb();
+        $command = $connection->createCommand($sql);
+
+        $res = $command->queryOne();
+        
+        
+        return  sprintf("%.2f", $res['common_weight']);
+    }
+
+
+
+
+    public function setAllAppOutStock($value){
+
+        if($this->id){
+            $sql = "UPDATE app SET `out_stock`={$value} WHERE `autotruck_id` = {$this->id}";
+
+            $connection = Yii::$app->getDb();
+            $command = $connection->createCommand($sql);
+
+            return $command->execute();
+
+        }
+
+        return 0;
+    }
+
+    public function getCountOutStockApp(){
+
+        if($this->id){
+            $sql = "SELECT COUNT(1) as count FROM app  WHERE `out_stock`=1 AND `autotruck_id` = {$this->id}";
+
+            $connection = Yii::$app->getDb();
+            $command = $connection->createCommand($sql);
+            $res = $command->queryOne();
+            return $res['count'];
+
+        }
+
+        return 0;
+    }
+
+
+    public function getAppCountPlace($client = null){
+        
+        $conditionClient = $client > 0 ? " AND `client`={$client}" : ""; 
+        
+        $sql = "SELECT SUM(count_place) FROM ".App::tableName()." WHERE autotruck_id = ".$this->id." ".$conditionClient;
+        $connection = Yii::$app->getDb();
+        $command = $connection->createCommand($sql);
+
+        return $command->queryScalar();
+    }
+
+    public function getAppCountPackage($package,$client = null){
+        
+        $conditionClient = $client > 0 ? " AND `client`={$client}" : ""; 
+        
+        $sql = "SELECT count(id) FROM ".App::tableName()." WHERE autotruck_id = ".$this->id." and package = ".$package." ".$conditionClient;
+        $connection = Yii::$app->getDb();
+        $command = $connection->createCommand($sql);
+
+        return $command->queryScalar();
+    }
+
+
+    public function getAppCountPlacePackage($package,$client = null){
+        
+        $conditionClient = $client > 0 ? " AND `client`={$client}" : "";
+        
+        $sql = "SELECT SUM(count_place) FROM ".App::tableName()." WHERE autotruck_id = ".$this->id." and package = ".$package." ".$conditionClient;
+        $connection = Yii::$app->getDb();
+        $command = $connection->createCommand($sql);
+
+        return $command->queryScalar();
+    }
+
+
+    
 }

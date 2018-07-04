@@ -60,6 +60,7 @@ class Status extends ActiveRecord
     		'title'=>'Заголовок',
             'description'=>'Описание',
             'notification_template'=> 'Шаблон уведомления',
+            'send_check'=>'Отправлять счет',
             'sort' => 'Порядок'
     		);
     }

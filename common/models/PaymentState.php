@@ -59,7 +59,7 @@ class PaymentState extends ActiveRecord
     		'id'=>'Id',
     		'title'=>'Заголовок',
             'color'=>'Цвет',
-            'default'=>'По умолчанию',
+            'default_value'=>'По умолчанию',
             'filter'=>"Использовать как фильтр?",
             'end_state'=>'Конечное состояние',
             'sum_state'=>'Промежуточное состояние'
@@ -67,20 +67,20 @@ class PaymentState extends ActiveRecord
     }
 
     public function setDefault($model){
-        $sql = "UPDATE ".self::tableName()." SET `default`=0 WHERE id != ".$model->id.";";
-        $sql .="UPDATE ".self::tableName()." SET `default`=1 WHERE id = ".$model->id.";";
+        $sql = "UPDATE ".self::tableName()." SET default_value=0 WHERE id != ".$model->id.";";
+        $sql .="UPDATE ".self::tableName()." SET default_value=1 WHERE id = ".$model->id.";";
 
         Yii::$app->db->createCommand($sql)->execute();
     }
 
     public static function getDefaultState(){
 
-        return PaymentState::find()->where(['default' => 1])->one();
+        return PaymentState::find()->where(['default_value' => 1])->one();
     }
 
     public function setEndState($model){
-        $sql = "UPDATE ".self::tableName()." SET `end_state`=0 WHERE id != ".$model->id.";";
-        $sql .="UPDATE ".self::tableName()." SET `end_state`=1 WHERE id = ".$model->id.";";
+        $sql = "UPDATE ".self::tableName()." SET end_state=0 WHERE id != ".$model->id.";";
+        $sql .="UPDATE ".self::tableName()." SET end_state=1 WHERE id = ".$model->id.";";
 
         Yii::$app->db->createCommand($sql)->execute();
     }
@@ -91,15 +91,15 @@ class PaymentState extends ActiveRecord
     }
 
     public function setSumState($model){
-        $sql = "UPDATE ".self::tableName()." SET `sum_state`=0 WHERE id != ".$model->id.";";
-        $sql .="UPDATE ".self::tableName()." SET `sum_state`=1 WHERE id = ".$model->id.";";
+        //$sql = "UPDATE ".self::tableName()." SET sum_state=0 WHERE id != ".$model->id.";";
+        $sql .="UPDATE ".self::tableName()." SET sum_state=1 WHERE id = ".$model->id.";";
 
         Yii::$app->db->createCommand($sql)->execute();
     }
 
-    public static function getSumState(){
+    public static function getSumStates(){
 
-        return PaymentState::find()->where(['sum_state' => 1])->one();
+        return PaymentState::find()->where(['sum_state' => 1])->all();
     }
 
 }

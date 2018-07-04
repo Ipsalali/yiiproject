@@ -26,6 +26,7 @@
         "kartik-v/yii2-export": "*",
         "phpoffice/phpexcel": "*",
         "2amigos/yii2-date-picker-widget" : "*",
+        "2amigos/yii2-file-upload-widget": "~1.0",
         "kartik-v/yii2-date-range": "dev-master",
         "kartik-v/yii2-widget-datepicker": "@dev",
         "kartik-v/yii2-field-range": "*"

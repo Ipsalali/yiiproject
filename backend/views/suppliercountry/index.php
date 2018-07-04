@@ -3,7 +3,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\bootstrap\ActiveForm;
 
- $this->title = "Статус";
+ $this->title = "Страны поставок";
 ?>
  
 <?php if(Yii::$app->session->hasFlash('StatusDeletedError')): ?>

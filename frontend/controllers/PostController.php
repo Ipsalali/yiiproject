@@ -118,20 +118,20 @@ class PostController extends Controller{
 
 		if($id == NULL){
 			Yii::$app->session->setFlash("PostDeleteError");
-			Yii::$app->response->redirect(array("post/index"));
+			return Yii::$app->response->redirect(array("post/index"));
 		}
 
 		$post = Post::findOne($id);
 
 		if($post === NULL){
 			Yii::$app->session->setFlash("PostDeleteError");
-			Yii::$app->response->redirect(array("post/index"));
+			return Yii::$app->response->redirect(array("post/index"));
 		}
 
 		$post->delete();
 
 		Yii::$app->session->setFlash("PostDeleted");
-		Yii::$app->response->redirect(array("post/index"));
+		return Yii::$app->response->redirect(array("post/index"));
 	}
 
 }

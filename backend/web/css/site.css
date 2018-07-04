@@ -113,3 +113,11 @@ a.desc:after {
 .org_btn_save{
     margin-bottom: 20px;
 }
+
+#organisation-payment{
+
+}
+
+#organisation-payment > div.radio{
+    margin:0px 0px 0px 0px !important;
+}

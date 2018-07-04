@@ -17,6 +17,7 @@ use frontend\models\Autotruck;
 use frontend\modules\ListAction;
 use frontend\modules\ClientSearch;
 use frontend\models\CustomerPayment;
+use common\models\ClientOrganisation;
 
 
 class ClientController extends Controller{
@@ -48,7 +49,7 @@ class ClientController extends Controller{
                         'roles' => ['client/index'],
                     ],
                     [
-                        'actions' => ['create', 'index'],
+                        'actions' => ['create', 'index','get-relation'],
                         'allow' => true,
                         'roles' => ['client/create'],
                     ],
@@ -104,12 +105,26 @@ class ClientController extends Controller{
 
 	public $layout = "/client/client";
 
+
+
+
+
+
 	public function actionIndex(){
 
         $clientSearch = new ClientSearch;
 		$dataProvider = $clientSearch->search(Yii::$app->request->queryParams);
 		return $this->render('index',array('dataProvider'=>$dataProvider,'clientSearch'=>$clientSearch));
 	}
+
+
+
+
+
+
+
+
+
 
 	public function actionCreate(){
 		$client = new Client;
@@ -119,19 +134,28 @@ class ClientController extends Controller{
 		$managers = User::getManagers();
 
 		$post = Yii::$app->request->post();
+        $error = false;
 
 		if(isset($post['Client'])){
-            $client->full_name = trim(strip_tags($post['Client']['full_name']));
-			$client->name = trim(strip_tags($post['Client']['name']));
-            $client->contract_number = trim(strip_tags($post['Client']['contract_number']));
-			$client->description = trim(strip_tags($post['Client']['description']));
-			$client->phone = trim(strip_tags($post['Client']['phone']));
-			$client->client_category_id = ($_POST['Client']['client_category_id'])? $_POST['Client']['client_category_id']:0;
- 			$client->manager = ($_POST['Client']['manager'])? $_POST['Client']['manager']:0;
-            $client->payment_clearing = ($_POST['Client']['payment_clearing'])? $_POST['Client']['payment_clearing']:0;
-			if($client->save()){
+            
+            
+
+            if(isset($post['use_free_client']) && (int)$post['use_free_client']){
+                if(isset($post['Client']['user_id']) && !(int)$post['Client']['user_id']){
+                    $error = true;
+                }
+            }
+
+
+			if($client->load($post) && !$error && $client->save()){
 				
-				if ($user->load($post)) {
+                //Сохраняем связь между организацией и клиентом
+                $c_n = isset($post['Client']['contract_number']) ? trim(strip_tags($post['Client']['contract_number'])) : "";
+
+
+                ClientOrganisation::saveRelation($client,$c_n);
+
+				if (!$client->user_id && $user->load($post)) {
 
             		if ($profile = $user->signup()) {
 
@@ -153,26 +177,12 @@ class ClientController extends Controller{
 
 		}
 
+        $freeUser = User::getUnAssignedUserForClient();
+        $mode_user_create = true;
 
-		return $this->render('create',array('data'=>array("client"=>$client,"user"=>$user),"mode"=>"create",'managers'=>$managers));
+		return $this->render('create',array("error"=>$error,"freeUser"=>$freeUser,"client"=>$client,"user"=>$user,"mode"=>"create",'managers'=>$managers,"mode_user_create"=>$mode_user_create));
 	}
 
-	public function actionRead($id = NULL){
-
-		if($id == null)
-			throw new HttpException(404,'Not Found!');
-
-		$client = Client::findOne($id);
-        
-		if($client === NULL)
-			throw new HttpException(404,'Document Does Not Exist');
-
-		$autotrucks = $client->appsSortAutotruck;
-		$grafik = $client->getDataForGrafik();
-
-		return $this->render('read',array("client"=>$client,'autotrucks'=>$autotrucks,'grafik'=>$grafik));
-
-	}
 
 
 
@@ -181,38 +191,122 @@ class ClientController extends Controller{
 			throw new HttpException(404, 'Not Found');
 
 		$Client = Client::findOne($id);
-		
+
 		$managers = User::getManagers();
 
-		if ($Client === NULL)
+        $user = new SignupForm();
+        
+		if(!isset($Client->id))
         	throw new HttpException(404, 'Document Does Not Exist');
 		
-		if (isset($_POST['Client']))
-    	{  
-            $Client->full_name = trim(strip_tags($_POST['Client']['full_name']));
-        	$Client->name = trim(strip_tags($_POST['Client']['name']));
-            $Client->contract_number = trim(strip_tags($_POST['Client']['contract_number']));
-        	$Client->description = trim(strip_tags($_POST['Client']['description']));
- 			$Client->phone = trim(strip_tags($_POST['Client']['phone']));
- 			$Client->client_category_id=($_POST['Client']['client_category_id'])?$_POST['Client']['client_category_id']:0;
- 			$Client->manager = ($_POST['Client']['manager'])?$_POST['Client']['manager']:0;
-            $Client->payment_clearing = ($_POST['Client']['payment_clearing'])? $_POST['Client']['payment_clearing']:0;
-        	if ($Client->save()){
 
-        		if($_POST['User']['email'])
-        			$user = $Client->user;
-        			$user->email = trim(strip_tags($_POST['User']['email']));
-        			$user->save();
-            	Yii::$app->response->redirect(array('client/index'));
+        $error = false;
+        
+        $post = Yii::$app->request->post();
+
+		if (isset($_POST['Client']))
+    	{   
+
+
+            if(isset($post['use_free_client']) && (int)$post['use_free_client']){
+                if(isset($post['Client']['user_id']) && !(int)$post['Client']['user_id']){
+                    $error = true;
+                }
+            }
+
+        	if ($Client->load($_POST) && $Client->save()){
+
+                $c_n = isset($_POST['Client']['contract_number']) ? trim(strip_tags($_POST['Client']['contract_number'])) : "";
+
+                
+                //Сохраняем связь между организацией и клиентом
+                ClientOrganisation::saveRelation($Client,$c_n);
+
+                
+                if (!isset($Client->user->id) && isset($post['SignupForm']) &&  $user->load($post)) {
+
+                    if ($profile = $user->signup()) {
+
+                        //Устанавливаем для пользователя роль
+                        $userRole = Yii::$app->authManager->getRole('client');
+                
+                        Yii::$app->authManager->assign($userRole, $profile->getId());
+
+                        $Client->user_id = $profile->getId();
+
+                        $Client->save();
+
+                    }
+                
+                }elseif(isset($_POST['User']['email']) && $_POST['User']['email']){
+                    $user = $Client->user;
+                    $user->email = trim(strip_tags($_POST['User']['email']));
+                    $user->save();
+                }
+        			
+            	
+
+                Yii::$app->response->redirect(array('client/read','id'=>$Client->id));
         	}
     	}
 
+        
+        if($Client->user){
+            $user = $Client->user;
+            $mode_user_create = false;
+        }else{
+            
+            $mode_user_create = true;
+        }
+
+        $freeUser = User::getUnAssignedUserForClient();
+
     	return $this->render('create', array(
-        	'data'=>array("client"=>$Client),'managers'=>$managers,
-        	"mode"=>"update"
+        	"client"=>$Client,'managers'=>$managers,
+        	"mode"=>"update",'user'=>$user,"mode_user_create"=>$mode_user_create,"freeUser"=>$freeUser,"error"=>$error
     	));
 
 	}
+
+
+
+    public function actionRead($id = NULL){
+
+        if($id == null)
+            throw new HttpException(404,'Not Found!');
+
+        $client = Client::findOne($id);
+        
+        if(!isset($client->id))
+            throw new HttpException(404,'Document Does Not Exist');
+
+        $autotrucks = $client->appsSortAutotruck;
+        $grafik = $client->getDataForGrafik();
+
+        return $this->render('read',array("client"=>$client,'autotrucks'=>$autotrucks,'grafik'=>$grafik));
+
+    }
+
+
+    public function actionGetRelation(){
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+        $post = Yii::$app->request->post();
+        $answer['result'] = 0;
+        $answer['value'] = "";
+        if(isset($post['client_id']) && (int)$post['client_id'] && isset($post['org_id']) && (int)$post['org_id']){
+            $cl = ClientOrganisation::findByClienAndOrg((int)$post['client_id'],(int)$post['org_id']);
+
+            if(isset($cl->client_id) && $cl->client_id){
+                $answer['result'] = 1;
+                $answer['value'] = $cl->relation_number;
+            }
+        }
+        return $answer;
+    }
+
+
+
 
 
 
@@ -220,14 +314,14 @@ class ClientController extends Controller{
 
 		if($id == NULL){
 			Yii::$app->session->setFlash("ClientDeleteError");
-			Yii::$app->response->redirect(array("post/index"));
+			return Yii::$app->response->redirect(array("post/index"));
 		}
 
 		$client = Client::findOne($id);
 
-		if($client === NULL){
+		if(!isset($client->id)){
 			Yii::$app->session->setFlash("ClientDeleteError");
-			Yii::$app->response->redirect(array("post/index"));
+			return Yii::$app->response->redirect(array("post/index"));
 		}
 
 		$profile = User::findOne($client->user_id);
@@ -241,8 +335,20 @@ class ClientController extends Controller{
 		
 
 		Yii::$app->session->setFlash("ClientDeleted");
-		Yii::$app->response->redirect(array("client/index"));
+		return Yii::$app->response->redirect(array("client/index"));
 	}
+
+
+
+
+
+
+    
+
+
+
+
+
 
 	public function actionApp($id = null){
 		if($id == NULL){
@@ -251,7 +357,7 @@ class ClientController extends Controller{
 
 		$client = Client::findOne($id);
 
-		if($client === NULL){
+		if(!isset($client->id)){
 			throw new HttpException(404,'Document Does Not Exist');
 		}
 
@@ -265,6 +371,18 @@ class ClientController extends Controller{
 	}
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 	public function actionCheck($client,$autotruck){
 		
 		if($client == NULL){
@@ -276,8 +394,8 @@ class ClientController extends Controller{
 		}
 
 		$client_model = Client::findOne($client);
-
-		if($client_model === NULL){
+        
+        if(!isset($client_model->id)){
 			throw new HttpException(404,'Document Does Not Exist');
 		}
 
@@ -298,6 +416,16 @@ class ClientController extends Controller{
 		
 	}
 
+
+
+
+
+
+
+
+
+
+
     public function actionMycheck($autotruck){
         
         if(Yii::$app->user->isGuest){
@@ -310,7 +438,7 @@ class ClientController extends Controller{
             throw new HttpException(404, 'Not Found');
         }
 
-        if($client_model === NULL){
+        if(!isset($client_model->id)){
             throw new HttpException(404,'Document Does Not Exist');
         }
 
@@ -331,6 +459,19 @@ class ClientController extends Controller{
         
     }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 	public function actionSendnotification($client,$autotruck){
 		if($client == NULL){
 			throw new HttpException(404, 'Not Found');
@@ -343,11 +484,11 @@ class ClientController extends Controller{
 		$client_model = Client::findOne($client);
 		$autotruck_model =Autotruck::findOne($autotruck);
 
-		if($client_model === NULL){
+		if(!isset($client_model->id)){
 			throw new HttpException(404,'Document Does Not Exist');
 		}
 
-		if($autotruck_model === NULL){
+		if(!isset($autotruck_model->id)){
 			throw new HttpException(404,'Document Does Not Exist');
 		}
 
@@ -422,10 +563,10 @@ class ClientController extends Controller{
 
         $client = Yii::$app->user->identity->client;
 
-        if($client === NULL)
+        if(!isset($client->id))
             throw new HttpException(404,'Document Does Not Exist');
 
-        $autotrucks = $client->appsSortAutotruck;
+        $autotrucks = $client->getAppsSortAutotruck($client->ownApps);
 
         return $this->render('profile',array("client"=>$client,'autotrucks'=>$autotrucks));
     }

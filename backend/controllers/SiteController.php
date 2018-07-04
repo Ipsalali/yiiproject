@@ -35,36 +35,7 @@ class SiteController extends Controller
                         'roles' => ['@'],
                     ],
                     [
-                        'actions' => ['addrole', 'index'],
-                        'allow' => true,
-                        'roles' => ['admin'],
-                    ],
-                    [
-                        'actions' => ['list', 'index'],
-                        'allow' => true,
-                        'roles' => ['admin'],
-                    ],
-                    [
-                        'actions' => ['user', 'index'],
-                        'allow' => true,
-                        'roles' => ['admin'],
-                    ],
-                    [
-                        'actions' => ['permission', 'index'],
-                        'allow' => true,
-                        'roles' => ['admin'],
-                    ],
-                    [
-                        'actions' => ['extendperm', 'index'],
-                        'allow' => true,
-                        'roles' => ['admin'],
-                    ],[
-                        'actions' => ['delete', 'index'],
-                        'allow' => true,
-                        'roles' => ['admin'],
-                    ],
-                    [
-                        'actions' => ['userform', 'index'],
+                        'actions' => ['addrole', 'index','list','user','permission','extendperm','delete','userform'],
                         'allow' => true,
                         'roles' => ['admin'],
                     ]
@@ -91,12 +62,18 @@ class SiteController extends Controller
         ];
     }
 
+
+
+
     public function actionIndex()
     {   
 
         //$this->layout = "/sidebars/no_sidebar.php";
         return $this->render('index');
     }
+
+
+
 
     public function actionLogin()
     {
@@ -115,12 +92,18 @@ class SiteController extends Controller
         }
     }
 
+
+
+
     public function actionLogout()
     {
         Yii::$app->user->logout();
 
         return $this->goHome();
     }
+
+
+
 
 
     public function actionList(){
@@ -135,6 +118,9 @@ class SiteController extends Controller
 
     }
 
+
+
+
     public function actionUser($id = 0){
 
         $user =User::findOne($id);
@@ -144,6 +130,8 @@ class SiteController extends Controller
         return $this->render('user',array('user'=>$user));
 
     }
+
+
 
 
     public function actionUserform($id=null){
@@ -157,19 +145,35 @@ class SiteController extends Controller
 
         if(Yii::$app->request->post()){
             $post = Yii::$app->request->post();
+
+           
+
             $user->username = $post['User']['username'];
             $user->email = $post['User']['email'];
             $user->name = $post['User']['name'];
             $user->phone = $post['User']['phone'];
-            $user->setPassword($post['User']['password']);
-            $user->generateAuthKey();
+            if(!$id){
+                $user->setPassword($post['User']['password']);
+                $user->generateAuthKey();
+            }
 
             
-
+            
             if ($user->save()) {
-                if(!$id){
-                    $userRole = Yii::$app->authManager->getRole('manager');
+                if(!$id){                    
+                    $userRole = Yii::$app->authManager->getRole('main_manager');
                     Yii::$app->authManager->assign($userRole, $user->getId());
+                    
+                }elseif(isset($post['resetPass']) && (int)$post['resetPass']){
+                    $user->setPassword($post['User']['password']);
+                    $user->generateAuthKey();
+                    $user->save();
+                }
+
+                if(isset($post['manager_country'])){
+                    $user->addAccessCountry($post['manager_country']);
+                }else{
+                    $user->removeAccessCountry();
                 }
                 
                 Yii::$app->response->redirect(array("site/list"));
@@ -180,21 +184,20 @@ class SiteController extends Controller
     }
 
 
+
+
+
     //Добавление роли
     public function actionAddrole(){
 
-        // $role = Yii::$app->authManager->createRole('admin');
-        // $role->description = 'admin';
-        // Yii::$app->authManager->add($role);
 
         $role = Yii::$app->authManager->createRole('manager');
         $role->description = 'manager';
         Yii::$app->authManager->add($role);
  
-        // $role = Yii::$app->authManager->createRole('user');
-        // $role->description = 'client';
-        // Yii::$app->authManager->add($role);
     }
+
+
 
 
     //Добавление разрешении
@@ -206,6 +209,9 @@ class SiteController extends Controller
 
     }
 
+
+
+
     //наследование роли
     public function actionExtendperm(){
         
@@ -214,6 +220,8 @@ class SiteController extends Controller
         Yii::$app->authManager->addChild($role, $permit);
     
     }
+
+    
 
     
     public function actionDelete($id = NULL){

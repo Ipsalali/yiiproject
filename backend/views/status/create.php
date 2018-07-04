@@ -17,6 +17,7 @@ use mihaildev\elfinder\ElFinder;
 
     <?php echo $form->field($model, 'title')->textInput(array('class' => 'form-control')); ?>
     <?php echo $form->field($model, 'sort')->textInput(array('class' => 'form-control')); ?>
+    <?php echo $form->field($model, 'send_check')->checkBox(); ?>
     
     <?php
     	echo $form->field($model, 'description')->textarea(array("class"=>'form-control'));
@@ -31,6 +32,7 @@ use mihaildev\elfinder\ElFinder;
             <li><span>[APP_DATE]</span> - для вывода даты заявки;</li>
             <li><span>[APP_STATUS]</span> - для вывода статуса заявки;</li>
             <li><span>[APP_COURSE]</span> - для вывода курса заявки;</li>
+            <li><span>[APP_GTD]</span> - гос таможенная декларация;</li>
     	</ul>
     </div>
      <?php

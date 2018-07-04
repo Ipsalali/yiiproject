@@ -3,6 +3,12 @@ use yii\helpers\Html;
 use frontend\models\Autotruck;
 use frontend\models\CustomerPayment;
 use common\models\PaymentState;
+use yii\helpers\ArrayHelper;
+use common\models\TypePackaging;
+$this->title = "TEDTRANS";
+
+$user = Yii::$app->user->identity;
+$packages = TypePackaging::find()->all();
 ?>
 
 <div class="client_page">
@@ -33,11 +39,24 @@ use common\models\PaymentState;
 			</div>
 		
 		</div>
+		
+		
+			<div class="col-xs-12">
+				<p>Задолженность: 
+				    <?php 
+				    	echo $client->user->getManagerSverka();
+				        //echo $client->getDebt() - $client->getSumStateSum();
+				    ?> $
+				</p>
+			</div>
+		
+		
 		<div class="row">
 			<div class="col-xs-12">
 				<h3>Ваши заявки:</h3>
 			</div>
 		</div>
+		
 		<div class="row">
 				<div class="col-xs-12">
 				<?php if($autotrucks){?>
@@ -53,25 +72,32 @@ use common\models\PaymentState;
 						?>
 				<div id="autotruck_tab_<?=$key?>" >
 				  	<div class="panel panel-primary">
-				  		<div class="panel-heading">
+				  		<div class="panel-heading profile_autotruck_head">
 				  			<div class="row">
 				  			<div class="col-xs-9">
-				  				<h4><?php echo $autotruck->name." №".$autotruck->id?>
+				  				<h4>
+				  				    <?php echo $autotruck->name; ?>
+				  				    &nbsp&nbsp&nbsp
+				  					<?php 
+				  						echo ($user->id === $autotruck->creator) ? html::a("Редактировать",array("autotruck/update","id"=>$autotruck->id)) : "";
+				  					?>
 				  				</h4>
 				  			</div>
-				  			<div class="col-xs-3" style="text-align:center">
+				  			<div class="col-xs-3" style="text-align:right">
 				  				<span><?=date("d.m.Y",strtotime($autotruck->date))?></span>
 				  				<?php echo Html::a("Скачать счет", array("client/mycheck","autotruck"=>$autotruck->id),array("class"=>"check btn btn-success"))?>
 				  			</div>
 				  			</div>
 
 				  		</div>
-						<div class="panel-body autotruck_info">
+						<div class="panel-body autotruck_info profile_autotruck_body">
 							
 							<div class="row">
 								<div class="col-xs-4">
-									<p>Курс: <span><?php echo $autotruck->course; ?> руб.</span></p>
-									<p>Страна поставки: <span><?php echo $autotruck->countryName; ?></span></p>
+									<p><strong>Курс:</strong><span><?php echo $autotruck->course; ?> руб.</span></p>
+									<p><strong>Страна поставки:</strong> <span><?php echo $autotruck->countryName; ?></span></p>
+									<p><strong>Номер машины:</strong> <?php echo $autotruck->auto_number?></p>
+                                    <p><strong>ГТД:</strong> <?php echo Html::encode($autotruck->gtd)?></p>
 								</div>
 								<div class="col-xs-4">
 									<h4>Статус:</h4>
@@ -91,27 +117,50 @@ use common\models\PaymentState;
 												}
 											?>
 										</ul>
-								</div>
-								<div class="col-xs-4">
-									<div class="col-xs-12">
-										<p>Текущий статус: <span style="color:<?=$paymentState->color?>"><?php echo $paymentState->title; ?></span></p>
+									<div>
+										
 										<?php
-											if($paymentState->id == PaymentState::getSumState()->id){
-										?><p>Сумма: <?php echo $CustomerPayment->sum?> $</p><?php }?>
-										<p>Комментраий: <?php echo $CustomerPayment->comment?></p>
+											if(is_array($packages)){
+												foreach ($packages as $key => $package) {
+													$count = $autotruck->getAppCountPlacePackage($package->id,$client->id);
+
+													if($count > 0){
+														?>
+														<p><?php echo $package->title?>: <?php echo $count; ?></p>
+														<?php
+													}
+												}
+											}
+										?>
+								    	</div>
+								</div>
+								<div class="col-xs-4" style="display: none;">
+									<div class="col-xs-12">
+										<p><strong>Статус оплаты:</strong> <span style="color:<?=$paymentState->color?>"><?php echo $paymentState->title; ?></span></p>
+										<?php
+										    $sum_states = PaymentState::getSumStates();
+										    $sum_statesArray = ArrayHelper::map($sum_states,'id','id');
+											if(in_array($paymentState->id, $sum_statesArray)){
+										?>
+											<p><strong>Сумма:</strong> <?php echo $CustomerPayment->sum?> $</p>
+										<?php }?>
+										<p><strong>Итого кол-во мест:</strong> <?php echo $autotruck->getAppCountPlace($client->id)?></p>
+										<p><strong>Комментрий:</strong> <?php echo $CustomerPayment->comment?></p>
 									</div> 
 								</div>
 							</div>
-
 							
 
 							<div class="table autotruck_apps">
-								<h4>Ваши товары:</h4>
+								<!-- <h4>Ваши товары:</h4> -->
 								<table class="table table-striped table-hover table-bordered">
 								<tbody>
 									<tr>
 										<th>№</th>
-										<th>Информация</th>
+										<th class="app_sender">Отправитель</th>
+										<th class="app_place">Кол-во мест</th>
+										<th class="app_package">Упаковка</th>
+										<th>Наименование</th>
 										<th>Вес (кг)</th>
 										<th>Ставка ($)</th>
 										<th>Сумма $</th>
@@ -122,11 +171,31 @@ use common\models\PaymentState;
 							foreach ($a['apps'] as $i=> $app) { ?>
 									<tr>
 										<td><?=$i+1?></td>
+										<?php 
+														if(!$app->type){
+														?>
+															<td>
+																<?php echo $app->sender 
+																			? $app->senderObject->name 
+																			: "Не указан"; 
+																?>
+															</td>
+														
+															<td><? echo $app->count_place ?></td>
+														
+															<td><?php echo $app->package ? $app->typePackaging->title : "Не указан"; ?></td>
+														<?php	
+														}else{
+															?>
+															<td colspan="3"></td>
+															<?php
+														}
+													?>
 										<td><?=$app->info?></td>
 										<td><?=$app->weight?></td>
 										<td><?=$app->rate?></td>
-										<td><?=$app->weight*$app->rate?> $</td>
-										<td><?=$app->weight*$app->rate*$autotruck->course?> руб</td>
+										<td><?=round($app->weight*$app->rate,2)?> $</td>
+										<td><?=round($app->weight*$app->rate*$autotruck->course,2)?> руб</td>
 										<td><?=$app->comment?></td>
 									</tr>
 							<?php   $cweight += $app->weight; 
@@ -135,10 +204,11 @@ use common\models\PaymentState;
 								}?>
 								<tr>
 									<td colspan="2"><strong>Итого</strong></td>
+									<td colspan="3"><strong><?php echo $autotruck->getAppCountPlace($client->id)?></strong></td>
 									<td><strong><?php echo $cweight;?> кг.</strong></td>
 									<td></td>
-									<td><strong><?php echo $totalUs;?> $</strong></td>
-									<td><strong><?php echo $total;?> руб.</strong></td>
+									<td><strong><?php echo round($totalUs,2);?> $</strong></td>
+									<td><strong><?php echo round($total,2);?> руб.</strong></td>
 									<td></td>
 								</tr>
 								</tbody>

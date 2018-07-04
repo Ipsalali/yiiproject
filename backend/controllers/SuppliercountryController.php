@@ -22,27 +22,7 @@ class SuppliercountryController extends Controller{
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['index', 'index'],
-                        'allow' => true,
-                        'roles' => ['admin'],
-                    ],
-                    [
-                        'actions' => ['create', 'index'],
-                        'allow' => true,
-                        'roles' => ['admin'],
-                    ],
-                    [
-                        'actions' => ['update', 'index'],
-                        'allow' => true,
-                        'roles' => ['admin'],
-                    ],
-                    [
-                        'actions' => ['read', 'index'],
-                        'allow' => true,
-                        'roles' => ['admin'],
-                    ],
-                    [
-                        'actions' => ['delete', 'index'],
+                        'actions' => ['index', 'create','read','delete','update'],
                         'allow' => true,
                         'roles' => ['admin'],
                     ]
@@ -51,6 +31,9 @@ class SuppliercountryController extends Controller{
         ];
     }
     
+
+
+
     public function actionIndex(){
 
         $country = new SupplierCountry;
@@ -60,6 +43,10 @@ class SuppliercountryController extends Controller{
 
         return $this->render('index',array('data'=>$data,'model'=>$country));
     }
+
+
+
+
 
     public function actionCreate(){
         $model = new SupplierCountry;
@@ -75,6 +62,10 @@ class SuppliercountryController extends Controller{
         return $this->render('create',array('model'=>$model));
     }
 
+
+
+
+
     public function actionRead($id = NULL){
 
         if($id == null)
@@ -88,6 +79,9 @@ class SuppliercountryController extends Controller{
         return $this->render('read',array("model"=>$model));
 
     }
+
+
+
 
     public function actionUpdate($id = null){
         if($id == null)
@@ -112,6 +106,9 @@ class SuppliercountryController extends Controller{
 
     }
 
+
+
+
     public function actionDelete($id = NULL){
 
         if($id == NULL){
@@ -133,5 +130,7 @@ class SuppliercountryController extends Controller{
        // Yii::$app->getResponse->redirect(array("status/index"));
         Yii::$app->response->redirect(array("suppliercountry/index"));
     }
+
+    
 
 }

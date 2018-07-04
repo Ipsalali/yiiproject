@@ -20,9 +20,9 @@ class AutotruckSearch extends Autotruck
     public $date_from;
     public $date_to;
     public $implements_state;
-    public $page_size = 15;
+    public $page_size = 50;
     public $filterPosition = FILTER_POS_BODY;
-
+    public $common_weight;
     /**
      * Правила валидации модели
      * @return array
@@ -33,7 +33,7 @@ class AutotruckSearch extends Autotruck
             // Обязательное поле
             ['id','integer'],
             // Только числа, значение как минимум должна равняться единице
-            [['date','date_from','date_to','country','status','name','implements_state'],'safe']
+            [['date','date_from','date_to','country','decor','status','name','implements_state','auto_number','auto_name','common_weight'],'safe']
         ];
     }
 
@@ -46,10 +46,13 @@ class AutotruckSearch extends Autotruck
      * @return ActiveDataProvider|\yii\data\DataProviderInterface
      */
     public function search($params)
-    {
+    {   
+
+        $user = \Yii::$app->user->identity;
+        $u_countries = \yii\helpers\ArrayHelper::map($user->accessCountry,'country_id','country_id');
         // Создаём запрос на получение продуктов вместе категориями
-        $query = Autotruck::find();
-        $query->orderBy(['id' => SORT_DESC]);
+        $query = Autotruck::find()->where(["in",'country',$u_countries]);
+        $query->orderBy(['date' => SORT_DESC]);
         /**
          * Создаём DataProvider, указываем ему запрос, настраиваем пагинацию
          */
@@ -59,6 +62,8 @@ class AutotruckSearch extends Autotruck
                     'pageSize' => $this->page_size
                 ])
         ]);
+        
+        
         
         if(!($this->load($params) && $this->validate())){
             return $dataProvider;
@@ -87,6 +92,8 @@ class AutotruckSearch extends Autotruck
                 $query->andFilterWhere(["id"=>$subquery]);
 
             }elseif(PaymentStateFilter::getEndState()->id == $this->implements_state){
+               
+              
                $subquery->where("{$subsql1} = {$subsql2}");
               
                
@@ -94,10 +101,15 @@ class AutotruckSearch extends Autotruck
                $query->where("NOT EXISTS (SELECT a.id FROM app a WHERE a.autotruck_id = autotruck.id AND a.client = 0)");
 
                 $query->andFilterWhere(["id"=>$subquery]);
-            }elseif($this->implements_state == "none"){
-                //print_r("none");
+            }elseif($this->implements_state == PaymentStateFilter::STATE_NONE){
+                
                 //Если существуют наименования без клиентов в заявке(т.е нереализованные)
                 $query->where("EXISTS (SELECT a.id FROM app a WHERE a.autotruck_id = autotruck.id AND a.client =0)");
+            }elseif($this->implements_state == PaymentStateFilter::STATE_STOCK){
+                
+                //Если существуют наименования без клиентов в заявке(т.е нереализованные)
+                $query->where("EXISTS (SELECT a.id FROM app a WHERE a.autotruck_id = autotruck.id AND a.out_stock=0)");
+                $this->status = 3;
             }
 
             
@@ -105,20 +117,49 @@ class AutotruckSearch extends Autotruck
         
         // Если ошибок нет, фильтруем по цене
         $query->andFilterWhere([
-                'country' => $this->country,
                 'status' => $this->status,
                 'course' => $this->course,
                 ]);
+
+        
+        if($this->country && array_key_exists($this->country, $u_countries)){
+            $query->andFilterWhere([
+                'country' => $this->country,
+                ]);
+
+        }
+        
+
         
         if($this->date_from)
             $query->andFilterWhere(['>=', 'date', date("Y.m.d H:i:s",strtotime($this->date_from))]);
 
         if($this->date_to)
             $query->andFilterWhere(['<=', 'date', date("Y.m.d H:i:s",strtotime($this->date_to))]);
-
-        $query->andFilterWhere(['like','name',$this->name]);
         
-       
+        if($this->name)
+            $query->andFilterWhere(['like','name',$this->name]);
+
+        if($this->decor)
+            $query->andFilterWhere(['like','decor',$this->decor]);
+        
+        if($this->auto_number)    
+            $query->andFilterWhere(['like','auto_number',$this->auto_number]);
+        
+        if($this->auto_name)   
+            $query->andFilterWhere(['like','auto_name',$this->auto_name]);
+        
+
+        if($this->common_weight){
+
+            $sql = "SELECT SUM(aw.weight) as common_weight  FROM app aw
+                WHERE aw.autotruck_id = autotruck.id AND aw.type = '0'";
+
+            $query->where("({$sql}) LIKE '{$this->common_weight}%'");
+        }
+        
+        
+        
         return $dataProvider;
     }
 

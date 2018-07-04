@@ -7,7 +7,7 @@ use yii\db\ActiveRecord;
 use yii\db\Expression;
 use frontend\models\Autotruck;
 use common\models\User;
-
+use common\models\Organisation;
 /**
 *
 *
@@ -22,7 +22,8 @@ class PaymentsExpenses extends ActiveRecord
 		return [
             // name, email, subject and body are required
             [['manager_id','sum'], 'required'],
-            ['sum','double']
+            ['sum','double'],
+            [['payment','organisation'],'default','value'=>Organisation::PAY_CARD],
         ];
 	}
 
@@ -63,7 +64,10 @@ class PaymentsExpenses extends ActiveRecord
             'manager_id'=>'Менеджер',
             'sum'=>'Сумма ($)',
             'date'=>'Дата',
-            'comment'=>'Комментарии'
+            'organisation'=>'Организация',
+            'payment'=>'Способ оплаты',
+            'comment'=>'Комментарии',
+            'course'=>'Курс'
     		);
     }
 
@@ -72,5 +76,13 @@ class PaymentsExpenses extends ActiveRecord
         return $this->hasOne(User::className(),["id"=>'manager_id']);
     }
 
+
+    public function getOrg(){
+        return $this->hasOne(Organisation::className(),["id"=>'organisation']);
+    }
+
+    public function getPaymentLabel(){
+        return Organisation::$pay_labels[$this->payment];
+    }
 
 }
