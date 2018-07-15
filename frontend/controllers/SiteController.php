@@ -579,14 +579,11 @@ class SiteController extends Controller
 
 
     public function actionOrgReport(){
-
         
         $PaymentsExpensesReport = new PaymentsExpensesReport;
         $dataProvider = $PaymentsExpensesReport->search(Yii::$app->request->queryParams);
-
         
         return $this->render('orgreport',['dataProvider'=>$dataProvider,'PaymentsExpensesReport'=>$PaymentsExpensesReport]);
-
     }
 
     

@@ -27,7 +27,7 @@ class m180630_080931_usersverka extends Migration
             'updated_at' => $this->timestamp()->notNull(),
         ], $tableOptions);
 
-        $this->addForeignKey('fk-sverka-user_id', '{{%user_sverka}}', 'user_id', 'user', 'id');
+        $this->addForeignKey('fk-sverka-user_id', '{{%user_sverka}}', 'user_id', 'user', 'id','CASCADE','CASCADE');
     }
 
     /**
