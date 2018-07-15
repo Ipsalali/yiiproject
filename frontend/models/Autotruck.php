@@ -177,7 +177,19 @@ class Autotruck extends ActiveRecord
 
 
 
+    public function refreshClientsSverka(){
 
+        $SQL = "SELECT c.`user_id`  
+                FROM app as a
+                INNER JOIN client as c ON a.client = c.id
+                WHERE a.autotruck_id = {$this->id}";
+        $users = \Yii::$app->db->createCommand($sql)->queryAll();
+
+        foreach ($users as $u_id) {
+            User::refreshUserSverka($u_id);
+        }
+
+    }
 
 
 
@@ -245,6 +257,8 @@ class Autotruck extends ActiveRecord
                                     if(file_exists($file)){
                                         $message->attach($file);
                                     }
+
+                                    
                                 }
 
                                 $message->send();
@@ -273,9 +287,6 @@ class Autotruck extends ActiveRecord
                         }else{
                             continue;
                         }
-                        
-
-
                         
 
                         foreach ($apps as $k => $app) {

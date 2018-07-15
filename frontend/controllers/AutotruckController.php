@@ -13,6 +13,7 @@ use frontend\models\App;
 use frontend\models\AppTrace;
 use common\models\Client;
 use common\models\Status;
+use common\models\User;
 use common\helper\EDateTime;
 use frontend\modules\ListAction;
 use frontend\modules\AutotruckSearch;
@@ -192,7 +193,12 @@ class AutotruckController extends Controller{
 						$exp->autotruck_id = $autotruck->id;
 						$exp->comment = trim(strip_tags($item['comment']));
 
-						$exp->save();
+						if($exp->save()){
+							//обновление сверки
+							try {
+								User::refreshUserSverka($exp->manager_id);
+							} catch (Exception $e) {}
+						}
 					}
 				}
 
@@ -227,22 +233,25 @@ class AutotruckController extends Controller{
 					}
 							
 					
-					Yii::$app->session->setFlash("AutotruckSaved");
-
-					if(Yii::$app->user->can("clientExtended")){
-						Yii::$app->response->redirect(array("site/profile"));
-					}
-					else{
-						Yii::$app->response->redirect(array("autotruck/index"));
-					}
+					
 				}else{
 					Yii::$app->session->setFlash("AutotruckEmpty");
-					Yii::$app->response->redirect(array("autotruck/create"));
+					return Yii::$app->response->redirect(array("autotruck/create"));
 				}
 
                 if($autotruck->status){
 				    $autotruck->sendNotification();
                 }
+
+                //Временно реализуем перерасчет сверки
+		        if($autotruck->activeStatus->send_check){
+		            //обновление сверки
+		            try {
+		                $autotruck::refreshClientSverka();
+		            } catch (Exception $e) {}
+		        }
+
+		        Yii::$app->session->setFlash("AutotruckSaved");
 
                 if(Yii::$app->user->can("clientExtended")){
 					Yii::$app->response->redirect(array("client/profile"));
@@ -358,7 +367,7 @@ class AutotruckController extends Controller{
 		
         $post = Yii::$app->request->post();
 
-		if($post['Autotruck']){
+		if(isset($post['Autotruck'])){
 
 			$autotruck->name = $post['Autotruck']['name'];
 			$autotruck->course = ($post['Autotruck']['course'])?round($post['Autotruck']['course'],4):0;
@@ -438,8 +447,12 @@ class AutotruckController extends Controller{
 						$exp->autotruck_id = $autotruck->id;
 						$exp->comment = trim(strip_tags($item['comment']));
 
-						$exp->save();
-
+						if($exp->save()){
+							//обновление сверки
+							try {
+								User::refreshUserSverka($exp->manager_id);
+							} catch (Exception $e) {}
+						}
 					}
 				}
 				
@@ -493,6 +506,14 @@ class AutotruckController extends Controller{
 				    $autotruck->sendNotification();
                 }
 
+                //Временно реализуем перерасчет сверки
+                if($autotruck->activeStatus->send_check){
+                    //обновление сверки
+                    try {
+                        $autotruck::refreshClientSverka();
+                    } catch (Exception $e) {}
+                }
+
 			}else{
 				Yii::$app->session->setFlash("AutotruckUpdatedError");
 			}
@@ -537,7 +558,24 @@ class AutotruckController extends Controller{
 			return Yii::$app->response->redirect(array("post/index"));
 		}
 
-		$post->delete();
+		try {
+			//#sverka_restart
+			//Перед тем как удалить получим пользователей, чтоб поосле удаления перерасчитать сверку
+			$SQL = "SELECT c.`user_id`  
+                FROM app as a
+                INNER JOIN client as c ON a.client = c.id
+                WHERE a.autotruck_id = {$this->id}";
+	        $users = \Yii::$app->db->createCommand($sql)->queryAll();
+
+			$post->delete();
+
+			foreach ($users as $u_id) {
+	            User::refreshUserSverka($u_id);
+	        }	
+		} catch (Exception $e) {
+			
+		}
+		
 
 		Yii::$app->session->setFlash("PostDeleted");
 		return Yii::$app->response->redirect(array("post/index"));
@@ -563,7 +601,18 @@ class AutotruckController extends Controller{
 				if($app){
 					$answer['result'] = (int)$post['id'];
 
+					//#sverka restart
+					$client = $app->client ? $app->buyer : null;
+
 					$app->delete();
+
+					if($client && isset($client->user_id)){
+						try {
+							User::refreshUserSverka($client->user_id);
+						} catch (Exception $e) {
+							
+						}
+					}
 
 				}else{
 					$answer['error']['text'] = 'not found app';
@@ -604,7 +653,16 @@ class AutotruckController extends Controller{
 				if($exp){
 					$answer['result'] = (int)$post['id'];
 
+					//#sverka restart
+					$manager_id = $exp->manager_id ? $exp->manager_id : null;
 					$exp->delete();
+					if($manager_id){
+						try {
+							User::refreshUserSverka($manager_id);
+						} catch (Exception $e) {
+							
+						}
+					}
 
 				}else{
 					$answer['error']['text'] = 'not found app';
@@ -643,6 +701,12 @@ class AutotruckController extends Controller{
 
 			if($model->save()){
 				Yii::$app->session->setFlash("ExpensesManagerAddSuccess");
+
+				//#sverka restart
+				try {
+					User::refreshUserSverka($model->manager_id);
+				} catch (Exception $e) {}
+
 			}else{
 				Yii::$app->session->setFlash("ExpensesManagerAddError");
 			}

@@ -343,15 +343,16 @@ class SiteController extends Controller
         $params = Yii::$app->request->get();
         $expenses = array();
         $data_params = array();
-        
+        $sverka = array();
+        $payments = array();
         if(Yii::$app->user->identity->isSeller(true)){
             $manager = User::findOne(Yii::$app->user->id);
         }else{
-           $manager = new User; 
+            $manager = new User; 
         }
         
 
-        if($params && (int)$params['manager']){
+        if($params && isset($params['manager']) && (int)$params['manager']){
             $data_params['date_from'] = $params['date_from'];
             $data_params['date_to'] = $params['date_to'];
             
@@ -360,19 +361,17 @@ class SiteController extends Controller
             }else{
                 $data_params['manager'] = Yii::$app->user->id;
             }
-
-            
             
             $manager = User::findOne($data_params['manager']);
             
             $expenses = $manager->getExpenses($data_params['date_from'],$data_params['date_to']);
             $payments = $manager->getPayments($data_params['date_from'],$data_params['date_to']);
             
-
-
             $sverka = $manager->getPaymentsAndExpenses($data_params['date_from'],$data_params['date_to']);
 
-
+        }else{
+            $data_params['date_from'] = date("d.m.Y",time() - (86400 * 61));
+            $data_params['date_to'] = date("d.m.Y",time());
         }
         return $this->render('sverka', ["sverka"=>$sverka,"manager"=>$manager,"expenses"=>$expenses,"data_params"=>$data_params,'payments'=>$payments]);
     }
@@ -496,6 +495,7 @@ class SiteController extends Controller
 
                     if($pm->save()){
                         $answer['messages'][] = "Оплата с суммой ".$item['sum'].' добавлена';
+                        
                         $answer['result'] = 1;
                     }else{
                         $answer['messages'][] = "Оплата с суммой ".$item['sum'].' не добавлена';
@@ -529,6 +529,12 @@ class SiteController extends Controller
             }  
         }
         
+        if($answer['result'] == 1){
+            //Обновление сверки пользователя
+            try {
+                $manager->refreshSverka();
+            } catch (Exception $e) {}
+        }
         
             
         return $answer;
@@ -551,7 +557,12 @@ class SiteController extends Controller
                     $answer['result'] = (int)$post['id'];
                     
                     //Опасно удалять
-                    //$exp->delete();
+                    $exp->delete();
+
+                    //Обновление сверки пользователя
+                    try {
+                        $manager->refreshSverka();
+                    } catch (Exception $e) {}
 
                 }else{
                     $answer['error']['text'] = 'not found app';

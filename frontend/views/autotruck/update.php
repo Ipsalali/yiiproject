@@ -129,18 +129,18 @@ $packages = TypePackaging::find()->all();
 								</div>
 
 								<ul>
-									<?
+									<?php
 										$autotruck->activeStatus->title;
 										$story = $autotruck->traceStory;
 										if(is_array($story)){
 											foreach ($story as $key => $s) { 
 												$active_s = ($s->status_id == $autotruck->status)? "active_status" :'';
 												?>
-												<li class="app_status <?=$active_s?>">
-													<?=$s->status->title?>
-													<span><?=date('d.m.Y',strtotime($s->trace_date))?></span>
+												<li class="app_status <?php echo $active_s?>">
+													<?php echo $s->status->title?>
+													<span><?php echo date('d.m.Y',strtotime($s->trace_date))?></span>
 												</li>
-									<?	}  } ?>
+									<?php	}  } ?>
 								</ul>
 							</div>
     						<div class="col-xs-3">

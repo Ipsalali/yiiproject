@@ -35,7 +35,7 @@ class SiteController extends Controller
                         'roles' => ['@'],
                     ],
                     [
-                        'actions' => ['addrole', 'index','list','user','permission','extendperm','delete','userform'],
+                        'actions' => ['addrole', 'sverka-restart','index','list','user','permission','extendperm','delete','userform'],
                         'allow' => true,
                         'roles' => ['admin'],
                     ]
@@ -243,6 +243,25 @@ class SiteController extends Controller
 
         Yii::$app->session->setFlash("StatusDeleted");
        // Yii::$app->getResponse->redirect(array("status/index"));
-        Yii::$app->response->redirect(array("site/list"));
+        return  Yii::$app->response->redirect(array("site/list"));
+    }
+
+
+
+
+    public function actionSverkaRestart(){
+        $users = User::find()->all();
+
+        try{
+            foreach ($users as $u) {
+                $u->refreshSverka();
+            }
+
+            Yii::$app->session->setFlash("success","Сверка перерасчитана!");
+        }catch(\Exception $e){
+            Yii::$app->session->setFlash("danger","Ошибка при выполнении перерасчета сверки!");
+        }
+        
+        return Yii::$app->response->redirect(array("site/list"));
     }
 }

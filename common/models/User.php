@@ -485,14 +485,67 @@ class User extends ActiveRecord implements IdentityInterface, UserRbacInterface
 
 
     public function getManagerSverka($withCourse = false,$endDate = null){
-        $endDate = !$endDate ? date("Y-m-d",time()) : $endDate;
+        
+        if(!$this->id) return false;
 
-        $sql = "CALL `get_user_sverka`({$this->id},'{$endDate}')";
+        return self::calchUserSverka($this->id,$withCourse,$endDate);
+        
+    }
+
+
+    public static function calchUserSverka($user_id,$withCourse = false,$endDate = null){
+
+        $endDate = !$endDate ? date("Y-m-d",time()) : date("Y-m-d",strtotime($endDate));
+
+        $sql = "CALL `get_user_sverka`({$user_id},'{$endDate}')";
         $connection = Yii::$app->getDb();
         $command = $connection->createCommand($sql);
         $row = $command->queryOne();
 
         return $withCourse ? $row : $row['sum'];
+    }
+
+
+
+    public function refreshSverka(){
+
+        if(!$this->id) return false;
+
+
+        return self::refreshUserSverka($this->id);
+
+
+    }
+
+    public static function refreshUserSverka($user_id){
+
+        if(!$user_id) return false;        
+
+        $sverka = self::calchUserSverka($user_id,true);
+
+        if(isset($sverka['sum']) && $sverka['sum_card'] && $sverka['sum_cash']){
+            $sql="INSERT INTO `user_sverka` SET 
+                    `user_id`={$user_id},
+                    `sum`={$sverka['sum']},
+                    `sum_card`={$sverka['sum_card']},
+                    `sum_cash`={$sverka['sum_cash']}
+                    ON DUPLICATE KEY UPDATE 
+                    `sum`={$sverka['sum']},
+                    `sum_card`={$sverka['sum_card']},
+                    `sum_cash`={$sverka['sum_cash']},
+                    `updated_at`='".date("Y-m-d\TH:i:s",time())."'
+                    ";
+
+            return Yii::$app->db->createCommand($sql)->execute();
+        }
+    }
+
+
+
+    public function getSverka(){
+        $sql = "SELECT `sum`,`sum_cash`,`sum_card`,`updated_at` FROM `user_sverka` WHERE `user_id`={$this->id}";
+
+        return Yii::$app->db->createCommand($sql)->queryOne();
     }
 
 

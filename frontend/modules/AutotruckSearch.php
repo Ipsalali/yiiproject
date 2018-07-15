@@ -21,7 +21,7 @@ class AutotruckSearch extends Autotruck
     public $date_to;
     public $implements_state;
     public $page_size = 50;
-    public $filterPosition = FILTER_POS_BODY;
+    public $filterPosition = 'FILTER_POS_BODY';
     public $common_weight;
     /**
      * Правила валидации модели

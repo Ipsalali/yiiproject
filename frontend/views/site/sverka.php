@@ -20,9 +20,15 @@ $this->title = "Сверка";
 
 
 
-$totalSverka = $manager->getManagerSverka(true,$data_params['date_to']);
+$totalSverka = $manager->getManagerSverka(true,isset($data_params['date_to']) ? $data_params['date_to'] : null);
+
+
+//$totalSverka = $manager->getSverka();
+
 if($totalSverka['sum'] > 0){
 	$average_course = round($totalSverka['sum_cash']/$totalSverka['sum'],2);
+}else{
+	$average_course = null;
 }
 
 
@@ -40,7 +46,7 @@ $card_percent = isset($client->id) ? $client->payment_clearing : 0;
 		</div>
 	</div>
 	<div class="row">
-		<?php $form = ActiveForm::begin(['id'=>'sverka','action'=>["site/sverka"],'method'=>'GET'])?>
+		<?php $form = ActiveForm::begin(['id'=>'sverka','action'=>["site/sverka"],'method'=>'GET']); ?>
 		<div class="col-xs-4">
 
 			<?php
@@ -195,7 +201,7 @@ HTML;
 		</div>
 		<?php Activeform::end(); ?>
 	</div>
-	<?php if(count($sverka)){?>
+	<?php if(count($sverka)){ ?>
 	<div class="row">
 		<div class="col-xs-12">
 			<h4>
@@ -214,9 +220,9 @@ HTML;
 				}
 				?> от <?php echo date("d.m.y",strtotime($data_params['date_from']))?> по <?php echo date("d.m.y",strtotime($data_params['date_to']))?>
 			    
-			<?php }else{?> 
+			<?php }else{ ?> 
 				Ваши расходы  от <?php echo date("d.m.y",strtotime($data_params['date_from']))?> по <?php echo date("d.m.y",strtotime($data_params['date_to']))?>
-			<?} ?>
+			<?php } ?>
 			&nbsp&nbspСумма расходов за указанный период: <span id="common_sum_expenses_by_period"></span>&nbsp$</h4>
 			
 			<?php 
@@ -290,7 +296,7 @@ HTML;
 								    
 								    
 								    //Для старых записей у которых нет сум руб и сум без нла и нет курса
-								    if(!(int)$sv['course'] && !(int)$sv['sum_cach'] && !(int)$sv['sum_card']){
+								    if(!(int)$sv['course'] && isset($sv['sum_cach']) && !(int)$sv['sum_cach'] && $sv['sum_card'] && !(int)$sv['sum_card']){
 								        
 								        echo "-".$sv['sum'];
 								        
@@ -401,8 +407,8 @@ HTML;
 									$action = ($sv['type']) ? "site/removepayajax":"autotruck/removeexpajax";
 							?>
 								<a class="btn btn-primary sverka_update_btn" data-state="0" data-id="<?php echo $sv['id']?>" data-model="<?php echo StringHelper::basename(get_class($model));?>"><i class="glyphicon glyphicon-pencil"></i></a>
-							    <?php if(false){?>
-								<button type="submit" data-action="<?php echo $action?>" data-id="<?php echo $sv['id']?>" class="btn btn-danger remove_exists_payexp">X</button>
+							    <?php if(!Yii::$app->user->can("client")){?>
+								    <button type="submit" data-action="<?php echo $action?>" data-id="<?php echo $sv['id']?>" class="btn btn-danger remove_exists_payexp">X</button>
 							    <?php } ?>
 							<?php } ?>
 						</td>
@@ -455,7 +461,7 @@ HTML;
     			<div class="col-xs-12">
     				<h4>У вас нет расходов на период от <?php echo date("d.m.y",strtotime($data_params['date_from']))?> по <?php echo date("d.m.y",strtotime($data_params['date_to']))?></h4>
     			</div>
-    		<?} ?>
+    		<?php } ?>
 	    </div>
 	<?php } ?>
 </div>

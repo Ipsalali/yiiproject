@@ -16,7 +16,7 @@ class ClientSearch extends Client
      * Принимаемые моделью входящие данные
      */
 
-    public $page_size = 50;
+    public $page_size = 0;
 
     public static $total_sverka = 0;
 
@@ -88,7 +88,7 @@ class ClientSearch extends Client
 
         $condition = is_array($conditions) && count($conditions) ? implode(" AND ", $conditions) : "";
         //$sql = "CALL get_client_list('{$condition}',{$this->page_size}, 1)";
-        $sql = "SELECT id,name,user_email,manager_name,phone,category_title,sverka_sum FROM client_list ORDER BY name ASC LIMIT 50";
+        $sql = "SELECT id,name,user_email,manager_name,phone,category_title,sverka_sum,user_id FROM client_list ORDER BY name ASC";
         $connection = \Yii::$app->getDb();
         $command = $connection->createCommand($sql);
         $result = $command->queryAll();

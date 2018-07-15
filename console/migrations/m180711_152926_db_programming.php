@@ -2,7 +2,7 @@
 
 use yii\db\Migration;
 
-class m180630_080931_db_programming extends Migration
+class m180711_152926_db_programming extends Migration
 {
     public function up()
     {   
@@ -16,6 +16,10 @@ class m180630_080931_db_programming extends Migration
 
         $this->create_view_clietn_list();
         $this->create_get_client_list();
+
+
+
+        $this->create_execute_all_users_sverka();
     }
 
     public function down()
@@ -38,6 +42,11 @@ class m180630_080931_db_programming extends Migration
         $this->execute("Drop procedure if exists `get_client_list`");
 
         $this->execute("Drop function if exists `f_get_client_sverka`");
+
+
+        $this->execute("Drop function if exists `execute_all_users_sverka`");
+
+        
     }
 
 
@@ -189,10 +198,13 @@ CREATE VIEW `client_list` AS
                 u2.`email` as 'user_email',
                 clc.`cc_title` as 'category_title',
                 clc.`cc_description` as 'category_description',
-                f_get_client_sverka(cl.`user_id`,curdate(),1,0,0) as 'sverka_sum'
+                us.`sum` as 'sverka_sum',
+                us.`sum_card` as 'sverka_sum_card',
+                us.`sum_cash` as 'sverka_sum_cash'
         FROM client as cl
         LEFT JOIN user as u ON u.id = cl.manager
         LEFT JOIN user as u2 ON u2.id = cl.user_id
+        LEFT JOIN user_sverka as us ON us.user_id = cl.user_id
         LEFT JOIN client_category as clc ON clc.cc_id = cl.client_category_id;
 SQL;
     
@@ -299,6 +311,22 @@ SQL;
             end
 SQL;
 
+        $this->execute($sql);
+    }
+
+
+    public function create_execute_all_users_sverka(){
+        $sql = <<<SQL
+        Create function `execute_all_users_sverka`()
+        returns int deterministic
+        begin
+            
+            declare role_name text default '';
+            declare role_type int default 1;
+            
+            return role_type;    
+        end
+SQL;
         $this->execute($sql);
     }
     

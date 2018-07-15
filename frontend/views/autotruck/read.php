@@ -195,12 +195,16 @@ $packages = TypePackaging::find()->all();
 										foreach ($autotruckApps as $key => $app) { ?>
 												<tr>
 													<td>
-														<?php echo $key+1?>
-														<?php 
-															echo Html::checkbox('out_stock[]',$app->out_stock,['value'=>$app->id,'class'=>'out_stock_item']);
-														?>
+													<?php echo $key+1?>
+													<?php 
+														echo Html::checkbox('out_stock[]',$app->out_stock,['value'=>$app->id,'class'=>'out_stock_item']);
+													?>
 													</td>
-													<td><?php echo Html::a($app->buyer->name,['client/read','id'=>$app->client],array('target'=>'_blank'));?></td>
+													<td>
+													<?php 
+														echo $app->client ? Html::a($app->buyer->name,['client/read','id'=>$app->client],array('target'=>'_blank')) : "";
+													?>		
+													</td>
 													
 													<?php 
 														if(!$app->type){
@@ -211,15 +215,19 @@ $packages = TypePackaging::find()->all();
 																			: "Не указан"; 
 																?>
 															</td>
-														    <td><?=$app->info?></td>
-															<td><? echo $app->count_place ?></td>
+														    <td><?php $app->info?></td>
+															<td><?php echo $app->count_place ?></td>
 														
-															<td><?php echo $app->package ? $app->typePackaging->title : "Не указан"; ?></td>
+															<td>
+																<?php 
+																	echo $app->package ? $app->typePackaging->title : "Не указан"; 
+																?>		
+															</td>
 														<?php	
 														}else{
 															?>
 															<td></td>
-															<td><?=$app->info?></td>
+															<td><?php echo $app->info?></td>
 															<td colspan="2"></td>
 															<?php
 														}
@@ -227,13 +235,13 @@ $packages = TypePackaging::find()->all();
 													
 													
 													
-													<td><? echo $app->type ? '': $app->weight?></td>
-													<td><?=$app->rate?></td>
-													<td><? echo $app->summa_us; ?> $</td>
+													<td><?php echo $app->type ? '': $app->weight?></td>
+													<td><?php echo $app->rate?></td>
+													<td><?php echo $app->summa_us; ?> $</td>
 													<td>
 
 
-													<? //echo $app->type ? round($app->rate*$autotruck->course,2) : round($app->weight*$app->rate*$autotruck->course,2)
+													<?php //echo $app->type ? round($app->rate*$autotruck->course,2) : round($app->weight*$app->rate*$autotruck->course,2)
 														$rate_vl = $app->weight > 0 ? $app->summa_us/$app->weight : 0;
 														$sum_ru = $app->weight * $rate_vl * $autotruck->course;
 
@@ -242,7 +250,7 @@ $packages = TypePackaging::find()->all();
 
 													руб</td>
 													
-													<td><?=$app->comment?></td>
+													<td><?php echo $app->comment?></td>
 												</tr>
 										<?php 
 											$cweight += $app->type ? 0 : $app->weight; 

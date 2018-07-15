@@ -123,7 +123,7 @@ echo \yii\grid\GridView::widget([
     <script type="text/javascript">
             $(function(){
 
-                $("#ft_total_sverka").text(<?php echo ClientSearch::$total_sverka;?>+" &");
+                $("#ft_total_sverka").text(<?php echo ClientSearch::$total_sverka;?>+" $");
                 
 
             });
