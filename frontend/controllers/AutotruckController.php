@@ -160,12 +160,14 @@ class AutotruckController extends Controller{
 			$autotruck->gtd = strip_tags($post['Autotruck']['gtd']);
 			$autotruck->decor = strip_tags($post['Autotruck']['decor']);
 
-			$autotruck->file = UploadedFile::getInstances($autotruck, 'file');
-			if ($autotruck->file && $fName = $autotruck->uploadFile()) {
-                $autotruck->file = $fName;
-            }else{
-            	Yii::$app->session->setFlash("FileUploadError");	
-            }
+			if($_FILES['Autotruck']['name']['file'][0]){
+				$autotruck->file = UploadedFile::getInstances($autotruck, 'file');
+				if ($autotruck->file && $fName = $autotruck->uploadFile()) {
+	                $autotruck->file = $fName;
+	            }else{
+	            	Yii::$app->session->setFlash("FileUploadError");	
+	            }
+        	}
 
 			if($autotruck->save()){
 			    
@@ -210,9 +212,9 @@ class AutotruckController extends Controller{
 						$a = new App;
 						$a->client = ($item['client'])?(int)$item['client']:0;
 						
-						$a->sender = ($item['sender'])?(int)$item['sender']:null;
-						$a->package = ($item['package'])?(int)$item['package']:null;
-						$a->count_place = $item['count_place']? (int)$item['count_place'] : null;
+						$a->sender = isset($item['sender'])?(int)$item['sender']:null;
+						$a->package = isset($item['package'])?(int)$item['package']:null;
+						$a->count_place = isset($item['count_place']) ? (int)$item['count_place'] : null;
 						
 						$a->info = $item['info'];
 						$a->info = $item['info'];
@@ -247,7 +249,7 @@ class AutotruckController extends Controller{
 		        if($autotruck->activeStatus->send_check){
 		            //обновление сверки
 		            try {
-		                $autotruck::refreshClientSverka();
+		                $autotruck->refreshClientsSverka();
 		            } catch (Exception $e) {}
 		        }
 
@@ -472,23 +474,23 @@ class AutotruckController extends Controller{
 							$a = new App;
 						}
 
-						$a->client = ($item['client'])?(int)$item['client']:0;
+						$a->client = isset($item['client'])?(int)$item['client']:0;
 
-						$a->sender = ($item['sender'])?(int)$item['sender']:0;
-						$a->package = ($item['package'])?(int)$item['package']:0;
-						$a->count_place = $item['count_place']? (int)$item['count_place'] : 0;
+						$a->sender = isset($item['sender'])?(int)$item['sender']:0;
+						$a->package = isset($item['package'])?(int)$item['package']:0;
+						$a->count_place = isset($item['count_place'])? (int)$item['count_place'] : 0;
 						
-						$a->info = $item['info'];
+						$a->info = isset($item['info']) ? $item['info'] : "";
 						if((int)$item['type']){
 							$a->weight = 1;
 							$a->type = 1;
 						}else{
-							$a->weight = ($item['weight']) ? $item['weight'] : 0;
+							$a->weight = isset($item['weight']) ? $item['weight'] : 0;
 							$a->type = 0;
 						}
-						$a->rate = ($item['rate']) ? round($item['rate'],2) : 0;
+						$a->rate = isset($item['rate']) ? round($item['rate'],2) : 0;
 						
-						$a->summa_us = ($item['summa_us']) ? round($item['summa_us'],2) : 0;
+						$a->summa_us = isset($item['summa_us']) ? round($item['summa_us'],2) : 0;
 						$a->comment = $item['comment'];
 						$a->autotruck_id = $autotruck->id;
 
@@ -510,7 +512,7 @@ class AutotruckController extends Controller{
                 if($autotruck->activeStatus->send_check){
                     //обновление сверки
                     try {
-                        $autotruck::refreshClientSverka();
+                        $autotruck->refreshClientsSverka();
                     } catch (Exception $e) {}
                 }
 
@@ -548,29 +550,31 @@ class AutotruckController extends Controller{
 
 		if($id == NULL){
 			Yii::$app->session->setFlash("PostDeleteError");
-			return Yii::$app->response->redirect(array("post/index"));
+			return Yii::$app->response->redirect(array("autotruck/index"));
 		}
 
-		$post = Autotruck::findOne($id);
+		$autotruck = Autotruck::findOne($id);
 
-		if($post === NULL){
+		if($autotruck === NULL){
 			Yii::$app->session->setFlash("PostDeleteError");
-			return Yii::$app->response->redirect(array("post/index"));
+			return Yii::$app->response->redirect(array("autotruck/index"));
 		}
 
 		try {
 			//#sverka_restart
 			//Перед тем как удалить получим пользователей, чтоб поосле удаления перерасчитать сверку
-			$SQL = "SELECT c.`user_id`  
+			$sql = "SELECT DISTINCT c.`user_id`  
                 FROM app as a
                 INNER JOIN client as c ON a.client = c.id
-                WHERE a.autotruck_id = {$this->id}";
+                WHERE a.autotruck_id = {$autotruck->id}";
 	        $users = \Yii::$app->db->createCommand($sql)->queryAll();
 
-			$post->delete();
+			$autotruck->delete();
 
 			foreach ($users as $u_id) {
-	            User::refreshUserSverka($u_id);
+				if(isset($u_id['user_id'])){
+	            	User::refreshUserSverka($u_id['user_id']);	
+				}
 	        }	
 		} catch (Exception $e) {
 			
@@ -578,7 +582,7 @@ class AutotruckController extends Controller{
 		
 
 		Yii::$app->session->setFlash("PostDeleted");
-		return Yii::$app->response->redirect(array("post/index"));
+		return Yii::$app->response->redirect(array("autotruck/index"));
 	}
 
 

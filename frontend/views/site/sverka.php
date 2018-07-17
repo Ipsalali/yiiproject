@@ -19,9 +19,7 @@ $expensesPeople = User::getExpensesManagers();
 $this->title = "Сверка";
 
 
-
 $totalSverka = $manager->getManagerSverka(true,isset($data_params['date_to']) ? $data_params['date_to'] : null);
-
 
 //$totalSverka = $manager->getSverka();
 

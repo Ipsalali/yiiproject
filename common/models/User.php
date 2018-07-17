@@ -446,7 +446,19 @@ class User extends ActiveRecord implements IdentityInterface, UserRbacInterface
         $start = date("Y.m.d H:i:s",strtotime($start));
         $end = date("Y.m.d H:i:s",strtotime($end));
         
-        $sql = "SELECT ex.id,manager_id,ex.date,ROUND(ex.cost,2) as sum, 0 as sum_cash_us,0 as sum_cash,0 as sum_card,ex.comment, 0 as type,0 as plus, 0 as toreport,0 as course
+        $sql = "SELECT 
+                        ex.id,
+                        manager_id,
+                        ex.date,
+                        ROUND(ex.cost,2) as sum,
+                        0 as sum_cash_us,
+                        0 as sum_cash,
+                        0 as sum_card,
+                        ex.comment, 
+                        0 as type,
+                        0 as plus, 
+                        0 as toreport,
+                        0 as course
                 FROM expenses_manager ex
                 inner join autotruck as a on a.id = ex.autotruck_id
 
@@ -454,7 +466,19 @@ class User extends ActiveRecord implements IdentityInterface, UserRbacInterface
                 
                 
                 UNION ALL
-                SELECT pe.id,manager_id,pe.date,ROUND(pe.sum,2) as sum,sum_cash_us, sum_cash,sum_card, pe.comment, 1 as type,plus,toreport,pe.course
+                SELECT 
+                    pe.id,
+                    manager_id,
+                    pe.date,
+                    ROUND(pe.sum,2) as sum,
+                    sum_cash_us,
+                    sum_cash,
+                    sum_card,
+                    pe.comment,
+                    1 as type,
+                    plus,
+                    toreport,
+                    pe.course
                 FROM payments_expenses pe 
                 WHERE '{$start}'<=`date` AND `date`<='{$end}' AND `manager_id` = ".$this->id."
                 ";
@@ -463,7 +487,19 @@ class User extends ActiveRecord implements IdentityInterface, UserRbacInterface
         $role_name = $this->getRole()->name;
         if($role_name == "client" || $role_name == "clientExtended"){
             $sql .= "UNION ALL
-                    SELECT at.`id`,a.`client` as 'manager_id',apt.`trace_date` as 'date',Round(SUM(a.`summa_us`),2) as 'sum',0 as sum_cash_us, truncate(SUM(a.`summa_us`) * at.course,2) as sum_cash,truncate(SUM(a.`summa_us`) * at.course + (SUM(a.`summa_us`) * at.course*c.payment_clearing/100),2) as sum_card,a.comment,2 as type,0 as plus,0 as toreport,at.course
+                    SELECT 
+                        at.`id`,
+                        a.`client` as 'manager_id',
+                        apt.`trace_date` as 'date',
+                        Round(SUM(a.`summa_us`),2) as 'sum',
+                        0 as sum_cash_us,
+                        truncate(SUM(a.`summa_us`) * at.course,2) as sum_cash,
+                        truncate(SUM(a.`summa_us`) * at.course + (SUM(a.`summa_us`) * at.course*c.payment_clearing/100),2) as sum_card,
+                        a.comment,
+                        2 as type,
+                        0 as plus,
+                        0 as toreport,
+                        at.course
                     FROM autotruck at
                     INNER JOIN app a ON a.autotruck_id = at.id
                     INNER JOIN client c ON c.id = a.client
@@ -523,21 +559,24 @@ class User extends ActiveRecord implements IdentityInterface, UserRbacInterface
 
         $sverka = self::calchUserSverka($user_id,true);
 
-        if(isset($sverka['sum']) && $sverka['sum_card'] && $sverka['sum_cash']){
+        $sum = isset($sverka['sum']) ? $sverka['sum'] : 0;
+        $sum_card = isset($sverka['sum_card']) ? $sverka['sum_card'] : 0;
+        $sum_cash = isset($sverka['sum_cash']) ? $sverka['sum_cash'] : 0;
+        
             $sql="INSERT INTO `user_sverka` SET 
                     `user_id`={$user_id},
-                    `sum`={$sverka['sum']},
-                    `sum_card`={$sverka['sum_card']},
-                    `sum_cash`={$sverka['sum_cash']}
+                    `sum`={$sum},
+                    `sum_card`={$sum_card},
+                    `sum_cash`={$sum_cash}
                     ON DUPLICATE KEY UPDATE 
-                    `sum`={$sverka['sum']},
-                    `sum_card`={$sverka['sum_card']},
-                    `sum_cash`={$sverka['sum_cash']},
+                    `sum`={$sum},
+                    `sum_card`={$sum_card},
+                    `sum_cash`={$sum_cash},
                     `updated_at`='".date("Y-m-d\TH:i:s",time())."'
                     ";
 
             return Yii::$app->db->createCommand($sql)->execute();
-        }
+        
     }
 
 

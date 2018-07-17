@@ -170,7 +170,7 @@ class Autotruck extends ActiveRecord
         $where = "`autotruck_id`=".$this->id." AND `status_id`=".$this->activeStatus->id." AND client_id=".$client." AND app_id=".$app;
 
         $notification = AutotruckNotification::find()->where($where)->one();
-        return ($notification->nid)?false:true;
+        return (isset($notification->nid) && $notification->nid)?false:true;
     }
 
 
@@ -179,14 +179,16 @@ class Autotruck extends ActiveRecord
 
     public function refreshClientsSverka(){
 
-        $SQL = "SELECT c.`user_id`  
+        $sql = "SELECT DISTINCT c.`user_id`  
                 FROM app as a
                 INNER JOIN client as c ON a.client = c.id
                 WHERE a.autotruck_id = {$this->id}";
         $users = \Yii::$app->db->createCommand($sql)->queryAll();
 
         foreach ($users as $u_id) {
-            User::refreshUserSverka($u_id);
+            if(isset($u_id['user_id'])){
+                User::refreshUserSverka($u_id['user_id']);   
+            }
         }
 
     }

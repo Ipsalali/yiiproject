@@ -399,14 +399,14 @@ class SiteController extends Controller
         
         $answer = array();
         $answer['result'] = 0;
-
+        $manager = null;
         if(Yii::$app->request->isAjax){
             
             \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         
             $post = Yii::$app->request->post();
             $answer['data'] = $post;
-            if($post['PaymentsExpenses'] && count($post['PaymentsExpenses'])){
+            if(isset($post['PaymentsExpenses']) && $post['PaymentsExpenses'] && count($post['PaymentsExpenses'])){
                 
                 foreach ($post['PaymentsExpenses'] as $key => $item) {
                     if(isset($item['id']) && (int)$item['id']){
@@ -504,7 +504,7 @@ class SiteController extends Controller
             }
 
             //Редактирование если есть расход
-            if($post['ExpensesManager'] && count($post['ExpensesManager'])){
+            if(isset($post['ExpensesManager']) && $post['ExpensesManager'] && count($post['ExpensesManager'])){
                 
                 foreach ($post['ExpensesManager'] as $key => $item) {
                     if(isset($item['id']) && (int)$item['id']){
@@ -517,6 +517,9 @@ class SiteController extends Controller
 
                         $em->cost = round(trim(strip_tags($item['sum'])),2);
                         $em->comment = trim(strip_tags($item['comment']));
+
+
+                        $manager = User::findOne($em->manager_id);
 
                         if(isset($item['organisation']))
                             $em->organisation = (int)$item['organisation'];
@@ -532,7 +535,9 @@ class SiteController extends Controller
         if($answer['result'] == 1){
             //Обновление сверки пользователя
             try {
-                $manager->refreshSverka();
+                if(isset($manager) && isset($manager->id)){
+                    $manager->refreshSverka();
+                }
             } catch (Exception $e) {}
         }
         
@@ -561,7 +566,7 @@ class SiteController extends Controller
 
                     //Обновление сверки пользователя
                     try {
-                        $manager->refreshSverka();
+                        User::refreshUserSverka($exp->manager_id);
                     } catch (Exception $e) {}
 
                 }else{

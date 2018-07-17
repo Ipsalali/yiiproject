@@ -26,7 +26,7 @@ $dataProvider = new ActiveDataProvider([
 
 echo Html::a("Добавить менеджера",array("site/userform"),array("class"=>"btn btn-success"));
 
-echo Html::a("Запустить процедуру перерасчета сверки",array("site/sverka-restart"),array("class"=>"btn btn-primary","data-confirm"=>"Предупреждение, выполнение скрипта займет несколько минут!"));
+//echo Html::a("Запустить процедуру перерасчета сверки",array("site/sverka-restart"),array("class"=>"btn btn-primary","data-confirm"=>"Предупреждение, выполнение скрипта займет несколько минут!"));
 
 echo GridView::widget([
     'dataProvider' => $dataProvider,

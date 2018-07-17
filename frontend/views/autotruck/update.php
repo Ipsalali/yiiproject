@@ -122,7 +122,7 @@ $packages = TypePackaging::find()->all();
 									</div>
 									<div class="date_status_block" >
 										<label for="date_status" data-current="<?=date('Y-m-d',strtotime($autotruck->activeStatusTrace->trace_date))?>"></label>
-										<input type="text" id="date_status" name="Autotruck[date_status]"  value="<?=date('Y-m-d',strtotime($autotruck->activeStatusTrace->trace_date))?>">
+										<input type="text" id="date_status" name="Autotruck[date_status]"  value="<?php echo date('Y-m-d',strtotime($autotruck->activeStatusTrace->trace_date))?>">
 									</div>
 									<div class="clear"></div>
 									<label class="change_status_info"></label>
@@ -216,7 +216,7 @@ $packages = TypePackaging::find()->all();
 											$type_class = !$app->type ? "type_app" :"type_service";
 										 ?>
 												<tr class="app_row <?php echo $type_class;?>">
-													<td><?=$key+1?> <input type="hidden" name="App[<?=$key?>][id]" value="<?=$app->id?>"><input type="hidden" name="App[<?=$key?>][type]" value="<?=$app->type?>"> </td>
+													<td><?php echo $key+1?> <input type="hidden" name="App[<?php echo $key?>][id]" value="<?php echo $app->id?>"><input type="hidden" name="App[<?php echo $key?>][type]" value="<?php echo $app->type?>"> </td>
 													<td> 
 													<?php echo  $form->field($app,'client',['inputOptions'=>['name'=>'App['.$key.'][client]']])->dropDownList(ArrayHelper::map($clients,'id','name'),['prompt'=>'Выберите клиента'])->label(false)?>
 													 
@@ -225,25 +225,25 @@ $packages = TypePackaging::find()->all();
 													<?php echo $app->type ? "" : $form->field($app,'sender',['inputOptions'=>['name'=>'App['.$key.'][sender]']])->dropDownList(ArrayHelper::map($senders,'id','name'),['prompt'=>'Выберите отправителя'])->label(false)?>
 													 
 													</td>
-													<td><? echo $form->field($app,'info',['inputOptions'=>['name'=>'App['.$key.'][info]']])->textInput(['class'=>'form-control app_info'])->label(false)?></td>
-													<td><? echo $app->type ? "" : $form->field($app,'count_place',['inputOptions'=>['name'=>'App['.$key.'][count_place]']])->textInput(['class'=>'form-control app_place'])->label(false)?></td>
+													<td><?php echo $form->field($app,'info',['inputOptions'=>['name'=>'App['.$key.'][info]']])->textInput(['class'=>'form-control app_info'])->label(false)?></td>
+													<td><?php echo $app->type ? "" : $form->field($app,'count_place',['inputOptions'=>['name'=>'App['.$key.'][count_place]']])->textInput(['class'=>'form-control app_place'])->label(false)?></td>
 													<td> 
 													<?php echo $app->type ? "" : $form->field($app,'package',['inputOptions'=>['name'=>'App['.$key.'][package]']])->dropDownList(ArrayHelper::map($packages,'id','title'),['prompt'=>'Выберите упаковку'])->label(false)?>
 													 
 													</td>
 													
-													<td><? echo $app->type ? '<input type="hidden" name="App['.$key.'][weight]" value="1">' : $form->field($app,'weight',['inputOptions'=>['name'=>'App['.$key.'][weight]']])->textInput(array('class'=>'form-control compute_sum compute_weight'))->label(false)?></td>
-													<td class='rate_td'><? echo $form->field($app,'rate',['inputOptions'=>['name'=>'App['.$key.'][rate]']])->textInput(array('class'=>'form-control compute_sum compute_rate'))->label(false)?></td>
+													<td><?php echo $app->type ? '<input type="hidden" name="App['.$key.'][weight]" value="1">' : $form->field($app,'weight',['inputOptions'=>['name'=>'App['.$key.'][weight]']])->textInput(array('class'=>'form-control compute_sum compute_weight'))->label(false)?></td>
+													<td class='rate_td'><?php echo $form->field($app,'rate',['inputOptions'=>['name'=>'App['.$key.'][rate]']])->textInput(array('class'=>'form-control compute_sum compute_rate'))->label(false)?></td>
 													<td class="summa_usa">
-														<? echo $form->field($app,'summa_us',['inputOptions'=>['name'=>'App['.$key.'][summa_us]']])->textInput(array('class'=>'form-control summa_us'))->label(false)?></td>
+														<?php echo $form->field($app,'summa_us',['inputOptions'=>['name'=>'App['.$key.'][summa_us]']])->textInput(array('class'=>'form-control summa_us'))->label(false)?></td>
 													<td class="summa"><?php echo !$app->type ? round($app->weight*$app->rate*$autotruck->course,2) : round($app->rate*$autotruck->course,2) ?> руб</td>
 													
 													
 
-													<td><? echo $form->field($app,'comment',['inputOptions'=>['name'=>'App['.$key.'][comment]']])->textInput()->label(false)?></td>
+													<td><?php echo $form->field($app,'comment',['inputOptions'=>['name'=>'App['.$key.'][comment]']])->textInput()->label(false)?></td>
 
 													<td>
-														<a class='btn btn-danger remove_exists_app' data-id="<?=$app->id?>">X</a>
+														<a class='btn btn-danger remove_exists_app' data-id="<?php echo $app->id?>">X</a>
 													</td>
 												
 												</tr>
@@ -276,7 +276,7 @@ $packages = TypePackaging::find()->all();
 										foreach ($expenses as $key => $exp) {
 										 ?>
 												<tr class="exp_row">
-													<td><?=$key+1?> <input type="hidden" name="ExpensesManager[<?=$key?>][id]" value="<?=$exp->id?>"></td>
+													<td><?php echo $key+1?> <input type="hidden" name="ExpensesManager[<?=$key?>][id]" value="<?=$exp->id?>"></td>
 													<td>
 														<?php
 															echo '<input type="date" name="ExpensesManager['.$key.'][date]" class="form-control" value='.date("Y-m-d",strtotime($exp->date)).'>';
@@ -286,14 +286,14 @@ $packages = TypePackaging::find()->all();
 													<?php echo $form->field($exp,'manager_id',['inputOptions'=>['name'=>'ExpensesManager['.$key.'][manager_id]']])->dropDownList(ArrayHelper::map($expManagers,'id','name'),['class'=>'manager_id form-control','prompt'=>'Выберите менеджера'])->label(false)?>
 													 
 													</td>
-													<td><? echo $form->field($exp,'cost',['inputOptions'=>['name'=>'ExpensesManager['.$key.'][cost]']])->textInput(array('class'=>'form-control cost'))->label(false)?></td>
+													<td><?php echo $form->field($exp,'cost',['inputOptions'=>['name'=>'ExpensesManager['.$key.'][cost]']])->textInput(array('class'=>'form-control cost'))->label(false)?></td>
 													
 													
 
-													<td><? echo $form->field($exp,'comment',['inputOptions'=>['name'=>'ExpensesManager['.$key.'][comment]']])->textInput()->label(false)?></td>
+													<td><?php echo $form->field($exp,'comment',['inputOptions'=>['name'=>'ExpensesManager['.$key.'][comment]']])->textInput()->label(false)?></td>
 
 													<td>
-														<a class='btn btn-danger remove_exists_exp' data-id="<?=$exp->id?>">X</a>
+														<a class='btn btn-danger remove_exists_exp' data-id="<?php echo $exp->id?>">X</a>
 													</td>
 												
 												</tr>
@@ -322,7 +322,7 @@ $packages = TypePackaging::find()->all();
 			ntd_client +='<option value="">Выберите клиента</option>';
 			<?php foreach ($clients as $key => $cl) { ?>
 
-				ntd_client += '<option value="<?=$cl->id?>"><?php echo Html::encode($cl->name)?></option>';
+				ntd_client += '<option value="<?php echo $cl->id?>"><?php echo Html::encode($cl->name)?></option>';
 
 			<?php } ?>
 			ntd_client +='</select></td>';
@@ -331,7 +331,7 @@ $packages = TypePackaging::find()->all();
 			ntd_sender +='<option value="">Выберите отправителя</option>';
 			<?php foreach ($senders as $key => $cl) { ?>
 
-				ntd_sender += '<option value="<?=$cl->id?>"><?php echo Html::encode($cl->name)?></option>';
+				ntd_sender += '<option value="<?php echo $cl->id?>"><?php echo Html::encode($cl->name)?></option>';
 
 			<?php } ?>
 			ntd_sender +='</select></td>';
@@ -340,7 +340,7 @@ $packages = TypePackaging::find()->all();
 			ntd_package +='<option value="">Выберите упаковку</option>';
 			<?php foreach ($packages as $key => $cl) { ?>
 
-				ntd_package += '<option value="<?=$cl->id?>"><?php echo Html::encode($cl->title)?></option>';
+				ntd_package += '<option value="<?php echo $cl->id?>"><?php echo Html::encode($cl->title)?></option>';
 
 			<?php } ?>
 			ntd_package +='</select></td>';
@@ -349,7 +349,7 @@ $packages = TypePackaging::find()->all();
 			ntd_status +='<option value="">Выберите статус</option>';
 			<?php foreach (Status::find()->all() as $key => $cl) { ?>
 
-				ntd_status += '<option value="<?=$cl->id?>"><?php echo Html::encode($cl->title)?></option>';
+				ntd_status += '<option value="<?php echo $cl->id?>"><?php echo Html::encode($cl->title)?></option>';
 
 			<?php } ?>
 			ntd_status +='</select></div>';
@@ -386,7 +386,7 @@ $packages = TypePackaging::find()->all();
 			ntd_client +='<option value="">Выберите менеджера</option>';
 			<?php foreach ($expManagers as $key => $cl) { ?>
 
-				ntd_client += '<option value="<?=$cl->id?>"><?php echo Html::encode($cl->name)?></option>';
+				ntd_client += '<option value="<?php echo $cl->id?>"><?php echo Html::encode($cl->name)?></option>';
 
 			<?php } ?>
 			ntd_client +='</select></td>';

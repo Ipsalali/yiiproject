@@ -314,6 +314,7 @@ class Checkexcel{
 
 		$startRow = 22;
 		$endRow = $startRow;
+		$total = null;
 		
 		$this->setText("№","B22",1);
 

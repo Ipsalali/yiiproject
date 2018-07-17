@@ -33,7 +33,7 @@ use common\models\ClientCategory;
             <td>
                 <?php echo Html::a($client->cc_id, array('clientcategory/read', 'id'=>$client->cc_id)); ?>
             </td>
-            <td><?php echo $client->parent->cc_title; ?></td>
+            <td><?php echo $client->cc_parent ? $client->parent->cc_title : ""; ?></td>
             <td><?php echo Html::a($client->cc_title, array('clientcategory/read', 'id'=>$client->cc_id)); ?></td>
             <td><?php echo $client->cc_description; ?></td>
             <td>

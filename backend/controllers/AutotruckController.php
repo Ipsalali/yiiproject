@@ -13,6 +13,7 @@ use backend\models\App;
 use backend\models\AppTrace;
 use common\models\Client;
 use common\models\Status;
+use common\models\User;
 use common\helper\EDateTime;
 use backend\modules\ListAction;
 use backend\modules\AutotruckSearch;
@@ -309,7 +310,26 @@ class AutotruckController extends Controller{
 			return Yii::$app->response->redirect(array("autotruck/index"));
 		}
 
-		$Autotruck->delete();
+        try {
+            //#sverka_restart
+            //Перед тем как удалить получим пользователей, чтоб поосле удаления перерасчитать сверку
+            $sql = "SELECT DISTINCT c.`user_id`  
+                FROM app as a
+                INNER JOIN client as c ON a.client = c.id
+                WHERE a.autotruck_id = {$Autotruck->id}";
+            $users = \Yii::$app->db->createCommand($sql)->queryAll();
+
+            
+            $Autotruck->delete();
+
+            foreach ($users as $u_id) {
+                if(isset($u_id['user_id'])){
+                    User::refreshUserSverka($u_id['user_id']); 
+                }
+            }   
+        } catch (Exception $e) {
+            
+        }
 
 		Yii::$app->session->setFlash("autotruckDeleted");
 		return Yii::$app->response->redirect(array("autotruck/index"));
