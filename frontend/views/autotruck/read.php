@@ -215,7 +215,7 @@ $packages = TypePackaging::find()->all();
 																			: "Не указан"; 
 																?>
 															</td>
-														    <td><?php $app->info?></td>
+														    <td><?php echo $app->info?></td>
 															<td><?php echo $app->count_place ?></td>
 														
 															<td>
