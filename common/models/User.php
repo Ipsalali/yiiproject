@@ -13,6 +13,7 @@ use yii\db\Query;
 use frontend\models\ExpensesManager;
 use frontend\models\PaymentsExpenses;
 
+use common\base\ActiveRecordVersionable;
 /**
  * User model
  *
@@ -27,7 +28,7 @@ use frontend\models\PaymentsExpenses;
  * @property integer $updated_at
  * @property string $password write-only password
  */
-class User extends ActiveRecord implements IdentityInterface, UserRbacInterface
+class User extends ActiveRecordVersionable implements IdentityInterface, UserRbacInterface
 {
     const STATUS_DELETED = 0;
     const STATUS_ACTIVE = 10;
@@ -66,6 +67,21 @@ class User extends ActiveRecord implements IdentityInterface, UserRbacInterface
 
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
+        ];
+    }
+
+
+    public static function versionableAttributes(){
+        return [
+            'username',
+            'email',
+            'auth_key',
+            'password_hash',
+            'password_reset_token',
+            'status',
+            'phone',
+            'name',
+            'isDeleted',
         ];
     }
 

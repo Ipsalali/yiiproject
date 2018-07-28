@@ -159,7 +159,7 @@ class SiteController extends Controller
 
             
             
-            if ($user->save()) {
+            if ($user->save(1)) {
                 if(!$id){                    
                     $userRole = Yii::$app->authManager->getRole('main_manager');
                     Yii::$app->authManager->assign($userRole, $user->getId());
