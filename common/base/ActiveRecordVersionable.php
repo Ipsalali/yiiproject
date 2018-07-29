@@ -312,7 +312,7 @@ class ActiveRecordVersionable extends ActiveRecord implements Versionable{
     public function getHistory(){
         if(!$this->id) return false;
 
-        return (new Query)->select(['rs.*','u.name as creator_name','u.username as creator_username'])->from(['rs'=>self::resourceTableName()])->innerJoin(['u'=>"user"]," rs.creator_id = u.id")->where([static::resourceKey()=>$this->id])->orderBy(["rs.id"=>SORT_DESC])->all();
+        return (new Query)->select(['rs.*','u.name as creator_name','u.username as creator_username'])->from(['rs'=>self::resourceTableName()])->leftJoin(['u'=>"user"]," rs.creator_id = u.id")->where([static::resourceKey()=>$this->id])->orderBy(["rs.id"=>SORT_DESC])->all();
     }
 
 

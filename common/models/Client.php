@@ -453,10 +453,10 @@ class Client extends ActiveRecordVersionable
                     'org.org_name as org_name'
                 ])
                 ->from(['rs'=>self::resourceTableName()])
-                ->innerJoin(['u'=>User::tableName()]," rs.creator_id = u.id")
-                ->innerJoin(['cc'=>ClientCategory::tableName()]," cc.cc_id = rs.client_category_id")
-                ->innerJoin(['u2'=>User::tableName()]," u2.id = rs.manager")
-                ->innerJoin(['org'=>Organisation::tableName()]," org.id = rs.organisation_pay_id")
+                ->leftJoin(['u'=>User::tableName()]," rs.creator_id = u.id")
+                ->leftJoin(['cc'=>ClientCategory::tableName()]," cc.cc_id = rs.client_category_id")
+                ->leftJoin(['u2'=>User::tableName()]," u2.id = rs.manager")
+                ->leftJoin(['org'=>Organisation::tableName()]," org.id = rs.organisation_pay_id")
                 ->where([static::resourceKey()=>$this->id])
                 ->orderBy(["rs.id"=>SORT_DESC])
                 ->all();

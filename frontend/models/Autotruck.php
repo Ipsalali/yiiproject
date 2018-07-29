@@ -568,9 +568,9 @@ class Autotruck extends ActiveRecordVersionable
                     'sc.country as country_title'
                 ])
                 ->from(['rs'=>self::resourceTableName()])
-                ->innerJoin(['u'=>User::tableName()]," rs.creator_id = u.id")
-                ->innerJoin(['st'=>Status::tableName()]," st.id = rs.status")
-                ->innerJoin(['sc'=>SupplierCountry::tableName()]," sc.id = rs.country")
+                ->leftJoin(['u'=>User::tableName()]," rs.creator_id = u.id")
+                ->leftJoin(['st'=>Status::tableName()]," st.id = rs.status")
+                ->leftJoin(['sc'=>SupplierCountry::tableName()]," sc.id = rs.country")
                 ->where([static::resourceKey()=>$this->id])
                 ->orderBy(["rs.id"=>SORT_DESC])
                 ->all();

@@ -50,7 +50,7 @@ use yii\bootstrap\ActiveForm;
 								foreach ($stories as $key => $s) {
 									?>
 									<tr>
-										<td><?php echo $key++?></td>
+										<td><?php echo ++$key?></td>
 										<td><?php echo $s['name'];?></td>
 										<td><?php echo $s['date']?></td>
 										<td><?php echo $s['description']?></td>

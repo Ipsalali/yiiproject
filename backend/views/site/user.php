@@ -37,7 +37,7 @@ use yii\helpers\Html;
 								foreach ($stories as $key => $s) {
 									?>
 									<tr>
-										<td><?php echo $key++?></td>
+										<td><?php echo ++$key?></td>
 										<td><?php echo $s['username'];?></td>
 										<td><?php echo $s['name']?></td>
 										<td><?php echo $s['phone']?></td>
