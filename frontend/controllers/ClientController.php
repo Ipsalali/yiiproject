@@ -54,7 +54,7 @@ class ClientController extends Controller{
                         'roles' => ['client/create'],
                     ],
                     [
-                        'actions' => ['read', 'index'],
+                        'actions' => ['read', 'index','client-story'],
                         'allow' => true,
                         'roles' => ['client/read'],
                     ],
@@ -147,7 +147,7 @@ class ClientController extends Controller{
             }
 
 
-			if($client->load($post) && !$error && $client->save()){
+			if($client->load($post) && !$error && $client->save(1)){
 				
                 //Сохраняем связь между организацией и клиентом
                 $c_n = isset($post['Client']['contract_number']) ? trim(strip_tags($post['Client']['contract_number'])) : "";
@@ -166,7 +166,7 @@ class ClientController extends Controller{
 
                 		$client->user_id = $profile->getId();
 
-                		$client->save();
+                		$client->save(1);
 
             		}
         		
@@ -214,7 +214,7 @@ class ClientController extends Controller{
                 }
             }
 
-        	if ($Client->load($_POST) && $Client->save()){
+        	if ($Client->load($_POST) && $Client->save(1)){
 
                 $c_n = isset($_POST['Client']['contract_number']) ? trim(strip_tags($_POST['Client']['contract_number'])) : "";
 
@@ -234,14 +234,14 @@ class ClientController extends Controller{
 
                         $Client->user_id = $profile->getId();
 
-                        $Client->save();
+                        $Client->save(1);
 
                     }
                 
                 }elseif(isset($_POST['User']['email']) && $_POST['User']['email']){
                     $user = $Client->user;
                     $user->email = trim(strip_tags($_POST['User']['email']));
-                    $user->save();
+                    $user->save(true);
                 }
         			
             	
@@ -324,11 +324,13 @@ class ClientController extends Controller{
 			return Yii::$app->response->redirect(array("post/index"));
 		}
 
-		$profile = User::findOne($client->user_id);
-		if(is_object($profile)){
-			$profile->delete();
-
-		}
+        if($client->user_id){
+            $profile = User::findOne($client->user_id);
+            if(is_object($profile)){
+                $profile->delete();
+            }
+        }
+		
 		
 		$client->delete();
 
@@ -606,6 +608,22 @@ class ClientController extends Controller{
             }
         }else{
           Yii::$app->response->redirect(array("client/index"));
+        }
+    }
+
+
+    public function actionClientStory($id){
+        if(Yii::$app->request->isAjax){
+
+            if($id == NULL){
+                $model = null;
+            }else{
+                $model = Client::findOne((int)$id);
+            }
+            
+            return $this->renderAjax("story",['model'=>$model]);
+        }else{
+            return $this->redirect(["client/index"]);
         }
     }
 }

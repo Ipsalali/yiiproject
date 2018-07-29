@@ -166,7 +166,7 @@ class AutotruckController extends Controller{
             $autotruck->description = $post['Autotruck']['description'];
             
 
-            if($autotruck->save()){
+            if($autotruck->save(1)){
                 // статус заявки
                 if($autotruck->id && $status_update){
                     $apptrace = new AppTrace;

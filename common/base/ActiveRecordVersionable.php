@@ -19,11 +19,29 @@ class ActiveRecordVersionable extends ActiveRecord implements Versionable{
     }
 
 	private static $defaultStoryAttributes = [
-		'type_action' => 'create',
-		'user_id'=>null,
+		'type_action' => 1,
+		'creator_id'=>null,
 		'version'=>1,
 		'entity_id'=>null
 	];
+
+
+
+
+
+
+    public function getStoryActions(){
+        return $this->storyActions();
+    }
+
+
+
+
+    public function getStoryAction($code){
+        $actions = $this->storyActions();
+        return array_key_exists($code, $actions) ? $actions[$code] : "";
+    }
+
 
 
     public function setStoryAttributeTypeAction($code){
@@ -64,10 +82,11 @@ class ActiveRecordVersionable extends ActiveRecord implements Versionable{
     public function getStoryAttributes(){
         $attrs = array_merge(self::$defaultStoryAttributes,self::$storyAttributes);
 
-        $attrs['user_id'] = \Yii::$app->user->isGuest ? null : \Yii::$app->user->id;
+        $attrs['creator_id'] = \Yii::$app->user->isGuest ? null : \Yii::$app->user->id;
         $attrs[static::resourceKey()]=  $this->id ? $this->id : null;
         $attrs['version'] = $this->lastVersionNumber;
-        
+        $attrs['created_at'] = date("Y-m-d\TH:i:s",time());
+
         return $attrs;
     }
 
@@ -290,6 +309,15 @@ class ActiveRecordVersionable extends ActiveRecord implements Versionable{
 
 
 
+    public function getHistory(){
+        if(!$this->id) return false;
+
+        return (new Query)->select(['rs.*','u.name as creator_name','u.username as creator_username'])->from(['rs'=>self::resourceTableName()])->innerJoin(['u'=>"user"]," rs.creator_id = u.id")->where([static::resourceKey()=>$this->id])->orderBy(["rs.id"=>SORT_DESC])->all();
+    }
+
+
+
+
     public function delete($physical = false){
     	if($physical){
     		if($this->clearHistory()){
@@ -297,7 +325,7 @@ class ActiveRecordVersionable extends ActiveRecord implements Versionable{
     		}
     	}else{
     		
-    		self::$defaultStoryAttributes['type_action']='delete';
+    		self::$defaultStoryAttributes['type_action']=3;
     		$this->isDeleted = true;
     		return $this->save(true);
     	}

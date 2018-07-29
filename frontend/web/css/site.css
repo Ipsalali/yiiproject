@@ -952,3 +952,7 @@ table th.app_package{
 .ali_table input,.ali_table select{
     
 }
+
+.modal-dialog.modal-all{
+    width: 100%;
+}

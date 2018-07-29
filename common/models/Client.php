@@ -15,13 +15,16 @@ use yii\db\Command;
 use common\models\PaymentState;
 use common\models\ClientOrganisation;
 
+
+
+use common\base\ActiveRecordVersionable;
 /**
 *
 *
 *
 */
 
-class Client extends ActiveRecord
+class Client extends ActiveRecordVersionable
 {
 
     public $ipay;
@@ -31,7 +34,8 @@ class Client extends ActiveRecord
             // name, email, subject and body are required
             [['name','full_name','payment_clearing','phone'], 'required'],
             
-            ['contract_number','required','on'=>'save_contact_number'],
+            //['contract_number','required','on'=>'save_contact_number'],
+            ['contract_number','string'],
 
             [['name','full_name','contract_number','payment_clearing','phone','description'], 'filter','filter'=>function($v){return trim(strip_tags($v));}],
             ['email','match','pattern'=>'|^[A-Z0-9@\-_\. ,]*$|i'],
@@ -55,6 +59,24 @@ class Client extends ActiveRecord
         ];
 	}
 
+
+
+    public static function versionableAttributes(){
+        return [
+            'name',
+            'full_name',
+            'description',
+            'phone',
+            'email',
+            'user_id',
+            'client_category_id',
+            'manager',
+            'contract_number',
+            'payment_clearing',
+            'organisation_pay_id',
+            'isDeleted'
+        ];
+    }
 
 	/**
      * Returns the static model of the specified AR class.
@@ -412,5 +434,31 @@ class Client extends ActiveRecord
         }
         
         return $this->contract_number;
+    }
+
+
+
+    public function getHistory(){
+        if(!$this->id) return false;
+
+        return (new Query)
+                ->select([
+                    'rs.*',
+                    'u.name as creator_name',
+                    'u.username as creator_username',
+                    'cc.cc_title as client_category_title',
+                    
+                    'u2.name as manager_name',
+                    'u2.username as manager_username',
+                    'org.org_name as org_name'
+                ])
+                ->from(['rs'=>self::resourceTableName()])
+                ->innerJoin(['u'=>User::tableName()]," rs.creator_id = u.id")
+                ->innerJoin(['cc'=>ClientCategory::tableName()]," cc.cc_id = rs.client_category_id")
+                ->innerJoin(['u2'=>User::tableName()]," u2.id = rs.manager")
+                ->innerJoin(['org'=>Organisation::tableName()]," org.id = rs.organisation_pay_id")
+                ->where([static::resourceKey()=>$this->id])
+                ->orderBy(["rs.id"=>SORT_DESC])
+                ->all();
     }
 }

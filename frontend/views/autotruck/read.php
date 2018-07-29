@@ -11,6 +11,7 @@ use frontend\models\ExpensesManager;
 use common\models\User;
 use yii\helpers\Url;
 use common\models\TypePackaging;
+use yii\bootstrap\Modal;
 
 $roleexpenses = 'autotruck/addexpenses';
 
@@ -158,6 +159,8 @@ $packages = TypePackaging::find()->all();
 									<?php echo Html::a('Редактировать', array('autotruck/update','id'=>$autotruck->id), array('class' => 'btn btn-default')); ?>
 
 									<?php echo Html::a('Выгрузить в excel', array('autotruck/to-excel','id'=>$autotruck->id), array('class' => 'btn btn-success')); ?>
+
+									<?php echo Html::a("Журнал редактирования заявки",['autotruck/autotruck-story','id'=>$autotruck->id],['id'=>'btnAutotruckStory','class'=>'btn btn-success'])?>
 							</div>
 							<ul class="nav nav-tabs">
   								<li class="active"><a data-toggle="tab" href="#apps">Наименования</a></li>
@@ -396,5 +399,27 @@ JS;
 					</div>
 				</div>
 		</div>
+
+
+	<?php 
+
+	$script = <<<JS
+			$("#btnAutotruckStory").click(function(event){
+				event.preventDefault();
+				$("#modalJournal").modal('show').find(".modal-body").load($(this).attr('href'));
+			});
+JS;
+
+
+	$this->registerJs($script);
+
+		Modal::begin([
+			'header'=>"<h4>Журнал редактирования заявки</h4>",
+			'id'=>'modalJournal',
+			'size'=>'modal-all'
+		]);
+		Modal::end();
+	?>
+
 	<?php } ?>
 </div>

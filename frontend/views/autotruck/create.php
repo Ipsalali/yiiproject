@@ -38,7 +38,7 @@ $packages = TypePackaging::find()->all();
 	</div>
 <?php if(Yii::$app->session->hasFlash('AutotruckEmpty')): ?>
 <div class="alert alert-error">
-    There was an error deleting your record!
+    Не удалось сохранить заявку
 </div>
 <?php endif; ?>
 

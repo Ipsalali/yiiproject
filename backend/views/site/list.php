@@ -7,8 +7,7 @@
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 use yii\grid\GridView;
-use common\models\User;
-use yii\data\ActiveDataProvider;
+use backend\models\User;
 use yii\helpers\Url;
 
 
@@ -16,12 +15,7 @@ $this->title = 'Пользователи';
 $this->params['breadcrumbs'][] = $this->title;
 
 
-$dataProvider = new ActiveDataProvider([
-    'query' => User::find(),
-    'pagination' => [
-        'pageSize' => 15,
-    ],
-]);
+
 
 
 echo Html::a("Добавить менеджера",array("site/userform"),array("class"=>"btn btn-success"));
@@ -30,6 +24,7 @@ echo Html::a("Добавить менеджера",array("site/userform"),array(
 
 echo GridView::widget([
     'dataProvider' => $dataProvider,
+    'filterModel'=>$filterModel,
     'columns' => [
         ['class' => 'yii\grid\SerialColumn'],
 

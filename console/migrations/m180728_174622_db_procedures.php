@@ -2,9 +2,9 @@
 
 use yii\db\Migration;
 
-class m180711_152926_db_programming extends Migration
+class m180728_174622_db_procedures extends Migration
 {
-    public function up()
+    public function safeUp()
     {   
         $this->drop_all();
         $this->create_get_client_sverka();
@@ -22,7 +22,7 @@ class m180711_152926_db_programming extends Migration
         $this->create_execute_all_users_sverka();
     }
 
-    public function down()
+    public function safeDown()
     {
         $this->drop_all();
     }
@@ -81,7 +81,7 @@ class m180711_152926_db_programming extends Migration
                     INNER JOIN client c ON c.id = a.client
                     INNER JOIN app_status a_s ON a_s.id = at.status
                     INNER JOIN app_trace apt ON apt.autotruck_id = at.id
-                    WHERE  c.`user_id` = p_user_id AND a_s.send_check = 1 AND apt.status_id = at.status  AND apt.`trace_date` <= p_enddate
+                    WHERE  c.`user_id` = p_user_id AND a_s.send_check = 1 AND apt.status_id = at.status AND at.isDeleted=0 AND apt.`trace_date` <= p_enddate
                 ) AS v;
             end
 SQL;
@@ -299,7 +299,7 @@ SQL;
                                 INNER JOIN client c ON c.id = a.client
                                 INNER JOIN app_status a_s ON a_s.id = at.status
                                 INNER JOIN app_trace apt ON apt.autotruck_id = at.id
-                                WHERE  c.`user_id` = p_user_id AND a_s.send_check = 1 AND apt.status_id = at.status  AND apt.`trace_date` <= v_endDate
+                                WHERE  c.`user_id` = p_user_id AND a_s.send_check = 1 AND apt.status_id = at.status AND at.isDeleted = 0 AND apt.`trace_date` <= v_endDate
                             ) AS v;
                 
                 if(p_out_sum) then set return_sum = v_sum;
@@ -329,5 +329,5 @@ SQL;
 SQL;
         $this->execute($sql);
     }
-    
+
 }

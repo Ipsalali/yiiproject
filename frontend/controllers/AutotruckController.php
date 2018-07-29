@@ -66,7 +66,7 @@ class AutotruckController extends Controller{
                         'roles' => ['autotruck/create'],
                     ],
                     [
-                        'actions' => ['read', 'to-excel','download'],
+                        'actions' => ['read', 'to-excel','download','autotruck-story'],
                         'allow' => true,
                         'roles' => ['autotruck/read'],
                     ],
@@ -169,7 +169,7 @@ class AutotruckController extends Controller{
 	            }
         	}
 
-			if($autotruck->save()){
+			if($autotruck->save(1)){
 			    
 				//Добавление статуса
 				if($autotruck->id && $autotruck->status){
@@ -237,7 +237,9 @@ class AutotruckController extends Controller{
 					
 					
 				}else{
-					Yii::$app->session->setFlash("AutotruckEmpty");
+					if($autotruck->id){
+						return Yii::$app->response->redirect(array("autotruck/read",'id'=>$autotruck->id));
+					}
 					return Yii::$app->response->redirect(array("autotruck/create"));
 				}
 
@@ -404,7 +406,7 @@ class AutotruckController extends Controller{
         	}
 			
 
-			if($autotruck->save()){
+			if($autotruck->save(1)){
 				// статус заявки
 				if($autotruck->id && $status_update){
 					$apptrace = new AppTrace;
@@ -843,6 +845,22 @@ class AutotruckController extends Controller{
 		}
 		return $answer;
 	}
+
+
+	public function actionAutotruckStory($id){
+        if(Yii::$app->request->isAjax){
+
+            if($id == NULL){
+                $model = null;
+            }else{
+                $model = Autotruck::findOne((int)$id);
+            }
+            
+            return $this->renderAjax("story",['model'=>$model]);
+        }else{
+            return $this->redirect(["autotruck/index"]);
+        }
+    }
 
 
 }

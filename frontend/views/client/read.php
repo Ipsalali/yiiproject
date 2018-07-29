@@ -6,6 +6,8 @@ use yii\bootstrap\ActiveForm;
 use frontend\models\CustomerPayment;
 use common\models\PaymentState;
 use common\models\TypePackaging;
+use yii\bootstrap\Modal;
+
 $this->title = "Клиент ".$client->name;
 
 $sum_states = PaymentState::getSumStates();
@@ -18,6 +20,7 @@ $packages = TypePackaging::find()->all();
 		 <?php echo Html::a('Клиенты', array('client/index'), array('class' => '')); ?>
 	</div>
 	<div class="pull-right btn-group">
+	<?php echo Html::a("Журнал редактирования клиента",['client/client-story','id'=>$client->id],['id'=>'btnClientStory','class'=>'btn btn-success'])?>
     <?php echo Html::a('Редактировать', array('client/update', 'id' => $client->id), array('class' => 'btn btn-primary')); ?>
     <?php echo Html::a('Удалить', array('client/delete', 'id' => $client->id), array('class' => 'btn btn-danger remove_check')); ?>
 	</div>
@@ -84,7 +87,7 @@ $packages = TypePackaging::find()->all();
 		</div>
 		</div>
 		<div class="row">
-			<div class="col-xs-12">
+			<div class="col-xs-3">
 			    	
 				<p>Задолженность: 
 				    <?php 
@@ -93,6 +96,7 @@ $packages = TypePackaging::find()->all();
 			    ?> $</p>
 			
 			</div>
+			
 		</div>
 		<div class="row">
 				<div class="col-xs-12">
@@ -325,7 +329,38 @@ $packages = TypePackaging::find()->all();
 	<?php } ?>
 				</div>
 			</div>
+<?php 
+
+$script = <<<JS
+			$("#btnClientStory").click(function(event){
+				event.preventDefault();
+				$("#modalJournal").modal('show').find(".modal-body").load($(this).attr('href'));
+			});
+JS;
+
+
+$this->registerJs($script);
+
+	Modal::begin([
+		'header'=>"<h4>Журнал редактирования клиента</h4>",
+		'id'=>'modalJournal',
+		'size'=>'modal-all'
+	]);
+	Modal::end();
+?>
+
+
+<?php 
+
+$script = <<<JS
 		
+
+JS;
+
+
+$this->registerJs($script);
+
+?>		
 		
 			<script id="source" language="javascript" type="text/javascript">
 				$(function () {
@@ -335,27 +370,39 @@ $packages = TypePackaging::find()->all();
 					grafik.push(['<?php echo date('M Y',strtotime($key));?>',<?php echo $v['weight'];?>]);
 				<?php }?>	
     			
-				var data = [{	
-					data:grafik,
-					label:" Количество веса по месяцам"
-				}];
+    			if(grafik.length){
+    				var data = [{	
+						data:grafik,
+						label:" Количество веса по месяцам"
+					}];
 
-				var plot = $.plot("#placeholder", data, {
-					series: {
-						// bars: {
-						// 	show: true,
-						// 	barWidth: 0.2,
-						// 	align: "center"
-						// }
-						lines: { show: true },
-		        		points: { show: true }
-					},
-					grid: {clickable: true },
-					xaxis: {
-						mode: "categories",
-						tickLength: 0
-					}
-				});
+					var plot = $.plot("#placeholder", data, {
+						series: {
+							// bars: {
+							// 	show: true,
+							// 	barWidth: 0.2,
+							// 	align: "center"
+							// }
+							lines: { show: true },
+			        		points: { show: true }
+						},
+						grid: {clickable: true },
+						xaxis: {
+							mode: "categories",
+							tickLength: 0
+						}
+					});
+
+
+					$("#placeholder").bind("plotclick", function (event, pos, item) {
+		        		if (item) {
+		            		$("#grafik_info").html(" Вес " + item.series.data[item.dataIndex][1] + "кг <br>"+"Период " + item.series.data[item.dataIndex][0]);
+		            		plot.highlight(item.series, item.datapoint);
+		        		}
+		    		});
+    			}
+
+				
 
 				//при выборе статуса оплаты проверяем, если выбран частично оплачен. то отображаем поле для суммы
 				$(".payment-state-select").change(function(){
@@ -370,12 +417,7 @@ $packages = TypePackaging::find()->all();
 					}
 				});
 
-			$("#placeholder").bind("plotclick", function (event, pos, item) {
-        		if (item) {
-            		$("#grafik_info").html(" Вес " + item.series.data[item.dataIndex][1] + "кг <br>"+"Период " + item.series.data[item.dataIndex][0]);
-            		plot.highlight(item.series, item.datapoint);
-        		}
-    });
+			
 
 			});
 			</script>

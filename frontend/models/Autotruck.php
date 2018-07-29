@@ -18,13 +18,14 @@ use frontend\models\ExpensesManager;
 use frontend\helpers\Checkexcel;
 
 
+use common\base\ActiveRecordVersionable;
 /**
 *
 *
 *
 */
 
-class Autotruck extends ActiveRecord
+class Autotruck extends ActiveRecordVersionable
 {
 
     public $tempFiles = null;
@@ -39,6 +40,27 @@ class Autotruck extends ActiveRecord
             ['creator','default','value'=>\Yii::$app->user->identity->id,'on'=>self::SCENARIO_CREATE]
         ];
 	}
+
+
+
+    public static function versionableAttributes(){
+        return [
+            'name',
+            'number',
+            'date',
+            'description',
+            'status',
+            'course',
+            'country',
+            'file',
+            'auto_number',
+            'auto_name',
+            'gtd',
+            'decor',
+            'creator',
+            'isDeleted'
+        ];
+    }
 
 
     public function scenarios(){
@@ -430,7 +452,7 @@ class Autotruck extends ActiveRecord
                 }
 
                 $this->file = implode('|', $new_files);
-                return $this->save();
+                return $this->save(1);
                 
             }
         }
@@ -529,6 +551,29 @@ class Autotruck extends ActiveRecord
         $command = $connection->createCommand($sql);
 
         return $command->queryScalar();
+    }
+
+
+
+
+    public function getHistory(){
+        if(!$this->id) return false;
+
+        return (new Query)
+                ->select([
+                    'rs.*',
+                    'u.name as creator_name',
+                    'u.username as creator_username',
+                    'st.title as status_title',
+                    'sc.country as country_title'
+                ])
+                ->from(['rs'=>self::resourceTableName()])
+                ->innerJoin(['u'=>User::tableName()]," rs.creator_id = u.id")
+                ->innerJoin(['st'=>Status::tableName()]," st.id = rs.status")
+                ->innerJoin(['sc'=>SupplierCountry::tableName()]," sc.id = rs.country")
+                ->where([static::resourceKey()=>$this->id])
+                ->orderBy(["rs.id"=>SORT_DESC])
+                ->all();
     }
 
 

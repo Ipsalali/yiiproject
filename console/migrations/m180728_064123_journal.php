@@ -20,6 +20,7 @@ class m180728_064123_journal extends Migration
         $this->createTable($this->tableUserJournal, [
             'id' => $this->primaryKey(),
             'entity_id' => $this->integer()->notNull(),
+            
             'username' => $this->string()->null(),
             'auth_key' => $this->string()->null(),
             'password_hash' => $this->string()->null(),
@@ -32,13 +33,13 @@ class m180728_064123_journal extends Migration
             'created_at'=>$this->timestamp(),
             'type_action'=> $this->integer()->notNull(),
             'version'=> $this->integer()->notNull(),
-            'user_id'=> $this->integer()->null(),
+            'creator_id'=> $this->integer()->null(),
             'isDeleted'=> $this->smallInteger()->null()->defaultValue(0),
         ], $tableOptions);
 
 
         $this->addForeignKey('fk-user_history-entity_id', $this->tableUserJournal,'entity_id', $this->tableUser, 'id','CASCADE','CASCADE');
-        $this->addForeignKey('fk-user_history-user_id', $this->tableUserJournal,'user_id', $this->tableUser, 'id','CASCADE','CASCADE');
+        $this->addForeignKey('fk-user_history-creator_id', $this->tableUserJournal,'creator_id', $this->tableUser, 'id','CASCADE','CASCADE');
 
         $this->addColumn($this->tableUser,'version_id',$this->integer()->null());
         $this->addColumn($this->tableUser,'isDeleted',$this->smallInteger()->null()->defaultValue(0));
@@ -49,8 +50,8 @@ class m180728_064123_journal extends Migration
     public function safeDown()
     {   
         $this->dropForeignKey('fk-user_history-entity_id',$this->tableUserJournal);
-        $this->dropForeignKey('fk-user_history-user_id',$this->tableUserJournal);
-        
+        $this->dropForeignKey('fk-user_history-creator_id',$this->tableUserJournal);
+
         $this->dropForeignKey('fk-user-version_id',$this->tableUser);
         
         $this->dropColumn($this->tableUser,'version_id');

@@ -7,6 +7,7 @@ use yii\web\Controller;
 use backend\models\LoginForm;
 use yii\filters\VerbFilter;
 use common\models\User;
+use backend\modules\UserSearch;
 
 /**
  * Site controller
@@ -108,13 +109,12 @@ class SiteController extends Controller
 
     public function actionList(){
 
-        $user = new User;
+        $filterModel = new UserSearch;
 
-        $data = $user->find()->all();
+        $dataProvider = $filterModel->search(Yii::$app->request->queryParams);
         
-        //$this->layout = 'sidebars/sb_left';
 
-        return $this->render('list',array('data'=>$data));
+        return $this->render('list',array('dataProvider'=>$dataProvider,'filterModel'=>$filterModel));
 
     }
 
@@ -124,8 +124,6 @@ class SiteController extends Controller
     public function actionUser($id = 0){
 
         $user =User::findOne($id);
-
-        $this->layout = 'sidebars/sb_left';
 
         return $this->render('user',array('user'=>$user));
 
