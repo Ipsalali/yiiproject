@@ -115,7 +115,8 @@ class AutotruckReport extends Autotruck
                 SELECT a.id, a.name, a.date,c.country, c.id as country_id, a.course,SUM(exp.cost) as expenses
                 FROM `autotruck` as a 
                 LEFT JOIN `expenses_manager` exp ON exp.autotruck_id = a.id 
-                LEFT JOIN supplier_countries c ON c.id = a.country 
+                LEFT JOIN supplier_countries c ON c.id = a.country
+                WHERE isDeleted = 0
                 GROUP BY a.`id`
                 ) atr ON ap.autotruck_id = atr.`id` 
                  ".$sqlCondition." 
