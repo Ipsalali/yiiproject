@@ -9,6 +9,7 @@ use frontend\models\Autotruck;
 use common\models\User;
 use common\models\Organisation;
 use common\base\ActiveRecordVersionable;
+use yii\db\Query;
 
 /**
 *
@@ -100,6 +101,28 @@ class ExpensesManager extends ActiveRecordVersionable
 
     public static function getAutotruckExpenses($autotruck_id){
         return ExpensesManager::find()->where(['autotruck_id'=>$autotruck_id])->all();
+    }
+
+
+
+    public function getHistory(){
+        if(!$this->id) return false;
+
+        return (new Query)
+                ->select([
+                    'rs.*',
+                    'u.name as creator_name',
+                    'u.username as creator_username',
+                    'o.org_name',
+                    'u2.name as manager_name'
+                ])
+                ->from(['rs'=>self::resourceTableName()])
+                ->leftJoin(['u'=>User::tableName()]," rs.creator_id = u.id")
+                ->leftJoin(['o'=>Organisation::tableName()]," o.id = rs.organisation")
+                ->leftJoin(['u2'=>User::tableName()]," u2.id = rs.manager_id")
+                ->where([static::resourceKey()=>$this->id])
+                ->orderBy(["rs.id"=>SORT_DESC])
+                ->all();
     }
 
 }

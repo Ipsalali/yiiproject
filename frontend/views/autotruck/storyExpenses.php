@@ -47,8 +47,8 @@ use yii\bootstrap\ActiveForm;
 									<tr>
 										<td><?php echo ++$key?></td>
 										<td><?php echo $s['date'];?></td>
-										<td><?php echo $s['organisation']?></td>
-										<td><?php echo $s['manager_id']?></td>
+										<td><?php echo $s['org_name']?></td>
+										<td><?php echo $s['manager_name']?></td>
 										<td><?php echo $s['cost']?></td>
 										<td><?php echo $s['comment']?></td>
 

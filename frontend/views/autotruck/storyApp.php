@@ -52,17 +52,17 @@ use yii\bootstrap\ActiveForm;
 									?>
 									<tr>
 										<td><?php echo ++$key?></td>
-										<td><?php echo $s['client'];?></td>
+										<td><?php echo $s['client_name'];?></td>
 										<td><?php echo $s['weight']?></td>
 										<td><?php echo $s['rate']?></td>
-										<td><?php echo $s['summa_us']?></td>
+										<td><?php echo $s['summa_us']?> $</td>
 										<td><?php echo $s['comment']?></td>
 										<td><?php echo $s['info']?></td>
 										<td><?php echo $s['type'] == 1 ? "Услуга" : null;?></td>
 										<!-- <td><?php echo $s['out_sock']?></td> -->
-										<td><?php echo $s['sender']?></td>
+										<td><?php echo $s['sender_name']?></td>
 										<td><?php echo $s['count_place']?></td>
-										<td><?php echo $s['package']?></td>
+										<td><?php echo $s['package_title']?></td>
 
 										<td><?php echo $s['version']?></td>
 										<td>

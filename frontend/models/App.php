@@ -7,6 +7,7 @@ use yii\db\ActiveRecord;
 use yii\db\Expression;
 use frontend\models\Autotruck;
 use common\models\Status;
+use common\models\User;
 use common\models\Client;
 use common\models\Sender;
 use common\models\TypePackaging;
@@ -152,6 +153,29 @@ class App extends ActiveRecordVersionable
         return $query->all();
     }
 
+
+
+    public function getHistory(){
+        if(!$this->id) return false;
+
+        return (new Query)
+                ->select([
+                    'rs.*',
+                    'u.name as creator_name',
+                    'u.username as creator_username',
+                    'cl.name as client_name',
+                    's.name as sender_name',
+                    'tp.title as package_title'
+                ])
+                ->from(['rs'=>self::resourceTableName()])
+                ->leftJoin(['u'=>User::tableName()]," rs.creator_id = u.id")
+                ->leftJoin(['cl'=>Client::tableName()]," cl.id = rs.client")
+                ->leftJoin(['s'=>Sender::tableName()]," s.id = rs.sender")
+                ->leftJoin(['tp'=>TypePackaging::tableName()]," tp.id = rs.package")
+                ->where([static::resourceKey()=>$this->id])
+                ->orderBy(["rs.id"=>SORT_DESC])
+                ->all();
+    }
     
 
 }
