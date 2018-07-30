@@ -270,7 +270,7 @@ class TransfersPackage extends ActiveRecordVersionable
     public function getTransfers(){
         if(!$this->id) return [];
 
-        return Transfer::find()->where(['package_id'=>$this->id])->all();
+        return Transfer::find()->where(['package_id'=>$this->id,'isDeleted'=>0])->all();
     }
     
     
@@ -278,7 +278,7 @@ class TransfersPackage extends ActiveRecordVersionable
     public function getSellerExpenses(){
         if(!$this->id) return [];
 
-        return SellerExpenses::find()->where(['package_id'=>$this->id])->all();
+        return SellerExpenses::find()->where(['package_id'=>$this->id,'isDeleted'=>0])->all();
     }
 
 
@@ -315,11 +315,13 @@ class TransfersPackage extends ActiveRecordVersionable
             array_push($models, $model);
         }
 
+
+
         if(!count($errors)){
 
             $answer = true; 
             foreach ($models as $key => $m) {
-                if(!$m->save()){
+                if(!$m->save(1)){
                     $answer = 2;
                 }
             }
@@ -369,7 +371,7 @@ class TransfersPackage extends ActiveRecordVersionable
 
             $answer = true; 
             foreach ($models as $key => $m) {
-                if(!$m->save()){
+                if(!$m->save(1)){
                     $answer = 2;
                 }
             }

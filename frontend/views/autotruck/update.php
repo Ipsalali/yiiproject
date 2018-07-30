@@ -29,7 +29,7 @@ if(\Yii::$app->user->can("clientExtended")){
 	$clients[] = $user->client;
 }else{
 	$countries = $user->countries;
-	$clients = Client::find()->orderBy(['name'=>'DESC'])->all();
+	$clients = Client::find()->where(['isDeleted'=>0])->orderBy(['name'=>'DESC'])->all();
 }
 
 $senders = Sender::find()->orderBy(['name'=>'DESC'])->all();

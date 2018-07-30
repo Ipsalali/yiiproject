@@ -49,7 +49,7 @@ class ClientSearch extends Client
          
 
         $conditions = array();
-        // $conditions['isDeleted'] = 1;
+        $conditions[] = "`isDeleted` = 0";
         //если данные не фильтра не переданы или переданы не валидные данныеы
         if($this->load($params) && $this->validate()){
 

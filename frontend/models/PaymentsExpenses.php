@@ -8,13 +8,14 @@ use yii\db\Expression;
 use frontend\models\Autotruck;
 use common\models\User;
 use common\models\Organisation;
+use common\base\ActiveRecordVersionable;
 /**
 *
 *
 *
 */
 
-class PaymentsExpenses extends ActiveRecord
+class PaymentsExpenses extends ActiveRecordVersionable
 {
 
 
@@ -27,6 +28,24 @@ class PaymentsExpenses extends ActiveRecord
         ];
 	}
 
+
+    public static function versionableAttributes(){
+        return [
+            'manager_id',
+            'sum',
+            'date',
+            'comment',
+            'organisation',
+            'payment',
+            'sum_cash',
+            'sum_card',
+            'sum_cash_us',
+            'plus',
+            'toreport',
+            'course',
+            'isDeleted'
+        ];
+    }
 
 	/**
      * Returns the static model of the specified AR class.
@@ -42,10 +61,10 @@ class PaymentsExpenses extends ActiveRecord
 	/**
      * @return string the associated database table name
      */
-
 	public static function tableName(){
 		return '{{%payments_expenses}}';
 	}
+
 
 	/**
      * @return array primary key of the table

@@ -8,6 +8,7 @@ use yii\db\Expression;
 use frontend\models\Autotruck;
 use common\models\User;
 use common\models\Organisation;
+use common\base\ActiveRecordVersionable;
 
 /**
 *
@@ -15,7 +16,7 @@ use common\models\Organisation;
 *
 */
 
-class ExpensesManager extends ActiveRecord
+class ExpensesManager extends ActiveRecordVersionable
 {
 
 
@@ -27,6 +28,19 @@ class ExpensesManager extends ActiveRecord
             ['organisation','default','value'=>0]
         ];
 	}
+
+    
+    public static function versionableAttributes(){
+        return [
+            'manager_id',
+            'autotruck_id',
+            'cost',
+            'comment',
+            'date',
+            'organisation',
+            'isDeleted'
+        ];
+    }
 
 
 	/**

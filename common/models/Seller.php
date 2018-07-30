@@ -12,9 +12,10 @@ use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use common\models\User;
 
+use common\base\ActiveRecordVersionable;
 
 
-class Seller extends ActiveRecord  implements IdentityInterface
+class Seller extends ActiveRecordVersionable  implements IdentityInterface
 {
     
     const STATUS_DELETED = 0;
@@ -29,6 +30,24 @@ class Seller extends ActiveRecord  implements IdentityInterface
     {
         return '{{%user}}';
     }
+
+
+
+    public static function versionableAttributes(){
+        return [
+            'username',
+            'email',
+            'auth_key',
+            'password_hash',
+            'password_reset_token',
+            'status',
+            'phone',
+            'name',
+            'isDeleted',
+        ];
+    }
+
+    
 
     /**
      * @inheritdoc

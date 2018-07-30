@@ -193,6 +193,7 @@ $packages = TypePackaging::find()->all();
 													<th>Сумма ($)</th>
 													<th>Сумма (руб)</th>
 													<th>Комментарий</th>
+													<th></th>
 												</tr>
 										<?php $cweight=0; $total = 0; $total_us = 0;
 										foreach ($autotruckApps as $key => $app) { ?>
@@ -254,6 +255,7 @@ $packages = TypePackaging::find()->all();
 													руб</td>
 													
 													<td><?php echo $app->comment?></td>
+													<td style="text-align: center;"><?php echo Html::a("Журнал",['autotruck/app-story','id'=>$app->id],['id'=>'btnAppStory'])?></td>
 												</tr>
 										<?php 
 											$cweight += $app->type ? 0 : $app->weight; 
@@ -269,6 +271,7 @@ $packages = TypePackaging::find()->all();
 												<td></td>
 												<td><strong><?php echo round($total_us,2);?> $</strong></td>
 												<td><strong><?php echo round( $total,2);?> руб.</strong></td>
+												<td></td>
 												<td></td>
 											</tr>
 											</tbody>
@@ -368,7 +371,7 @@ JS;
 											<?php 
 											if(count($AutotruckExpenses)){
 												$dataProvider = new ActiveDataProvider([
-	           										'query' => ExpensesManager::find()->where(['autotruck_id'=>$autotruck->id]),
+	           										'query' => ExpensesManager::find()->where(['autotruck_id'=>$autotruck->id,'isDeleted'=>0]),
 	            								]);
 	            								echo GridView::widget([
 	            										'dataProvider' => $dataProvider,
@@ -386,7 +389,16 @@ JS;
 	            												'value'=>'manager.name'
 	            											],
 	            											'cost',
-	            											'comment'
+	            											'comment',
+	            											['class' => 'yii\grid\ActionColumn',
+													         'template' => '{view}',
+													         'buttons' =>
+													             [
+													                 'view' => function ($url, $model) {
+													                    return Html::a("Журнал",['autotruck/expenses-story','id'=>$model['id']],['id'=>'btnExpensesStory']); 
+													                 },
+													             ]
+													        ],
 	            										]
 	            									]);
 											} ?>
@@ -406,7 +418,18 @@ JS;
 	$script = <<<JS
 			$("#btnAutotruckStory").click(function(event){
 				event.preventDefault();
-				$("#modalJournal").modal('show').find(".modal-body").load($(this).attr('href'));
+				$("#modalJournalAutotruck").modal('show').find(".modal-body").load($(this).attr('href'));
+			});
+
+
+			$("#btnAppStory").click(function(event){
+				event.preventDefault();
+				$("#modalJournalApp").modal('show').find(".modal-body").load($(this).attr('href'));
+			});
+
+			$("#btnExpensesStory").click(function(event){
+				event.preventDefault();
+				$("#modalJournalExpenses").modal('show').find(".modal-body").load($(this).attr('href'));
 			});
 JS;
 
@@ -415,7 +438,22 @@ JS;
 
 		Modal::begin([
 			'header'=>"<h4>Журнал редактирования заявки</h4>",
-			'id'=>'modalJournal',
+			'id'=>'modalJournalAutotruck',
+			'size'=>'modal-all'
+		]);
+		Modal::end();
+
+
+		Modal::begin([
+			'header'=>"<h4>Журнал редактирования наименований</h4>",
+			'id'=>'modalJournalApp',
+			'size'=>'modal-all'
+		]);
+		Modal::end();
+
+		Modal::begin([
+			'header'=>"<h4>Журнал редактирования наименований</h4>",
+			'id'=>'modalJournalExpenses',
 			'size'=>'modal-all'
 		]);
 		Modal::end();

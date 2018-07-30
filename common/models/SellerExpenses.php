@@ -9,13 +9,14 @@ use frontend\models\Autotruck;
 use common\models\User;
 use common\models\Seller;
 
+use common\base\ActiveRecordVersionable;
 /**
 *
 *
 *
 */
 
-class SellerExpenses extends ActiveRecord
+class SellerExpenses extends ActiveRecordVersionable
 {
 
 
@@ -34,10 +35,23 @@ class SellerExpenses extends ActiveRecord
                 }
             }],
             [['date'],'default','value'=>date("Y-m-d H:i:s",time())],
+            [['isDeleted'],'default','value'=>0],
             [['comment'],'filter','filter'=>function($v){ return trim(strip_tags($v));}],
+
         ];
 	}
 
+
+    public static function versionableAttributes(){
+        return [
+            'package_id',
+            'seller_id',
+            'date',
+            'sum',
+            'comment',
+            'isDeleted'
+        ];
+    }
 
 	/**
      * Returns the static model of the specified AR class.
@@ -55,7 +69,7 @@ class SellerExpenses extends ActiveRecord
      */
 
 	public static function tableName(){
-		return '{{%expenses_seller}}';
+		return '{{%seller_expenses}}';
 	}
 
 	/**

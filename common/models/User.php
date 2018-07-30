@@ -478,7 +478,7 @@ class User extends ActiveRecordVersionable implements IdentityInterface, UserRba
                 FROM expenses_manager ex
                 inner join autotruck as a on a.id = ex.autotruck_id
 
-                WHERE '{$start}'<=ex.`date` AND   ex.`date`<='{$end}' AND ex.`manager_id` = ".$this->id." 
+                WHERE '{$start}'<=ex.`date` AND ex.`isDeleted`=0 AND   ex.`date`<='{$end}' AND ex.`manager_id` = ".$this->id."
                 
                 
                 UNION ALL
@@ -496,7 +496,7 @@ class User extends ActiveRecordVersionable implements IdentityInterface, UserRba
                     toreport,
                     pe.course
                 FROM payments_expenses pe 
-                WHERE '{$start}'<=`date` AND `date`<='{$end}' AND `manager_id` = ".$this->id."
+                WHERE '{$start}'<=`date` AND pe.`isDeleted`=0 AND `date`<='{$end}' AND `manager_id` = ".$this->id."
                 ";
 
 
@@ -521,7 +521,7 @@ class User extends ActiveRecordVersionable implements IdentityInterface, UserRba
                     INNER JOIN client c ON c.id = a.client
                     INNER JOIN app_status a_s ON a_s.id = at.status
                     INNER JOIN app_trace apt ON apt.autotruck_id = at.id
-                    WHERE  a_s.send_check = 1 AND apt.status_id = at.status AND '{$start}'<= apt.`trace_date` AND apt.`trace_date`<='{$end}' AND c.`user_id` = ".$this->id." GROUP BY at.id";
+                    WHERE  a_s.send_check = 1 AND apt.status_id = at.status AND '{$start}'<= apt.`trace_date` AND apt.`trace_date`<='{$end}' AND c.`user_id` = ".$this->id." AND  a.`isDeleted`=0 AND at.`isDeleted`=0 GROUP BY at.id";
          
         }
 

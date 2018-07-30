@@ -493,7 +493,7 @@ class SiteController extends Controller
                         
                     }
 
-                    if($pm->save()){
+                    if($pm->save(1)){
                         $answer['messages'][] = "Оплата с суммой ".$item['sum'].' добавлена';
                         
                         $answer['result'] = 1;
@@ -524,7 +524,7 @@ class SiteController extends Controller
                         if(isset($item['organisation']))
                             $em->organisation = (int)$item['organisation'];
 
-                        if($em->save())
+                        if($em->save(1))
                             $answer['result'] = 1;
                     }
                      

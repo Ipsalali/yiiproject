@@ -139,8 +139,11 @@ class ActiveRecordVersionable extends ActiveRecord implements Versionable{
 	* default table name for save entity history
 	*/
 	public static function resourceTableName(){
-		$t = str_replace(['%','&','{','}'], '', self::tableName());
-		return "{{%".$t."_history}}";
+		
+        $t = str_replace(['%','&','{','}'], '', self::tableName());
+        
+		
+        return "{{%".$t."_history}}";
 	}
 
 

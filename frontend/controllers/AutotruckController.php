@@ -66,7 +66,7 @@ class AutotruckController extends Controller{
                         'roles' => ['autotruck/create'],
                     ],
                     [
-                        'actions' => ['read', 'to-excel','download','autotruck-story'],
+                        'actions' => ['read', 'to-excel','download','autotruck-story','app-story','expenses-story'],
                         'allow' => true,
                         'roles' => ['autotruck/read'],
                     ],
@@ -195,7 +195,7 @@ class AutotruckController extends Controller{
 						$exp->autotruck_id = $autotruck->id;
 						$exp->comment = trim(strip_tags($item['comment']));
 
-						if($exp->save()){
+						if($exp->save(1)){
 							//обновление сверки
 							try {
 								User::refreshUserSverka($exp->manager_id);
@@ -231,7 +231,7 @@ class AutotruckController extends Controller{
 						$a->comment = $item['comment'];
 						$a->autotruck_id = $autotruck->id;
 
-						$a->save();
+						$a->save(1);
 					}
 							
 					
@@ -451,7 +451,7 @@ class AutotruckController extends Controller{
 						$exp->autotruck_id = $autotruck->id;
 						$exp->comment = trim(strip_tags($item['comment']));
 
-						if($exp->save()){
+						if($exp->save(1)){
 							//обновление сверки
 							try {
 								User::refreshUserSverka($exp->manager_id);
@@ -496,7 +496,7 @@ class AutotruckController extends Controller{
 						$a->comment = $item['comment'];
 						$a->autotruck_id = $autotruck->id;
 
-						if($a->save()){
+						if($a->save(1)){
 							
 							Yii::$app->session->setFlash("AppSaved");	
 						}else{
@@ -705,7 +705,7 @@ class AutotruckController extends Controller{
 			$model->autotruck_id = (int)$post['ExpensesManager']['autotruck_id'];
 			$model->comment = trim(strip_tags($post['ExpensesManager']['comment']));
 
-			if($model->save()){
+			if($model->save(1)){
 				Yii::$app->session->setFlash("ExpensesManagerAddSuccess");
 
 				//#sverka restart
@@ -857,6 +857,38 @@ class AutotruckController extends Controller{
             }
             
             return $this->renderAjax("story",['model'=>$model]);
+        }else{
+            return $this->redirect(["autotruck/index"]);
+        }
+    }
+
+
+    public function actionAppStory($id){
+        if(Yii::$app->request->isAjax){
+
+            if($id == NULL){
+                $model = null;
+            }else{
+                $model = App::findOne((int)$id);
+            }
+            
+            return $this->renderAjax("storyApp",['model'=>$model]);
+        }else{
+            return $this->redirect(["autotruck/index"]);
+        }
+    }
+
+
+    public function actionExpensesStory($id){
+        if(Yii::$app->request->isAjax){
+
+            if($id == NULL){
+                $model = null;
+            }else{
+                $model = ExpensesManager::findOne((int)$id);
+            }
+            
+            return $this->renderAjax("storyExpenses",['model'=>$model]);
         }else{
             return $this->redirect(["autotruck/index"]);
         }

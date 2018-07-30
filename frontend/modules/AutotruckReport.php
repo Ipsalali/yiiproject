@@ -77,7 +77,7 @@ class AutotruckReport extends Autotruck
         
         
         
-        $sqlCondition = "";
+        $sqlCondition = " WHERE ap.`isDeleted`=0";
         if($this->load($params) && $this->validate()){
             $cs = [];
 
@@ -101,7 +101,7 @@ class AutotruckReport extends Autotruck
 
 
             if(count($cs)){
-                $sqlCondition = " WHERE ".implode(" AND ", $cs)." ";
+                $sqlCondition = " ".implode(" AND ", $cs)." ";
             }
         }
 

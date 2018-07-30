@@ -141,11 +141,11 @@ class Autotruck extends ActiveRecordVersionable
     }
 
     public function getApps(){
-        return App::find()->where('autotruck_id='.$this->id)->all();
+        return App::find()->where('autotruck_id='.$this->id)->andWhere(['isDeleted'=>0])->all();
     }
 
     public function getExpensesManager(){
-        return ExpensesManager::find()->where('autotruck_id='.$this->id)->all();
+        return ExpensesManager::find()->where('autotruck_id='.$this->id)->andWhere(['isDeleted'=>0])->all();
     }
 
     public function getTraceStory(){
@@ -409,8 +409,10 @@ class Autotruck extends ActiveRecordVersionable
                 FROM `autotruck` as a 
                 LEFT JOIN `expenses_manager` exp ON exp.autotruck_id = a.id 
                 LEFT JOIN supplier_countries c ON c.id = a.country 
+                WHERE a.`isDeleted`=0
                 GROUP BY a.`id`
-                ) atr ON ap.autotruck_id = atr.`id` 
+                ) atr ON ap.autotruck_id = atr.`id`
+        WHERE ap.`isDeleted`=0
         GROUP BY atr.`id` ORDER BY ap.id DESC";
 
         $connection = Yii::$app->getDb();
@@ -506,7 +508,7 @@ class Autotruck extends ActiveRecordVersionable
     public function getCountOutStockApp(){
 
         if($this->id){
-            $sql = "SELECT COUNT(1) as count FROM app  WHERE `out_stock`=1 AND `autotruck_id` = {$this->id}";
+            $sql = "SELECT COUNT(1) as count FROM app  WHERE `out_stock`=1 AND `autotruck_id` = {$this->id} AND `isDeleted`=0";
 
             $connection = Yii::$app->getDb();
             $command = $connection->createCommand($sql);
@@ -523,7 +525,7 @@ class Autotruck extends ActiveRecordVersionable
         
         $conditionClient = $client > 0 ? " AND `client`={$client}" : ""; 
         
-        $sql = "SELECT SUM(count_place) FROM ".App::tableName()." WHERE autotruck_id = ".$this->id." ".$conditionClient;
+        $sql = "SELECT SUM(count_place) FROM ".App::tableName()." WHERE autotruck_id = ".$this->id." AND `isDeleted`=0 ".$conditionClient;
         $connection = Yii::$app->getDb();
         $command = $connection->createCommand($sql);
 
@@ -534,7 +536,7 @@ class Autotruck extends ActiveRecordVersionable
         
         $conditionClient = $client > 0 ? " AND `client`={$client}" : ""; 
         
-        $sql = "SELECT count(id) FROM ".App::tableName()." WHERE autotruck_id = ".$this->id." and package = ".$package." ".$conditionClient;
+        $sql = "SELECT count(id) FROM ".App::tableName()." WHERE autotruck_id = ".$this->id." AND `isDeleted`=0 AND package = ".$package." ".$conditionClient;
         $connection = Yii::$app->getDb();
         $command = $connection->createCommand($sql);
 
@@ -546,7 +548,7 @@ class Autotruck extends ActiveRecordVersionable
         
         $conditionClient = $client > 0 ? " AND `client`={$client}" : "";
         
-        $sql = "SELECT SUM(count_place) FROM ".App::tableName()." WHERE autotruck_id = ".$this->id." and package = ".$package." ".$conditionClient;
+        $sql = "SELECT SUM(count_place) FROM ".App::tableName()." WHERE autotruck_id = ".$this->id." AND `isDeleted`=0 AND package = ".$package." ".$conditionClient;
         $connection = Yii::$app->getDb();
         $command = $connection->createCommand($sql);
 

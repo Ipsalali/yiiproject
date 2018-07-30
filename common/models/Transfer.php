@@ -9,13 +9,14 @@ use yii\db\Query;
 use yii\db\Command;
 use common\models\Client;
 
+use common\base\ActiveRecordVersionable;
 /**
 *
 *
 *
 */
 
-class Transfer extends ActiveRecord
+class Transfer extends ActiveRecordVersionable
 {
 
 
@@ -25,11 +26,22 @@ class Transfer extends ActiveRecord
             [['comment','name'],'filter','filter'=>function($v){ return strip_tags(trim($v));}],
             [['sum','sum_ru'],'double'],
             ['package_id','integer'],
-            ['comment','default','value'=>""]
+            ['comment','default','value'=>""],
+            ['isDeleted','default','value'=>0]
         ];
 	}
 
-
+    public static function versionableAttributes(){
+        return [
+            'package_id',
+            'client_id',
+            'name',
+            'sum',
+            'sum_ru',
+            'comment',
+            'isDeleted'
+        ];
+    }
 	
 	public static function model($className = __CLASS__){
 
@@ -40,7 +52,7 @@ class Transfer extends ActiveRecord
 	
 
 	public static function tableName(){
-		return '{{%transfers}}';
+		return "{{%transfer}}";
 	}
 
 	    

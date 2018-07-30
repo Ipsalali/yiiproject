@@ -2,7 +2,7 @@
 
 use yii\db\Migration;
 
-class m180728_174622_db_procedures extends Migration
+class m180730_172137_db_programming extends Migration
 {
     public function safeUp()
     {   
@@ -65,12 +65,12 @@ class m180728_174622_db_procedures extends Migration
                 FROM (
                     SELECT SUM( ex.cost ) AS sum, 0 as sum_cash, 0 as sum_card
                     FROM expenses_manager ex
-                    WHERE  `manager_id` = p_user_id AND  ex.`date` <=  p_enddate 
+                    WHERE  `manager_id` = p_user_id AND  ex.`date` <=  p_enddate AND ex.isDeleted=0
                     
                     UNION ALL 
                     SELECT SUM( if(1,0 - pe.sum,pe.sum) ) AS sum, SUM(if(1,0-pe.sum_cash,pe.sum_cash)) as sum_cash, SUM(if(1,0-pe.sum_card,pe.sum_card)) as sum_card
                     FROM payments_expenses pe
-                    WHERE  `manager_id` = p_user_id AND  pe.`date` <= p_enddate
+                    WHERE  `manager_id` = p_user_id AND  pe.`date` <= p_enddate AND pe.isDeleted=0
                     
                     UNION ALL
                     SELECT  ROUND(SUM(a.`summa_us`),2) as 'sum',
@@ -81,7 +81,7 @@ class m180728_174622_db_procedures extends Migration
                     INNER JOIN client c ON c.id = a.client
                     INNER JOIN app_status a_s ON a_s.id = at.status
                     INNER JOIN app_trace apt ON apt.autotruck_id = at.id
-                    WHERE  c.`user_id` = p_user_id AND a_s.send_check = 1 AND apt.status_id = at.status AND at.isDeleted=0 AND apt.`trace_date` <= p_enddate
+                    WHERE  c.`user_id` = p_user_id AND a_s.send_check = 1 AND apt.status_id = at.status AND a.isDeleted=0 AND at.isDeleted=0 AND apt.`trace_date` <= p_enddate
                 ) AS v;
             end
 SQL;
@@ -104,12 +104,12 @@ SQL;
                 FROM (
                     SELECT SUM( ex.cost ) AS sum, 0 as sum_cash, 0 as sum_card
                     FROM expenses_manager ex
-                    WHERE  `manager_id` = p_user_id AND  ex.`date` <=  p_enddate 
+                    WHERE  `manager_id` = p_user_id AND  ex.`date` <=  p_enddate AND ex.isDeleted=0
                     
                     UNION ALL 
                     SELECT SUM( if(1,0 - pe.sum,pe.sum) ) AS sum, SUM(if(1,0-pe.sum_cash,pe.sum_cash)) as sum_cash, SUM(if(1,0-pe.sum_card,pe.sum_card)) as sum_card
                     FROM payments_expenses pe
-                    WHERE  `manager_id` = p_user_id AND  pe.`date` <= p_enddate
+                    WHERE  `manager_id` = p_user_id AND  pe.`date` <= p_enddate AND pe.isDeleted=0
                     
                 ) AS v;
         end
@@ -188,6 +188,7 @@ CREATE VIEW `client_list` AS
                 cl.`payment_clearing`,
                 cl.`organisation_pay_id`,
                 cl.`email`,
+                cl.`isDeleted`,
                 u.`username` as 'manager_username',
                 u.`phone` as 'manager_phone',
                 u.`name` as 'manager_name',
@@ -283,12 +284,12 @@ SQL;
                             FROM (
                                 SELECT SUM( ex.cost ) AS sum, 0 as sum_cash, 0 as sum_card
                                 FROM expenses_manager ex
-                                WHERE  `manager_id` = p_user_id AND  ex.`date` <=  v_endDate 
+                                WHERE  `manager_id` = p_user_id AND  ex.`date` <=  v_endDate AND ex.isDeleted=0
                                 
                                 UNION ALL 
                                 SELECT SUM( if(1,0 - pe.sum,pe.sum) ) AS sum, SUM(if(1,0-pe.sum_cash,pe.sum_cash)) as sum_cash, SUM(if(1,0-pe.sum_card,pe.sum_card)) as sum_card
                                 FROM payments_expenses pe
-                                WHERE  `manager_id` = p_user_id AND  pe.`date` <= v_endDate
+                                WHERE  `manager_id` = p_user_id AND  pe.`date` <= v_endDate AND pe.isDeleted=0
                                 
                                 UNION ALL
                                 SELECT  ROUND(SUM(a.`summa_us`),2) as 'sum',
@@ -299,7 +300,7 @@ SQL;
                                 INNER JOIN client c ON c.id = a.client
                                 INNER JOIN app_status a_s ON a_s.id = at.status
                                 INNER JOIN app_trace apt ON apt.autotruck_id = at.id
-                                WHERE  c.`user_id` = p_user_id AND a_s.send_check = 1 AND apt.status_id = at.status AND at.isDeleted = 0 AND apt.`trace_date` <= v_endDate
+                                WHERE  c.`user_id` = p_user_id AND a_s.send_check = 1 AND apt.status_id = at.status AND a.isDeleted = 0 AND at.isDeleted = 0 AND apt.`trace_date` <= v_endDate
                             ) AS v;
                 
                 if(p_out_sum) then set return_sum = v_sum;
@@ -329,5 +330,4 @@ SQL;
 SQL;
         $this->execute($sql);
     }
-
 }

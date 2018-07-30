@@ -7,13 +7,14 @@ use yii\db\ActiveRecord;
 use yii\db\Expression;
 use yii\db\Query;
 
+use common\base\ActiveRecordVersionable;
 /**
 *
 *
 *
 */
 
-class Sender extends ActiveRecord
+class Sender extends ActiveRecordVersionable
 {
 
 
@@ -21,10 +22,20 @@ class Sender extends ActiveRecord
 		return [
             // name, email, subject and body are required
             [['name','phone'], 'required'],
-            ['email','email']
+            ['email','email'],
+            [['isDeleted'],'default','value'=>0],
         ];
 	}
 
+
+    public static function versionableAttributes(){
+        return [
+            'phone',
+            'email',
+            'name',
+            'isDeleted',
+        ];
+    }
 
 	/**
      * Returns the static model of the specified AR class.

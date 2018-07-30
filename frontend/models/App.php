@@ -13,13 +13,14 @@ use common\models\TypePackaging;
 use frontend\models\AppTrace;
 use yii\db\Query;
 
+use common\base\ActiveRecordVersionable;
 /**
 *
 *
 *
 */
 
-class App extends ActiveRecord
+class App extends ActiveRecordVersionable
 {
 
 
@@ -31,6 +32,25 @@ class App extends ActiveRecord
         ];
 	}
 
+
+    public static function versionableAttributes(){
+        return [
+            'client',
+            'weight',
+            'rate',
+            'summa_us',
+            'status',
+            'comment',
+            'info',
+            'autotruck_id',
+            'type',
+            'out_sock',
+            'sender',
+            'count_place',
+            'package',
+            'isDeleted'
+        ];
+    }
 
 	/**
      * Returns the static model of the specified AR class.
