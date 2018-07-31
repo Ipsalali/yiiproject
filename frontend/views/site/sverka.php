@@ -261,7 +261,7 @@ HTML;
 				</tr>
 
 
-				<?php $com=0; $cExpens = 0; foreach ($sverka as $key => $sv) { 
+				<?php  $com=0; $cExpens = 0; foreach ($sverka as $key => $sv) { 
 						if((int)$sv['type'] == 1){
 							$model = PaymentsExpenses::findOne($sv['id']);
 						}elseif((int)$sv['type'] == 2){
@@ -294,14 +294,14 @@ HTML;
 								    
 								    
 								    //Для старых записей у которых нет сум руб и сум без нла и нет курса
-								    if(!(int)$sv['course'] && isset($sv['sum_cach']) && !(int)$sv['sum_cach'] && $sv['sum_card'] && !(int)$sv['sum_card']){
+								    if(!(int)$sv['course'] && isset($sv['sum_cash']) && !(int)$sv['sum_cash'] && isset($sv['sum_card']) && !(int)$sv['sum_card']){
 								        
 								        echo "-".$sv['sum'];
 								        
+								    }elseif(!(int)$sv['toreport'] || !(int)$sv['course']){
+								   
+								        echo "-".$sv['sum'];
 								    }
-								   // if($sv['toreport'] == 1){
-								   //     echo "-".$sv['sum'];
-								    //}
 								    
 								}else{
 								    echo "+".$sv['sum'];

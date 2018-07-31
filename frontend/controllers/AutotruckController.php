@@ -864,6 +864,8 @@ class AutotruckController extends Controller{
 
 
     public function actionAppStory($id){
+        
+        
         if(Yii::$app->request->isAjax){
 
             if($id == NULL){
@@ -876,6 +878,7 @@ class AutotruckController extends Controller{
         }else{
             return $this->redirect(["autotruck/index"]);
         }
+        
     }
 
 

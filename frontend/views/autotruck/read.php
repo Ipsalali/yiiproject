@@ -255,7 +255,7 @@ $packages = TypePackaging::find()->all();
 													руб</td>
 													
 													<td><?php echo $app->comment?></td>
-													<td style="text-align: center;"><?php echo Html::a("Журнал",['autotruck/app-story','id'=>$app->id],['id'=>'btnAppStory'])?></td>
+													<td style="text-align: center;"><?php echo Html::a("Журнал",['autotruck/app-story','id'=>$app->id],['class'=>'btnAppStory'])?></td>
 												</tr>
 										<?php 
 											$cweight += $app->type ? 0 : $app->weight; 
@@ -395,7 +395,7 @@ JS;
 													         'buttons' =>
 													             [
 													                 'view' => function ($url, $model) {
-													                    return Html::a("Журнал",['autotruck/expenses-story','id'=>$model['id']],['id'=>'btnExpensesStory']); 
+													                    return Html::a("Журнал",['autotruck/expenses-story','id'=>$model['id']],['class'=>'btnExpensesStory']); 
 													                 },
 													             ]
 													        ],
@@ -422,12 +422,12 @@ JS;
 			});
 
 
-			$("#btnAppStory").click(function(event){
+			$(".btnAppStory").click(function(event){
 				event.preventDefault();
 				$("#modalJournalApp").modal('show').find(".modal-body").load($(this).attr('href'));
 			});
 
-			$("#btnExpensesStory").click(function(event){
+			$(".btnExpensesStory").click(function(event){
 				event.preventDefault();
 				$("#modalJournalExpenses").modal('show').find(".modal-body").load($(this).attr('href'));
 			});
