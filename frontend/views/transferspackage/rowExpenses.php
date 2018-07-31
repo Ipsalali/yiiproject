@@ -14,7 +14,20 @@ $class = "SellerExpenses[{$n}]";
 		<?php echo Html::dropDownList($class."[seller_id]",null,ArrayHelper::map($sellers,'id','name'),['prompt'=>'Выберите поставщика','class'=>'form-control']);?>
 	</td>
 	<td>
+		<?php
+			echo Html::dropDownList($class."[currency]",null,ArrayHelper::map(Currency::getCurrencies(),'id','title'),['prompt'=>'Выберите валюту','class'=>'form-control']);
+		?>
+	</td>
+	<td>
+		<?php
+			echo Html::textInput($class."[course]",null,['class'=>'form-control compute_sum']);
+		?>
+	</td>
+	<td>
 		<?php echo Html::textInput($class."[sum]",null,['class'=>'sum form-control']);?>
+	</td>
+	<td>
+		<?php echo Html::textInput($class."[sum_ru]",null,['class'=>'sum_ru form-control','readonly'=>1]);?>
 	</td>
 	<td>
 		<?php echo Html::textInput($class."[comment]",null,['class'=>'form-control']);?>

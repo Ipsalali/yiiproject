@@ -3,6 +3,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
 use yii\bootstrap\ActiveForm;
+use common\models\Currency;
 
 $this->title = isset($model->id)? "Перевод: ".$model->name : "Новый перевод";
 ?>
@@ -35,13 +36,6 @@ $this->title = isset($model->id)? "Перевод: ".$model->name : "Новый 
 						<?php echo $form->field($model,'date')->widget(\yii\jui\DatePicker::classname(),['language' => 'ru','dateFormat'=>'dd-MM-yyyy',"options"=>array("class"=>"form-control",)]); ?>
 					</div>
 					
-					<div class="col-xs-1">
-						<?php echo $form->field($model,'course')->textInput(array('class'=>'form-control compute_sum compute_course')); ?>
-					</div>
-
-					<div class="col-xs-2">
-						<?php echo $form->field($model,'currency')->dropDownList(ArrayHelper::map($model->getCurrencies(),'id','title'),['prompt'=>'Выберите валюту']);?>
-					</div>
 				</div>
 				<div class="row">
 					<?php 
@@ -99,7 +93,9 @@ $this->title = isset($model->id)? "Перевод: ".$model->name : "Новый 
                 							<th>#</th>
                 							<th>Клиент</th>
                 							<th>Наименование</th>
-                							<th>Сумма <span id="th_sum_span"><?php echo $model->currencyTitle; ?></span></th>
+                                            <th>Валюта</th>
+                                            <th>Курс</th>
+                							<th>Сумма</th>
                 							<th>Сумма руб</th>
                 							<th>Комментарий</th>
                 							<th></th>
@@ -136,6 +132,25 @@ $this->title = isset($model->id)? "Перевод: ".$model->name : "Новый 
                                                             		    echo is_array($e) && count($e) ? $e[0] : null;
                                                             		?>
                                                             	</td>
+
+
+                                                                <td>
+                                                                    <?php 
+                                                                        $e = array_key_exists('currency',$errors) ? $errors['currency'] : null;
+                                                                        echo Html::dropDownList($class."[currency]",$t['currency'],ArrayHelper::map(Currency::getCurrencies(),'id','title'),['prompt'=>'Выберите валюту','class'=>'form-control']);
+                                                                        echo is_array($e) && count($e) ? $e[0] : null;
+                                                                    ?>
+                                                                </td>
+
+
+                                                                <td>
+                                                                    <?php 
+                                                                        $e = array_key_exists('course',$errors) ? $errors['course'] : null;
+                                                                        echo Html::textInput($class."[course]",$t['course'],['class'=>'form-control compute_sum']);
+                                                                        echo is_array($e) && count($e) ? $e[0] : null;
+                                                                    ?>
+                                                                </td>
+
                                                             	<td>
                                                             		<?php 
                                                             		    $e = array_key_exists('sum',$errors) ? $errors['sum'] : null;
@@ -199,7 +214,10 @@ $this->title = isset($model->id)? "Перевод: ".$model->name : "Новый 
                 							<th>#</th>
                 							<th>Дата</th>
                 							<th>Поставщик</th>
-                							<th>Сумма <span class="th_sum_span"><?php echo $model->currencyTitle; ?></span></th>
+                                            <th>Валюта</th>
+                                            <th>Курс</th>
+                							<th>Сумма</th>
+                                            <th>Сумма Руб</th>
                 							<th>Комментарий</th>
                 							<th></th>
                 						</thead>
@@ -235,6 +253,22 @@ $this->title = isset($model->id)? "Перевод: ".$model->name : "Новый 
                                                             		    echo is_array($e) && count($e) ? $e[0] : null;
                                                             		?>
                                                             	</td>
+                                                                
+
+                                                                <td>
+                                                                    <?php 
+                                                                        $e = array_key_exists('currency',$errors) ? $errors['currency'] : null;
+                                                                        echo Html::dropDownList($class."[currency]",$ex['currency'],ArrayHelper::map(Currency::getCurrencies(),'id','title'),['prompt'=>'Выберите валюту','class'=>'form-control']);
+                                                                        echo is_array($e) && count($e) ? $e[0] : null;
+                                                                    ?>
+                                                                </td>
+                                                                <td>
+                                                                    <?php 
+                                                                        $e = array_key_exists('course',$errors) ? $errors['course'] : null;
+                                                                        echo Html::textInput($class."[course]",$ex['course'],['class'=>'form-control compute_sum']);
+                                                                        echo is_array($e) && count($e) ? $e[0] : null;
+                                                                    ?>
+                                                                </td>
                                                             	<td>
                                                             		<?php 
                                                             		    $e = array_key_exists('sum',$errors) ? $errors['sum'] : null;
@@ -242,6 +276,13 @@ $this->title = isset($model->id)? "Перевод: ".$model->name : "Новый 
                                                             		    echo is_array($e) && count($e) ? $e[0] : null;
                                                             		?>
                                                             	</td>
+                                                                <td>
+                                                                    <?php 
+                                                                        $e = array_key_exists('sum_ru',$errors) ? $errors['sum_ru'] : null;
+                                                                        echo Html::textInput($class."[sum_ru]",$ex['sum_ru'],['class'=>'sum_ru form-control','readonly'=>1]);
+                                                                        echo is_array($e) && count($e) ? $e[0] : null;
+                                                                    ?>
+                                                                </td>
                                                             	<td>
                                                             		<?php 
                                                             		    $e = array_key_exists('comment',$errors) ? $errors['comment'] : null;
@@ -284,16 +325,16 @@ $this->title = isset($model->id)? "Перевод: ".$model->name : "Новый 
 $script = <<<JS
 	
 	//Смена валюты
-	$("#transferspackage-currency").change(function(){
-		if($(this).val()){
-			var op = $(this).find("option[value="+$(this).val()+"]");
-			if(op.length){
-				$("#th_sum_span").html(op.html());
-			}else{
-				$("#th_sum_span").html("");
-			}
-		}
-	});
+	// $("#transferspackage-currency").change(function(){
+	// 	if($(this).val()){
+	// 		var op = $(this).find("option[value="+$(this).val()+"]");
+	// 		if(op.length){
+	// 			$("#th_sum_span").html(op.html());
+	// 		}else{
+	// 			$("#th_sum_span").html("");
+	// 		}
+	// 	}
+	// });
 
 
 	var send_getRowService = 0;
@@ -402,33 +443,34 @@ $script = <<<JS
 	
 	
 	//Расчет суммы руб при изменении курса
-	$("body").on("keyup","#transferspackage-course",function(){
+	$("body").on("keyup","input.compute_sum",function(){
 	    
 	    var course = parseFloat($(this).val()).toFixed(2);
-	    var tableSer = $("#services_table tbody tr");  
-	    if(tableSer.length){
-	        tableSer.each(function(){
-	            var s = $(this).find("input.sum");
-	            var sru = $(this).find("input.sum_ru");
-	            if(s.length && sru.length){
-	                var sum = parseFloat(s.val()).toFixed(2);
-	                sru.val(calcSumRu(course,sum));
-	            }
-	        })
+	    var tRow = $(this).parents("tr");  
+	    if(tRow.length){
+	       var s = $(tRow).find("input.sum");
+	       var sru = $(tRow).find("input.sum_ru");
+	       if(s.length && sru.length){
+	           var sum = parseFloat(s.val()).toFixed(2);
+	           sru.val(calcSumRu(course,sum));
+	       }
+	        
 	    }
 	});
 	
-	$("body").on("keyup","#services_table input.sum",function(){
+	$("body").on("keyup","input.sum",function(){
 	    
 	    var sum = parseFloat($(this).val()).toFixed(2);
-	    var course = parseFloat($("#transferspackage-course").val()).toFixed(2);  
-	    
-	    var sum_ru_input = $(this).parents("tr").find("input.sum_ru");
-	    if(sum_ru_input.length && sum && course){
-	        sum_ru_input.val(calcSumRu(course,sum));
-	    }
-	    
-	    
+        var tRow = $(this).parents("tr");
+
+        if(tRow.length){
+            var course = parseFloat(tRow.find("input.compute_sum").val()).toFixed(2);
+            var sum_ru_input = tRow.find("input.sum_ru");
+            if(sum_ru_input.length && sum && course){
+                sum_ru_input.val(calcSumRu(course,sum));
+            }
+        }
+	      
 	});
 
 JS;

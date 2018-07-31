@@ -29,7 +29,7 @@ class TransferspackageController extends Controller{
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['index', 'error','create','read','show-files','download','unlinkfile','change-status','story-status','get-row-service','get-row-expenses','delete','remove-transfer-ajax','remove-expenses-ajax'],
+                        'actions' => ['index', 'error','create','read','show-files','download','unlinkfile','change-status','story-status','get-row-service','get-row-expenses','delete','remove-transfer-ajax','remove-expenses-ajax','transfer-story','expenses-story'],
                         'allow' => true,
                         'roles' => ['transferspackage'],
                     ],
@@ -455,6 +455,47 @@ class TransferspackageController extends Controller{
 		$ans['html'] = $this->renderPartial("rowExpenses",['model'=>$model,'sellers'=>$sellers,'n'=>$n]);
 		return $ans;
 	}
+
+
+
+	public function actionTransferStory($id){
+        
+        
+        if(Yii::$app->request->isAjax){
+
+            if($id == NULL){
+                $model = null;
+            }else{
+                $model = Transfer::findOne((int)$id);
+            }
+            
+            return $this->renderAjax("storyTransfer",['model'=>$model]);
+        }else{
+            return $this->redirect(["transferspackage/index"]);
+        }
+        
+    }
+
+
+
+
+    public function actionExpensesStory($id){
+        
+        
+        if(Yii::$app->request->isAjax){
+
+            if($id == NULL){
+                $model = null;
+            }else{
+                $model = SellerExpenses::findOne((int)$id);
+            }
+            
+            return $this->renderAjax("storyExpenses",['model'=>$model]);
+        }else{
+            return $this->redirect(["transferspackage/index"]);
+        }
+        
+    }
 
 
 

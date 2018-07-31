@@ -4,6 +4,8 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\bootstrap\Modal;
 use yii\bootstrap\ActiveForm;
+use common\models\Currency;
+
 $this->title = $model->name;
 
 ?>
@@ -42,10 +44,7 @@ $this->title = $model->name;
 					<?php echo Html::a("Изменить статус",['transferspackage/change-status','id'=>$model->id],['id'=>'btnChangeStatus','class'=>'btn btn-success'])?>
 					<?php echo Html::a("История изменений статуса",['transferspackage/story-status','id'=>$model->id],['id'=>'btnStoryStatus','class'=>'btn btn-success'])?>
 				</div>
-				<div class="col-xs-3">
-					<p>Валюта: <?php echo Html::encode($model->currencyTitle)?></p>
-					<p>Курс: <?php echo Html::encode($model->course)?></p>
-				</div>
+				
 				<div class="col-xs-3">
 					<?php 
 						$files = explode("|", $model->files);
@@ -88,9 +87,12 @@ $this->title = $model->name;
                     	            <th>#</th>
                     	            <th>Клиент</th>
                     	            <th>Наименование</th>
-                    	            <th>Сумма <span><?php echo $model->currencyTitle?></span></th>
+                    	            <th>Валюта</th>
+                    	            <th>Курс</th>
+                    	            <th>Сумма</th>
                     	            <th>Сумма руб.</th>
                     	            <th>Комментарий</th>
+                    	            <th>Журнал</th>
                     	        </tr>
                     	        <?php 
                     	            $transfers = $model->transfers;
@@ -106,6 +108,12 @@ $this->title = $model->name;
                                             		<?php echo Html::encode($t->name);?>
                                             	</td>
                                             	<td>
+                                            		<?php echo Html::encode(Currency::getCurrencyTitle($t->currency));?>
+                                            	</td>
+                                            	<td>
+                                            		<?php echo Html::encode($t->course);?>
+                                            	</td>
+                                            	<td>
                                             		<?php echo Html::encode($t->sum);?>
                                             	</td>
                                             	<td>
@@ -113,6 +121,9 @@ $this->title = $model->name;
                                             	</td>
                                             	<td>
                                             		<?php echo Html::encode($t->comment);?>
+                                            	</td>
+                                            	<td style="text-align: center;">
+                                            		<?php echo Html::a("Журнал",['transferspackage/transfer-story','id'=>$t->id],['class'=>'btnTransferStory'])?>
                                             	</td>
                     	                    </tr>
                     	                    <?php
@@ -130,8 +141,12 @@ $this->title = $model->name;
                     	            <th>#</th>
                     	            <th>Дата</th>
                     	            <th>Поставщик</th>
-                    	            <th>Сумма <span><?php echo $model->currencyTitle?></span></th>
+                    	            <th>Валюта</th>
+                    	            <th>Курс</th>
+                    	            <th>Сумма</th>
+                    	            <th>Сумма Руб</th>
                     	            <th>Комментарий</th>
+                    	            <th>Журнал</th>
                     	        </tr>
                     	        <?php 
                     	            $expenses= $model->SellerExpenses;
@@ -147,10 +162,22 @@ $this->title = $model->name;
                                             		<?php echo Html::encode($t->seller_id? $t->seller->name : "не указан");?>
                                             	</td>
                                             	<td>
+                                            		<?php echo Html::encode(Currency::getCurrencyTitle($t->currency));?>
+                                            	</td>
+                                            	<td>
+                                            		<?php echo Html::encode($t->course);?>
+                                            	</td>
+                                            	<td>
                                             		<?php echo Html::encode($t->sum);?>
                                             	</td>
                                             	<td>
+                                            		<?php echo Html::encode($t->sum_ru);?>
+                                            	</td>
+                                            	<td>
                                             		<?php echo Html::encode($t->comment);?>
+                                            	</td>
+                                            	<td style="text-align: center;">
+                                            		<?php echo Html::a("Журнал",['transferspackage/expenses-story','id'=>$t->id],['class'=>'btnExpensesStory'])?>
                                             	</td>
                     	                    </tr>
                     	                    <?php
@@ -191,7 +218,16 @@ $script = <<<JS
 				$("#modalStoryStatus").modal('show').find(".modal-body").load($(this).attr('href'));
 			});
 
-			
+			$(".btnTransferStory").click(function(event){
+				event.preventDefault();
+				$("#modalTransferStory").modal('show').find(".modal-body").load($(this).attr('href'));
+			});
+
+			$(".btnExpensesStory").click(function(event){
+				event.preventDefault();
+				$("#modalExpensesStory").modal('show').find(".modal-body").load($(this).attr('href'));
+			});
+
 		});
 
 
@@ -219,6 +255,22 @@ $this->registerJs($script);
 		'header'=>"<h4>История статуса</h4>",
 		'id'=>'modalStoryStatus',
 		'size'=>'modal-lg'
+	]);
+	Modal::end();
+
+
+	Modal::begin([
+		'header'=>"<h4>Журнал услуги</h4>",
+		'id'=>'modalTransferStory',
+		'size'=>'modal-all'
+	]);
+	Modal::end();
+
+
+	Modal::begin([
+		'header'=>"<h4>Журнал расхода</h4>",
+		'id'=>'modalExpensesStory',
+		'size'=>'modal-all'
 	]);
 	Modal::end();
 ?>

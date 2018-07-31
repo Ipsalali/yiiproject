@@ -16,23 +16,13 @@ class TransfersPackage extends ActiveRecordVersionable
 
     public static $filesPath = "transfers/";
 
-
-    const C_DOLLAR = 1;
-    const C_EURO = 2;
-
-    const C_DOLLAR_SYMBOL = "$";
-    const C_EURO_SYMBOL = "€";
-
     const S_START = 1;
     const S_END = 2;
 
     const S_START_TITLE = "Отправлено";
     const S_END_TITLE = "Исполнено";
 
-    protected static $currencyCodeTitle = [
-        self::C_DOLLAR => self::C_DOLLAR_SYMBOL,
-        self::C_EURO => self::C_EURO_SYMBOL
-    ];
+    
 
     protected static $statusCodeTitle = [
         self::S_START => self::S_START_TITLE,
@@ -42,8 +32,6 @@ class TransfersPackage extends ActiveRecordVersionable
     public static function versionableAttributes(){
         return [
             'name',
-            'currency',
-            'course',
             'status',
             'status_date',
             'date',
@@ -65,13 +53,10 @@ class TransfersPackage extends ActiveRecordVersionable
 	public function rules(){
 		return [
             
-            [['name','currency','course','status','status_date','date'],"required"],
+            [['name','status','status_date','date'],"required"],
             
-            [['name','course','comment'],'filter','filter'=>function($v){ return trim(strip_tags($v));}],
+            [['name','comment'],'filter','filter'=>function($v){ return trim(strip_tags($v));}],
 
-            [['course'],'number'],
-
-            ['currency','in','range'=>[self::C_DOLLAR,self::C_EURO]],
             ['status','in','range'=>[self::S_START,self::S_END]],
 
             [['date','status_date'],'filter','filter'=>function($v){ 
@@ -85,8 +70,8 @@ class TransfersPackage extends ActiveRecordVersionable
 
             ['isDeleted','default','value'=>0],
 
-            [['files'], 'file', 'skipOnEmpty' => true,'checkExtensionByMimeType'=>false, 'extensions' => 'xls,xlsx,doc,docx,pdf,jpeg,jpg,png','maxFiles'=>20],
-            ['files','default','value'=>null]
+            [['files'], 'file', 'skipOnEmpty' => true,'checkExtensionByMimeType'=>false, 'extensions' => 'xls,xlsx,doc,docx,pdf,jpeg,jpg,png,rtf','maxFiles'=>20],
+            [['files'],'default','value'=>null]
         ];
 	}
 
@@ -125,8 +110,6 @@ class TransfersPackage extends ActiveRecordVersionable
     	return array(
     		'id'=>'Id',
     		'name'=>'Название',
-            'currency'=>'Валюта',
-            'course'=>'Курс',
     	    'status'=>'Статус',
             'status_date'=>'Время действий',
             'date'=>'Дата',
@@ -148,15 +131,7 @@ class TransfersPackage extends ActiveRecordVersionable
     }
 
 
-    public function getCurrencyTitle($code = null){
-
-        $code = !$code ? $this->currency : $code;
-        if(array_key_exists($code, self::$currencyCodeTitle)){
-            return self::$currencyCodeTitle[$code];
-        }else{
-            return null;
-        }
-    }
+    
 
 
 
@@ -175,18 +150,7 @@ class TransfersPackage extends ActiveRecordVersionable
 
 
 
-    public function getCurrencies(){
-        return [
-            [
-                'id'=>self::C_DOLLAR,
-                'title'=>self::C_DOLLAR_SYMBOL,
-            ],
-            [
-                'id'=>self::C_EURO,
-                'title'=>self::C_EURO_SYMBOL,
-            ],
-        ];
-    }
+    
 
 
 

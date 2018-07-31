@@ -3,6 +3,7 @@ use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 use kartik\date\DatePicker;
+use common\models\Currency;
 
 $this->title = "Переводы";
 ?>
@@ -79,21 +80,8 @@ HTML;
                         "format"=>"html",
                         "filter"=>Html::activeDropDownList($modelFilters,'status',ArrayHelper::map($modelFilters->getStatuses(),'id','title'),['class'=>'form-control','prompt'=>'Выберите статус'])
                     ],
-                    [
-                        'attribute'=>"currency",
-                        "value"=>function($c){
-                            return $c->currencyTitle;
-                        },
-                        "format"=>"html",
-                        "filter"=>Html::activeDropDownList($modelFilters,'currency',ArrayHelper::map($modelFilters->getCurrencies(),'id','title'),['class'=>'form-control','prompt'=>'Выберите валюту'])
-                    ],
-                    [
-                        'attribute'=>"course",
-                        "value"=>function($c){
-                            return $c->course;
-                        },
-                        "format"=>"html"
-                    ],
+                    
+                    
                     [
                         'attribute'=>"comment",
                         "value"=>function($c){
