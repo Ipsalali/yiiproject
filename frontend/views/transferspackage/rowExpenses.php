@@ -1,6 +1,7 @@
 <?php
 use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
+use common\models\Currency;
 
 $class = "SellerExpenses[{$n}]";
 ?>

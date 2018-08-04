@@ -97,37 +97,54 @@ $this->title = $model->name;
                     	        <?php 
                     	            $transfers = $model->transfers;
                     	            if(is_array($transfers)){
+                    	            	$comSumUs = $comSumEu = $comSumRu = 0;
                     	                foreach ($transfers as $k=>$t) {
+                    	                	
+                    	                	$comSumUs += $t['currency'] == Currency::C_DOLLAR ? $t['sum'] : 0;
+                    	                	$comSumEu += $t['currency'] == Currency::C_EURO ? $t['sum'] : 0;
+                    	                	$comSumRu += $t['sum_ru'];
                     	                    ?>
                     	                    <tr>
                         	                    <td><?php echo Html::encode($k+1);?></td>
                                             	<td>
-                                            		<?php echo Html::encode($t->client_id ? $t->client->name : "не указан");?>
+                                            		<?php echo Html::encode($t['client_id'] ? $t->client->name : "не указан");?>
                                             	</td>
                                             	<td>
-                                            		<?php echo Html::encode($t->name);?>
+                                            		<?php echo Html::encode($t['name']);?>
                                             	</td>
                                             	<td>
-                                            		<?php echo Html::encode(Currency::getCurrencyTitle($t->currency));?>
+                                            		<?php echo Html::encode(Currency::getCurrencyTitle($t['currency']));?>
                                             	</td>
                                             	<td>
-                                            		<?php echo Html::encode($t->course);?>
+                                            		<?php echo Html::encode($t['course']);?>
                                             	</td>
                                             	<td>
-                                            		<?php echo Html::encode($t->sum);?>
+                                            		<?php echo Html::encode($t['sum']);?>
                                             	</td>
                                             	<td>
-                                            		<?php echo Html::encode($t->sum_ru);?>
+                                            		<?php echo Html::encode($t['sum_ru']);?>
                                             	</td>
                                             	<td>
-                                            		<?php echo Html::encode($t->comment);?>
+                                            		<?php echo Html::encode($t['comment']);?>
                                             	</td>
                                             	<td style="text-align: center;">
-                                            		<?php echo Html::a("Журнал",['transferspackage/transfer-story','id'=>$t->id],['class'=>'btnTransferStory'])?>
+                                            		<?php echo Html::a("Журнал",['transferspackage/transfer-story','id'=>$t['id']],['class'=>'btnTransferStory'])?>
                                             	</td>
                     	                    </tr>
                     	                    <?php
                     	                }
+                    	                ?>
+
+                    	                <tr style="font-weight: bold;">
+                    	                	<td colspan="5">Итого</td>
+                    	                	<td><?php 
+                    	                			echo $comSumUs." ".Currency::getCurrencyTitle(Currency::C_DOLLAR)." - ",$comSumEu." ".Currency::getCurrencyTitle(Currency::C_EURO);
+                    	                		?>
+                    	                	</td>
+                    	                	<td><?php echo $comSumRu;?></td>
+                    	                	<td colspan="2"></td>
+                    	                </tr>
+                    	                <?php
                     	            }
                     	        
                     	        ?>
@@ -151,7 +168,12 @@ $this->title = $model->name;
                     	        <?php 
                     	            $expenses= $model->SellerExpenses;
                     	            if(is_array($expenses)){
+                    	            	$comSumUs = $comSumEu = $comSumRu = 0;
                     	                foreach ($expenses as $k=>$t) {
+                    	                		$comSumUs += $t['currency'] == Currency::C_DOLLAR ? $t['sum'] : 0;
+                    	                		$comSumEu += $t['currency'] == Currency::C_EURO ? $t['sum'] : 0;
+                    	                		$comSumRu += $t['sum_ru'];
+
                     	                    ?>
                     	                    <tr>
                         	                    <td><?php echo Html::encode($k+1);?></td>
@@ -182,6 +204,18 @@ $this->title = $model->name;
                     	                    </tr>
                     	                    <?php
                     	                }
+                    	                ?>
+
+                    	                <tr style="font-weight: bold;">
+                    	                	<td colspan="5">Итого</td>
+                    	                	<td><?php 
+                    	                			echo $comSumUs." ".Currency::getCurrencyTitle(Currency::C_DOLLAR)." - ",$comSumEu." ".Currency::getCurrencyTitle(Currency::C_EURO);
+                    	                		?>
+                    	                	</td>
+                    	                	<td><?php echo $comSumRu;?></td>
+                    	                	<td colspan="2"></td>
+                    	                </tr>
+                    	                <?php
                     	            }
                     	        
                     	        ?>
