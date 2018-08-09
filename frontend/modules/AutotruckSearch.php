@@ -53,7 +53,7 @@ class AutotruckSearch extends Autotruck
         // Создаём запрос на получение продуктов вместе категориями
         $query = Autotruck::find()->where(["in",'country',$u_countries]);
 
-        $query->where(['isDeleted'=>0]);
+        $query->andWhere(['isDeleted'=>0]);
         
         $query->orderBy(['date' => SORT_DESC]);
         /**
@@ -91,7 +91,7 @@ class AutotruckSearch extends Autotruck
                 
                 
                 //Если не существуют наименования без клиентов в заявке
-                $query->where("NOT EXISTS (SELECT a.id FROM app a WHERE a.autotruck_id = autotruck.id AND a.client = 0)");
+                $query->andWhere("NOT EXISTS (SELECT a.id FROM app a WHERE a.autotruck_id = autotruck.id AND a.client = 0)");
                 $query->andFilterWhere(["id"=>$subquery]);
 
             }elseif(PaymentStateFilter::getEndState()->id == $this->implements_state){
@@ -101,17 +101,17 @@ class AutotruckSearch extends Autotruck
               
                
                //Если не существуют наименования без клиентов в заявке
-               $query->where("NOT EXISTS (SELECT a.id FROM app a WHERE a.autotruck_id = autotruck.id AND a.client = 0)");
+               $query->andWhere("NOT EXISTS (SELECT a.id FROM app a WHERE a.autotruck_id = autotruck.id AND a.client = 0)");
 
                 $query->andFilterWhere(["id"=>$subquery]);
             }elseif($this->implements_state == PaymentStateFilter::STATE_NONE){
                 
                 //Если существуют наименования без клиентов в заявке(т.е нереализованные)
-                $query->where("EXISTS (SELECT a.id FROM app a WHERE a.autotruck_id = autotruck.id AND a.client =0)");
+                $query->andWhere("EXISTS (SELECT a.id FROM app a WHERE a.autotruck_id = autotruck.id AND a.client =0)");
             }elseif($this->implements_state == PaymentStateFilter::STATE_STOCK){
                 
                 //Если существуют наименования без клиентов в заявке(т.е нереализованные)
-                $query->where("EXISTS (SELECT a.id FROM app a WHERE a.autotruck_id = autotruck.id AND a.out_stock=0)");
+                $query->andWhere("EXISTS (SELECT a.id FROM app a WHERE a.autotruck_id = autotruck.id AND a.out_stock=0)");
                 $this->status = 3;
             }
 
@@ -158,7 +158,7 @@ class AutotruckSearch extends Autotruck
             $sql = "SELECT SUM(aw.weight) as common_weight  FROM app aw
                 WHERE aw.autotruck_id = autotruck.id AND aw.type = '0'";
 
-            $query->where("({$sql}) LIKE '{$this->common_weight}%'");
+            $query->andWhere("({$sql}) LIKE '{$this->common_weight}%'");
         }
         
         

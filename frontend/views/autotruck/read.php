@@ -243,16 +243,15 @@ $packages = TypePackaging::find()->all();
 													<td><?php echo $app->rate?></td>
 													<td><?php echo $app->summa_us; ?> $</td>
 													<td>
+														<?php 
+															$rate_vl = $app->weight > 0 ? $app->summa_us/$app->weight : 0;
+															$sum_ru = $app->weight * $rate_vl * $autotruck->course;
 
+															echo $app->type ? round($app->rate*$autotruck->course,2) : round($sum_ru,2);
+														?> 
 
-													<?php //echo $app->type ? round($app->rate*$autotruck->course,2) : round($app->weight*$app->rate*$autotruck->course,2)
-														$rate_vl = $app->weight > 0 ? $app->summa_us/$app->weight : 0;
-														$sum_ru = $app->weight * $rate_vl * $autotruck->course;
-
-														echo $app->type ? round($app->rate*$autotruck->course,2) : round($sum_ru,2);
-													?> 
-
-													руб</td>
+														руб
+													</td>
 													
 													<td><?php echo $app->comment?></td>
 													<td style="text-align: center;"><?php echo Html::a("Журнал",['autotruck/app-story','id'=>$app->id],['class'=>'btnAppStory'])?></td>

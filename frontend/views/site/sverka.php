@@ -21,7 +21,6 @@ $this->title = "Сверка";
 
 $totalSverka = $manager->getManagerSverka(true,isset($data_params['date_to']) ? $data_params['date_to'] : null);
 
-//$totalSverka = $manager->getSverka();
 
 if($totalSverka['sum'] > 0){
 	$average_course = round($totalSverka['sum_cash']/$totalSverka['sum'],2);
@@ -182,11 +181,6 @@ HTML;
     					
     				})
     			</script>
-    			<?php 
-    			
-    				//echo Html::dropDownList("manager",$manager->id,ArrayHelper::map($expensesPeople,'id',['name','email'],null,' - '),['class'=>'	form-control','prompt'=>'Выберите поставщика']);
-    			
-    			?>
     		</div>
 		<?php }else{
 		    ?>
@@ -199,6 +193,16 @@ HTML;
 		</div>
 		<?php Activeform::end(); ?>
 	</div>
+
+	<div class="tabs"  style="margin-top: 50px;">
+		<ul class="nav nav-tabs">
+  			<li class="active"><a data-toggle="tab" href="#sverka_app">Доставки</a></li>
+  			<li><a data-toggle="tab" href="#sverka_transfer">Переводы</a></li>
+		</ul>
+	</div>
+
+<div class="tab-content">
+	<div id="sverka_app" class="tab-pane fade in active">
 	<?php if(count($sverka)){ ?>
 	<div class="row">
 		<div class="col-xs-12">
@@ -206,7 +210,7 @@ HTML;
 			<?php if(!Yii::$app->user->identity->isSeller(true) && !Yii::$app->user->can("sverka_seer") && !Yii::$app->user->can("client")){?>
 			Расходы 
 				<?php if($manager->name) {
-					 echo $manager->name;
+					echo $manager->name;
 				}else{
 					$cl = $manager->client;
 					if(isset($cl->id)){
@@ -214,7 +218,6 @@ HTML;
 					}else{
 						echo $manager->username;
 					}
-					
 				}
 				?> от <?php echo date("d.m.y",strtotime($data_params['date_from']))?> по <?php echo date("d.m.y",strtotime($data_params['date_to']))?>
 			    
@@ -462,6 +465,10 @@ HTML;
     		<?php } ?>
 	    </div>
 	<?php } ?>
+</div>
+<div id="sverka_transfer" class="tab-pane fade in">
+</div>
+</div>
 </div>
 
 <?php if(count($sverka) && $manager->id){?>
