@@ -467,6 +467,9 @@ HTML;
 	<?php } ?>
 </div>
 <div id="sverka_transfer" class="tab-pane fade in">
+	<?php 
+		echo $this->render("sverka_transfer",[]);
+	?>
 </div>
 </div>
 </div>
