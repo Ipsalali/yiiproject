@@ -12,25 +12,8 @@ use frontend\models\ExpensesManager;
 use yii\helpers\StringHelper;
 use common\models\Organisation;
 
-$orgs = Organisation::find()->all();
-
-$expensesPeople = User::getExpensesManagers();
-
 $this->title = "Сверка";
 
-
-$totalSverka = $manager->getManagerSverka(true,isset($data_params['date_to']) ? $data_params['date_to'] : null);
-
-
-if($totalSverka['sum'] > 0){
-	$average_course = round($totalSverka['sum_cash']/$totalSverka['sum'],2);
-}else{
-	$average_course = null;
-}
-
-
-$client = $manager->client;
-$card_percent = isset($client->id) ? $client->payment_clearing : 0;
 ?>
 
 <div>
@@ -43,7 +26,7 @@ $card_percent = isset($client->id) ? $client->payment_clearing : 0;
 		</div>
 	</div>
 	<div class="row">
-		<?php $form = ActiveForm::begin(['id'=>'sverka','action'=>["site/sverka"],'method'=>'GET']); ?>
+		<?php $form = ActiveForm::begin(['id'=>'sverka','action'=>["sverka/index"],'method'=>'GET']); ?>
 		<div class="col-xs-4">
 
 			<?php
@@ -123,7 +106,7 @@ HTML;
 
     						if(val.length < 2) return;
 
-    						var action = "<?php echo Url::to(['site/expenses-people-by-key'])?>";
+    						var action = "<?php echo Url::to(['sverka/expenses-people-by-key'])?>";
 
     						$.ajax({
     							url:action,
@@ -244,7 +227,7 @@ HTML;
 	<?php } ?>
 	<div class="row">
 		<div class="col-xs-12">
-		<?php $form = ActiveForm::begin(['id'=>'addPaymentsManager','action'=>["site/addpaymentsmanager"]])?>
+		<?php $form = ActiveForm::begin(['id'=>'addPaymentsManager','action'=>["sverka/addpaymentsmanager"]])?>
 			
 			<table class="table table-bordered table-hover" style="text-align: center;" id="table_pay">
 				<tr>
@@ -405,7 +388,7 @@ HTML;
 						<td>
 							<?php 
 								if((int)$sv['type'] != 2){
-									$action = ($sv['type']) ? "site/removepayajax":"autotruck/removeexpajax";
+									$action = ($sv['type']) ? "sverka/removepayajax":"autotruck/removeexpajax";
 							?>
 								<a class="btn btn-primary sverka_update_btn" data-state="0" data-id="<?php echo $sv['id']?>" data-model="<?php echo StringHelper::basename(get_class($model));?>"><i class="glyphicon glyphicon-pencil"></i></a>
 							    <?php if(!Yii::$app->user->can("client")){?>
@@ -468,7 +451,14 @@ HTML;
 </div>
 <div id="sverka_transfer" class="tab-pane fade in">
 	<?php 
-		echo $this->render("sverka_transfer",[]);
+		echo $this->render("sverka_transfer",[
+			"manager"=>$manager,
+			'orgs'=>$orgs,
+			"sellers"=>$sellers,
+            "data_params"=>$data_params,
+            'client'=>$client,
+			'sverka'=>$clientSverkaByTransfer
+		]);
 	?>
 </div>
 </div>
@@ -704,7 +694,7 @@ HTML;
 			var formData = form.serialize();
 			if(valid){
 				$.ajax({
-					url:"index.php?r=site%2Faddpaymentsmanager",
+					url:"index.php?r=sverka%2Faddpaymentsmanager",
 					type:"POST",
 					data:formData,
 					dateType:'json',

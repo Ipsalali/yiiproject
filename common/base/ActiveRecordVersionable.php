@@ -217,7 +217,7 @@ class ActiveRecordVersionable extends ActiveRecord implements Versionable{
                 $defA['version'] = $this->lastVersionNumber + 1;
 	    		if($version = $this->saveHistory($defA)){
 	    			//сохранить его в текущем объекте
-	    			$this->setCurrentVersion($version['id'] ? $version['id'] : null);
+	    			$this->setCurrentVersion($version);
 	    		}
 	    	}
     		return true;
@@ -238,7 +238,7 @@ class ActiveRecordVersionable extends ActiveRecord implements Versionable{
 	    		if($saveVersion){
 		    		if($version = $this->saveHistory()){
 		    			//сохранить его в текущем объекте
-		    			$this->setCurrentVersion($version['id'] ? $version['id'] : null);
+		    			$this->setCurrentVersion($version);
 		    		}
 		    	}
 	    		return true;
@@ -266,9 +266,9 @@ class ActiveRecordVersionable extends ActiveRecord implements Versionable{
 
     	if($params && count($params)){
     		\Yii::$app->db->createCommand()->insert(self::resourceTableName(),$params)->execute();
-
+            $version_id = \Yii::$app->db->getLastInsertID();
     		$this->afterSaveHistory();
-    		return	(new Query)->from(self::resourceTableName())->where($params)->one();
+    		return	$version_id;
     	}
 
     	$this->afterSaveHistory();
