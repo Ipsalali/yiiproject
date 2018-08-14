@@ -23,7 +23,7 @@ $canSaveClientPaymentTransfer = Yii::$app->user->can("sverka/save-client-payment
 
 ?>
 
-<div class="row">
+<div class="row" style="margin-top:20px;">
 	<div class="col-xs-2">
 		<?php
 		    if(Yii::$app->user->can("sverka/save-client-payment-transfer")){
