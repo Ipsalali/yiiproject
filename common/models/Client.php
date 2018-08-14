@@ -14,7 +14,9 @@ use yii\db\Query;
 use yii\db\Command;
 use common\models\PaymentState;
 use common\models\ClientOrganisation;
-
+use common\models\Transfer;
+use common\models\TransferPackage;
+use common\models\PaymentClientByTransfer;
 
 
 use common\base\ActiveRecordVersionable;
@@ -460,5 +462,126 @@ class Client extends ActiveRecordVersionable
                 ->where([static::resourceKey()=>$this->id])
                 ->orderBy(["rs.id"=>SORT_DESC])
                 ->all();
+    }
+
+
+
+
+
+
+
+    public function addTransferPayments($paymentsTransfer){
+        if(!is_array($paymentsTransfer) || !count($paymentsTransfer))
+            return false;
+
+
+        $errors = array();
+        foreach ($paymentsTransfer as $p) {
+            
+            if(isset($p['id'])){
+                $model = PaymentClientByTransfer::findOne($p['id']);
+
+                $model = isset($model->id) ? $model : new PaymentClientByTransfer();
+            }else{
+                $model = new PaymentClientByTransfer();
+            }
+
+
+            $p['client_id'] = $this->id;
+            $contractor = $p['contractor'];
+            if(strripos($contractor,"organisation#") !== false){
+                $p['contractor_org'] = (int)str_replace("organisation#", "", $contractor);
+            }elseif(strripos($contractor,"seller#") !== false){
+                $p['contractor_seller'] = (int)str_replace("seller#", "", $contractor);
+            }
+
+            $data = array();
+            $data['PaymentClientByTransfer'] = $p;
+            if(!($model->load($data) && $model->validate() && $model->save(1))){
+                array_push($errors, $model);
+            }
+        }
+
+        return !count($errors);
+
+    }
+
+
+
+    public function getSverkaByTransfer($start,$end){
+        if(!$start || !$end) return null;
+
+        $start = date("Y.m.d\TH:i:s",strtotime($start));
+        $end = date("Y.m.d\TH:i:s",strtotime($end));
+
+        $TransferTable = Transfer::tableName();
+        $statusEnd = TransfersPackage::S_END;
+        $clientTable = Client::tableName();
+        $TransferPackageTable = TransfersPackage::tableName();
+        $TransferPackageResourseTable = TransfersPackage::resourceTableName();
+        $PaymentClientByTransferTable = PaymentClientByTransfer::tableName();
+        $client_id = $this->id;
+        $sql = <<<SQL
+
+            SELECT 
+                tp.id,
+                t.client_id as 'manager_id',
+                tp.status_date as 'date',
+                t.currency as 'currency',
+                t.course,
+                Round(SUM(t.`sum`),2) as 'sum',
+                Round(SUM(t.`sum_ru`),2) as 'sum_ru',
+                truncate(SUM(t.`sum`) * t.course + (SUM(t.`sum`) * t.course*c.payment_clearing/100),2) as sum_card,
+                "" as contractor_org,
+                "" as contractor_seller,
+                t.comment,
+                0 as type
+            FROM {$TransferTable} AS t
+            INNER JOIN {$TransferPackageTable} AS tp ON tp.id = t.package_id
+            INNER JOIN {$clientTable} AS c ON c.id = t.client_id
+            WHERE tp.isDeleted=0 AND tp.status = {$statusEnd}
+                  AND t.isDeleted = 0 AND t.client_id = $client_id
+                  AND '{$start}'<= tp.status_date  AND   tp.status_date <= '{$end}'
+            GROUP BY `currency`,`id`
+
+            UNION ALL 
+
+            SELECT 
+                pcl.id,
+                pcl.client_id as 'manager_id', 
+                pcl.date,
+                pcl.currency,
+                pcl.course,
+                Round(pcl.sum,2) as 'sum',
+                Round(pcl.sum_ru,2) as 'sum_ru',
+                0 as sum_card,
+                contractor_org,
+                contractor_seller,
+                pcl.comment,
+                1 as type
+            FROM $PaymentClientByTransferTable as pcl
+            WHERE '{$start}'<= pcl.date  AND   pcl.date <='{$end}' AND pcl.client_id = $client_id AND pcl.isDeleted=0
+
+
+            
+            ORDER BY `date`,`id` ASC
+
+SQL;
+        $connection = Yii::$app->getDb();
+        $command = $connection->createCommand($sql);
+
+        $report = $command->queryAll();
+
+        
+        $sverka = array();
+        foreach ($report as $r) {
+            if($r['type'] == 0){
+                $sverka['transfer#'.$r['id']][] = $r;
+            }else{
+                $sverka['pay#'.$r['id']] = $r;
+            }
+        }
+
+        return $sverka;
     }
 }

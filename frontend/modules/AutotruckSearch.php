@@ -55,9 +55,7 @@ class AutotruckSearch extends Autotruck
         $u_countries = \yii\helpers\ArrayHelper::map($user->accessCountry,'country_id','country_id');
         // Создаём запрос на получение продуктов вместе категориями
         $query = Autotruck::find()->where(["in",'country',$u_countries]);
-        
-        
-        
+
         $query->andWhere(['isDeleted'=>0]);
         
         $query->orderBy(['date' => SORT_DESC]);

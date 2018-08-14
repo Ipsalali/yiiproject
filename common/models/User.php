@@ -456,6 +456,18 @@ class User extends ActiveRecordVersionable implements IdentityInterface, UserRba
 
     }
 
+
+    public function getTransferPaymentsAndExpenses($start,$end){
+        if(!$start || !$end) return null;
+
+        $start = date("Y.m.d H:i:s",strtotime($start));
+        $end = date("Y.m.d H:i:s",strtotime($end));
+    }
+
+
+
+
+
     public function getPaymentsAndExpenses($start,$end){
         if(!$start || !$end) return null;
 
@@ -536,6 +548,13 @@ class User extends ActiveRecordVersionable implements IdentityInterface, UserRba
     }
 
 
+
+
+
+
+
+
+
     public function getManagerSverka($withCourse = false,$endDate = null){
         
         if(!$this->id) return false;
@@ -543,6 +562,12 @@ class User extends ActiveRecordVersionable implements IdentityInterface, UserRba
         return self::calchUserSverka($this->id,$withCourse,$endDate);
         
     }
+
+
+
+
+
+
 
 
     public static function calchUserSverka($user_id,$withCourse = false,$endDate = null){
@@ -559,15 +584,24 @@ class User extends ActiveRecordVersionable implements IdentityInterface, UserRba
 
 
 
+
+
+
+
+
     public function refreshSverka(){
 
         if(!$this->id) return false;
 
-
         return self::refreshUserSverka($this->id);
-
-
     }
+
+
+
+
+
+
+
 
     public static function refreshUserSverka($user_id){
 
@@ -597,11 +631,21 @@ class User extends ActiveRecordVersionable implements IdentityInterface, UserRba
 
 
 
+
+
+
+
+
+
+
+
     public function getSverka(){
         $sql = "SELECT `sum`,`sum_cash`,`sum_card`,`updated_at` FROM `user_sverka` WHERE `user_id`={$this->id}";
 
         return Yii::$app->db->createCommand($sql)->queryOne();
     }
+
+
 
 
 

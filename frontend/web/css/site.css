@@ -956,3 +956,7 @@ table th.app_package{
 .modal-dialog.modal-all{
     width: 100%;
 }
+
+.inputNotValid{
+    border: 1px solid #f00;
+}

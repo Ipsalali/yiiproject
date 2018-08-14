@@ -364,8 +364,8 @@ class SiteController extends Controller
             
             $manager = User::findOne($data_params['manager']);
             
-            $expenses = $manager->getExpenses($data_params['date_from'],$data_params['date_to']);
-            $payments = $manager->getPayments($data_params['date_from'],$data_params['date_to']);
+            //$expenses = $manager->getExpenses($data_params['date_from'],$data_params['date_to']);
+            //$payments = $manager->getPayments($data_params['date_from'],$data_params['date_to']);
             
             $sverka = $manager->getPaymentsAndExpenses($data_params['date_from'],$data_params['date_to']);
 
@@ -373,7 +373,13 @@ class SiteController extends Controller
             $data_params['date_from'] = date("d.m.Y",time() - (86400 * 61));
             $data_params['date_to'] = date("d.m.Y",time());
         }
-        return $this->render('sverka', ["sverka"=>$sverka,"manager"=>$manager,"expenses"=>$expenses,"data_params"=>$data_params,'payments'=>$payments]);
+        return $this->render('sverka', [
+            "sverka"=>$sverka,
+            "manager"=>$manager,
+            "data_params"=>$data_params,
+            //"payments"=>$payments,
+            //"expenses"=>$expenses,
+        ]);
     }
 
 
