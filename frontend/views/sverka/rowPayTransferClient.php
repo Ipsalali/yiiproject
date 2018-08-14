@@ -17,9 +17,9 @@ $contractors = PaymentClientByTransfer::getContractors();
 	</td>
 	<td><?php echo Html::input("date","pay[{$n}][date]",date("Y-m-d",isset($model->id) ? strtotime($model->date) : time()));?></td>
 	<td><?php echo Html::dropDownList("pay[{$n}][currency]",$model->currency,ArrayHelper::map(Currency::getCurrencies(),"id","title"),['prompt'=>"Выберите валюту"]);?></td>
-	<td><?php echo Html::input("number","pay[{$n}][course]",$model->course);?></td>
-	<td><?php echo Html::input("number","pay[{$n}][sum]",$model->sum,['class'=>'req']);?></td>
-	<td><?php echo Html::input("number","pay[{$n}][sum_ru]",$model->sum_ru,['class'=>'req']);?></td>
+	<td><?php echo Html::input("number","pay[{$n}][course]",$model->course,['class'=>"pt_course_input"]);?></td>
+	<td><?php echo Html::input("number","pay[{$n}][sum]",$model->sum,['class'=>'req pt_sum_input']);?></td>
+	<td><?php echo Html::input("number","pay[{$n}][sum_ru]",$model->sum_ru,['class'=>'req pt_sum_ru_input']);?></td>
 	<td><?php echo Html::dropDownList("pay[{$n}][contractor]",$model->contractor_org,$contractors,['prompt'=>"Выберите контрагента"]);?></td>
 	<td><?php echo Html::input("text","pay[{$n}][comment]",$model->comment);?></td>
 	<td>

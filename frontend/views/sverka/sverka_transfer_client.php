@@ -6,6 +6,9 @@ use yii\helpers\Url;
 use common\models\Currency;
 
 $client_id = isset($client->id) ? $client->id : 0;
+if(!$client_id) return false;
+//Выход из скрипта, если выбран не клиент
+
 $contragents = array();
 
 foreach ($orgs as $o) {
@@ -16,8 +19,7 @@ foreach ($sellers as $s) {
 	$contragents['seller#'.$s['id']] = $s['name'];
 }
 
-if(!$client_id) return false;
-//Выход из скрипта, если выбран не клиент
+
 ?>
 
 <div class="row">
@@ -47,6 +49,9 @@ if(!$client_id) return false;
 					<?php
 					if(isset($sverka) && count($sverka)){
 						$i = 0;
+						$total_ru=0;
+						$total_us=0;
+						$total_eu=0;
 						foreach ($sverka as $key => $row) {
 
 							$rData = isset($row[0]) ? $row[0] : $row;
@@ -59,8 +64,29 @@ if(!$client_id) return false;
 								<td rowspan="<?php echo $rowspan ?>"><?php echo Html::encode($rData['date'])?></td>
 								<td><?php echo Currency::getCurrencyTitle($rData['currency'])?></td>
 								<td><?php echo Html::encode($rData['course'])?></td>
-								<td><?php echo Html::encode($rData['sum'])?></td>
-								<td><?php echo Html::encode($rData['sum_ru'])?></td>
+								<td>
+									<?php 
+										if($isPay && $rData['sum']){
+											echo "-".Html::encode($rData['sum']);
+											$rData['currency'] == Currency::C_DOLLAR ? $total_us -=$rData['sum'] :$total_eu -=$rData['sum'] ;
+										}elseif($rData['sum']){
+											echo "+".Html::encode($rData['sum']);
+											$rData['currency'] == Currency::C_DOLLAR ? $total_us +=$rData['sum'] :$total_eu +=$rData['sum'] ;
+										}
+										
+									?>
+								</td>
+								<td>
+									<?php 
+										if($isPay && $rData['sum_ru']){
+											echo "-".Html::encode($rData['sum_ru']);
+											$total_ru -=$rData['sum_ru'];
+										}elseif($rData['sum_ru']){
+											$total_ru +=$rData['sum_ru'];
+											echo "+".Html::encode($rData['sum_ru']);
+										}
+									?>
+								</td>
 								<td>
 								<?php 
 									if((int)$rData['contractor_org'] > 0 && array_key_exists("organisation#".(int)$rData['contractor_org'], $contragents)){
@@ -89,8 +115,22 @@ if(!$client_id) return false;
 								<tr class="<?php echo $class?>">
 									<td><?php echo Currency::getCurrencyTitle($rData['currency'])?></td>
 									<td><?php echo Html::encode($rData['course'])?></td>
-									<td><?php echo Html::encode($rData['sum'])?></td>
-									<td><?php echo Html::encode($rData['sum_ru'])?></td>
+									<td>
+										<?php 
+											if($rData['sum']){
+												echo "+".Html::encode($rData['sum']);
+												$rData['currency'] == Currency::C_DOLLAR ? $total_us +=$rData['sum'] : $total_eu +=$rData['sum'] ;
+											}
+										?>
+									</td>
+									<td>
+										<?php 
+											if($rData['sum_ru']){
+												echo "+".Html::encode($rData['sum_ru']);
+												$total_ru +=$rData['sum_ru'];
+											}
+										?>
+									</td>
 									<td><?php echo ""; ?></td>
 									<td><?php echo Html::encode($rData['comment'])?></td>
 									<td></td>
@@ -102,6 +142,21 @@ if(!$client_id) return false;
 						}
 					}
 					?>
+					<tr>
+						<th colspan="4">Итого:</th>
+						<th>
+							<?php
+								echo $total_us." ".Currency::getCurrencyTitle(Currency::C_DOLLAR);
+								echo " - ",$total_eu." ".Currency::getCurrencyTitle(Currency::C_EURO);
+							?>
+						</th>
+						<th>
+							<?php
+								echo $total_ru." Руб.";
+							?>
+						</th>
+						<th colspan="3"></th>
+					</tr>
 				</table>
 				<?php echo Html::submitButton("Сохранить",['class'=>'btn btn-primary','id'=>'btnSubmitTransferClientSverka','style'=>'display:none']);?>
 			</form>		
@@ -278,6 +333,33 @@ $script = <<<JS
 				}
 			});
 	});
+
+
+
+
+	$("body").on("keyup",".pt_sum_input",function(){
+		var sum = $(this).val();
+		var sum_ru_input = $(this).parents("tr").find("input.pt_sum_ru_input");
+		var course_input = $(this).parents("tr").find("input.pt_course_input");
+	});
+
+
+
+	$("body").on("keyup",".pt_sum_ru_input",function(){
+		var sum_ru = $(this).val();
+		var sum_input = $(this).parents("tr").find("input.pt_sum_input");
+		var course_input = $(this).parents("tr").find("input.pt_course_input");
+	});
+
+
+
+	$("body").on("keyup",".pt_course_input",function(){
+		var course = $(this).val();
+		var sum_input = $(this).parents("tr").find("input.pt_sum_input");
+		var sum_ru_input = $(this).parents("tr").find("input.pt_sum_ru_input");
+	});
+
+
 JS;
 
 

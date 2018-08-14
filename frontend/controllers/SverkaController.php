@@ -135,7 +135,7 @@ class SverkaController extends Controller
         }
         return $this->render('sverka', [
             "orgs" => $orgs,
-            "sellers"=>$sellers,
+            "sellers"=>isset($sellers) ? $sellers : [],
             "expensesPeople"=>$expensesPeople,
             'card_percent'=>$card_percent,
             'totalSverka'=>$totalSverka,

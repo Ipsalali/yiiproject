@@ -451,7 +451,7 @@ HTML;
 </div>
 <div id="sverka_transfer" class="tab-pane fade in">
 	<?php 
-		echo $this->render("sverka_transfer",[
+		echo $this->render("sverka_transfer_client",[
 			"manager"=>$manager,
 			'orgs'=>$orgs,
 			"sellers"=>$sellers,
