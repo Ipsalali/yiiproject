@@ -51,6 +51,12 @@ return [
             //              'targetMinPixel' => 200         // Target image minimum pixel size
             //     ]
             ]
-        ],
+    ],
+    'modules' => [
+        'debug' => [
+            'class' => 'yii\debug\Module',
+            'allowedIPs' => ['::1']
+        ]
+    ],    
     'params' => $params,
 ];
