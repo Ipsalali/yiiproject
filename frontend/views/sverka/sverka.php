@@ -14,6 +14,9 @@ use common\models\Organisation;
 
 $this->title = "Сверка";
 
+$canAddPaymentsManager = Yii::$app->user->can("sverka/addpaymentsmanager");
+$canRemovePayAjax = Yii::$app->user->can("sverka/removepayajax");
+$canRemoveExpensesAutotruck = Yii::$app->user->can("autotruck/update");
 ?>
 
 <div>
@@ -218,7 +221,7 @@ HTML;
 		</div>
 	</div>
 
-	<?php if(!Yii::$app->user->can("client")){ ?>
+	<?php if($canAddPaymentsManager){ ?>
 	<div class="row">
 		<div class="col-xs-3">
 			<button id="add_pay" class="btn btn-success">Добавить оплату</button>
@@ -389,11 +392,16 @@ HTML;
 							<?php 
 								if((int)$sv['type'] != 2){
 									$action = ($sv['type']) ? "sverka/removepayajax":"autotruck/removeexpajax";
-							?>
-								<a class="btn btn-primary sverka_update_btn" data-state="0" data-id="<?php echo $sv['id']?>" data-model="<?php echo StringHelper::basename(get_class($model));?>"><i class="glyphicon glyphicon-pencil"></i></a>
-							    <?php if(!Yii::$app->user->can("client")){?>
+									$canAction = ($sv['type']) ? $canRemovePayAjax : $canRemoveExpensesAutotruck ;
+							?>   
+							    <?php if($canAddPaymentsManager){ ?>
+								    <a class="btn btn-primary sverka_update_btn" data-state="0" data-id="<?php echo $sv['id']?>" data-model="<?php echo StringHelper::basename(get_class($model));?>"><i class="glyphicon glyphicon-pencil"></i></a>
+							    <?php } ?>
+							    
+							    <?php if($canAction){?>
 								    <button type="submit" data-action="<?php echo $action?>" data-id="<?php echo $sv['id']?>" class="btn btn-danger remove_exists_payexp">X</button>
 							    <?php } ?>
+							    
 							<?php } ?>
 						</td>
 					</tr>

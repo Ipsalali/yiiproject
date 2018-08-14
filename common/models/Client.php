@@ -252,14 +252,14 @@ class Client extends ActiveRecordVersionable
         $user = \Yii::$app->user->identity;
         $u_countries = \yii\helpers\ArrayHelper::map($user->accessCountry,'country_id','country_id');
 
-        return App::find()->innerJoin('autotruck','autotruck.id = app.autotruck_id')->where("client=".$this->id)->andWhere(['in','autotruck.country',$u_countries])->orderBy(["autotruck.date"=>SORT_DESC])->all();
+        return App::find()->innerJoin('autotruck','autotruck.id = app.autotruck_id')->where("client=".$this->id)->andWhere(['in','autotruck.country',$u_countries])->andWhere(['app.isDeleted'=>0,'autotruck.isDeleted'=>0])->orderBy(["autotruck.date"=>SORT_DESC])->all();
     }
 
 
 
     public function getOwnApps(){
 
-        return App::find()->innerJoin('autotruck','autotruck.id = app.autotruck_id')->where("client=".$this->id)->orderBy(["autotruck.date"=>SORT_DESC])->all();
+        return App::find()->innerJoin('autotruck','autotruck.id = app.autotruck_id')->where("client=".$this->id)->andWhere(['app.isDeleted'=>0,'autotruck.isDeleted'=>0])->orderBy(["autotruck.date"=>SORT_DESC])->all();
     }
 
 
@@ -290,7 +290,7 @@ class Client extends ActiveRecordVersionable
 
 
     public function getAutotruckApps($autotruck_id){
-        return App::find()->where("client=".$this->id." AND autotruck_id=".$autotruck_id)->all();
+        return App::find()->where("client=".$this->id." AND autotruck_id=".$autotruck_id)->andWhere(['app.isDeleted'=>0])->all();
     }
 
 

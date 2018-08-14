@@ -26,7 +26,9 @@ $contractors = PaymentClientByTransfer::getContractors();
 		<?php 
 			if(isset($model->id)){
 				echo Html::a("X",null,['class'=>'btn btn-primary closePayClientForm']);
-				echo Html::a("<i class=\"glyphicon glyphicon-trash\"></i>",['sverka/remove-client-pay-by-transfer'],['class'=>'btn btn-danger delete_pay_transfer_client','data-id'=>$model['id']]);
+				if(Yii::$app->user->can("sverka/remove-client-pay-by-transfer")){
+				    echo Html::a("<i class=\"glyphicon glyphicon-trash\"></i>",['sverka/remove-client-pay-by-transfer'],['class'=>'btn btn-danger delete_pay_transfer_client','data-id'=>$model['id']]);
+				}
 			}else{ ?>
 				<a class="btn btn-danger remove_pay_transfer_client">X</a>
 			<?php } ?>

@@ -19,13 +19,16 @@ foreach ($sellers as $s) {
 	$contragents['seller#'.$s['id']] = $s['name'];
 }
 
+$canSaveClientPaymentTransfer = Yii::$app->user->can("sverka/save-client-payment-transfer");
 
 ?>
 
 <div class="row">
 	<div class="col-xs-2">
 		<?php
-			echo Html::a("Добавить оплату",['/sverka/pay-form-transfer-client'],['class'=>'btn btn-success','id'=>'btnPayFormClientTransfer']);
+		    if(Yii::$app->user->can("sverka/save-client-payment-transfer")){
+			    echo Html::a("Добавить оплату",['/sverka/pay-form-transfer-client'],['class'=>'btn btn-success','id'=>'btnPayFormClientTransfer']);
+		    }
 		?>
 	</div>
 </div>
@@ -46,6 +49,7 @@ foreach ($sellers as $s) {
 							<th></th>
 						</tr>
 					</thead>
+					<tbody>
 					<?php
 					if(isset($sverka) && count($sverka)){
 						$i = 0;
@@ -99,12 +103,11 @@ foreach ($sellers as $s) {
 								<td><?php echo Html::encode($rData['comment'])?></td>
 								<td>
 									<?php
-										if($isPay){
+										if($isPay && $canSaveClientPaymentTransfer){
 											
 											echo Html::a("<i class=\"glyphicon glyphicon-pencil\"></i>",['sverka/pay-form-transfer-client','id'=>$rData['id']],['class'=>'btn btn-primary formEditClientTransferPayments']);
 											
 										}
-										
 									?>
 								</td>
 							</tr>
@@ -142,6 +145,8 @@ foreach ($sellers as $s) {
 						}
 					}
 					?>
+					</tbody>
+					<tfoot>
 					<tr>
 						<th colspan="4">Итого:</th>
 						<th>
@@ -157,6 +162,7 @@ foreach ($sellers as $s) {
 						</th>
 						<th colspan="3"></th>
 					</tr>
+					</tfoot>
 				</table>
 				<?php echo Html::submitButton("Сохранить",['class'=>'btn btn-primary','id'=>'btnSubmitTransferClientSverka','style'=>'display:none']);?>
 			</form>		

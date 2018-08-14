@@ -116,7 +116,7 @@ class AutotruckReport extends Autotruck
                 FROM `autotruck` as a 
                 LEFT JOIN `expenses_manager` exp ON exp.autotruck_id = a.id 
                 LEFT JOIN supplier_countries c ON c.id = a.country
-                WHERE isDeleted = 0
+                WHERE a.isDeleted = 0
                 GROUP BY a.`id`
                 ) atr ON ap.autotruck_id = atr.`id` 
                  ".$sqlCondition." 

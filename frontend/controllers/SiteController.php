@@ -41,37 +41,34 @@ class SiteController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['logout', 'signup'],
+                
                 'rules' => [
                     [
                         'actions' => ['logout'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
+                    
                     [
                         'actions' => ['index'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
                     [
-                        'actions' => ['search'],
-                        'allow' => true,
-                        'roles' => ['admin','manager'],
+                        'actions'=>['org-report'],
+                        'allow'=>true,
+                        'roles'=>['autotruck/report']
                     ],
                     [
-                        'actions' => ['sverka','expenses-people-by-key','org-report'],
+                        'actions' => ['search'],
                         'allow' => true,
-                        'roles' => ['site/sverka'],
+                        'roles' => ['@'],
                     ],
+                    
                     [
                         'actions' => ['login','reset-password'],
                         'allow' => true,
                         'roles' => ['@'],
-                    ],
-                    [
-                        'actions'=>['addpaymentsmanager'],
-                        'allow' => true,
-                        'roles' => ['admin','manager'],
                     ]
                 ],
             ],

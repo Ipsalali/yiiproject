@@ -44,9 +44,24 @@ class SverkaController extends Controller
                         'roles' => ['site/sverka'],
                     ],
                     [
-                        'actions'=>['addpaymentsmanager','removepayajax','pay-form-transfer-client','save-client-payment-transfer','remove-client-pay-by-transfer'],
+                        'actions'=>['addpaymentsmanager'],
                         'allow' => true,
-                        'roles' => ['admin','manager'],
+                        'roles' => ['sverka/addpaymentsmanager'],
+                    ],
+                    [
+                        'actions'=>['removepayajax'],
+                        'allow' => true,
+                        'roles' => ['sverka/removepayajax'],
+                    ],
+                    [
+                        'actions'=>['pay-form-transfer-client','save-client-payment-transfer'],
+                        'allow' => true,
+                        'roles' => ['sverka/save-client-payment-transfer'],
+                    ],
+                    [
+                        'actions'=>['remove-client-pay-by-transfer'],
+                        'allow' => true,
+                        'roles' => ['sverka/remove-client-pay-by-transfer'],
                     ]
                 ],
             ],
@@ -70,9 +85,6 @@ class SverkaController extends Controller
             ]
         ];
     }
-
-
-
 
 
 
