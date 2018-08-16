@@ -68,7 +68,7 @@ class SiteController extends Controller
                     [
                         'actions' => ['login','reset-password'],
                         'allow' => true,
-                        'roles' => ['@'],
+                        'roles' => ['?'],
                     ]
                 ],
             ],
@@ -89,11 +89,7 @@ class SiteController extends Controller
         return [
             'error' => [
                 'class' => 'yii\web\ErrorAction',
-            ],
-            'captcha' => [
-                'class' => 'yii\captcha\CaptchaAction',
-                'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
-            ],
+            ]
         ];
     }
 
@@ -108,7 +104,7 @@ class SiteController extends Controller
 
 
         //Если пользователь не авторизован отправляем на страницу авторизации
-        if (Yii::$app->user->isGuest) return $this->actionLogin();
+        if(Yii::$app->user->isGuest) return $this->actionLogin();
         
         if(Yii::$app->user->identity->role->name !="client"){
             
