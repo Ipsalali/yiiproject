@@ -145,7 +145,8 @@ class Autotruck extends ActiveRecordVersionable
     }
 
     public function getExpensesManager(){
-        return ExpensesManager::find()->where('autotruck_id='.$this->id)->andWhere(['isDeleted'=>0])->all();
+
+        return ExpensesManager::getAutotruckExpenses($this->id);
     }
 
     public function getTraceStory(){

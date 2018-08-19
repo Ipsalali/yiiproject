@@ -17,7 +17,9 @@ $expensesManager = new ExpensesManager;
 $AutotruckExpenses =ExpensesManager::getAutotruckExpenses($autotruck->id);
 $expManagers = User::getSellers();
 $apps= $autotruck->getApps();
+
 $expenses = $autotruck->getExpensesManager();
+
 $apps_count = count($apps);
 $expenses_count = count($expenses);
 

@@ -328,26 +328,9 @@ class User extends ActiveRecordVersionable implements IdentityInterface, UserRba
     //Возвращает менеджеры для расхода
     public static function getExpensesManagers($search_key = false){
         
-        $expmanager[] = "'".Yii::$app->authManager->getRole('client_manager')->name."'";
-        
-        $expmanager[] = "'".Yii::$app->authManager->getRole('clientExtended')->name."'";
-        $expmanager[] = "'".Yii::$app->authManager->getRole('client')->name."'";
-        
-        $expmanager[] = "'".Yii::$app->authManager->getRole('main_manager')->name."'";
-        $expmanager[] = "'".Yii::$app->authManager->getRole('App_manager')->name."'";
-        $expmanager[] = "'".Yii::$app->authManager->getRole('expenses_manager')->name."'";
-        $expmanager[] = "'".Yii::$app->authManager->getRole('seller')->name."'";
-        $expm = implode(",", $expmanager);
-        $query = new Query;
-        
-        $managers = $query->select('user_id')->from("auth_assignment")->where('`item_name` IN ('.$expm.')')->all();
+        $managers = self::getAllowedSverkaUserID();
         if(count($managers)){
-            $in = '';
-            $last = array_pop($managers);
-            foreach ($managers as $key => $m) {
-                $in .= $m['user_id'].',';
-            }
-            $in .= $last['user_id'];
+            $in = implode(",", $managers);
 
             if($search_key){
                 return self::find()->select(['user.id','user.`name`','user.username','user.email','user.phone','cl.name','cl.full_name'])->leftJoin(['cl'=>Client::tableName()],"cl.`user_id` = user.`id`")->where(' user.id IN ('.$in.')')->andWhere("(cl.`email` like '{$search_key}%' or user.`email` like '{$search_key}%' or `username` like '{$search_key}%' or cl.`name` like '{$search_key}%' or cl.`full_name` like '{$search_key}%')")->all();
@@ -359,23 +342,62 @@ class User extends ActiveRecordVersionable implements IdentityInterface, UserRba
 
        return array();
     }
+
+
+
+    public static function getAllowedSverkaUserID(){
+
+        $id = Yii::$app->user->identity->id;
+        $expmanager[] = "'clientExtended'";
+        $expmanager[] = "'client'";
+        $expmanager[] = "'seller'";
+        
+        $expm = implode(",", $expmanager);
+        $query = new Query;
+        $query->select('aa.user_id')->from(["aa"=>"auth_assignment"])->where('aa.`item_name` IN ('.$expm.')');
+
+        $otherManagers[] = "'client_manager'";
+        $otherManagers[] = "'main_manager'";
+        $otherManagers[] = "'App_manager'";
+        $otherManagers[] = "'expenses_manager'";
+        
+        $othM = implode(",", $otherManagers);
+
+        if(Yii::$app->user->can("main_manager") || Yii::$app->user->can("admin")){
+            $query->orWhere("aa.`item_name` IN (".$othM.")");
+        }else{
+            //Исключаем тех у кого есть другие роли менеджеров кроме поставщика
+            $query->andWhere("NOT EXISTS (SELECT 1 FROM `auth_assignment` as aa2 WHERE aa.`user_id` = aa2.`user_id` AND aa2.`item_name` IN (".$othM."))");
+        }
+        
+        
+        
+        $managers = $query->all();
+
+        $ids = array();
+        foreach ($managers as $key => $v) {
+            $ids[] = $v['user_id'];
+        }
+
+        return $ids;
+    } 
+
+
+
+
+
+
+
+
     
      //Возвращает менеджеры для расхода
     public static function getSellers($search_key = false){
         
         
-        $expmanager = Yii::$app->authManager->getRole('seller')->name;
+        $managers = self::getAllowedSellersId();
         
-        $query = new Query;
-        
-        $managers = $query->select('user_id')->from("auth_assignment")->where(['item_name'=>$expmanager])->all();
         if(count($managers)){
-            $in = '';
-            $last = array_pop($managers);
-            foreach ($managers as $key => $m) {
-                $in .= $m['user_id'].',';
-            }
-            $in .= $last['user_id'];
+            $in = implode(",", $managers);
 
             if($search_key){
                 return self::find()->select(['user.id','user.`name`','user.username','user.email','user.phone','cl.name','cl.full_name'])->leftJoin(['cl'=>Client::tableName()],"cl.`user_id` = user.`id`")->where(' user.id IN ('.$in.')')->andWhere("(cl.`email` like '{$search_key}%' or user.`email` like '{$search_key}%' or `username` like '{$search_key}%' or cl.`name` like '{$search_key}%' or cl.`full_name` like '{$search_key}%')")->all();
@@ -386,6 +408,35 @@ class User extends ActiveRecordVersionable implements IdentityInterface, UserRba
 
 
        return array();
+    }
+
+
+
+
+
+    public static function getAllowedSellersId(){
+        
+
+        $id = Yii::$app->user->identity->id;
+        $expmanager = 'seller';
+        $query = new Query;
+
+        $query->select('user_id')->from("auth_assignment")->where(['item_name'=>$expmanager]);
+
+        //Для всех кроме менеджера(main_manager)системы, исключить из списка пользователей имеющие
+        //роли 'main_manager','App_manager','expenses_manager','client_manager'. Включить и самого текущего пользователя
+        if(!Yii::$app->user->can("main_manager") && !Yii::$app->user->can("admin")){
+            $query->andWhere(['user_id'=>$id]);
+        }
+                                            
+        $sellers = $query->all();
+
+        $ids = array();
+        foreach ($sellers as $key => $v) {
+            $ids[] = $v['user_id'];
+        }
+
+        return $ids;
     }
 
 

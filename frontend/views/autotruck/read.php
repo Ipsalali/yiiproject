@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 use yii\helpers\ArrayHelper;
 use yii\grid\GridView;
-use yii\data\ActiveDataProvider;
+use yii\data\ArrayDataProvider;
 use frontend\models\App;
 use frontend\models\Autotruck;
 use frontend\models\ExpensesManager;
@@ -14,7 +14,7 @@ use common\models\TypePackaging;
 use yii\bootstrap\Modal;
 
 $roleexpenses = 'autotruck/addexpenses';
-
+$userCanRoleexpenses = Yii::$app->user->can($roleexpenses);
 $expensesManager = new ExpensesManager;
 
 $AutotruckExpenses =ExpensesManager::getAutotruckExpenses($autotruck->id);
@@ -165,7 +165,7 @@ $packages = TypePackaging::find()->all();
 							<ul class="nav nav-tabs">
   								<li class="active"><a data-toggle="tab" href="#apps">Наименования</a></li>
 
-								<?php if(Yii::$app->user->can($roleexpenses)){?>
+								<?php if($userCanRoleexpenses){?>
   									<li><a data-toggle="tab" href="#expenses">Расходы</a></li>
   								<?php } ?>
 							</ul>
@@ -363,14 +363,14 @@ JS;
 								?>
 
 
-								<?php if(Yii::$app->user->can($roleexpenses)){?>
+								<?php if($userCanRoleexpenses){?>
 								<div id="expenses" class="tab-pane fade in">
 									<div class="row">
 										<div class="col-xs-12">
 											<?php 
-											if(count($AutotruckExpenses)){
-												$dataProvider = new ActiveDataProvider([
-	           										'query' => ExpensesManager::find()->where(['autotruck_id'=>$autotruck->id,'isDeleted'=>0]),
+											
+												$dataProvider = new ArrayDataProvider([
+	           										'allModels' => $AutotruckExpenses,
 	            								]);
 	            								echo GridView::widget([
 	            										'dataProvider' => $dataProvider,
@@ -400,7 +400,7 @@ JS;
 													        ],
 	            										]
 	            									]);
-											} ?>
+											 ?>
 										</div>
 									</div>
 								</div>

@@ -100,7 +100,23 @@ class ExpensesManager extends ActiveRecordVersionable
     }
 
     public static function getAutotruckExpenses($autotruck_id){
-        return ExpensesManager::find()->where(['autotruck_id'=>$autotruck_id])->all();
+
+        
+        $query = ExpensesManager::find()->where(['autotruck_id'=>$autotruck_id,'isDeleted'=>0]);
+
+        $managers = User::getAllowedSellersId();
+        
+        if(count($managers)){
+            $in = implode(",", $managers);
+            $query->andWhere("manager_id IN ({$in})");
+
+            return $query->all();
+        }else{
+            return array();
+        }
+
+        
+        
     }
 
 
