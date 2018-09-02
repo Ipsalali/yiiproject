@@ -183,7 +183,7 @@ HTML;
 	<div class="tabs"  style="margin-top: 50px;">
 		<ul class="nav nav-tabs">
   			<li class="active"><a data-toggle="tab" href="#sverka_app">Доставки</a></li>
-  			<li><a data-toggle="tab" href="#sverka_transfer">Переводы</a></li>
+  			<!-- <li><a data-toggle="tab" href="#sverka_transfer">Переводы</a></li> -->
 		</ul>
 	</div>
 
@@ -457,18 +457,18 @@ HTML;
 	    </div>
 	<?php } ?>
 </div>
-<div id="sverka_transfer" class="tab-pane fade in">
+<!-- <div id="sverka_transfer" class="tab-pane fade in"> -->
 	<?php 
-		echo $this->render("sverka_transfer_client",[
+		/*echo $this->render("sverka_transfer_client",[
 			"manager"=>$manager,
 			'orgs'=>$orgs,
 			"sellers"=>$sellers,
             "data_params"=>$data_params,
             'client'=>$client,
 			'sverka'=>$clientSverkaByTransfer
-		]);
+		]);*/
 	?>
-</div>
+<!-- </div> -->
 </div>
 </div>
 
