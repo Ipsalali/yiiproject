@@ -11,7 +11,7 @@ use frontend\models\ExpensesManager;
 use common\models\User;
 use yii\helpers\Url;
 
-
+$this->title = "Заявка: ".$autotruck->name;
 $roleexpenses = 'autotruck/addexpenses';
 $expensesManager = new ExpensesManager;
 $AutotruckExpenses =ExpensesManager::getAutotruckExpenses($autotruck->id);
@@ -21,31 +21,6 @@ $Autotrucks = Autotruck::find()->orderBy('id')->all();
 
 
 <div class="base_content">
-	<div class="row">
-		<div class="col-xs-12">
-			<h1>Заявка: <?=$autotruck->name?></h1>
-			 
-		</div>
-	</div>
-	<?php if(Yii::$app->session->hasFlash('ExpensesManagerAddSuccess')): ?>
-		<div class="alert alert-success">
-   			Расход записан.
-		</div>
-	<?php endif; ?>
-
-	<?php if(Yii::$app->session->hasFlash('ExpensesManagerAddError')): ?>
-		<div class="alert alert-error">
-   			Не удалось записать расход.
-		</div>
-	<?php endif; ?>
-
-	<?php if(Yii::$app->session->hasFlash('AutotruckSaved')): ?>
-	<div class="alert alert-success">
-    	Заявка сохранена!
-	</div>
-	<?php endif; ?>
-
-
 	<?php if($autotruck){?>
 		<div class="app_blocks">
 				<div id="autotruck_tab_<?=$autotruck->id?>" class="">
@@ -76,7 +51,6 @@ $Autotrucks = Autotruck::find()->orderBy('id')->all();
 									<p>Статус:</p>
 									<ul>
 										<?php
-											$autotruck->activeStatus->title;
 											$story = $autotruck->traceStory;
 											if(is_array($story)){
 												foreach ($story as $key => $s) { 
@@ -136,7 +110,11 @@ $Autotrucks = Autotruck::find()->orderBy('id')->all();
 										foreach ($autotruck->getApps() as $key => $app) { ?>
 												<tr>
 													<td><?=$key+1?></td>
-													<td><?php echo Html::a($app->buyer->name,['client/read','id'=>$app->client],array('target'=>'_blank'));?></td>
+													<td>
+														<?php 
+															echo $app->buyer ? Html::a($app->buyer->name,['client/read','id'=>$app->client],array('target'=>'_blank')) : null;
+														?>	
+													</td>
 													<td><?=$app->info?></td>
 													<td><? echo $app->type?'':$app->weight?></td>
 													<td><?=$app->rate?></td>

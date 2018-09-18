@@ -134,7 +134,7 @@ HTML;
 					'label'=>'Расход $',
 					'value'=>function($a){
 						$e = round($a['expenses'],2);
-						AutotruckReport::$common_expenses_ru += $w;
+						AutotruckReport::$common_expenses_ru += $e;
 						return $e;
 					},
 					'footerOptions'=>['class'=>'ft_common_expenses','id'=>'common_expenses']

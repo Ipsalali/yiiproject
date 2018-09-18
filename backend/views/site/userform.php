@@ -1,12 +1,14 @@
 <?php
 
-use common\helper\Html;
+use common\helper\{Html};
 use yii\bootstrap\ActiveForm;
 use common\models\SupplierCountry;
-use yii\helpers\ArrayHelper;
+use yii\helpers\{ArrayHelper,Url};
 
+$this->title = $user->name;
+$this->params['breadcrumbs'][] = ['url'=>Url::to(['site/list']),'label'=>"Пользователи"];
+$this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="container">
 <?php $form = ActiveForm::begin(['id'=>"userform"]); ?>
 <div class="row">
 	<div class="col-xs-4">
@@ -60,5 +62,3 @@ JS;
 	</div>
 </div>
 <?php ActiveForm::end(); ?>
-
-</div>

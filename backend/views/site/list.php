@@ -35,7 +35,7 @@ echo GridView::widget([
         'phone',
 
         ['class' => 'yii\grid\ActionColumn',
-         'template' => '{view}&nbsp;&nbsp;{update}&nbsp;&nbsp;{permit}&nbsp;&nbsp;{delete}',
+         'template' => '{view}&nbsp;&nbsp;{update}&nbsp;&nbsp;{rbac}&nbsp;&nbsp;{delete}',
          'buttons' =>
              [
                  'view' => function ($url, $model) {
@@ -46,8 +46,8 @@ echo GridView::widget([
                      return Html::a('<span class="glyphicon glyphicon-pencil"></span>', Url::to(['/site/userform', 'id' => $model->id]), [
                          'title' => Yii::t('yii', 'update')
                      ]); },   
-                 'permit' => function ($url, $model) {
-                     return Html::a('<span class="glyphicon glyphicon-wrench"></span>', Url::to(['/permit/user/view', 'id' => $model->id]), [
+                 'rbac' => function ($url, $model) {
+                     return Html::a('<span class="glyphicon glyphicon-wrench"></span>', Url::to(['/rbac/rbac/permissions', 'id' => $model->id]), [
                          'title' => Yii::t('yii', 'Change user role')
                      ]); },
              ]

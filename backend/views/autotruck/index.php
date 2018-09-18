@@ -13,43 +13,12 @@ use common\models\Status;
 use common\models\PaymentState;
 use backend\modules\PaymentStateFilter;
 
-
+$this->title = "Заявки";
 ?>
 
 <div class="autotrucks">
-
-	<?php if(Yii::$app->session->hasFlash('AutotruckSaved')): ?>
-		<div class="alert alert-success">
-    		Заявка сохранена!
-		</div>
-	<?php endif; ?>
-
-	<?php if(Yii::$app->session->hasFlash('autotruckDeleteError')): ?>
-		<div class="alert alert-danger">
-    		Заявку не удалось удалить
-		</div>
-	<?php endif; ?>
-
-	<?php if(Yii::$app->session->hasFlash('autotruckDeleted')): ?>
-		<div class="alert alert-success">
-    		Заявка удалена
-		</div>
-	<?php endif; ?>
-
-	<?php if(Yii::$app->session->hasFlash('autotrucksDeleted')): ?>
-		<div class="alert alert-success">
-    		Заявки удалены
-		</div>
-	<?php endif; ?>
-
-
-	<div class="container">
 	<div class="row">
 		<div class="col-xs-12">
-			<h1>Заявки</h1>
-			 <div class="new_app">
-				<?php echo Html::a('Добавить заявку', array('autotruck/create'), array('class' => 'btn btn-primary')); ?>
-			 </div>
 			 <div class="">
 			 	<?php echo Html::a('Удалить все', Url::to(['/autotruck/delete-all']), [
 		                         'class' => 'btn btn-danger','data-confirm'=>'Предупреждение при удалении заявки, автоматически удалятся все связанные данные!!!Продолжить удаление?'
@@ -139,7 +108,5 @@ HTML;
 			]
 		])?>
 		</div>
-	   </div>
 	</div>
 </div>
-<div class="clearfix"></div>

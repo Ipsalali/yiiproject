@@ -19,11 +19,19 @@ class AppAsset extends AssetBundle
     public $baseUrl = '@web';
     public $css = [
         'css/site.css',
-        'css/jquery.minicolors.css'
+        'css/jquery.minicolors.css',
+        'css/metisMenu.min.css',
+        'css/sb-admin-2.css',
+        'css/morris.css',
+        'css/font-awesome.min.css',
     ];
     public $js = [
+        'js/jquery.minicolors.js',
+        'js/bootstrap.min.js',
+        'js/metisMenu.min.js',
+        'js/raphael.min.js',
+        'js/sb-admin-2.js',
         'js/main.js',
-        'js/jquery.minicolors.js'
     ];
     public $depends = [
         'yii\web\YiiAsset',

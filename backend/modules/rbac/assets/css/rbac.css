@@ -1,0 +1,12 @@
+
+
+
+.role-info-table .grid-view td:nth-of-type(1){
+	white-space: nowrap !important;
+    word-break: break-word;
+}
+
+.role-info-table .grid-view td{
+	white-space: normal !important;
+    word-break: break-word;
+}

@@ -1,7 +1,12 @@
 <?php
 
-use yii\helpers\Html;
+use yii\helpers\{Html,Url};
 
+use backend\modules\users\components\PermissionsTreeWidget;
+
+$this->title = $user->name;
+$this->params['breadcrumbs'][] = ['url'=>Url::to(['site/list']),'label'=>"Пользователи"];
+$this->params['breadcrumbs'][] = $this->title;
 ?>
 
 <div class="row">
@@ -11,7 +16,6 @@ use yii\helpers\Html;
 		<p>Телефон: <?php echo $user->phone?></p>
 		<p>E-mail: <span><?php echo $user->email;?></span></p>
 		<p>Права: <?php echo $user->role->description?></p>
-		
 		<div class="row">
 			<div class="col-xs-12">
 				<h4>Журнал изменений:</h4>
@@ -63,6 +67,17 @@ use yii\helpers\Html;
 				?>
 			</div>
 		</div>
+	</div>
+	<div class="col-xs-6">
+		<?php
+	        if(\Yii::$app->hasModule("rbac")){
+	            echo Html::a('Редактировать права', Url::to(['/rbac/rbac/permissions', 'id' => $user->id]), [
+                         'title' => Yii::t('site', 'Change user role')]);
 
+	            $moduleRbac = \Yii::$app->getModule("rbac");
+	            echo ($moduleRbac->componentNamespace.'\PermissionsTreeWidget')::widget(['user' => $user->id]);
+	        }
+	    ?>
 	</div>
 </div>
+

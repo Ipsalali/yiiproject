@@ -17,7 +17,6 @@ use yii\helpers\Html;
 </div>
 <?php endif; ?>
 
-<div class="container">
 <?php echo Html::a('Добавить статус заявки', array('status/create'), array('class' => 'btn btn-primary pull-right')); ?>
 <div class="clearfix"></div>
 <hr />
@@ -46,4 +45,3 @@ use yii\helpers\Html;
         </tr>
     <?php endforeach; ?>
 </table>
-</div>
