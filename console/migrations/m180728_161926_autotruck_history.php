@@ -22,6 +22,7 @@ class m180728_161926_autotruck_history extends Migration
             'entity_id' => $this->integer()->notNull(),
             
             'name' => $this->string()->null(),
+            'invoice' => $this->string()->null(),
             'number' => $this->integer()->null(),
             'date' => $this->timestamp()->null(),
             'description' => $this->text()->null(),

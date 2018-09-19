@@ -27,6 +27,8 @@ class m180730_171955_transfer_history extends Migration
             'sum' => $this->double()->null(),
             'sum_ru' => $this->double()->null(),
             'comment' => $this->text()->null(),
+            'course'=>$this->double()->null(),
+            'currency'=>$this->integer(3)->null(),
 
             'created_at'=>$this->timestamp(),
             'type_action'=> $this->integer()->notNull(),

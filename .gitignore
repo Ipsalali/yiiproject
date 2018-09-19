@@ -32,4 +32,6 @@ phpunit.phar
 /frontend/web/assets
 /backend/web/assets
 
+/console/import
+
 .htaccess

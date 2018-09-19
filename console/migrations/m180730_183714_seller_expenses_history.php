@@ -26,7 +26,9 @@ class m180730_183714_seller_expenses_history extends Migration
             'sum' => $this->double()->null(),
             'date' => $this->timestamp()->null(),
             'comment' => $this->text()->null(),
-
+            'sum_ru'=>$this->double()->null(),
+            'course'=>$this->double(),
+            'currency'=>$this->integer(3),
             'created_at'=>$this->timestamp(),
             'type_action'=> $this->integer()->notNull(),
             'version'=> $this->integer()->notNull(),

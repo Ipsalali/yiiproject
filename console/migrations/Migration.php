@@ -7,30 +7,6 @@ use yii\db\Migration as yiiMigration;
 class Migration extends yiiMigration{
 
 
-	/**
-     * @inheritdoc
-     */
-    public function safeUp()
-    {
-
-    }
-
-
-
-
-    /**
-     * @inheritdoc
-     */
-    public function safeDown()
-    {
-        
-        return false;
-    }
-
-
-
-
-
 
 
 	protected function isOracle()
@@ -59,6 +35,30 @@ class Migration extends yiiMigration{
         }
 
         return implode(' ', ['', $delete, $update]);
+    }
+
+
+
+    public function importFile($fileName,$file_prefix = '',$checkFK = true){
+        echo "\n\n Start import {$fileName};\n\n ";
+
+        $file = $file_prefix . $fileName.".sql";
+        $path = __DIR__."/../import/";
+        if(file_exists($path.$file)){
+            $sql = file_get_contents($path.$file);
+            
+            if($sql === false ){
+                echo "{$file} is empty;";
+                return false;
+            }
+
+            $sql = $checkFK ? "SET FOREIGN_KEY_CHECKS=0;".$sql : $sql;
+            $this->execute($sql);
+        }else{
+            echo "{$file} not found;";
+        }
+        
+        echo "\n\n finish import {$file};\n\n ";
     }
 }
 
