@@ -123,8 +123,13 @@ $packages = TypePackaging::find()->all();
 										?>
 									</div>
 									<div class="date_status_block" >
-										<label for="date_status" data-current="<?=date('Y-m-d',strtotime($autotruck->activeStatusTrace->trace_date))?>"></label>
-										<input type="text" id="date_status" name="Autotruck[date_status]"  value="<?php echo date('Y-m-d',strtotime($autotruck->activeStatusTrace->trace_date))?>">
+										<?php 
+											$activeStatusTrace = $autotruck->activeStatusTrace;
+											$trace_date = $activeStatusTrace && isset($activeStatusTrace->trace_date) ? $activeStatusTrace->trace_date : date('Y-m-d');
+										?>
+										<label for="date_status" data-current="<?php echo $trace_date?>"></label>
+										<input type="text" id="date_status" name="Autotruck[date_status]"  value="<?php echo $trace_date?>">
+										
 									</div>
 									<div class="clear"></div>
 									<label class="change_status_info"></label>

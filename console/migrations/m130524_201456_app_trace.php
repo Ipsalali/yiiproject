@@ -26,7 +26,6 @@ class m130524_201456_app_trace extends Migration
               PRIMARY KEY (`trace_id`),
               
               CONSTRAINT `fk-app_trace-status_id` FOREIGN KEY (`status_id`) REFERENCES {$this->app_status} (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-              CONSTRAINT `fk-app_trace-prevstatus_id` FOREIGN KEY (`prevstatus_id`) REFERENCES {$this->app_status} (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
               CONSTRAINT `fk-app_trace-autotruck_id` FOREIGN KEY (`autotruck_id`) REFERENCES {$this->autotruck} (`id`) ON DELETE CASCADE ON UPDATE CASCADE
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8
 SQL;

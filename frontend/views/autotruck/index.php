@@ -20,12 +20,6 @@ $this->title = "Список заявок";
 ?>
 
 <div class="autotrucks">
-
-	<?php if(Yii::$app->session->hasFlash('AutotruckSaved')): ?>
-		<div class="alert alert-success">
-    		Заявка сохранена!
-		</div>
-	<?php endif; ?>
 	<div class="main">
 	<div class="row">
 		<div class="col-xs-6 autotruck_head">

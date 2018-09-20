@@ -15,7 +15,12 @@ use yii\rbac\DbManager;
  * @since 2.0
  */
 class m130524_201442_init_rbac extends \yii\db\Migration
-{
+{   
+
+
+    public $column = 'user_id';
+    public $index = 'auth_assignment_user_id_idx';
+
     /**
      * @throws yii\base\InvalidConfigException
      * @return DbManager
@@ -54,7 +59,7 @@ class m130524_201442_init_rbac extends \yii\db\Migration
         $tableOptions = null;
         if ($this->db->driverName === 'mysql') {
             // http://stackoverflow.com/questions/766809/whats-the-difference-between-utf8-general-ci-and-utf8-unicode-ci
-            $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB';
+            $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB';
         }
 
         $this->createTable($authManager->ruleTable, [
@@ -95,8 +100,10 @@ class m130524_201442_init_rbac extends \yii\db\Migration
             'created_at' => $this->integer(),
             'PRIMARY KEY ([[item_name]], [[user_id]])',
             'FOREIGN KEY ([[item_name]]) REFERENCES ' . $authManager->itemTable . ' ([[name]])' .
-                $this->buildFkClause('ON DELETE CASCADE', 'ON UPDATE CASCADE'),
+                $this->buildFkClause('ON DELETE CASCADE', 'ON UPDATE CASCADE')
         ], $tableOptions);
+
+        $this->createIndex($this->index, $authManager->assignmentTable, $this->column);
 
         if ($this->isMSSQL()) {
             $this->execute("CREATE TRIGGER dbo.trigger_auth_item_child
@@ -148,6 +155,8 @@ class m130524_201442_init_rbac extends \yii\db\Migration
             $this->execute('DROP TRIGGER dbo.trigger_auth_item_child;');
         }
 
+        $this->dropIndex($this->index, $authManager->assignmentTable);
+        
         $this->dropTable($authManager->assignmentTable);
         $this->dropTable($authManager->itemChildTable);
         $this->dropTable($authManager->itemTable);

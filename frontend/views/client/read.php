@@ -182,6 +182,7 @@ $packages = TypePackaging::find()->all();
 								</div>
 								<?php 
 									//РАссмотреть безопасное отключение функционала CustomerPayment
+									if(false){
 								?> 
 								<div class="col-xs-5" style="display: none;">
 									<div class="row">
@@ -230,6 +231,7 @@ $packages = TypePackaging::find()->all();
 									</div>
 									<?php ActiveForm::end();?>
 								</div>
+								<?php } ?>
 							</div>
 
 							

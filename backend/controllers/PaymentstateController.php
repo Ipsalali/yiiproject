@@ -9,6 +9,11 @@ use yii\filters\VerbFilter;
 use yii\web\HttpException;
 use common\models\PaymentState;
 
+/**
+*  Старый функционал, рассмотреть удаление
+*
+*
+*/
 class PaymentstateController extends Controller{
 
 

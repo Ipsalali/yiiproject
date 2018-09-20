@@ -13,7 +13,7 @@ class m130524_201459_customer_payment extends Migration
     public function safeUp()
     {
         
-
+        return true;
         /**
         * Table customer_payment
         */
@@ -40,6 +40,7 @@ SQL;
 
     public function safeDown()
     {
+        return true
         $this->dropTable($this->customer_payment);
     }
 }

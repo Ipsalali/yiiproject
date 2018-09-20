@@ -13,14 +13,14 @@ use common\models\TypePackaging;
 
 $this->title = "Новая заявка";
 
-$roleexpenses = 'autotruck/addexpenses';
+
 $expensesManager = new ExpensesManager;
 $AutotruckExpenses =ExpensesManager::getAutotruckExpenses($autotruck->id);
 
+$user = Yii::$app->user->identity;
+$canUserAddExpenses = Yii::$app->user->can('autotruck/addexpenses');
 
-$user = \Yii::$app->user->identity;
-
-if(\Yii::$app->user->can("clientExtended")){
+if(Yii::$app->user->can("clientExtended")){
 	$countries =  SupplierCountry::find()->all();
 	$clients[] = $user->client;
 }else{
@@ -32,21 +32,7 @@ $senders = Sender::find()->orderBy(['name'=>'DESC'])->all();
 $packages = TypePackaging::find()->all();
 ?>
 
-<div class="">
-	<div class="row">
-		
-	</div>
-<?php if(Yii::$app->session->hasFlash('AutotruckEmpty')): ?>
-<div class="alert alert-error">
-    Не удалось сохранить заявку
-</div>
-<?php endif; ?>
-
-<?php if(Yii::$app->session->hasFlash('AutotruckCreateError')): ?>
-<div class="alert alert-success">
-    Произошла ошибка при добавлений заявки.
-</div>
-<?php endif; ?>
+<div class="form">
 
 <?php $form = ActiveForm::begin(['id'=>'autotruck_and_app','options' => ['enctype' => 'multipart/form-data']]); ?>
 	
@@ -109,7 +95,7 @@ $packages = TypePackaging::find()->all();
 			</div>
 		</div>
 	</div>
-	<?php if(Yii::$app->user->can($roleexpenses)){?>
+	<?php if($canUserAddExpenses){?>
 		<ul class="nav nav-tabs">
 		  	<li class="active"><a data-toggle="tab" href="#apps">Наименования</a></li>
 		  	<li><a data-toggle="tab" href="#expenses">Расходы</a></li>

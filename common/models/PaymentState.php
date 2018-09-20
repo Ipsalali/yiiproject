@@ -6,12 +6,14 @@ use Yii;
 use yii\db\ActiveRecord;
 use yii\db\Expression;
 use yii\db\Query;
+
+
+
 /**
-*
+*  Старый функционал, рассмотреть удаление
 *
 *
 */
-
 class PaymentState extends ActiveRecord
 {
 

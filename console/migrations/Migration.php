@@ -53,6 +53,7 @@ class Migration extends yiiMigration{
             }
 
             $sql = $checkFK ? "SET FOREIGN_KEY_CHECKS=0;".$sql : $sql;
+            $sql = "SET time_zone = \"+00:00\";".$sql;
             $this->execute($sql);
         }else{
             echo "{$file} not found;";

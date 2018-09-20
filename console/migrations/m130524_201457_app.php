@@ -9,6 +9,7 @@ class m130524_201457_app extends Migration
     public $autotruck = '{{%autotruck}}';
     public $client = '{{%client}}';
     public $sender = '{{%sender}}';
+    public $type_packaging = '{{%type_packaging}}';
 
     public function safeUp()
     {
@@ -35,7 +36,8 @@ class m130524_201457_app extends Migration
 
               CONSTRAINT `fk-app-client` FOREIGN KEY (`client`) REFERENCES {$this->client} (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
               CONSTRAINT `fk-app-autotruck_id` FOREIGN KEY (`autotruck_id`) REFERENCES {$this->autotruck} (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-              CONSTRAINT `fk-app-sender` FOREIGN KEY (`sender`) REFERENCES {$this->sender} (`id`) ON DELETE SET NULL ON UPDATE CASCADE
+              CONSTRAINT `fk-app-sender` FOREIGN KEY (`sender`) REFERENCES {$this->sender} (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+              CONSTRAINT `fk-app-package` FOREIGN KEY (`package`) REFERENCES {$this->type_packaging} (`id`) ON DELETE SET NULL ON UPDATE CASCADE
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8
 SQL;
 

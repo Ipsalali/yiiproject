@@ -10,11 +10,10 @@ use common\models\PaymentState;
 use common\models\Client;
 
 /**
-*
+*  Старый функционал, рассмотреть удаление
 *
 *
 */
-
 class CustomerPayment extends ActiveRecord
 {
 

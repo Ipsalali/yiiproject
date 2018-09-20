@@ -9,6 +9,7 @@ class m130524_201449_payment_state extends Migration
 
     public function safeUp()
     {
+        return true;
         $tableOptions = null;
         if ($this->db->driverName === 'mysql') {
             // http://stackoverflow.com/questions/766809/whats-the-difference-between-utf8-general-ci-and-utf8-unicode-ci
@@ -37,6 +38,7 @@ SQL;
 
     public function safeDown()
     {
-        $this->dropTable($this->payment_state);
+      return true;
+      $this->dropTable($this->payment_state);
     }
 }

@@ -8,6 +8,7 @@ class m130524_201453_autotruck extends Migration
     public $autotruck = '{{%autotruck}}';
     public $user = '{{%user}}';
     public $app_status = '{{%app_status}}';
+    public $supplier_countries = '{{%supplier_countries}}';
 
     public function safeUp()
     {
@@ -24,7 +25,7 @@ class m130524_201453_autotruck extends Migration
               `description` text NOT NULL,
               `status` int(11) NOT NULL,
               `course` double NOT NULL DEFAULT '0',
-              `country` int(11) NOT NULL,
+              `country` int(11) DEFAULT NULL,
               `file` text,
               `auto_number` varchar(255) NOT NULL,
               `auto_name` varchar(255) NOT NULL,
@@ -34,7 +35,8 @@ class m130524_201453_autotruck extends Migration
               PRIMARY KEY (`id`),
 
               CONSTRAINT `fk-autotruck-status` FOREIGN KEY (`status`) REFERENCES {$this->app_status} (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-              CONSTRAINT `fk-autotruck-creator` FOREIGN KEY (`creator`) REFERENCES {$this->user} (`id`) ON DELETE SET NULL ON UPDATE CASCADE
+              CONSTRAINT `fk-autotruck-creator` FOREIGN KEY (`creator`) REFERENCES {$this->user} (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+              CONSTRAINT `fk-autotruck-country` FOREIGN KEY (`country`) REFERENCES {$this->supplier_countries} (`id`) ON DELETE SET NULL ON UPDATE CASCADE
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8
 SQL;
 
