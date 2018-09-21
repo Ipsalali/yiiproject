@@ -56,47 +56,47 @@ use yii\helpers\{Html,Url};
                         </li>
                         <li>
                             <a href="#"><i class="fa fa-table fa-fw"></i>
-                                <?php echo \Yii::t('site', 'Справочники')?> <span class="fa arrow"></span>
+                                <?php echo Yii::t('site', 'Справочники')?> <span class="fa arrow"></span>
                             </a>
                             <ul class="nav nav-second-level">
                                 <li>
                                     <a href="<?php echo Url::to(['/status/index'])?>"><i class="fa fa-table fa-fw"></i> 
-                                        <?php echo \Yii::t('site', 'Статус заявок')?>
+                                        <?php echo Yii::t('site', 'Статус заявок')?>
                                     </a>  
                                 </li>
 
                                 <li>
                                     <a href="<?php echo Url::to(['/clientcategory/index'])?>"><i class="fa fa-table fa-fw"></i> 
-                                        <?php echo \Yii::t('site', 'Категория клиентов')?>
+                                        <?php echo Yii::t('site', 'Категория клиентов')?>
                                     </a>  
                                 </li>
 
                                 <li>
                                     <a href="<?php echo Url::to(['/suppliercountry/index'])?>"><i class="fa fa-table fa-fw"></i> 
-                                        <?php echo \Yii::t('site', 'Страны поставок')?>
+                                        <?php echo Yii::t('site', 'Страны поставок')?>
                                     </a>  
                                 </li>
 
                                 <li>
                                     <a href="<?php echo Url::to(['/paymentstate/index'])?>"><i class="fa fa-table fa-fw"></i> 
-                                        <?php echo \Yii::t('site', 'Статус оплаты')?>
+                                        <?php echo Yii::t('site', 'Статус оплаты')?>
                                     </a>  
                                 </li>
                                 <li>
                                     <a href="<?php echo Url::to(['/typepackaging/index'])?>"><i class="fa fa-table fa-fw"></i> 
-                                        <?php echo \Yii::t('site', 'Тип упаковки')?>
+                                        <?php echo Yii::t('site', 'Тип упаковки')?>
                                     </a>  
                                 </li>
                             </ul>
                         </li>
                         <li>
                             <a href="<?php echo Url::to(['/sender/index'])?>"><i class="fa fa-table fa-fw"></i> 
-                                <?php echo \Yii::t('site', 'Отправители')?>
+                                <?php echo Yii::t('site', 'Отправители')?>
                             </a>  
                         </li>
                         <li>
                             <a href="<?php echo Url::to(['/setting/index'])?>"><i class="fa fa-wrench fa-fw"></i> 
-                                <?php echo \Yii::t('site', 'Настройки системы')?>
+                                <?php echo Yii::t('site', 'Настройки системы')?>
                             </a>  
                         </li>
                     <?php } ?>

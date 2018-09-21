@@ -32,6 +32,21 @@ class Autotruck extends ActiveRecordVersionable
 {
 
     public $tempFiles = null;
+    
+    /**
+    * Array 
+    */
+    public $apps;
+
+    /**
+    * Array 
+    */
+    public $packagesCountPlace;
+
+    /**
+    * int 
+    */
+    public $totalCountPlace;
 
     const SCENARIO_CREATE = "create";
 
@@ -148,6 +163,13 @@ class Autotruck extends ActiveRecordVersionable
 
     public function getApps(){
         return App::find()->where('autotruck_id='.$this->id)->andWhere(['isDeleted'=>0])->all();
+    }
+
+
+    public function setApps($apps){
+        if(is_array($apps)){
+            return $this->apps = $apps;
+        }
     }
 
 

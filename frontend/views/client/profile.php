@@ -1,12 +1,10 @@
 <?php 
 use yii\helpers\Html;
-use frontend\models\Autotruck;
-use frontend\models\CustomerPayment;
-use common\models\PaymentState;
 use yii\helpers\ArrayHelper;
+use frontend\models\Autotruck;
 use common\models\TypePackaging;
-$this->title = "TEDTRANS";
 
+$this->title = "TEDTRANS";
 $user = Yii::$app->user->identity;
 $packages = TypePackaging::find()->all();
 ?>
@@ -42,12 +40,7 @@ $packages = TypePackaging::find()->all();
 		
 		
 			<div class="col-xs-12">
-				<p>Задолженность: 
-				    <?php 
-				    	echo $client->user->getManagerSverka();
-				        //echo $client->getDebt() - $client->getSumStateSum();
-				    ?> $
-				</p>
+				<p>Задолженность: <?php echo $client->user->getManagerSverka();?> $</p>
 			</div>
 		
 		
@@ -66,10 +59,7 @@ $packages = TypePackaging::find()->all();
 							}else continue;
 						?>
 
-						<?php 
-							$CustomerPayment = CustomerPayment::getCustomerPayment($client->id,$autotruck->id);
-							$paymentState = $CustomerPayment->id ? $CustomerPayment->paymentState : PaymentState::getDefaultState();
-						?>
+				
 				<div id="autotruck_tab_<?=$key?>" >
 				  	<div class="panel panel-primary">
 				  		<div class="panel-heading profile_autotruck_head">
@@ -133,20 +123,6 @@ $packages = TypePackaging::find()->all();
 											}
 										?>
 								    	</div>
-								</div>
-								<div class="col-xs-4" style="display: none;">
-									<div class="col-xs-12">
-										<p><strong>Статус оплаты:</strong> <span style="color:<?=$paymentState->color?>"><?php echo $paymentState->title; ?></span></p>
-										<?php
-										    $sum_states = PaymentState::getSumStates();
-										    $sum_statesArray = ArrayHelper::map($sum_states,'id','id');
-											if(in_array($paymentState->id, $sum_statesArray)){
-										?>
-											<p><strong>Сумма:</strong> <?php echo $CustomerPayment->sum?> $</p>
-										<?php }?>
-										<p><strong>Итого кол-во мест:</strong> <?php echo $autotruck->getAppCountPlace($client->id)?></p>
-										<p><strong>Комментрий:</strong> <?php echo $CustomerPayment->comment?></p>
-									</div> 
 								</div>
 							</div>
 							

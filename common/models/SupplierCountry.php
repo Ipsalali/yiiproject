@@ -3,7 +3,7 @@
 namespace common\models;
 
 use Yii;
-use yii\db\ActiveRecord;
+use yii\db\{ActiveRecord,Query};
 use yii\db\Expression;
 
 /**
@@ -60,6 +60,18 @@ class SupplierCountry extends ActiveRecord
     		'country'=>'Страна поставки',
             'code'=>'Код'
     		);
+    }
+
+
+    public static function getIndexedArray(){
+        $data = (new Query)->select(['id','country'])->from(self::tableName())->all();
+        
+        $countries = [];
+        foreach ($data as $s) {
+            $countries[$s['id']] = $s;
+        }
+
+        return $countries;
     }
 
 }

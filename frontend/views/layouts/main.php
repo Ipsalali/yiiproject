@@ -95,11 +95,6 @@ AppAsset::register($this);
             $menuItems[] = ['label' => 'Профиль', 'url' => ['/client/profile']];
 
         }
-        // $menuItems[] = [
-        //     'label' => 'Выход',
-        //     'url' => ['/site/logout'],
-        //     'linkOptions' => ['data-method' => 'post']
-        // ];
     }
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-left'],
@@ -127,11 +122,11 @@ AppAsset::register($this);
         <?php } ?>
     </div>
     <div class="main">
-        <?= Breadcrumbs::widget([
+        <?php echo  Breadcrumbs::widget([
             'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
         ]) ?>
-        <?= Alert::widget() ?>
-        <?= $content ?>
+        <?php echo Alert::widget() ?>
+        <?php echo $content ?>
     </div>
 </div>
 

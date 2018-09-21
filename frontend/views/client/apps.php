@@ -12,18 +12,6 @@ $this->title = "Клиент ".$client->name;
 	<h3>Заявки клиента <?=$client->name?></h3>
 </div>
 
-<?php if(Yii::$app->session->hasFlash('Notification_error')): ?>
-<div class="alert alert-error">
-    Не удолось отправить уведомление.
-</div>
-<?php endif; ?>
-
-<?php if(Yii::$app->session->hasFlash('Notification_sended')): ?>
-<div class="alert alert-success">
-    Уведомление отправлено.
-</div>
-<?php endif; ?>
-
 <?php if($autotrucks){?>
 		<div class="app_blocks">
 			<?php  foreach ($autotrucks as $key => $a){

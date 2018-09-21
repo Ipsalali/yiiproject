@@ -22,18 +22,7 @@ use common\models\ClientOrganisation;
 
 class ClientController extends Controller{
 	
-	public function actions()
-    {
-        // return [
-        //     'index' => [
-        //         'class' => ListAction::className(),
-        //         'filterModel' => new ClientSearch(),
-        //         'directPopulating' => true,
-        //         'view'=>'@frontend/views/client/index'
-        //     ]
-        // ];
-    }
-
+	
     /**
      * @inheritdoc
      */
@@ -103,24 +92,14 @@ class ClientController extends Controller{
         ];
     }
 
-	public $layout = "/client/client";
-
-
-
 
 
 
 	public function actionIndex(){
-
         $clientSearch = new ClientSearch;
 		$dataProvider = $clientSearch->search(Yii::$app->request->queryParams);
 		return $this->render('index',array('dataProvider'=>$dataProvider,'clientSearch'=>$clientSearch));
 	}
-
-
-
-
-
 
 
 
@@ -138,8 +117,6 @@ class ClientController extends Controller{
 
 		if(isset($post['Client'])){
             
-            
-
             if(isset($post['use_free_client']) && (int)$post['use_free_client']){
                 if(isset($post['Client']['user_id']) && !(int)$post['Client']['user_id']){
                     $error = true;
@@ -279,8 +256,9 @@ class ClientController extends Controller{
         
         if(!isset($client->id))
             throw new HttpException(404,'Document Does Not Exist');
-
-        $autotrucks = $client->appsSortAutotruck;
+        $autotrucks = $client->getAutotrucksWithApps();
+        // $autotrucks = $client->appsSortAutotruck;
+        
         $grafik = $client->getDataForGrafik();
 
         return $this->render('read',array("client"=>$client,'autotrucks'=>$autotrucks,'grafik'=>$grafik));
@@ -365,8 +343,6 @@ class ClientController extends Controller{
 
 		$autotrucks = $client->appsSortAutotruck;
 
-		//print_r($autotrucks);
-		//exit;
 		return $this->render('apps', array(
         	'autotrucks'=>$autotrucks,"client"=>$client
     	));
@@ -496,15 +472,16 @@ class ClientController extends Controller{
 
 		$apps = $client_model->getAutotruckApps($autotruck);
 		if(!count($apps))
-			Yii::$app->response->redirect(array("client/index"));
-		//print_r($apps);
+			return Yii::$app->response->redirect(["client/index"]);
+		
+        
 		$activeStatus = $autotruck_model->activeStatus;
         $activeTrace = $autotruck_model->activeStatusTrace;
-		//print_r($activeStatus->notification_template);
-		// print_r($client_model);
-		// exit;
-		$this->layout = "/client/empty";
-		$mail_template =  $this->render('notification_status', array(
+		
+
+		$this->layout = "empty";
+		
+        $mail_template =  $this->render('notification_status', array(
         	'apps' => $apps,'activeStatus'=>$activeStatus,"activeTrace"=>$activeTrace,"autotruck_model"=>$autotruck_model
     	));
 
@@ -514,13 +491,15 @@ class ClientController extends Controller{
     	$res = $this->MailSend($mail,$mail_template);
 
     	if($res){
-    		Yii::$app->session->setFlash("Notification_sended");
+    		Yii::$app->session->setFlash("success",'Уведомление отправлено.');
     	}else{
-    		Yii::$app->session->setFlash("Notification_error");
+    		Yii::$app->session->setFlash("danger",'Не удолось отправить уведомление.');
     	}
 
-    	Yii::$app->response->redirect(array("client/app",'id'=>$client));
+    	return Yii::$app->response->redirect(["client/app",'id'=>$client]);
 	}
+
+
 
 	function MailSend($tomail,$html,$files=null){
             
@@ -572,6 +551,7 @@ class ClientController extends Controller{
 
         return $this->render('profile',array("client"=>$client,'autotrucks'=>$autotrucks));
     }
+
 
 
     public function actionAutotruckpayment(){

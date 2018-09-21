@@ -3,33 +3,41 @@ use yii\helpers\Html;
 use frontend\models\Autotruck;
 use yii\helpers\ArrayHelper;
 use yii\bootstrap\ActiveForm;
-use frontend\models\CustomerPayment;
-use common\models\PaymentState;
 use common\models\TypePackaging;
+use common\models\Status;
+use common\models\SupplierCountry;
 use yii\bootstrap\Modal;
 
 $this->title = "Клиент ".$client->name;
 
-$sum_states = PaymentState::getSumStates();
 $packages = TypePackaging::find()->all();
+$clientCategory = $client->category;
+$clientUser = $client->user;
+$clientManager = $client->managerUser;
+$autotruckStatuses = Status::getIndexedArray();
+$autotruckCountries = SupplierCountry::getIndexedArray();
+
 ?>
 
-<div class="client_page">
+<div class="client_page" style="padding-top: 20px;">
+
 <div class="row client_page_head">
-	<div class="pull-left">
-		 <?php echo Html::a('Клиенты', array('client/index'), array('class' => '')); ?>
-	</div>
-	<div class="pull-right btn-group">
-	<?php echo Html::a("Журнал редактирования клиента",['client/client-story','id'=>$client->id],['id'=>'btnClientStory','class'=>'btn btn-success'])?>
-    <?php echo Html::a('Редактировать', array('client/update', 'id' => $client->id), array('class' => 'btn btn-primary')); ?>
-    <?php echo Html::a('Удалить', array('client/delete', 'id' => $client->id), array('class' => 'btn btn-danger remove_check')); ?>
+	<div class="col-xs-12">
+		<div class="pull-left">
+			 <?php echo Html::a('Клиенты', array('client/index'), array('class' => '')); ?>
+		</div>
+		<div class="pull-right btn-group">
+		<?php echo Html::a("Журнал редактирования клиента",['client/client-story','id'=>$client->id],['id'=>'btnClientStory','class'=>'btn btn-success'])?>
+	    <?php echo Html::a('Редактировать', array('client/update', 'id' => $client->id), array('class' => 'btn btn-primary')); ?>
+	    <?php echo Html::a('Удалить', array('client/delete', 'id' => $client->id), array('class' => 'btn btn-danger remove_check')); ?>
+		</div>
 	</div>
 </div>
 	
 	<div class="row">
 		<div class="col-xs-12">
 			<h2>
-				<?php echo Html::encode($client->name); ?>&nbsp(<span><?php echo Html::encode($client->categoryTitle); ?></span>)
+				<?php echo Html::encode($client->name); ?>&nbsp(<span><?php echo Html::encode($clientCategory->cc_title); ?></span>)
 			</h2>
 		</div>
 	</div>
@@ -44,7 +52,7 @@ $packages = TypePackaging::find()->all();
 				</div>
 			<div class="col-xs-3">
 				<h4>Email</h4>
-				<p><?php echo Html::encode($client->user->email ? $client->user->email :"E-mail не указан"); ?></p>
+				<p><?php echo Html::encode(isset($clientUser->email) && $clientUser->email ? $clientUser->email :"E-mail не указан"); ?></p>
 			</div>
 			<div class="col-xs-3">
 				<h4>Телефон</h4>
@@ -56,7 +64,7 @@ $packages = TypePackaging::find()->all();
 			<div class="row">
 				<div class="col-xs-4">
 					<h4>Ответственный:</h4>
-					<p><?php echo Html::encode(($client->managerUser)?$client->managerUser->name:"Не закреплен к менеджеру."); ?></p>
+					<p><?php echo Html::encode(($clientManager)? $clientManager->name: "Не закреплен к менеджеру."); ?></p>
 				</div>
 				<div class="col-xs-4">
 					<h4>Договор:</h4>
@@ -74,7 +82,7 @@ $packages = TypePackaging::find()->all();
 				</div>
 				<div class="col-xs-4">
 					<h4>Организация:</h4>
-					<p><?php echo Html::encode(($client->organisation_pay_id)?$client->organisation->org_name:"Не привязан."); ?></p>
+					<p><?php echo Html::encode(($client->organisation_pay_id) ? $client->organisation->org_name:"Не привязан."); ?></p>
 				</div>
 			</div>
 		</div>
@@ -88,30 +96,16 @@ $packages = TypePackaging::find()->all();
 		</div>
 		<div class="row">
 			<div class="col-xs-3">
-			    	
-				<p>Задолженность: 
-				    <?php 
-				    	echo $client->user->getManagerSverka();
-				    	//echo $client->getDebt() - $client->getSumStateSum();
-			    ?> $</p>
-			
+				<p>Задолженность: <?php echo $client->user->getManagerSverka();?> $</p>
 			</div>
 			
 		</div>
 		<div class="row">
-				<div class="col-xs-12">
-					<?php if($autotrucks){?>
+			<div class="col-xs-12">
+				<?php if($autotrucks){?>
 					<div class="app_blocks">
 					
-						<?php  foreach ($autotrucks as $key => $a){
-							if($autotruck = Autotruck::find()->where("id=".$key)->one()){
-							}else continue;
-						?>
-						<?php 
-							//Не используется больше, рассмотреть удаление этого функционала
-							$CustomerPayment = CustomerPayment::getCustomerPayment($client->id,$autotruck->id);
-							$paymentState = $CustomerPayment->id ? $CustomerPayment->paymentState : PaymentState::getDefaultState();
-						?>
+					<?php  foreach ($autotrucks as $key => $autotruck){ ?>
 				<div id="autotruck_tab_<?=$key?>">
 				  	<div class="panel panel-primary">
 				  		<div class="panel-heading">
@@ -137,39 +131,39 @@ $packages = TypePackaging::find()->all();
 								<div class="col-xs-4">
 									<p><strong>Курс:</strong> <span><?php echo $autotruck->course; ?> руб.</span></p>
 									
-									<p><strong>Страна поставки:</strong> <span><?php echo $autotruck->countryName; ?></span></p>
-									
+									<p><strong>Страна поставки:</strong><span><?php echo array_key_exists($autotruck->country, $autotruckCountries) ? $autotruckCountries[$autotruck->country]['country'] : "" ;?></span></p>
                                     <p><strong>Номер машины:</strong> <?php echo $autotruck->auto_number?></p>
 									<p><strong>Описание:</strong> <?php echo Html::encode($autotruck->description); ?></p>
-									
                                     <p><strong>ГТД:</strong> <?php echo $autotruck->gtd?></p>
-                                
 								</div>
 								<div class="col-xs-3">
 									<h4>Статус:</h4>
 										<ul>
-											<?
-												$autotruck->activeStatus->title;
+											<?php
 												$story = $autotruck->traceStory;
 												if(is_array($story)){
 													foreach ($story as $s) { 
 														$active_s = ($s->status_id == $autotruck->status)? "active_status" :'';
-																	?>
-														<li class="app_status <?=$active_s?>">
-															<?=$s->status->title?>
+
+														if(!array_key_exists($s->status_id, $autotruckStatuses)) continue;
+													?>
+														<li class="app_status <?php echo $active_s?>">
+															<?php echo $autotruckStatuses[$s->status_id]['title']?>
 															<span><?=date('d.m.Y',strtotime($s->trace_date))?></span>
 														</li>
-													<? }
+													<?php }
 												}
 											?>
 										</ul>
-										<div>
-										<p>Итого кол-во мест: <?php echo $autotruck->getAppCountPlace($client->id)?></p>
-										<?php
-											if(is_array($packages)){
-												foreach ($packages as $key => $package) {
-													$count = $autotruck->getAppCountPlacePackage($package->id,$client->id);
 
+										<div>
+										<p>Итого кол-во мест: <?php echo $autotruck->totalCountPlace;//$autotruck->getAppCountPlace($client->id)?></p>
+										<?php
+											$autotuckPackages = $autotruck->packagesCountPlace;
+											if(is_array($packages) && is_array($autotuckPackages)){
+												foreach ($packages as $key => $package) {
+													//$count = $autotruck->getAppCountPlacePackage($package->id,$client->id);
+													$count = array_key_exists($package->id, $autotuckPackages) ? $autotuckPackages[$package->id]['count'] : 0;
 													if($count > 0){
 														?>
 														<p><?php echo $package->title?>: <?php echo $count; ?></p>
@@ -177,61 +171,13 @@ $packages = TypePackaging::find()->all();
 													}
 												}
 											}
+
+											if(array_key_exists("none", $autotuckPackages) && $autotuckPackages['none']['count']){
+											?><p>Не известная упаковка: <?php echo $autotuckPackages['none']['count']; ?></p><?php
+											}
 										?>
 								    	</div>
 								</div>
-								<?php 
-									//РАссмотреть безопасное отключение функционала CustomerPayment
-									if(false){
-								?> 
-								<div class="col-xs-5" style="display: none;">
-									<div class="row">
-										<div class="col-xs-12">
-											<p>
-												<strong>Статус оплаты</strong>: <span style="color:<?=$paymentState->color?>"><?php echo $paymentState->title; ?></span>
-											</p>
-										</div>
-									</div>
-									<?php $form = ActiveForm::begin(['id'=>"paymentStateFor".$autotruck->id,'class'=>'paymentStateForm','action'=>['client/autotruckpayment','id'=>$CustomerPayment->id]])?>
-									<div class="row">
-										<div class="col-xs-4">
-											<?php 
-												echo $form->field($CustomerPayment,"autotruck_id",array('attribute'=>['class'=>"hid"]))->hiddenInput(['value' => $autotruck->id,'class'=>"hid"])->label(false);
-												echo $form->field($CustomerPayment,"client_id")->hiddenInput(['value' => $client->id,'class'=>"hid"])->label(false);
-											?>
-											<?php 
-												$options = [$paymentState->id=>['selected'=>true]];
-												
-												foreach ($sum_states as $key => $ss) {
-													$options[$ss->id]['data-sum'] = 1;
-												}
-
-												echo $form->field($CustomerPayment,'payment_state_id',['inputOptions'=>["class"=>"form-control payment-state-select"]])->label(false)->dropDownList(ArrayHelper::map(PaymentState::find()->orderBy(['id'=>SORT_ASC])->all(),'id','title'),['prompt'=>'Статус оплаты','options'=>$options]);
-											?>
-										</div>
-										<?php 
-
-											$sum_statesArray = ArrayHelper::map($sum_states,'id','id');
-											$display = (in_array($paymentState->id, $sum_statesArray))?"block":"none";
-										?>
-										<div class="col-xs-4 sum_state_block" style="display: <?php echo $display;?>;">
-										<?php echo $form->field($CustomerPayment, "sum",array('attribute'=>['class'=>"sum_hid"]))->textInput(['id' => 'sum_hid_'.$autotruck->id,'class'=>"form-control hid",'value'=>$CustomerPayment->sum]); ?>
-										</div>
-
-										<div class="col-xs-4">
-										<?php echo Html::submitButton('Сохранить',['id'=>'submit_payment','class' => 'btn btn-primary', 'name' => 'customer-payment-autotruck']); ?>
-										</div>
-									</div>
-									<div class="row">
-										<div class="col-xs-10">
-											<?php
-												echo $form->field($CustomerPayment, "comment")->textarea();
-											?>
-										</div>
-									</div>
-									<?php ActiveForm::end();?>
-								</div>
-								<?php } ?>
 							</div>
 
 							
@@ -253,67 +199,49 @@ $packages = TypePackaging::find()->all();
 										<th>Комментарий</th>
 									</tr>
 							<?php $cweight=0;$crate=0; $total = 0; $total_us = 0;
-							foreach ($a['apps'] as $i=> $app) { ?>
+							foreach ($autotruck->apps as $i => $app) { ?>
 									<tr>
 										<td>
 											<?php echo $i+1?>
 											<?php
-												$cl = $app->out_stock ? 'ok' : '';
+												$cl = $app['out_stock'] ? 'ok' : '';
 											?>
 											<span class="app_out_stock <?php echo $cl?>"></span>
 										</td>
-										<td><?=$app->buyer->name?></td>
+										<td><?php echo $client->name;?></td>
 										
-										<?php 
-														if(!$app->type){
-														?>
-															<td>
-																<?php echo $app->sender 
-																			? $app->senderObject->name 
-																			: "Не указан"; 
-																?>
-															</td>
-														
-															<td><? echo $app->count_place ?></td>
-														
-															<td><?php echo $app->package ? $app->typePackaging->title : "Не указан"; ?></td>
-														<?php	
-														}else{
-															?>
-															<td colspan="3"></td>
-															<?php
-														}
-													?>
-										
-										<td><?=$app->info?></td>
-										<td><? echo $app->type?'':$app->weight?></td>
-										<td><?=$app->rate?></td>
-										
-										<td><? echo $app->summa_us?> $</td>
-										
+										<?php if(!$app['type']){ ?>
+											<td>
+												<?php echo $app['sender'] ? $app['senderName'] : "Не указан"; ?>
+											</td>	
+											<td><?php echo $app['count_place'] ?></td>
+											<td><?php echo $app['package'] ? $app['packageTitle'] : "Не указан"; ?></td>
+										<?php }else{ ?>
+											<td colspan="3"></td>
+										<?php } ?>
+										<td><?php echo $app['info']; ?></td>
+										<td><?php echo $app['type']? '' : $app['weight']; ?></td>
+										<td><?php echo $app['rate']; ?></td>
+										<td><?php echo $app['summa_us']; ?> $</td>
 										<td>
 										    <?php 
-										    
-										        //echo $app->type ? round($app->rate*$autotruck->course,2) : round($app->weight*$app->rate*$autotruck->course,2);
-										         $rate_vl = $app->weight > 0 ? $app->summa_us/$app->weight : 0;
-										         $sum_ru = $app->weight * $rate_vl * $autotruck->course;
+										        $rate_vl = $app['weight'] > 0 ? $app['summa_us']/$app['weight'] : 0;
+										        $sum_ru = $app['weight'] * $rate_vl * $autotruck['course'];
 										         
-										         echo $app->type ? round($app->rate*$autotruck->course,2) : round($sum_ru,2);
+										        echo $app['type'] ? round($app['rate']*$autotruck['course'],2) : round($sum_ru,2);
 										     ?> 
-										
 										руб</td>
 										
-										<td><?=$app->comment?></td>
+										<td><?php echo $app['comment']?></td>
 									</tr>
 							<?php 
-								$cweight += $app->type ? 0 : $app->weight; 
-								//$total+= $app->type?$app->rate*$autotruck->course:$app->weight*$app->rate*$autotruck->course;
-								$total+= $app->type? round($app->rate*$autotruck->course,2) : round($app->summa_us*$autotruck->course,2);
-								$total_us+=$app->summa_us;  
+								$cweight += $app['type'] ? 0 : $app['weight']; 
+								$total+= $app['type']? round($app['rate']*$autotruck->course,2) : round($app['summa_us']*$autotruck->course,2);
+								$total_us+=$app['summa_us'];  
 								}?>
 								<tr>
 									<td colspan="3"><strong>Итого</strong></td>
-									<td colspan="3"><strong><?php echo $autotruck->getAppCountPlace($client->id)?></strong></td>
+									<td colspan="3"><strong><?php echo $autotruck->totalCountPlace; //$autotruck->getAppCountPlace($client->id)?></strong></td>
 									<td><strong><?php echo $cweight;?> кг.</strong></td>
 									<td></td>
 									<td><strong><?php echo round($total_us,2);?> $</strong></td>
@@ -350,21 +278,9 @@ $this->registerJs($script);
 	]);
 	Modal::end();
 ?>
-
-
-<?php 
-
-$script = <<<JS
+	
 		
-
-JS;
-
-
-$this->registerJs($script);
-
-?>		
-		
-			<script id="source" language="javascript" type="text/javascript">
+<script id="source" language="javascript" type="text/javascript">
 				$(function () {
 
 				var grafik = [];
@@ -418,10 +334,7 @@ $this->registerJs($script);
 						$(this).parent().parent().siblings(".sum_state_block").find('input').val(0);
 					}
 				});
-
-			
-
 			});
-			</script>
+</script>
 
 </div>

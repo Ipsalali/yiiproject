@@ -3,7 +3,7 @@
 namespace common\models;
 
 use Yii;
-use yii\db\ActiveRecord;
+use yii\db\{ActiveRecord,Query};
 use yii\db\Expression;
 
 /**
@@ -63,6 +63,20 @@ class Status extends ActiveRecord
             'send_check'=>'Отправлять счет',
             'sort' => 'Порядок'
     		);
+    }
+
+
+
+
+    public static function getIndexedArray(){
+        $data = (new Query)->select(['id','title','description','send_check'])->from(self::tableName())->all();
+        
+        $statuses = [];
+        foreach ($data as $s) {
+            $statuses[$s['id']] = $s;
+        }
+
+        return $statuses;
     }
 
 }

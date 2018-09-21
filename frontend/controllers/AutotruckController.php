@@ -169,10 +169,10 @@ class AutotruckController extends Controller{
 					foreach ($post['App'] as $key => $item) {
 						
 						$a = new App;
-						$a->client = ($item['client'])?(int)$item['client']:0;
+						$a->client = ($item['client'])?(int)$item['client']:null;
 						
 						$a->sender = isset($item['sender'])?(int)$item['sender']:null;
-						$a->package = isset($item['package'])?(int)$item['package']:null;
+						$a->package = isset($item['package']) && (int)$item['package']? (int)$item['package'] : null;
 						$a->count_place = isset($item['count_place']) ? (int)$item['count_place'] : null;
 						
 						$a->info = $item['info'];
@@ -409,10 +409,10 @@ class AutotruckController extends Controller{
 							$a = new App;
 						}
 
-						$a->client = isset($item['client'])?(int)$item['client']:0;
+						$a->client = isset($item['client'])?(int)$item['client']:null;
 
-						$a->sender = isset($item['sender'])?(int)$item['sender']:0;
-						$a->package = isset($item['package'])?(int)$item['package']:0;
+						$a->sender = isset($item['sender'])?(int)$item['sender']:null;
+						$a->package = isset($item['package']) && (int)$item['package'] ?(int)$item['package']:null;
 						$a->count_place = isset($item['count_place'])? (int)$item['count_place'] : 0;
 						
 						$a->info = isset($item['info']) ? $item['info'] : "";

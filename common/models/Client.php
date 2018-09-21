@@ -264,23 +264,63 @@ class Client extends ActiveRecordVersionable
 
 
 
+    public function getUserAssignAutotrucks(){
+        $user = \Yii::$app->user->identity;
+        $u_countries = \yii\helpers\ArrayHelper::map($user->accessCountry,'country_id','country_id');
 
+        return Autotruck::find()->innerJoin('app','autotruck.id = app.autotruck_id AND app.client = '.$this->id)->andWhere(['in','autotruck.country',$u_countries])->andWhere(['app.isDeleted'=>0,'autotruck.isDeleted'=>0])->orderBy(["autotruck.date"=>SORT_DESC])->all();
+    }
 
 
     //Возвращает наименования сгруппированные по заявкам
-    public function getAppsSortAutotruck($apps = null){
+    //Удалить этот метод безопасным образом
+    // public function getAppsSortAutotruck($apps = null){
         
-        $apps = ($apps === null) ? $this->apps : $apps;
+    //     $apps = ($apps === null) ? $this->apps : $apps;
         
-        $sorted =array(); 
-        if($apps){
+    //     $sorted =array(); 
+    //     if($apps){
+    //         foreach ($apps as $key => $a) {
+    //             $sorted[$a->autotruck_id]['apps'][] = $a;
+    //         }
+    //     }
 
-            foreach ($apps as $key => $a) {
-                $sorted[$a->autotruck_id]['apps'][] = $a;
+    //     return $sorted;
+    // }
+
+
+    public function getAutotrucksWithApps(){
+        $autotrucks = $this->userAssignAutotrucks;
+
+        $withApps = array();
+        foreach ($autotrucks as $autotruck) {
+            $apps = (new Query)->
+                        select(['app.*','sender.name as senderName','pkg.title as packageTitle'])->
+                        from(['app'=>App::tableName()])->
+                        leftJoin(['sender'=>Sender::tableName()]," app.sender = sender.id")->
+                        leftJoin(['pkg'=>TypePackaging::tableName()]," app.package = pkg.id")->
+                        where(['app.autotruck_id'=>$autotruck->id,'app.client'=>$this->id,'app.isDeleted'=>0])->
+                        all();
+            
+            $packages = array();
+            $total_place = 0;
+            foreach ($apps as $a) {
+                $key = ($a['package'] > 0) ? $a['package'] : 'none';
+                if(!isset($packages[$key]['count']))
+                    $packages[$key]['count'] = 0;
+
+                $packages[$key]['count'] += $a['count_place'];
+                $total_place += $a['count_place'];
             }
+
+            $autotruck->apps = $apps;
+            $autotruck->packagesCountPlace = $packages;
+            $autotruck->totalCountPlace = $total_place;
+            
+            $withApps[$autotruck->id] = $autotruck;
         }
 
-        return $sorted;
+        return $withApps;
     }
 
 
@@ -337,7 +377,7 @@ class Client extends ActiveRecordVersionable
 
     //Формирует данные для графика по соотношению времени и веса заявок
     public function getDataForGrafik(){
-        $sql= "SELECT at.`date`,SUM(a.`weight`) com_weight FROM app a INNER JOIN autotruck at ON (a.`autotruck_id` = at.`id`) WHERE a.`client` = " . $this->id . " GROUP by at.date ORDER BY at.date ASC ";
+        $sql= "SELECT at.`date`,SUM(a.`weight`) com_weight FROM app a INNER JOIN autotruck at ON (a.`autotruck_id` = at.`id`) WHERE a.`isDeleted`=0 AND at.`isDeleted`=0 AND a.`client` = " . $this->id . " GROUP by at.date ORDER BY at.date ASC ";
         //App::find()->leftJoin("autotrucks ON ")->where("client=".$this->id)->orderBy(["id"=>SORT_DESC])->all();
         $connection = Yii::$app->getDb();
         $command = $connection->createCommand($sql);
@@ -346,7 +386,9 @@ class Client extends ActiveRecordVersionable
         if($result){
             foreach ($result as $key => $value) {
                 $month = date("M Y",strtotime($value['date']));
-                $data[$month]['weight'] +=$value['com_weight']; 
+                if(!isset($data[$month]['weight']))
+                    $data[$month]['weight'] = 0;
+                $data[$month]['weight'] += $value['com_weight'];
             }
         }
         return $data;
