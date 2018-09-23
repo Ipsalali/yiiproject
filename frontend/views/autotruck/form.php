@@ -280,8 +280,7 @@ $this->title = $newModel ? "Новая заявка" : "Заявка:".$autotruc
                                                             echo Html::a("X",['autotruck/removeappajax','id'=>$id],['class'=>'btn btn-danger remove_exists_app','data-id'=>$id,'data-confirm'=>'Подтвердите свои дейсвтия']);
                                                         }else{
                                                             echo Html::a("X",null,['class'=>'btn btn-danger remove_app','data-confirm'=>'Подтвердите свои дейсвтия']);
-                                                        }
-                                                            		
+                                                        }  		
                                                      ?>
 													</td>
 												
