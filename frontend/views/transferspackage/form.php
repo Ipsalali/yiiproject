@@ -4,6 +4,11 @@ use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
 use yii\bootstrap\ActiveForm;
 use common\models\Currency;
+use common\models\Seller;
+use common\models\Client;
+
+$sellers = Seller::getSellers();
+$clients = Client::find()->All();
 
 $this->title = isset($model->id)? "Перевод: ".$model->name : "Новый перевод";
 ?>
@@ -51,7 +56,6 @@ $this->title = isset($model->id)? "Перевод: ".$model->name : "Новый 
 						</div>
 					<?php }else{
 					    echo Html::hiddenInput("package_id",$model->id);
-					    //echo $form->field($model,'id')->hiddenInput()->label(false);
 					} ?>
 
 					<div class="col-xs-3">
@@ -102,7 +106,7 @@ $this->title = isset($model->id)? "Перевод: ".$model->name : "Новый 
                 						</thead>
                 						<tbody>
                 							<?php
-                								if(isset($transfers) && is_array($transfers) &&count($transfers)){
+                								if(isset($transfers) && is_array($transfers) && count($transfers)){
                 									foreach ($transfers as $k => $t) {
                 									    
                 									    $id = isset($t['id']) && $t['id'] ? (int)$t['id'] : null;

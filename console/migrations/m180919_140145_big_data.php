@@ -17,11 +17,16 @@ class m180919_140145_big_data extends Migration
 
     public function safeUp()
     {   
-        return true;
+        //return true;
         if($this->tables && is_array($this->tables)){
-            foreach ($this->tables as $table) {
-                $this->importFile($table,$this->file_frefix);
+            try {
+                foreach ($this->tables as $table) {
+                    $this->importFile($table,$this->file_frefix,true,true);
+                }
+            } catch (Exception $e) {
+                echo "\n\n".$e->getMessage()."\n\n";
             }
+            
         }
     }
 
@@ -30,7 +35,7 @@ class m180919_140145_big_data extends Migration
      */
     public function safeDown()
     {
-        return true;
+        //return true;
         if($this->tables && is_array($this->tables)){
             $tables = array_reverse($this->tables);
             foreach ($tables as $table) {

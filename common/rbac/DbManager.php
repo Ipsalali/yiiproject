@@ -48,6 +48,10 @@ class DbManager extends yDbManager{
 
     public function getUserRights($userId){
 
+        if ($this->isEmptyUserId($userId)) {
+            return [];
+        }
+
     	$sql = "CALL get_UserRights($userId)";
     	$items = Yii::$app->db->createCommand($sql)->queryAll();
 
@@ -61,6 +65,15 @@ class DbManager extends yDbManager{
     	return $rights;
     }
 
+    /**
+     * Check whether $userId is empty.
+     * @param mixed $userId
+     * @return bool
+     */
+    private function isEmptyUserId($userId)
+    {
+        return !isset($userId) || $userId === '';
+    }
 }
 
 ?>

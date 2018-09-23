@@ -39,7 +39,7 @@ class Migration extends yiiMigration{
 
 
 
-    public function importFile($fileName,$file_prefix = '',$checkFK = true){
+    public function importFile($fileName,$file_prefix = '',$checkFK = true,$big = false){
         echo "\n\n Start import {$fileName};\n\n ";
 
         $file = $file_prefix . $fileName.".sql";
@@ -53,6 +53,7 @@ class Migration extends yiiMigration{
             }
 
             $sql = $checkFK ? "SET FOREIGN_KEY_CHECKS=0;".$sql : $sql;
+            $sql = $big ? "SET GLOBAL max_allowed_packet=1073741824;".$sql : $sql;
             $sql = "SET time_zone = \"+00:00\";".$sql;
             $this->execute($sql);
         }else{

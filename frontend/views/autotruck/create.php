@@ -186,14 +186,7 @@ $packages = TypePackaging::find()->all();
 			<?php } ?>
 			ntd_package +='</select></td>';
 
-		// var	ntd_status = '<td><select name="App['+n+'][status]" class=\'app_status form-control\'>';
-		// 	ntd_status +='<option value="">Выберите статус</option>';
-		// 	<?php foreach (Status::find()->all() as $key => $cl) { ?>
-
-		// 		ntd_status += '<option value="<?=$cl->id?>"><?php echo Html::encode($cl->title)?></option>';
-
-		// 	<?php } ?>
-		// 	ntd_status +='</select></td>';
+		
 
 		var ntd_place = "<td><input type='text' name='App["+n+"][count_place]' class=\'app_place form-control\'></td>";
 		
@@ -204,7 +197,7 @@ $packages = TypePackaging::find()->all();
 		//var ntd_course = "<td><input type='text' name='App["+n+"][course]' class=\'app_course form-control\'></td>";
 		var ntd_comment = "<td><input type='text' name='App["+n+"][comment]' class=\'app_comment form-control\'></td>";
         
-        var addition_fields = (!type)? ntd_sender+ntd_info+ntd_place+ntd_package : "<td></td>"+ntd_info+"<td colspan='2'></td>";
+        var addition_fields = (!type) ? ntd_sender+ntd_info+ntd_place+ntd_package : "<td></td>"+ntd_info+"<td colspan='2'></td>";
         
 		ntr += ntd_client+addition_fields+ntd_weight+ntd_rate+"<td class='summa_usa'><input name='App["+n+"][summa_us]' class='form-control summa_us' type='text'/></td><td class='summa'></td>"+ntd_comment;/*ntd_status+*/
 		ntr+="<td><a class='btn btn-danger remove_app'>X</a></td>";

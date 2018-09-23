@@ -1124,16 +1124,16 @@
         },
         {
             "name": "kartik-v/yii2-grid",
-            "version": "v3.2.1",
+            "version": "v3.2.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kartik-v/yii2-grid.git",
-                "reference": "951eada4f20593ace18295336c75fd16b353ded0"
+                "reference": "bb3a841ceee259375e07820f250ecfe7297a31bb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/yii2-grid/zipball/951eada4f20593ace18295336c75fd16b353ded0",
-                "reference": "951eada4f20593ace18295336c75fd16b353ded0",
+                "url": "https://api.github.com/repos/kartik-v/yii2-grid/zipball/bb3a841ceee259375e07820f250ecfe7297a31bb",
+                "reference": "bb3a841ceee259375e07820f250ecfe7297a31bb",
                 "shasum": ""
             },
             "require": {
@@ -1173,7 +1173,7 @@
                 "widget",
                 "yii2"
             ],
-            "time": "2018-09-12T11:02:54+00:00"
+            "time": "2018-09-22T07:44:31+00:00"
         },
         {
             "name": "kartik-v/yii2-helpers",
@@ -1228,16 +1228,16 @@
         },
         {
             "name": "kartik-v/yii2-krajee-base",
-            "version": "v1.9.4",
+            "version": "v1.9.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kartik-v/yii2-krajee-base.git",
-                "reference": "a5440e5ce26377e641acc708accf7b9b7d561162"
+                "reference": "fe4324fca887e3219afb71ee394d6880ccc1812a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/yii2-krajee-base/zipball/a5440e5ce26377e641acc708accf7b9b7d561162",
-                "reference": "a5440e5ce26377e641acc708accf7b9b7d561162",
+                "url": "https://api.github.com/repos/kartik-v/yii2-krajee-base/zipball/fe4324fca887e3219afb71ee394d6880ccc1812a",
+                "reference": "fe4324fca887e3219afb71ee394d6880ccc1812a",
                 "shasum": ""
             },
             "require": {
@@ -1275,7 +1275,7 @@
                 "widget",
                 "yii2"
             ],
-            "time": "2018-09-05T18:15:03+00:00"
+            "time": "2018-09-22T07:37:15+00:00"
         },
         {
             "name": "kartik-v/yii2-mpdf",
@@ -1383,16 +1383,16 @@
         },
         {
             "name": "kartik-v/yii2-widget-activeform",
-            "version": "v1.5.2",
+            "version": "v1.5.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kartik-v/yii2-widget-activeform.git",
-                "reference": "e82d9f69258bccd510c22825327cd51db7c325ec"
+                "reference": "9460f27248a3f481097168234c70a0c7a0559cfc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/yii2-widget-activeform/zipball/e82d9f69258bccd510c22825327cd51db7c325ec",
-                "reference": "e82d9f69258bccd510c22825327cd51db7c325ec",
+                "url": "https://api.github.com/repos/kartik-v/yii2-widget-activeform/zipball/9460f27248a3f481097168234c70a0c7a0559cfc",
+                "reference": "9460f27248a3f481097168234c70a0c7a0559cfc",
                 "shasum": ""
             },
             "require": {
@@ -1431,7 +1431,7 @@
                 "widget",
                 "yii2"
             ],
-            "time": "2018-09-05T18:09:38+00:00"
+            "time": "2018-09-22T07:40:06+00:00"
         },
         {
             "name": "kartik-v/yii2-widget-datepicker",
@@ -1784,16 +1784,16 @@
         },
         {
             "name": "mpdf/mpdf",
-            "version": "v7.1.4",
+            "version": "v7.1.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mpdf/mpdf.git",
-                "reference": "349a1ffae7d04f0d976f619d6f00d8569a4a74c7"
+                "reference": "2ed29c3a59fa23e77052e9d7fa7e31c707fb7502"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mpdf/mpdf/zipball/349a1ffae7d04f0d976f619d6f00d8569a4a74c7",
-                "reference": "349a1ffae7d04f0d976f619d6f00d8569a4a74c7",
+                "url": "https://api.github.com/repos/mpdf/mpdf/zipball/2ed29c3a59fa23e77052e9d7fa7e31c707fb7502",
+                "reference": "2ed29c3a59fa23e77052e9d7fa7e31c707fb7502",
                 "shasum": ""
             },
             "require": {
@@ -1848,7 +1848,7 @@
                 "php",
                 "utf-8"
             ],
-            "time": "2018-08-10T11:00:53+00:00"
+            "time": "2018-09-19T09:58:39+00:00"
         },
         {
             "name": "myclabs/deep-copy",

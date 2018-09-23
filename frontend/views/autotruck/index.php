@@ -27,7 +27,7 @@ $this->title = "Список заявок";
 				<h1>Список заявок</h1>
 			</div>
 			<div class="new_autotruck">
-				<?php echo Html::a('Добавить заявку', array('autotruck/create'), array('class' => 'btn btn-primary')); ?>
+				<?php echo Html::a('Добавить заявку', array('autotruck/form'), array('class' => 'btn btn-primary')); ?>
 			</div>
 			
 		</div>

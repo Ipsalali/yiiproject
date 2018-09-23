@@ -6,29 +6,27 @@ use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
-use common\models\Post;
 use yii\web\HttpException;
+use yii\data\ActiveDataProvider;
+use yii\data\ArrayDataProvider;
+use yii\web\UploadedFile;
+
 use frontend\models\Autotruck;
 use frontend\models\App;
 use frontend\models\AppTrace;
+use frontend\models\ExpensesManager;
+use frontend\modules\AutotruckSearch;
+use frontend\modules\AutotruckReport;
+use frontend\helpers\ExcelAutotruck;
+
+use common\models\SupplierCountry;
+use common\models\Sender;
+use common\models\TypePackaging;
 use common\models\Client;
 use common\models\Status;
 use common\models\User;
-use common\helper\EDateTime;
-use frontend\modules\ListAction;
-use frontend\modules\AutotruckSearch;
-use frontend\modules\AutotruckReport;
-use yii\data\ActiveDataProvider;
-use frontend\models\ExpensesManager;
-use yii\data\ArrayDataProvider;
-use frontend\helpers\ExcelAutotruck;
-use yii\web\UploadedFile;
 
 class AutotruckController extends Controller{
-
-	
-
-	
 
     /**
      * @inheritdoc
@@ -45,7 +43,7 @@ class AutotruckController extends Controller{
                         'roles' => ['autotruck/index'],
                     ],
                     [
-                        'actions' => ['create','addown'],
+                        'actions' => ['create','addown','form','get-row-exp','get-row-app'],
                         'allow' => true,
                         'roles' => ['autotruck/create'],
                     ],
@@ -55,7 +53,7 @@ class AutotruckController extends Controller{
                         'roles' => ['autotruck/read'],
                     ],
                     [
-                        'actions' => ['update','unlinkfile','download','removeappajax', 'set-out-stock','set-all-out-stock'],
+                        'actions' => ['update','form','get-row-exp','get-row-app','unlinkfile','download','removeappajax', 'set-out-stock','set-all-out-stock'],
                         'allow' => true,
                         'roles' => ['autotruck/update'],
                     ],
@@ -91,33 +89,220 @@ class AutotruckController extends Controller{
 
 
 
+	public function actionForm($id = null){
+		
+		$post = Yii::$app->request->post();
+
+		if($id !== null){
+			$autotruck = Autotruck::findOne($id);
+			if(!isset($autotruck->id))
+        		throw new HttpException(404, 'Заявка не найдена!');
+		}elseif(isset($post['autotruck_id']) && (int)$post['autotruck_id']){
+		    
+		    $autotruck = Autotruck::findOne((int)$post['autotruck_id']);
+
+			if(!isset($autotruck->id))
+				throw new HttpException(404,'Заявка не найдена!');
+				
+		}else{
+			$autotruck = new Autotruck();
+			$autotruck->scenario = Autotruck::SCENARIO_CREATE;
+		}
+
+		
+		$expenses = $autotruck->getExpensesManager();
+		$apps= $autotruck->getApps();
+
+		if(isset($post['Autotruck'])){
+
+			$update = true;
+        	$has_new_status = ($autotruck->status == $post['Autotruck']['status'])? false : true;
+        	$prev_status = $autotruck->status;
+       
+        	$autotruck->load($post);
+        	$trace_date = ($post['Autotruck']['date_status'])
+									? date('Y-m-d\TH:i:s',strtotime($post['Autotruck']['date_status'])):date("Y-m-d\TH:i:s");
+        	
+			if(isset($_FILES['Autotruck']['name']['file'][0]) && $_FILES['Autotruck']['name']['file'][0]){
+
+				$autotruck->tempFiles = $autotruck->file;
+				$autotruck->file = UploadedFile::getInstances($autotruck, 'file');
+				
+	            if ($autotruck->file && $fName = $autotruck->uploadFile()) {
+	                $autotruck->file = $fName;
+	            }else{
+	            	Yii::$app->session->setFlash("warning","Не удалось загузить файл");	
+	            }
+        	}
+
+
+			if($autotruck->save(1)){
+				// статус заявки
+				$params['autotruck_id'] = $autotruck->id;
+				$params['status_id'] = $autotruck->status;
+				$params['prevstatus_id'] = 0;
+				$params['trace_date'] = $trace_date;
+				
+				if($autotruck->id && $has_new_status){
+					$params['prevstatus_id'] =($has_new_status)? $prev_status : 0;
+					$trace = AppTrace::addSelf($params);
+				}elseif($autotruck->id && $autotruck->status){
+					$activeStatusTrace = $autotruck->activeStatusTrace;
+					if($activeStatusTrace instanceof AppTrace && isset($activeStatusTrace->trace_id) && $activeStatusTrace->trace_id){
+						$apptrace = $activeStatusTrace;
+						$apptrace->trace_date = $trace_date;
+						$apptrace->save();
+					}else{
+						$params['traсe_first'] = 1;
+						$trace = AppTrace::addSelf($params);
+					}
+				}
+
+				//Добавление расхода
+				if(isset($post['ExpensesManager']) && count($post['ExpensesManager']) && $autotruck->id){
+					foreach ($post['ExpensesManager'] as $key => $item) {
+						
+						if(isset($item['id']) && (int)$item['id']){
+							$exp = ExpensesManager::findOne((int)$item['id']);
+							if ($exp->id === NULL)
+        						throw new HttpException(404, 'App Not Exist');
+						}else{
+							$exp = new ExpensesManager;
+						}
+						$data['ExpensesManager'] = $item;
+						$data['ExpensesManager']['autotruck_id'] = $autotruck->id;
+						$data['ExpensesManager']['date'] = isset($item['date']) && $item['date'] ?$item['date']:$autotruck->date;
+						
+						if($exp->load($data) && $exp->save(1)){
+							//обновление сверки
+							try {
+								User::refreshUserSverka($exp->manager_id);
+							} catch (Exception $e) {}
+						}
+					}
+				}
+				
+
+				//Добавление наименовании
+				if(isset($post['App']) && count($post['App']) && $autotruck->id){
+					
+					foreach ($post['App'] as $key => $item) {
+						
+						if(isset($item['id']) && (int)$item['id']){
+							$a = App::findOne((int)$item['id']);
+							if ($a->id === NULL)
+        						throw new HttpException(404, 'Попытка сохранить не существующее наименование');
+						}else{
+							$a = new App;
+						}
+
+						$data['App'] = $item;
+						$data['App']['autotruck_id']= $autotruck->id;
+						if(!$a->load($data) || !$a->save(1)){
+							Yii::$app->session->setFlash("danger",'Наименование не добавлено!');
+						}
+					}
+				}
+				Yii::$app->session->setFlash("success",'Заявка сохранена');
+
+				if($autotruck->status){
+				    $autotruck->sendNotification();
+                }
+
+                //Временно реализуем перерасчет сверки
+                if($autotruck->activeStatus->send_check){
+                    //обновление сверки
+                    try {
+                        $autotruck->refreshClientsSverka();
+                    } catch (Exception $e) {}
+                }
+
+			}else{
+				Yii::$app->session->setFlash("danger",'Ошибка при сохранении заявки');
+			}
+
+			
+			if(Yii::$app->user->can("clientExtended")){
+				return Yii::$app->response->redirect(array("client/profile"));
+			}else{
+				return Yii::$app->response->redirect(['autotruck/read', 'id' => $autotruck->id]);
+			}
+			
+    	}
+    	
+
+		
+    	return $this->render('form',[
+        	'autotruck' => $autotruck,
+        	'expenses'=>$expenses,
+        	'apps'=>$apps
+    	]);
+	}
 
 
 
+	public function actionGetRowExp(){
+		\Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+		$get = \Yii::$app->request->get();
+
+		$model = new ExpensesManager(); 
+		$expManagers = User::getSellers();
+		$n = isset($get['n']) ? (int)$get['n'] : 0;
+
+		$ans['html'] = $this->renderPartial("rowExp",[
+												'model'=>$model,
+												'expManagers'=>$expManagers,
+												'n'=>$n
+											]);
+		return $ans;
+	}
+
+
+	public function actionGetRowApp(){
+		\Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+		$get = \Yii::$app->request->get();
+		
+		$senders = Sender::find()->orderBy(['name'=>'DESC'])->all();
+		$packages = TypePackaging::find()->all();
+		
+		$user = \Yii::$app->user->identity;
+		$userIsClientExtended = \Yii::$app->user->can("clientExtended");
+		$clients = ($userIsClientExtended) ? [$user->client] : Client::find()->where(['isDeleted'=>0])->orderBy(['name'=>'DESC'])->all();
+
+		$model = new App();
+		$n = isset($get['n']) ? (int)$get['n'] : 0;
+		$type = isset($get['type']) && (int)$get['type'] ? 1 : 0;
+
+		$ans['html'] = $this->renderPartial("rowApp",[
+											'model'=>$model,
+											'senders'=>$senders,
+											'packages'=>$packages,
+											'clients'=>$clients,
+											'n'=>$n,
+											'type'=>$type
+										]);
+		return $ans;
+	}
+
+
+
+
+
+
+
+	// избавиться в будущем
 	public function actionCreate(){
 		$autotruck = new Autotruck;
 		$autotruck->scenario = Autotruck::SCENARIO_CREATE;
-		$app = new App;
-
-		$filters = (array_key_exists('filters', $_GET)) ? $_GET['filters'] : array();
-		Yii::$app->view->params['filters'] = $filters;
+		
 
 		$post = Yii::$app->request->post();
 
-		$eDate = new EDateTime;
-        
 		if(isset($post['Autotruck'])){
-			$autotruck->name = $post['Autotruck']['name'];
-			$autotruck->course = ($post['Autotruck']['course'])?round($post['Autotruck']['course'],4):0;
-			$autotruck->country = ($post['Autotruck']['country'])? $post['Autotruck']['country']:0;
-			$autotruck->date = ($post['Autotruck']['date'])?date('Y-m-d',strtotime($post['Autotruck']['date'])):date("Y-m-d");
-			$autotruck->description = $post['Autotruck']['description'];
-			$autotruck->status = $post['Autotruck']['status']? $post['Autotruck']['status']: 0;
-
-			$autotruck->auto_number = strip_tags($post['Autotruck']['auto_number']);
-			$autotruck->auto_name = strip_tags($post['Autotruck']['auto_name']);
-			$autotruck->gtd = strip_tags($post['Autotruck']['gtd']);
-			$autotruck->decor = strip_tags($post['Autotruck']['decor']);
+			
+			$autotruck->load($post);
 
 			if($_FILES['Autotruck']['name']['file'][0]){
 				$autotruck->file = UploadedFile::getInstances($autotruck, 'file');
@@ -148,13 +333,10 @@ class AutotruckController extends Controller{
 				if(isset($post['ExpensesManager']) && count($post['ExpensesManager']) && $autotruck->id){
 					foreach ($post['ExpensesManager'] as $key => $item) {
 						$exp = new ExpensesManager;
-						$exp->date = isset($item['date']) && $item['date'] ? date("Y-m-d",strtotime($item['date'])) : $autotruck->date;
-						$exp->manager_id = (int)$item['manager_id'];
-						$exp->cost = round($item['cost'],2);
-						$exp->autotruck_id = $autotruck->id;
-						$exp->comment = trim(strip_tags($item['comment']));
-
-						if($exp->save(1)){
+						$data['ExpensesManager'] = $item;
+						$data['ExpensesManager']['autotruck_id'] = $autotruck->id;
+						$data['ExpensesManager']['date'] = isset($item['date']) && $item['date'] ?$item['date']:$autotruck->date;
+						if($exp->load($data) && $exp->save(1)){
 							//обновление сверки
 							try {
 								User::refreshUserSverka($exp->manager_id);
@@ -165,36 +347,15 @@ class AutotruckController extends Controller{
 
 				//Добавление наименовании
 				if(isset($post['App']) && count($post['App']) && $autotruck->id){
-
 					foreach ($post['App'] as $key => $item) {
-						
 						$a = new App;
-						$a->client = ($item['client'])?(int)$item['client']:null;
-						
-						$a->sender = isset($item['sender'])?(int)$item['sender']:null;
-						$a->package = isset($item['package']) && (int)$item['package']? (int)$item['package'] : null;
-						$a->count_place = isset($item['count_place']) ? (int)$item['count_place'] : null;
-						
-						$a->info = $item['info'];
-						$a->info = $item['info'];
-						if((int)$item['type']){
-							$a->weight = 1;
-							$a->type = 1;
-						}else{
-							$a->weight = ($item['weight']) ? $item['weight'] : 0;
-							$a->type = 0;
+						$data['App'] = $item;
+						$data['App']['autotruck_id']= $autotruck->id;
+						if(!$a->load($data) || !$a->save(1)){
+							Yii::$app->session->setFlash("danger",'Наименование не добавлено!');
 						}
-
-						$a->summa_us = ($item['summa_us']) ? round($item['summa_us'],2) : 0;
-						$a->rate = ($item['rate']) ? round($item['rate'],2) : 0;
-						$a->comment = $item['comment'];
-						$a->autotruck_id = $autotruck->id;
-
-						$a->save(1);
 					}
-							
-					
-					
+
 				}else{
 					if($autotruck->id){
 						return Yii::$app->response->redirect(array("autotruck/read",'id'=>$autotruck->id));
@@ -230,15 +391,8 @@ class AutotruckController extends Controller{
 		}
 
 		
-		return $this->render('create',array('autotruck'=>$autotruck,'app'=>$app));
+		return $this->render('create',array('autotruck'=>$autotruck));
 	}
-
-
-
-
-
-
-
 
 
 
@@ -256,10 +410,6 @@ class AutotruckController extends Controller{
 
 		return $this->render('read',array("autotruck"=>$autotruck));
 	}
-
-
-
-
 
 
 
@@ -294,7 +444,7 @@ class AutotruckController extends Controller{
 
 
 
-	
+	// Избавить в будущем
 	public function actionUpdate($id = null){
 
 		if($id == null)
@@ -309,28 +459,15 @@ class AutotruckController extends Controller{
 
 		if(isset($post['Autotruck'])){
 
-			$autotruck->name = $post['Autotruck']['name'];
-			$autotruck->course = ($post['Autotruck']['course'])?round($post['Autotruck']['course'],4):0;
-			$autotruck->country = $post['Autotruck']['country'];
-			$autotruck->date = ($post['Autotruck']['date'])
-									? date('Y-m-d',strtotime($post['Autotruck']['date']))
-									: $autotruck->date;
-			
 			$update = true;
         	$has_new_status = ($autotruck->status == $post['Autotruck']['status'])? false : true;
         	$prev_status = $autotruck->status;
-        	$autotruck->status = (!$has_new_status) ? $autotruck->status: (int)$post['Autotruck']['status'];
+       
+        	$autotruck->load($post);
         	$trace_date = ($post['Autotruck']['date_status'])
 									? date('Y-m-d\TH:i:s',strtotime($post['Autotruck']['date_status'])):date("Y-m-d\TH:i:s");
         	
-        	$autotruck->auto_number = strip_tags($post['Autotruck']['auto_number']);
-			$autotruck->auto_name = strip_tags($post['Autotruck']['auto_name']);
-			$autotruck->gtd = strip_tags($post['Autotruck']['gtd']);
-			$autotruck->decor = strip_tags($post['Autotruck']['decor']);
-			
-			$autotruck->description = $post['Autotruck']['description'];
-			
-			if($_FILES['Autotruck']['name']['file'][0]){
+			if(isset($_FILES['Autotruck']['name']['file'][0]) && $_FILES['Autotruck']['name']['file'][0]){
 
 				$autotruck->tempFiles = $autotruck->file;
 				$autotruck->file = UploadedFile::getInstances($autotruck, 'file');
@@ -338,10 +475,9 @@ class AutotruckController extends Controller{
 	            if ($autotruck->file && $fName = $autotruck->uploadFile()) {
 	                $autotruck->file = $fName;
 	            }else{
-	            	Yii::$app->session->setFlash("FileUploadError");	
+	            	Yii::$app->session->setFlash("warning","Не удалось загузить файл");	
 	            }
         	}
-			
 
 			if($autotruck->save(1)){
 				// статус заявки
@@ -376,15 +512,11 @@ class AutotruckController extends Controller{
 						}else{
 							$exp = new ExpensesManager;
 						}
+						$data['ExpensesManager'] = $item;
+						$data['ExpensesManager']['autotruck_id'] = $autotruck->id;
+						$data['ExpensesManager']['date'] = isset($item['date']) && $item['date'] ?$item['date']:$autotruck->date;
 						
-						$exp->manager_id = (int)$item['manager_id'];
-						
-						$exp->date = isset($item['date']) && $item['date'] ? date("Y-m-d",strtotime($item['date'])) : $autotruck->date;
-						$exp->cost = round($item['cost'],2);
-						$exp->autotruck_id = $autotruck->id;
-						$exp->comment = trim(strip_tags($item['comment']));
-
-						if($exp->save(1)){
+						if($exp->load($data) && $exp->save(1)){
 							//обновление сверки
 							try {
 								User::refreshUserSverka($exp->manager_id);
@@ -400,44 +532,21 @@ class AutotruckController extends Controller{
 					foreach ($post['App'] as $key => $item) {
 						
 						if(isset($item['id']) && (int)$item['id']){
-							
 							$a = App::findOne((int)$item['id']);
-							
 							if ($a->id === NULL)
-        						throw new HttpException(404, 'App Not Exist');
+        						throw new HttpException(404, 'Попытка сохранить не существующее наименование');
 						}else{
 							$a = new App;
 						}
 
-						$a->client = isset($item['client'])?(int)$item['client']:null;
-
-						$a->sender = isset($item['sender'])?(int)$item['sender']:null;
-						$a->package = isset($item['package']) && (int)$item['package'] ?(int)$item['package']:null;
-						$a->count_place = isset($item['count_place'])? (int)$item['count_place'] : 0;
-						
-						$a->info = isset($item['info']) ? $item['info'] : "";
-						if((int)$item['type']){
-							$a->weight = 1;
-							$a->type = 1;
-						}else{
-							$a->weight = isset($item['weight']) ? $item['weight'] : 0;
-							$a->type = 0;
-						}
-						$a->rate = isset($item['rate']) ? round($item['rate'],2) : 0;
-						
-						$a->summa_us = isset($item['summa_us']) ? round($item['summa_us'],2) : 0;
-						$a->comment = $item['comment'];
-						$a->autotruck_id = $autotruck->id;
-
-						if($a->save(1)){
-							
-							Yii::$app->session->setFlash("AppSaved");	
-						}else{
-							Yii::$app->session->setFlash("AppSavedError");
+						$data['App'] = $item;
+						$data['App']['autotruck_id']= $autotruck->id;
+						if(!$a->load($data) || !$a->save(1)){
+							Yii::$app->session->setFlash("danger",'Наименование не добавлено!');
 						}
 					}
 				}
-				Yii::$app->session->setFlash("AutotruckUpdated");
+				Yii::$app->session->setFlash("success",'Заявка сохранена');
 
 				if($autotruck->status){
 				    $autotruck->sendNotification();
@@ -452,22 +561,21 @@ class AutotruckController extends Controller{
                 }
 
 			}else{
-				Yii::$app->session->setFlash("AutotruckUpdatedError");
+				Yii::$app->session->setFlash("danger",'Ошибка при сохранении заявки');
 			}
 
 			
 			if(Yii::$app->user->can("clientExtended")){
-					Yii::$app->response->redirect(array("client/profile"));
-			}
-			else{
+				return Yii::$app->response->redirect(array("client/profile"));
+			}else{
 				return Yii::$app->response->redirect(['autotruck/read', 'id' => $autotruck->id]);
 			}
 			
     	}
     
-    	return $this->render('update', array(
+    	return $this->render('update',[
         	'autotruck' => $autotruck
-    	));
+    	]);
 
 	}
 

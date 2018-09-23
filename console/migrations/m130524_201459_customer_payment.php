@@ -40,7 +40,7 @@ SQL;
 
     public function safeDown()
     {
-        return true
+        return true;
         $this->dropTable($this->customer_payment);
     }
 }

@@ -27,8 +27,15 @@ class App extends ActiveRecordVersionable
 	public function rules(){
 		return [
             // name, email, subject and body are required
-            [['info'], 'required'],
-            [['client','sender','package','count_place','type','autotruck_id','out_stock','comment','status'],'safe']
+            [['info','autotruck_id'], 'required'],
+            [['client','sender','package','count_place','autotruck_id'],'integer'],
+            [['client','sender','package'],'default','value'=>null],
+            [['count_place','rate'],'default','value'=>0],
+            [['info','comment'],'filter','filter'=>function($v){return trim(strip_tags($v));}],
+            [['rate','weight'],'number'],
+            ['type','in','range'=>[0,1]],
+            ['type','default','value'=>0],
+            [['rate','summa_us'],'filter','filter'=>function($v){return round($v,2);}]
         ];
 	}
 
@@ -51,6 +58,22 @@ class App extends ActiveRecordVersionable
             'isDeleted'
         ];
     }
+
+    public function load($data, $formName = null){
+        
+        if(parent::load($data, $formName)){
+
+            if((int)$this->type){
+                //У услуг не может быть веса.
+                $this->weight = 1;
+            }
+            return true;
+        }
+
+        return false;
+    }
+
+
 
 	/**
      * Returns the static model of the specified AR class.

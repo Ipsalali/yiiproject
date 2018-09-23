@@ -26,7 +26,11 @@ class ExpensesManager extends ActiveRecordVersionable
             // name, email, subject and body are required
             [['manager_id','cost','autotruck_id','date'], 'required'],
             ['cost','double'],
-            ['organisation','default','value'=>0]
+            [['manager_id','autotruck_id'],'integer'],
+            ['cost','filter','filter'=>function($v){return round($v,2);}],
+            ['comment','filter','filter'=>function($v){return trim(strip_tags($v));}],
+            ['date','filter','filter'=>function($v){return $v ? date("Y-m-d",strtotime($v)) : date("Y-m-d");}],
+            ['organisation','default','value'=>null]
         ];
 	}
 
@@ -100,8 +104,8 @@ class ExpensesManager extends ActiveRecordVersionable
     }
 
     public static function getAutotruckExpenses($autotruck_id){
+        if(!$autotruck_id) return array();
 
-        
         $query = ExpensesManager::find()->where(['autotruck_id'=>$autotruck_id,'isDeleted'=>0]);
 
         $managers = User::getAllowedSellersId();

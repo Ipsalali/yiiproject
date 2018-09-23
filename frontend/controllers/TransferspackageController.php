@@ -52,7 +52,6 @@ class TransferspackageController extends Controller{
 
 	public function actionCreate($id = null){
 		
-		
 		$post = Yii::$app->request->post();
 		
 		if($id !== null){
@@ -74,11 +73,9 @@ class TransferspackageController extends Controller{
 		}
 
 		
-
 		$transfers = $model->transfers;
 		$expenses = $model->sellerExpenses;
-		$sellers = Seller::getSellers();
-		$clients = Client::find()->All();
+		
 
 		if(isset($post['TransfersPackage'])){
 
@@ -150,7 +147,7 @@ class TransferspackageController extends Controller{
 	            	if(!$error){
 	            	    return $this->redirect(["transferspackage/index"]);
 	            	}else{
-	            	    return $this->render('form',['model'=>$model,'transfers'=>$transfers,'sellers'=>$sellers,'clients'=>$clients,'expenses'=>$expenses]);
+	            	    return $this->render('form',['model'=>$model,'transfers'=>$transfers,'expenses'=>$expenses]);
 	            	}
 	            	
 
@@ -163,12 +160,12 @@ class TransferspackageController extends Controller{
 
 				//Чтоб не потерять заполненные даные услуг, передадим их обратно клиенту
 				$transfers = isset($post['Transfer']) ? $post['Transfer'] : [];
-				return $this->render('form',['model'=>$model,'transfers'=>$transfers,'sellers'=>$sellers,'clients'=>$clients,'expenses'=>$expenses]);
+				return $this->render('form',['model'=>$model,'transfers'=>$transfers,'expenses'=>$expenses]);
 			}
 
 		}
 
-		return $this->render('form',['model'=>$model,'transfers'=>$transfers,'sellers'=>$sellers,'clients'=>$clients,'expenses'=>$expenses]);
+		return $this->render('form',['model'=>$model,'transfers'=>$transfers,'expenses'=>$expenses]);
 	}
 
 

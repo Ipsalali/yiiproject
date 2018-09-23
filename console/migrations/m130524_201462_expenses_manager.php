@@ -25,7 +25,7 @@ class m130524_201462_expenses_manager extends Migration
                   `cost` double NOT NULL,
                   `comment` text NOT NULL,
                   `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                  `organisation` int(11) NOT NULL DEFAULT '0',
+                  `organisation` int(11)  DEFAULT NULL,
                   PRIMARY KEY (`id`),
 
                 CONSTRAINT `fk-expenses_manager-manager_id` FOREIGN KEY (`manager_id`) REFERENCES {$this->user} (`id`) ON DELETE CASCADE ON UPDATE CASCADE,

@@ -77,7 +77,7 @@ $packages = TypePackaging::find()->all();
 						<div class="panel-body autotruck_info" style="padding:5px;">
 							<div class="row">
 								<div class="col-xs-3">
-									<p>Страна поставки: <span><?php echo $autotruck->supplierCountry->country?></span></p>
+									<p>Страна поставки: <span><?php echo $autotruck->country ? $autotruck->supplierCountry->country : "Не указана"?></span></p>
 								</div>
 								<div class="col-xs-3">
 									<p>Курс: <span><?php echo $autotruck->course?> руб.</span></p>

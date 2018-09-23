@@ -53,7 +53,19 @@ class Autotruck extends ActiveRecordVersionable
 	public function rules(){
 		return [
             // name, email, subject and body are required
-            [['name'], 'required'],
+            [['name'], 'required','message'=>'Обязательное поле'],
+            [['name','invoice','decor','gtd','auto_name','auto_number','description'],'filter','filter'=>function($v){
+                return trim(strip_tags($v));
+            }],
+            ['course','number'],
+            ['course','filter','filter'=>function($v){
+                return $v ? round($v,4) : 0;
+            }],
+            ['date','filter','filter'=>function($v){
+                return $v ? date('Y-m-d',strtotime($v)):date("Y-m-d");
+            }],
+            [['status','country'],'integer'],
+            [['status','country'],'default','value'=>null],
             [['file'], 'file', 'skipOnEmpty' => true,'checkExtensionByMimeType'=>false, 'extensions' => 'xls,xlsx,doc,docx,pdf,jpeg,jpg,png','maxFiles'=>20],
             ['creator','default','value'=>\Yii::$app->user->identity->id,'on'=>self::SCENARIO_CREATE]
         ];
@@ -64,6 +76,7 @@ class Autotruck extends ActiveRecordVersionable
     public static function versionableAttributes(){
         return [
             'name',
+            'invoice',
             'number',
             'date',
             'description',
@@ -81,9 +94,20 @@ class Autotruck extends ActiveRecordVersionable
     }
 
 
-    public function scenarios(){
-        return array_merge(parent::scenarios(),['SCENARIO_CREATE'=>[]]);
+    public function load($data, $formName = null){
+        $this->tempFiles = $this->file;
+        if(parent::load($data, $formName)){
+
+            if(is_array($this->file)){
+                $this->file = $this->tempFiles;
+            }
+            return true;
+        }
+
+        return false;
     }
+
+   
 
 	/**
      * Returns the static model of the specified AR class.
@@ -119,6 +143,7 @@ class Autotruck extends ActiveRecordVersionable
     	return array(
     		'id'=>'Id',
     		'name'=>'Инвойс',
+            'invoice'=>'Название',
     		'number'=>'Номер',
     		'date'=>'Дата',
     		'description'=>'Комментарии',
@@ -162,6 +187,8 @@ class Autotruck extends ActiveRecordVersionable
 
 
     public function getApps(){
+        if(!$this->id) return array();
+
         return App::find()->where('autotruck_id='.$this->id)->andWhere(['isDeleted'=>0])->all();
     }
 
@@ -177,7 +204,7 @@ class Autotruck extends ActiveRecordVersionable
 
 
     public function getExpensesManager(){
-
+        if(!$this->id) return array();
         return ExpensesManager::getAutotruckExpenses($this->id);
     }
 
@@ -186,6 +213,8 @@ class Autotruck extends ActiveRecordVersionable
 
 
     public function getTraceStory(){
+        if(!$this->id) return array();
+
         return AppTrace::find()->where('autotruck_id='.$this->id)->orderBy([
         'trace_date' => SORT_DESC
       ])->all();
@@ -216,7 +245,7 @@ class Autotruck extends ActiveRecordVersionable
     * @return AppTrace;
     */
     public function getActiveStatusTrace(){
-        $status = $this->getActiveStatus();
+        if(!$this->id || $this->status) return array();
 
         return AppTrace::find()->where(['autotruck_id'=>$this->id,'status_id'=>$this->activeStatus->id])->one();
     }
@@ -579,7 +608,7 @@ class Autotruck extends ActiveRecordVersionable
 
 
     public function getAppCountPlace($client = null){
-        
+        if(!$this->id) return null;
         $conditionClient = $client > 0 ? " AND `client`={$client}" : ""; 
         
         $sql = "SELECT SUM(count_place) FROM ".App::tableName()." WHERE autotruck_id = ".$this->id." AND `isDeleted`=0 ".$conditionClient;
@@ -590,7 +619,7 @@ class Autotruck extends ActiveRecordVersionable
     }
 
     public function getAppCountPackage($package,$client = null){
-        
+        if(!$this->id) return null;
         $conditionClient = $client > 0 ? " AND `client`={$client}" : ""; 
         
         $sql = "SELECT count(id) FROM ".App::tableName()." WHERE autotruck_id = ".$this->id." AND `isDeleted`=0 AND package = ".$package." ".$conditionClient;
@@ -603,6 +632,8 @@ class Autotruck extends ActiveRecordVersionable
 
     public function getAppCountPlacePackage($package,$client = null){
         
+        if(!$this->id) return null;
+
         $conditionClient = $client > 0 ? " AND `client`={$client}" : "";
         
         $sql = "SELECT SUM(count_place) FROM ".App::tableName()." WHERE autotruck_id = ".$this->id." AND `isDeleted`=0 AND package = ".$package." ".$conditionClient;
