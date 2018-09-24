@@ -92,7 +92,7 @@ class AutotruckController extends Controller{
 	public function actionForm($id = null){
 		
 		$post = Yii::$app->request->post();
-
+		
 		if($id !== null){
 			$autotruck = Autotruck::findOne($id);
 			if(!isset($autotruck->id))
@@ -105,6 +105,7 @@ class AutotruckController extends Controller{
 				throw new HttpException(404,'Заявка не найдена!');
 				
 		}else{
+
 			$autotruck = new Autotruck();
 			$autotruck->scenario = Autotruck::SCENARIO_CREATE;
 		}
@@ -115,119 +116,121 @@ class AutotruckController extends Controller{
 
 		if(isset($post['Autotruck'])){
 
-			$update = true;
-        	$has_new_status = ($autotruck->status == $post['Autotruck']['status'])? false : true;
-        	$prev_status = $autotruck->status;
-       
-        	$autotruck->load($post);
-        	$trace_date = ($post['Autotruck']['date_status'])
+       		if($autotruck->load($post) && $autotruck->validate()){
+	        	$has_new_status = ($autotruck->status == $post['Autotruck']['status'])? false : true;
+	        	$prev_status = $autotruck->status;
+	        	$trace_date = ($post['Autotruck']['date_status'])
 									? date('Y-m-d\TH:i:s',strtotime($post['Autotruck']['date_status'])):date("Y-m-d\TH:i:s");
-        	
-			if(isset($_FILES['Autotruck']['name']['file'][0]) && $_FILES['Autotruck']['name']['file'][0]){
+       		
+				if(isset($_FILES['Autotruck']['name']['file'][0]) && $_FILES['Autotruck']['name']['file'][0]){
+					$autotruck->tempFiles = $autotruck->file;
+					$autotruck->file = UploadedFile::getInstances($autotruck, 'file');
+		            if ($autotruck->file && $fName = $autotruck->uploadFile()) {
+		                $autotruck->file = $fName;
+		            }else{
+		            	Yii::$app->session->setFlash("warning","Не удалось загузить файл");	
+		            }
+	        	}
 
-				$autotruck->tempFiles = $autotruck->file;
-				$autotruck->file = UploadedFile::getInstances($autotruck, 'file');
-				
-	            if ($autotruck->file && $fName = $autotruck->uploadFile()) {
-	                $autotruck->file = $fName;
-	            }else{
-	            	Yii::$app->session->setFlash("warning","Не удалось загузить файл");	
-	            }
-        	}
-
-
-			if($autotruck->save(1)){
-				// статус заявки
-				$params['autotruck_id'] = $autotruck->id;
-				$params['status_id'] = $autotruck->status;
-				$params['prevstatus_id'] = 0;
-				$params['trace_date'] = $trace_date;
-				
-				if($autotruck->id && $has_new_status){
-					$params['prevstatus_id'] =($has_new_status)? $prev_status : 0;
-					$trace = AppTrace::addSelf($params);
-				}elseif($autotruck->id && $autotruck->status){
-					$activeStatusTrace = $autotruck->activeStatusTrace;
-					if($activeStatusTrace instanceof AppTrace && isset($activeStatusTrace->trace_id) && $activeStatusTrace->trace_id){
-						$apptrace = $activeStatusTrace;
-						$apptrace->trace_date = $trace_date;
-						$apptrace->save();
-					}else{
-						$params['traсe_first'] = 1;
-						$trace = AppTrace::addSelf($params);
-					}
-				}
-
-				//Добавление расхода
-				if(isset($post['ExpensesManager']) && count($post['ExpensesManager']) && $autotruck->id){
-					foreach ($post['ExpensesManager'] as $key => $item) {
-						
-						if(isset($item['id']) && (int)$item['id']){
-							$exp = ExpensesManager::findOne((int)$item['id']);
-							if ($exp->id === NULL)
-        						throw new HttpException(404, 'App Not Exist');
-						}else{
-							$exp = new ExpensesManager;
-						}
-						$data['ExpensesManager'] = $item;
-						$data['ExpensesManager']['autotruck_id'] = $autotruck->id;
-						$data['ExpensesManager']['date'] = isset($item['date']) && $item['date'] ?$item['date']:$autotruck->date;
-						
-						if($exp->load($data) && $exp->save(1)){
-							//обновление сверки
-							try {
-								User::refreshUserSverka($exp->manager_id);
-							} catch (Exception $e) {}
-						}
-					}
-				}
-				
-
-				//Добавление наименовании
-				if(isset($post['App']) && count($post['App']) && $autotruck->id){
+	        	$error = false;
+	        	if($autotruck->save(1)){
+	        		Yii::$app->session->setFlash("success",'Заявкавка сохранена');
+	        		// Статус заявки
+					$params['autotruck_id'] = $autotruck->id;
+					$params['status_id'] = $autotruck->status;
+					$params['prevstatus_id'] = 0;
+					$params['trace_date'] = $trace_date;
 					
-					foreach ($post['App'] as $key => $item) {
-						
-						if(isset($item['id']) && (int)$item['id']){
-							$a = App::findOne((int)$item['id']);
-							if ($a->id === NULL)
-        						throw new HttpException(404, 'Попытка сохранить не существующее наименование');
+					if($autotruck->id && $has_new_status){
+						$params['prevstatus_id'] =($has_new_status)? $prev_status : 0;
+						$trace = AppTrace::addSelf($params);
+					}elseif($autotruck->id && $autotruck->status){
+						$activeStatusTrace = $autotruck->activeStatusTrace;
+						if($activeStatusTrace instanceof AppTrace && isset($activeStatusTrace->trace_id) && $activeStatusTrace->trace_id){
+							$apptrace = $activeStatusTrace;
+							$apptrace->trace_date = $trace_date;
+							$apptrace->save();
 						}else{
-							$a = new App;
-						}
-
-						$data['App'] = $item;
-						$data['App']['autotruck_id']= $autotruck->id;
-						if(!$a->load($data) || !$a->save(1)){
-							Yii::$app->session->setFlash("danger",'Наименование не добавлено!');
+							$params['traсe_first'] = 1;
+							$trace = AppTrace::addSelf($params);
 						}
 					}
-				}
-				Yii::$app->session->setFlash("success",'Заявка сохранена');
 
-				if($autotruck->status){
-				    $autotruck->sendNotification();
-                }
+	        		//Добавление наименования
+	            	if(isset($post['App']) && count($post['App'])){
+	            		
+	            		$res = $autotruck->saveApps($post['App']);
+	            		if($res === true){
+	            			Yii::$app->session->setFlash("success",'Наименования и услуги сохранены');
+	            			//Перезагружаем услуги, на случай если расходы будут с ошибками, их нужно отправить на клиент обратно
+	            			$apps = $autotruck->getApps();
+	            		}elseif(is_array($res) && count($res)){
+	            			Yii::$app->session->setFlash("danger",'Наименования и услуги не сохранены, не правильный формат данных!');
+	            			$apps = $res;
+							$error = true;
+	            		}elseif($res === 2){
+	            			Yii::$app->session->setFlash("warning",'Не удалось добавить наименования, при добавлении некоторых наименований и услуг, произошла ошибка!');
+	            		}elseif($res === false){
+	            			Yii::$app->session->setFlash("warning",'Услуги не найдены!');
+	            		}
+	            	}
 
-                //Временно реализуем перерасчет сверки
-                if($autotruck->activeStatus->send_check){
-                    //обновление сверки
-                    try {
-                        $autotruck->refreshClientsSverka();
-                    } catch (Exception $e) {}
-                }
+	            	//Добавление расходов
+	            	if(isset($post['ExpensesManager']) && count($post['ExpensesManager'])){
+	            	    
+	            	    $res = $autotruck->saveExpenses($post['ExpensesManager']);
+	            		if($res === true){
+	            			Yii::$app->session->setFlash("success",'Наименования,услуги и расходы сохранены');
+	            			//Перезагружаем расходы, если услуги были с ошибками, их нужно отправить на клиент обратно
+		                    $expenses = $autotruck->getExpensesManager();
+	            		}elseif(is_array($res) && count($res)){
+	            			Yii::$app->session->setFlash("danger",'Расходы не сохранены, не правильный формат данных!');
+	            			$expenses = $res;
+							$error = true;
+	            		}elseif($res === 2){
+	            			Yii::$app->session->setFlash("warning",'Не удалось добавить расходы, при добавлении некоторых расходов, произошла ошибка!');
+	            		}elseif($res === false){
+	            			Yii::$app->session->setFlash("warning",'Расходы не найдены!');
+	            		}
+	            	}
 
-			}else{
-				Yii::$app->session->setFlash("danger",'Ошибка при сохранении заявки');
-			}
 
-			
-			if(Yii::$app->user->can("clientExtended")){
-				return Yii::$app->response->redirect(array("client/profile"));
-			}else{
-				return Yii::$app->response->redirect(['autotruck/read', 'id' => $autotruck->id]);
-			}
-			
+	            	if(!$error){
+
+	            		if($autotruck->status){
+						    $autotruck->sendNotification();
+		                }
+
+		                //Временно реализуем перерасчет сверки
+		                if($autotruck->status && $autotruck->activeStatus->send_check){
+		                    //обновление сверки
+		                    try {
+		                        $autotruck->refreshClientsSverka();
+		                    } catch (Exception $e) {}
+		                }
+
+		                if(Yii::$app->user->can("clientExtended")){
+							return Yii::$app->response->redirect(["client/profile"]);
+						}else{
+							if(!$id)
+								return $this->redirect(["autotruck/index"]);
+							else
+								return $this->redirect(['autotruck/read', 'id' => $autotruck->id]);
+						}
+	            	    
+	            	}else{
+	            	    return $this->render('form',['autotruck'=>$autotruck,'apps'=>$apps,'expenses'=>$expenses]);
+	            	}
+
+	        	}else{
+	            	Yii::$app->session->setFlash("danger",'Не удалось сохранить заявку!');
+	            }
+
+       		}else{
+       			//Чтоб не потерять заполненные даные услуг, передадим их обратно клиенту
+				$apps = isset($post['App']) ? $post['App'] : [];
+				return $this->render('form',['autotruck'=>$autotruck,'apps'=>$apps,'expenses'=>$expenses]);
+       		}
     	}
     	
 

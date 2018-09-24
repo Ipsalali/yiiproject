@@ -104,8 +104,8 @@ class Checkexcel{
 		}
 
 
-
-		$org = $client->organisation->id ? $client->organisation : Organisation::find()->where(['active'=>1])->one();
+		$organisation = $client->organisation_pay_id ? $client->organisation : null;
+		$org = isset($organisation->id) && $organisation->id ? $organisation : Organisation::find()->where(['active'=>1])->one();
 		
 		if(!$org->id) return;
 
@@ -271,7 +271,8 @@ class Checkexcel{
 
 	public function setSeller($client=""){
 
-		$org = $client->organisation->id ? $client->organisation : Organisation::find()->where(['active'=>1])->one();
+		$organisation = $client->organisation_pay_id ? $client->organisation : null;
+		$org = isset($organisation->id) && $organisation->id ? $organisation : Organisation::find()->where(['active'=>1])->one();
 		
 		if(!$org->id) return;
 		$objPHPExcel = $this->objPHPExcel;
@@ -525,7 +526,8 @@ class Checkexcel{
 		$this->merge($td);
 		$this->objPHPExcel->getActiveSheet()->getStyle($td)->applyFromArray($this->border_bottom);
 
-		$org = $client->organisation->id ? $client->organisation : Organisation::find()->where(['active'=>1])->one();
+		$organisation = $client->organisation_pay_id ? $client->organisation : null;
+		$org = isset($organisation->id) && $organisation->id ? $organisation : Organisation::find()->where(['active'=>1])->one();
 		$headman = $org->id && $org->payment == Organisation::PAY_CARD ? $org->headman : " ";
 		$startRow +=2;
 		$this->setText("Руководитель","B$startRow",1);

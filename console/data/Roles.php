@@ -5,7 +5,7 @@ namespace console\data;
 class Roles{
 	
 
-	public function getRoles(){	
+	public static function getRoles(){	
 		return [
 			'admin'=>'Администратор системы',
 			'App_manager'=>'менеджер заявок',

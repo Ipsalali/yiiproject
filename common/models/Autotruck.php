@@ -202,6 +202,115 @@ class Autotruck extends ActiveRecordVersionable
 
 
 
+    /**
+    *
+    * return array - модели с ошибками
+    * return false - transfers are empty
+    * return true - все ок
+    * return 2 - не все услуги были добавлены status warning
+    */
+    public function saveApps($apps){
+        if(!is_array($apps) || !count($apps)) return false;
+
+        //производим проверку на валидность
+        $errors = [];
+        $models = [];
+        foreach ($apps as $key => $t) {
+            if(isset($t['id']) && (int)$t['id']){
+                $model = App::findOne((int)$t['id']);
+
+                if(!isset($model->id) || !$model->id){
+                    $model = new App();
+                }
+            }else{
+                $model = new App();
+            }
+
+            $t['autotruck_id'] = $this->id;
+            $data = ['App'=>$t];
+            if(!$model->load($data) || !$model->validate()){
+                array_push($errors, $model);
+            }
+            
+            array_push($models, $model);
+        }
+
+        if(!count($errors)){
+
+            $answer = true; 
+            foreach ($models as $key => $m) {
+                if(!$m->save(1)){
+                    $answer = 2;
+                }
+            }
+
+            return $answer;
+
+        }else{
+            return $models;
+        }
+    }
+
+
+
+    /**
+    *
+    * return array - модели с ошибками
+    * return false - expenses are empty
+    * return true - все ок
+    * return 2 - не все услуги были добавлены status warning
+    */
+    public function saveExpenses($expenses){
+        if(!is_array($expenses) || !count($expenses)) return false;
+
+        //производим проверку на валидность
+        $errors = [];
+        $models = [];
+        foreach ($expenses as $key => $t) {
+            if(isset($t['id']) && (int)$t['id']){
+                $model = ExpensesManager::findOne((int)$t['id']);
+
+                if(!isset($model->id) || !$model->id){
+                    $model = new ExpensesManager();
+                }
+            }else{
+                $model = new ExpensesManager();
+            }
+
+            $t['autotruck_id'] = $this->id;
+            $t['date'] = isset($t['date']) && $t['date'] ? $t['date'] : $this->date;
+            $data = ['ExpensesManager'=>$t];
+            if(!$model->load($data) || !$model->validate()){
+                array_push($errors, $model);
+            }
+            
+            array_push($models, $model);
+        }
+
+        if(!count($errors)){
+
+            $answer = true; 
+            foreach ($models as $key => $m) {
+                if(!$m->save(1)){
+                    $answer = 2;
+                }else{
+                    //обновление сверки
+                    try {
+                        User::refreshUserSverka($m->manager_id);
+                    } catch (Exception $e) {}
+                }
+            }
+
+            return $answer;
+
+        }else{
+            return $models;
+        }
+    }
+
+
+
+
 
     public function getExpensesManager(){
         if(!$this->id) return array();
@@ -245,7 +354,7 @@ class Autotruck extends ActiveRecordVersionable
     * @return AppTrace;
     */
     public function getActiveStatusTrace(){
-        if(!$this->id || $this->status) return array();
+        if(!$this->id || !$this->status) return array();
 
         return AppTrace::find()->where(['autotruck_id'=>$this->id,'status_id'=>$this->activeStatus->id])->one();
     }
@@ -273,7 +382,7 @@ class Autotruck extends ActiveRecordVersionable
 
 
 
-    public function checkNotificationClent($client,$app){
+    public function checkNotificationClient($client,$app){
         if(!$client) return false;
         $where = "`autotruck_id`=".$this->id." AND `status_id`=".$this->activeStatus->id." AND client_id=".$client." AND app_id=".$app;
 
@@ -317,14 +426,15 @@ class Autotruck extends ActiveRecordVersionable
             foreach ($apps as $key => $app) {
                 if($app->client){
                     //Проверяем нужно ли отправить уведомление текущему клиенту.
-                    if(!$this->checkNotificationClent($app->client,$app->id)) continue;
+                    if(!$this->checkNotificationClient($app->client,$app->id)) continue;
                     
                     $client_apps[$app->client]['client'] = $app->client;
                     $client_apps[$app->client]['apps'][$app->id] = $app;   
                 }
             }
         }
-        //print_r($client_apps);
+        
+        
         $activeStatus = $this->activeStatus;
         $activeTrace =  $this->activeStatusTrace;
         $autotruck_model = $this;

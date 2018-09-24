@@ -44,6 +44,7 @@ class Migration extends yiiMigration{
 
         $file = $file_prefix . $fileName.".sql";
         $path = __DIR__."/../import/";
+        
         if(file_exists($path.$file)){
             $sql = file_get_contents($path.$file);
             
@@ -53,8 +54,20 @@ class Migration extends yiiMigration{
             }
 
             $sql = $checkFK ? "SET FOREIGN_KEY_CHECKS=0;".$sql : $sql;
-            $sql = $big ? "SET GLOBAL max_allowed_packet=1073741824;".$sql : $sql;
             $sql = "SET time_zone = \"+00:00\";".$sql;
+
+            if($big){
+                $sqlBig = <<<SQL
+                    SET GLOBAL connect_timeout=60;
+                    SET GLOBAL wait_timeout=60;
+                    SET @@global.max_allowed_packet=64*1024*1024;
+SQL;
+                
+                
+                $sql = $sqlBig.$sql;
+            }
+
+            
             $this->execute($sql);
         }else{
             echo "{$file} not found;";

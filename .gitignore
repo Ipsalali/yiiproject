@@ -30,6 +30,10 @@ phpunit.phar
 /phpunit.xml
 
 /frontend/web/assets
+/frontend/web/uploads
+/frontend/web/transfers
+/frontend/web/files
+/frontend/web/files_xls
 /backend/web/assets
 
 /console/import

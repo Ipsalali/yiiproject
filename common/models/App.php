@@ -33,8 +33,9 @@ class App extends ActiveRecordVersionable
             [['count_place','rate'],'default','value'=>0],
             [['info','comment'],'filter','filter'=>function($v){return trim(strip_tags($v));}],
             [['rate','weight'],'number'],
+
             ['type','in','range'=>[0,1]],
-            ['type','default','value'=>0],
+            [['type','weight'],'default','value'=>0],
             [['rate','summa_us'],'filter','filter'=>function($v){return round($v,2);}]
         ];
 	}

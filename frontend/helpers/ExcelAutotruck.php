@@ -218,6 +218,7 @@ class ExcelAutotruck{
 		
 
 		$totalW = 0;
+		$total = 0;
 		foreach ($apps as $key => $a) {
 			$endRow++;
 
@@ -332,7 +333,7 @@ class ExcelAutotruck{
 
 		if(!$autotruck instanceof Autotruck) return null;
 
-		$apps = $autotruck->apps;
+		$apps = $autotruck->getApps();
 		$this->setHEad($autotruck);
 		$this->setProducts($apps);
     
@@ -340,7 +341,7 @@ class ExcelAutotruck{
 
 
 		$objWriter = \PHPExcel_IOFactory::createWriter($this->objPHPExcel, 'Excel5');
-		$file_name = "Autotruck_".$client->id."_".date("dmy",time()).".xls";
+		$file_name = "Autotruck_".$autotruck->id."_".date("dmy",time()).".xls";
 		$path = "files_xls/";
 		$objWriter->save("{$path}{$file_name}");
 		

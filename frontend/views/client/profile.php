@@ -69,7 +69,7 @@ $packages = TypePackaging::find()->all();
 				  				    <?php echo $autotruck->name; ?>
 				  				    &nbsp&nbsp&nbsp
 				  					<?php 
-				  						echo ($user->id === $autotruck->creator) ? html::a("Редактировать",array("autotruck/update","id"=>$autotruck->id)) : "";
+				  						echo ($user->id === $autotruck->creator) ? html::a("Редактировать",array("autotruck/form","id"=>$autotruck->id)) : "";
 				  					?>
 				  				</h4>
 				  			</div>

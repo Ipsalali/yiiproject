@@ -156,7 +156,7 @@ $packages = TypePackaging::find()->all();
 								</div>
 							</div>
 							<div class="app_update_btn">
-									<?php echo Html::a('Редактировать', array('autotruck/update','id'=>$autotruck->id), array('class' => 'btn btn-default')); ?>
+									<?php echo Html::a('Редактировать', array('autotruck/form','id'=>$autotruck->id), array('class' => 'btn btn-default')); ?>
 
 									<?php echo Html::a('Выгрузить в excel', array('autotruck/to-excel','id'=>$autotruck->id), array('class' => 'btn btn-success')); ?>
 

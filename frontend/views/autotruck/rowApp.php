@@ -36,7 +36,7 @@ $type_class = (!$type)? "type_app":"type_service";
 		<?php echo Html::textInput($class."[count_place]",null,['class'=>'app_place form-control']);?>
 	</td>
 	<td>
-		<?php echo Html::dropDownList($class."[package]",null,ArrayHelper::map($senders,'id','name'),['prompt'=>'Выберите упаковку','class'=>'form-control app_package']);?>
+		<?php echo Html::dropDownList($class."[package]",null,ArrayHelper::map($packages,'id','title'),['prompt'=>'Выберите упаковку','class'=>'form-control app_package']);?>
 	</td>
 	<?php }else{echo "<td colspan='2'></td>";} ?>
 	

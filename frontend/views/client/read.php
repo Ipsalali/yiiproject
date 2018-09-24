@@ -113,7 +113,7 @@ $autotruckCountries = SupplierCountry::getIndexedArray();
 					  			<div class="col-xs-9">
 					  				<h4><?php echo Html::a($autotruck->name." №".$autotruck->id,array('autotruck/read','id'=>$autotruck->id))?>
 					  					&nbsp&nbsp&nbsp
-					  					<?php echo html::a("Редактировать",array("autotruck/update","id"=>$autotruck->id))?>
+					  					<?php echo html::a("Редактировать",array("autotruck/form","id"=>$autotruck->id))?>
 					  				</h4>
 					  			</div>
 					  			<div class="col-xs-3" style="text-align:center">

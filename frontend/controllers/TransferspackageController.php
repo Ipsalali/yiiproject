@@ -79,7 +79,6 @@ class TransferspackageController extends Controller{
 
 		if(isset($post['TransfersPackage'])){
 
-
 			if(isset($model->id)){
 					$model->tempFiles = $model->files;
 			}
@@ -120,11 +119,9 @@ class TransferspackageController extends Controller{
 	            		}elseif($res === false){
 	            			Yii::$app->session->setFlash("warning",'Услуги не найдены!');
 	            		}
-
-	            		
 	            	}
 	            	
-	            	//Добавление расход
+	            	//Добавление расходов
 	            	if(isset($post['SellerExpenses']) && count($post['SellerExpenses'])){
 	            	    
 	            	    $res = $model->saveExpenses($post['SellerExpenses']);
@@ -137,7 +134,7 @@ class TransferspackageController extends Controller{
 	            			$expenses = $res;
 							$error = true;
 	            		}elseif($res === 2){
-	            			Yii::$app->session->setFlash("warning",'Не удалось добавить все расходы, при добавлении некоторых расход, произошла ошибка!');
+	            			Yii::$app->session->setFlash("warning",'Не удалось добавить все расходы, при добавлении некоторых расходов, произошла ошибка!');
 	            		}elseif($res === false){
 	            			Yii::$app->session->setFlash("warning",'Расходы не найдены!');
 	            		}

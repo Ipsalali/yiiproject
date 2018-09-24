@@ -5,7 +5,7 @@ namespace console\data;
 class Permissions{
 	
 
-	public function getPerms(){	
+	public static function getPerms(){	
 		return array(
 			'autotruck/addexpenses'=> 'Добавление расхода',
 			'Autotruck/create'=> 'Добавление заявки',

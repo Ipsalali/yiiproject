@@ -12,7 +12,7 @@ if(is_array($apps) && count($apps)){
 
 	$html .="</ul>";
 }
-$trace_date = date("d.m.Y",strtotime($activeTrace->trace_date));
+$trace_date = (isset($activeTrace->trace_date)) ? date("d.m.Y",strtotime($activeTrace->trace_date)): $activeTrace->trace_date;
 $country = $autotruck_model->countryName;
 $course = $autotruck_model->course." руб.";
 $date = date("d.m.Y",strtotime($autotruck_model->date));

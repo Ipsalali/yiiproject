@@ -183,7 +183,7 @@ $this->title = $newModel ? "Новая заявка" : "Заявка:".$autotruc
 												$id = isset($app['id']) && $app['id'] ? (int)$app['id'] : null;
 												$type_class = !$app['type'] ? "type_app" :"type_service";
 												$class = "App[{$key}]";
-												$errors = is_object($t) ? $t->getErrors() : array();
+												$errors = is_object($app) ? $app->getErrors() : array();
 										 ?>
 												<tr class="app_row <?php echo $type_class;?>">
 													<td>
@@ -277,7 +277,7 @@ $this->title = $newModel ? "Новая заявка" : "Заявка:".$autotruc
 													<td>
 													<?php 
                                                         if($id){
-                                                            echo Html::a("X",['autotruck/removeappajax','id'=>$id],['class'=>'btn btn-danger remove_exists_app','data-id'=>$id,'data-confirm'=>'Подтвердите свои дейсвтия']);
+                                                            echo Html::a("X",['autotruck/removeappajax','id'=>$id],['class'=>'btn btn-danger remove_exists_app','data-id'=>$id]);
                                                         }else{
                                                             echo Html::a("X",null,['class'=>'btn btn-danger remove_app','data-confirm'=>'Подтвердите свои дейсвтия']);
                                                         }  		
@@ -358,7 +358,7 @@ $this->title = $newModel ? "Новая заявка" : "Заявка:".$autotruc
 													<td>
 													<?php 
                                                         if($id)
-                                                           	echo Html::a("X",['autotruck/removeexpajax','id'=>$id],['class'=>'btn btn-danger remove_exists_exp','data-confirm'=>'Подтвердите свои дейсвтия','data-id'=>$id]);
+                                                           	echo Html::a("X",['autotruck/removeexpajax','id'=>$id],['class'=>'btn btn-danger remove_exists_exp','data-id'=>$id]);
                                                         else
                                                             echo Html::a("X",null,['class'=>'btn btn-danger remove_exp','data-confirm'=>'Подтвердите свои дейсвтия']);
                                                             		
@@ -504,12 +504,14 @@ $script = <<<JS
 
 
 		//Удаление наименовании
-		$("#app_table").on("click",".remove_exists_app",function(){
+		$("#app_table").on("click",".remove_exists_app",function(event){
+			event.preventDefault();
 			var id = parseInt($(this).data("id"));
 			var r_rw = $(this).parents('.app_row');
-			if(id && window.confirm('Вы действительно хотите удалить выделенный объект?')){
+			var href = $(this).attr("href");
+			if(id  && window.confirm('Вы действительно хотите удалить выделенный объект?')){
 				$.ajax({
-					url:"index.php?r=autotruck/removeappajax",
+					url:href,
 					type:"POST",
 					data:'id='+id,
 					datetype:'json',
@@ -537,12 +539,14 @@ $script = <<<JS
 			}
 		})
 
-		$("#exp_table").on("click",".remove_exists_exp",function(){
+		$("#exp_table").on("click",".remove_exists_exp",function(event){
+			event.preventDefault();
 			var id = parseInt($(this).data("id"));
 			var r_rw = $(this).parents('.exp_row');
+			var href = $(this).attr("href");
 			if(id && window.confirm('Вы действительно хотите удалить выделенный объект?')){
 				$.ajax({
-					url:"index.php?r=autotruck/removeexpajax",
+					url:href,
 					type:"POST",
 					data:'id='+id,
 					datetype:'json',
