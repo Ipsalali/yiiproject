@@ -1,8 +1,5 @@
 <?php
 
-/* @var $this \yii\web\View */
-/* @var $content string */
-
 use yii\helpers\Html;
 use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
@@ -13,18 +10,18 @@ use yii\filters\AccessControl;
 
 AppAsset::register($this);
 ?>
-<?php $this->beginPage() ?>
+<?php $this->beginPage(); ?>
 <!DOCTYPE html>
-<html lang="<?= Yii::$app->language ?>">
+<html lang="<?php echo Yii::$app->language; ?>">
 <head>
-    <meta charset="<?= Yii::$app->charset ?>">
+    <meta charset="<?php echo Yii::$app->charset; ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <?= Html::csrfMetaTags() ?>
-    <title><?= Html::encode($this->title) ?></title>
-    <?php $this->head() ?>
+    <?php echo Html::csrfMetaTags(); ?>
+    <title><?php echo Html::encode($this->title); ?></title>
+    <?php $this->head(); ?>
 </head>
 <body>
-<?php $this->beginBody() ?>
+<?php $this->beginBody(); ?>
 
 <div class="wrap">
     <div class="top">
@@ -124,9 +121,9 @@ AppAsset::register($this);
     <div class="main">
         <?php echo  Breadcrumbs::widget([
             'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
-        ]) ?>
-        <?php echo Alert::widget() ?>
-        <?php echo $content ?>
+        ]); ?>
+        <?php echo Alert::widget(); ?>
+        <?php echo $content; ?>
     </div>
 </div>
 
@@ -134,7 +131,7 @@ AppAsset::register($this);
 <div class="clear"></div>
 
 
-<?php $this->endBody() ?>
+<?php $this->endBody(); ?>
 </body>
 </html>
-<?php $this->endPage() ?>
+<?php $this->endPage(); ?>

@@ -157,12 +157,11 @@ $autotruckCountries = SupplierCountry::getIndexedArray();
 										</ul>
 
 										<div>
-										<p>Итого кол-во мест: <?php echo $autotruck->totalCountPlace;//$autotruck->getAppCountPlace($client->id)?></p>
+										<p>Итого кол-во мест: <?php echo $autotruck->totalCountPlace;?></p>
 										<?php
 											$autotuckPackages = $autotruck->packagesCountPlace;
 											if(is_array($packages) && is_array($autotuckPackages)){
 												foreach ($packages as $key => $package) {
-													//$count = $autotruck->getAppCountPlacePackage($package->id,$client->id);
 													$count = array_key_exists($package->id, $autotuckPackages) ? $autotuckPackages[$package->id]['count'] : 0;
 													if($count > 0){
 														?>
@@ -173,9 +172,9 @@ $autotruckCountries = SupplierCountry::getIndexedArray();
 											}
 
 											if(array_key_exists("none", $autotuckPackages) && $autotuckPackages['none']['count']){
-											?><p>Не известная упаковка: <?php echo $autotuckPackages['none']['count']; ?></p><?php
-											}
-										?>
+											?>
+											<p>Не известная упаковка: <?php echo $autotuckPackages['none']['count']; ?></p>
+											<?php } ?>
 								    	</div>
 								</div>
 							</div>
@@ -199,7 +198,7 @@ $autotruckCountries = SupplierCountry::getIndexedArray();
 										<th>Комментарий</th>
 									</tr>
 							<?php $cweight=0;$crate=0; $total = 0; $total_us = 0;
-							foreach ($autotruck->apps as $i => $app) { ?>
+							foreach ($autotruck->appsCollection as $i => $app) { ?>
 									<tr>
 										<td>
 											<?php echo $i+1?>
@@ -230,8 +229,8 @@ $autotruckCountries = SupplierCountry::getIndexedArray();
 										         
 										        echo $app['type'] ? round($app['rate']*$autotruck['course'],2) : round($sum_ru,2);
 										     ?> 
-										руб</td>
-										
+										руб
+										</td>
 										<td><?php echo $app['comment']?></td>
 									</tr>
 							<?php 

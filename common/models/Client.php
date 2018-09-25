@@ -258,13 +258,22 @@ class Client extends ActiveRecordVersionable
 
 
     public function getOwnApps(){
+        if(!$this->id) return array();
 
         return App::find()->innerJoin('autotruck','autotruck.id = app.autotruck_id')->where("client=".$this->id)->andWhere(['app.isDeleted'=>0,'autotruck.isDeleted'=>0])->orderBy(["autotruck.date"=>SORT_DESC])->all();
     }
 
 
+    public function getOwnAutotrucks(){
+        if(!$this->id) return array();
+
+        return Autotruck::find()->innerJoin('app','autotruck.id = app.autotruck_id AND app.client = '.$this->id)->andWhere(['app.isDeleted'=>0,'autotruck.isDeleted'=>0])->orderBy(["autotruck.date"=>SORT_DESC])->all();
+    }
+
+
 
     public function getUserAssignAutotrucks(){
+        if(!$this->id) return array();
         $user = \Yii::$app->user->identity;
         $u_countries = \yii\helpers\ArrayHelper::map($user->accessCountry,'country_id','country_id');
 
@@ -288,6 +297,39 @@ class Client extends ActiveRecordVersionable
     //     return $sorted;
     // }
 
+    public function getOwnAutotrucksWithApps(){
+        $autotrucks = $this->ownAutotrucks;
+
+        $withApps = array();
+        foreach ($autotrucks as $autotruck) {
+            $apps = (new Query)->
+                        select(['app.*','sender.name as senderName','pkg.title as packageTitle'])->
+                        from(['app'=>App::tableName()])->
+                        leftJoin(['sender'=>Sender::tableName()]," app.sender = sender.id")->
+                        leftJoin(['pkg'=>TypePackaging::tableName()]," app.package = pkg.id")->
+                        where(['app.autotruck_id'=>$autotruck->id,'app.client'=>$this->id,'app.isDeleted'=>0])->
+                        all();
+            
+            $packages = array();
+            $total_place = 0;
+            foreach ($apps as $a) {
+                $key = ($a['package'] > 0) ? $a['package'] : 'none';
+                if(!isset($packages[$key]['count']))
+                    $packages[$key]['count'] = 0;
+
+                $packages[$key]['count'] += $a['count_place'];
+                $total_place += $a['count_place'];
+            }
+
+            $autotruck->appsCollection = $apps;
+            $autotruck->packagesCountPlace = $packages;
+            $autotruck->totalCountPlace = $total_place;
+            
+            $withApps[$autotruck->id] = $autotruck;
+        }
+
+        return $withApps;
+    }
 
     public function getAutotrucksWithApps(){
         $autotrucks = $this->userAssignAutotrucks;
@@ -313,7 +355,7 @@ class Client extends ActiveRecordVersionable
                 $total_place += $a['count_place'];
             }
 
-            $autotruck->apps = $apps;
+            $autotruck->appsCollection = $apps;
             $autotruck->packagesCountPlace = $packages;
             $autotruck->totalCountPlace = $total_place;
             

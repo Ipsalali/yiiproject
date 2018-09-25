@@ -537,8 +537,6 @@ class ClientController extends Controller{
 
     public function actionProfile(){
 
-       
-        
         if(Yii::$app->user->identity->id == null)
             throw new HttpException(404,'Not Found!');
 
@@ -547,49 +545,12 @@ class ClientController extends Controller{
         if(!isset($client->id))
             throw new HttpException(404,'Document Does Not Exist');
 
-        $autotrucks = $client->getAppsSortAutotruck($client->ownApps);
+        $autotrucks = $client->getOwnAutotrucksWithApps();
 
-        return $this->render('profile',array("client"=>$client,'autotrucks'=>$autotrucks));
+        return $this->render('profile',["client"=>$client,'autotrucks'=>$autotrucks]);
     }
 
 
-
-    public function actionAutotruckpayment(){
-        $post = Yii::$app->request->post();
-        $get = Yii::$app->request->get();
-        $cPayment = new CustomerPayment;
-        
-        if($get && (int)$get['id']){
-            $cPayment = CustomerPayment::findOne((int)$get['id']);
-        }
-
-        if($post){
-            if((int)$post['CustomerPayment']['payment_state_id'] && (int)$post['CustomerPayment']['client_id'] && (int)$post['CustomerPayment']['autotruck_id']){
-                $cPayment->autotruck_id = (int)$post['CustomerPayment']['autotruck_id'];
-                $cPayment->client_id = (int)$post['CustomerPayment']['client_id'];
-                $cPayment->payment_state_id = (int)$post['CustomerPayment']['payment_state_id'];
-                $cPayment->sum = round($post['CustomerPayment']['sum'],2);
-                $cPayment->comment = trim(strip_tags($post['CustomerPayment']['comment']));
-
-                if($cPayment->save()){
-                    Yii::$app->session->setFlash("CustomerPaymentSuccess");
-                    Yii::$app->response->redirect(array("client/read",'id'=>(int)$post['CustomerPayment']['client_id']));
-                }else{
-                    Yii::$app->session->setFlash("CustomerPaymentError");
-                    Yii::$app->response->redirect(array("client/read",'id'=>(int)$post['CustomerPayment']['client_id']));
-                }
-                
-            
-            }elseif((int)$post['CustomerPayment']['client_id']){
-                Yii::$app->session->setFlash("Not data for payment");
-                Yii::$app->response->redirect(array("client/read",'id'=>(int)$post['CustomerPayment']['client_id']));
-            }else{
-               Yii::$app->response->redirect(array("client/index")); 
-            }
-        }else{
-          Yii::$app->response->redirect(array("client/index"));
-        }
-    }
 
 
     public function actionClientStory($id){

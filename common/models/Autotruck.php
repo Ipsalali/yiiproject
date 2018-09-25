@@ -41,6 +41,11 @@ class Autotruck extends ActiveRecordVersionable
     /**
     * Array 
     */
+    public $appsCollection;
+
+    /**
+    * Array 
+    */
     public $packagesCountPlace;
 
     /**
