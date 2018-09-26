@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ee21454d94df36109bc37225a04279b4",
+    "content-hash": "e028a019f9640e7019818ed81f234b1a",
     "packages": [
         {
             "name": "2amigos/yii2-date-picker-widget",
@@ -735,16 +735,16 @@
         },
         {
             "name": "egulias/email-validator",
-            "version": "2.1.5",
+            "version": "2.1.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/egulias/EmailValidator.git",
-                "reference": "54859fabea8b3beecbb1a282888d5c990036b9e3"
+                "reference": "0578b32b30b22de3e8664f797cf846fc9246f786"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/egulias/EmailValidator/zipball/54859fabea8b3beecbb1a282888d5c990036b9e3",
-                "reference": "54859fabea8b3beecbb1a282888d5c990036b9e3",
+                "url": "https://api.github.com/repos/egulias/EmailValidator/zipball/0578b32b30b22de3e8664f797cf846fc9246f786",
+                "reference": "0578b32b30b22de3e8664f797cf846fc9246f786",
                 "shasum": ""
             },
             "require": {
@@ -788,7 +788,7 @@
                 "validation",
                 "validator"
             ],
-            "time": "2018-08-16T20:49:45+00:00"
+            "time": "2018-09-25T20:47:26+00:00"
         },
         {
             "name": "ezyang/htmlpurifier",
@@ -1004,16 +1004,16 @@
         },
         {
             "name": "kartik-v/yii2-export",
-            "version": "v1.3.0",
+            "version": "v1.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kartik-v/yii2-export.git",
-                "reference": "a55403976e16e606463bf53b96b612ba7454b15b"
+                "reference": "30ecff89686168e812b0ac6bdd09fec04d3e8dc2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/yii2-export/zipball/a55403976e16e606463bf53b96b612ba7454b15b",
-                "reference": "a55403976e16e606463bf53b96b612ba7454b15b",
+                "url": "https://api.github.com/repos/kartik-v/yii2-export/zipball/30ecff89686168e812b0ac6bdd09fec04d3e8dc2",
+                "reference": "30ecff89686168e812b0ac6bdd09fec04d3e8dc2",
                 "shasum": ""
             },
             "require": {
@@ -1061,7 +1061,7 @@
                 "xlsx",
                 "yii2"
             ],
-            "time": "2018-09-06T19:44:25+00:00"
+            "time": "2018-09-24T18:35:44+00:00"
         },
         {
             "name": "kartik-v/yii2-field-range",
@@ -2184,6 +2184,60 @@
             "time": "2017-10-23T01:57:42+00:00"
         },
         {
+            "name": "ramosisw/yii2-material-dashboard",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ramosisw/yii2-material-dashboard.git",
+                "reference": "1677f564129f71d64f7749d95b3f3ad40886e859"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ramosisw/yii2-material-dashboard/zipball/1677f564129f71d64f7749d95b3f3ad40886e859",
+                "reference": "1677f564129f71d64f7749d95b3f3ad40886e859",
+                "shasum": ""
+            },
+            "require": {
+                "yiisoft/yii2": "2.*",
+                "yiisoft/yii2-bootstrap": "2.*"
+            },
+            "type": "yii2-extension",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "ramosisw\\CImaterial\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Julio C. Ramos",
+                    "email": "ramosisw@gmail.com"
+                }
+            ],
+            "description": "Material dashboard backend theme asset bundle for Yii 2.0 Framework",
+            "keywords": [
+                "admin",
+                "asset",
+                "backend",
+                "css",
+                "dashboard",
+                "extension",
+                "less",
+                "material",
+                "theme",
+                "yii2"
+            ],
+            "time": "2018-06-14T14:37:58+00:00"
+        },
+        {
             "name": "scotthuangzl/yii2-export2excel",
             "version": "dev-master",
             "source": {
@@ -2657,21 +2711,21 @@
         },
         {
             "name": "yiisoft/yii2-swiftmailer",
-            "version": "2.1.1",
+            "version": "2.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/yiisoft/yii2-swiftmailer.git",
-                "reference": "fd917fbe63b7ea796c52902143b83b98e65bfb73"
+                "reference": "09659a55959f9e64b8178d842b64a9ffae42b994"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yiisoft/yii2-swiftmailer/zipball/fd917fbe63b7ea796c52902143b83b98e65bfb73",
-                "reference": "fd917fbe63b7ea796c52902143b83b98e65bfb73",
+                "url": "https://api.github.com/repos/yiisoft/yii2-swiftmailer/zipball/09659a55959f9e64b8178d842b64a9ffae42b994",
+                "reference": "09659a55959f9e64b8178d842b64a9ffae42b994",
                 "shasum": ""
             },
             "require": {
                 "swiftmailer/swiftmailer": "~6.0",
-                "yiisoft/yii2": "~2.0.4"
+                "yiisoft/yii2": ">=2.0.4"
             },
             "type": "yii2-extension",
             "extra": {
@@ -2703,7 +2757,7 @@
                 "swiftmailer",
                 "yii2"
             ],
-            "time": "2018-04-24T23:17:42+00:00"
+            "time": "2018-09-23T22:00:47+00:00"
         }
     ],
     "packages-dev": [
@@ -2870,16 +2924,16 @@
         },
         {
             "name": "yiisoft/yii2-debug",
-            "version": "2.0.13",
+            "version": "2.0.14",
             "source": {
                 "type": "git",
                 "url": "https://github.com/yiisoft/yii2-debug.git",
-                "reference": "b37f414959c2fafefb332020b42037cd17c1cb7f"
+                "reference": "dc5a4a8529de1a41dbb037dbabf1f3f93002f21d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yiisoft/yii2-debug/zipball/b37f414959c2fafefb332020b42037cd17c1cb7f",
-                "reference": "b37f414959c2fafefb332020b42037cd17c1cb7f",
+                "url": "https://api.github.com/repos/yiisoft/yii2-debug/zipball/dc5a4a8529de1a41dbb037dbabf1f3f93002f21d",
+                "reference": "dc5a4a8529de1a41dbb037dbabf1f3f93002f21d",
                 "shasum": ""
             },
             "require": {
@@ -2894,7 +2948,7 @@
             },
             "autoload": {
                 "psr-4": {
-                    "yii\\debug\\": ""
+                    "yii\\debug\\": "src"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -2913,7 +2967,7 @@
                 "debugger",
                 "yii2"
             ],
-            "time": "2017-12-05T07:36:23+00:00"
+            "time": "2018-09-23T21:41:04+00:00"
         },
         {
             "name": "yiisoft/yii2-faker",
@@ -3021,7 +3075,8 @@
     "stability-flags": {
         "scotthuangzl/yii2-export2excel": 20,
         "kartik-v/yii2-date-range": 20,
-        "kartik-v/yii2-widget-datepicker": 20
+        "kartik-v/yii2-widget-datepicker": 20,
+        "ramosisw/yii2-material-dashboard": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

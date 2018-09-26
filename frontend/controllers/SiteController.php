@@ -31,7 +31,6 @@ use common\models\Sender;
 class SiteController extends Controller
 {   
 
-    public $layout = "main";
 
     /**
      * @inheritdoc
@@ -43,14 +42,9 @@ class SiteController extends Controller
                 'class' => AccessControl::className(),
                 
                 'rules' => [
-                    [
-                        'actions' => ['logout'],
-                        'allow' => true,
-                        'roles' => ['@'],
-                    ],
                     
                     [
-                        'actions' => ['index'],
+                        'actions' => ['index','search','logout'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -59,16 +53,11 @@ class SiteController extends Controller
                         'allow'=>true,
                         'roles'=>['autotruck/report']
                     ],
-                    [
-                        'actions' => ['search'],
-                        'allow' => true,
-                        'roles' => ['@'],
-                    ],
                     
                     [
-                        'actions' => ['login','reset-password'],
+                        'actions' => ['login','reset-password','request-password-reset'],
                         'allow' => true,
-                        'roles' => ['?'],
+                        'roles' => ['?','@'],
                     ]
                 ],
             ],
@@ -109,12 +98,12 @@ class SiteController extends Controller
         if(Yii::$app->user->identity->role->name !="client"){
             
             if(Yii::$app->user->can('autotruck/index')){
-                Yii::$app->response->redirect(['autotruck/index']);
+                return Yii::$app->response->redirect(['autotruck/index']);
                 
             }elseif(Yii::$app->user->can('client/index')){
-                 Yii::$app->response->redirect(['client/index']);
-               
+                return Yii::$app->response->redirect(['client/index']);
             }
+
             $query = Post::find();
             $countPost = clone $query;
             $pages = new Pagination(['totalCount'=>$countPost->count(), 'pageSize' => 6]);
@@ -141,12 +130,11 @@ class SiteController extends Controller
      */
     public function actionLogin()
     {   
-
+        $this->layout = "login";
         if (!\Yii::$app->user->isGuest) {
             return $this->goHome();
         }
 
-        
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
            
@@ -170,38 +158,8 @@ class SiteController extends Controller
         return $this->goHome();
     }
 
-    /**
-     * Displays contact page.
-     *
-     * @return mixed
-     */
-    public function actionContact()
-    {
-        $model = new ContactForm();
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            if ($model->sendEmail(Yii::$app->params['adminEmail'])) {
-                Yii::$app->session->setFlash('success', 'Thank you for contacting us. We will respond to you as soon as possible.');
-            } else {
-                Yii::$app->session->setFlash('error', 'There was an error sending email.');
-            }
+ 
 
-            return $this->refresh();
-        } else {
-            return $this->render('contact', [
-                'model' => $model,
-            ]);
-        }
-    }
-
-    /**
-     * Displays about page.
-     *
-     * @return mixed
-     */
-    public function actionAbout()
-    {
-        return $this->render('about');
-    }
 
     /**
      * Signs user up.
@@ -230,13 +188,17 @@ class SiteController extends Controller
         ]);
     }
 
+
+
+
     /**
      * Requests password reset.
      *
      * @return mixed
      */
     public function actionRequestPasswordReset()
-    {
+    {   
+        $this->layout = "login";
         $model = new PasswordResetRequestForm();
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             if ($model->sendEmail()) {
@@ -253,6 +215,9 @@ class SiteController extends Controller
         ]);
     }
 
+
+
+
     /**
      * Resets password.
      *
@@ -261,7 +226,8 @@ class SiteController extends Controller
      * @throws BadRequestHttpException
      */
     public function actionResetPassword($token)
-    {
+    {   
+        $this->layout = "login";
         try {
             $model = new ResetPasswordForm($token);
         } catch (InvalidParamException $e) {
@@ -280,28 +246,33 @@ class SiteController extends Controller
     }
 
 
+
+
+
+
+
     public function actionSearch(){
 
-        if(Yii::$app->request->isAjax){
 
-            $post = Yii::$app->request->post();
+        if(Yii::$app->request->isAjax){
+            Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+            $get = Yii::$app->request->get();
 
             $answer = array();
 
-            if($post['keywords']){
+            if($get['keywords']){
 
-                $keywords = trim(strip_tags($post['keywords']));
+                $keywords = trim(strip_tags($get['keywords']));
                 
                 
                 $autotrucks = Autotruck::searchByKey($keywords);
                 $apps = App::searchByKey($keywords);
                 $clients = Client::searchByKey($keywords);
-
                 $sender = Sender::searchByKey($keywords);
 
-                $this->layout = "/site/empty";
+                $this->layout = "site/empty";
 
-                if(count($apps) || count($autotrucks) || count($clients)){
+                if(count($apps) || count($autotrucks) || count($clients) || count($sender)){
                     $html = $this->render('search', [
                         'autotrucks' => $autotrucks,
                         'apps' => $apps,
@@ -314,68 +285,21 @@ class SiteController extends Controller
                     $html = "No results";
                 }
 
-                $answer['result'] = 1;
                 $answer['html'] = $html;
                 $answer['keywords'] = $keywords;
 
             }else{
                 $answer['result'] = 0;
             }
-        
-            \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
             
             return $answer;
+        }else{
+            return $this->goHome();
         }
     }
 
 
-    public function actionSverka(){
-
-        
-        
-        $params = Yii::$app->request->get();
-        $expenses = array();
-        $data_params = array();
-        $sverka = array();
-        $payments = array();
-        if(Yii::$app->user->identity->isSeller(true)){
-            $manager = User::findOne(Yii::$app->user->id);
-        }else{
-            $manager = new User; 
-        }
-        
-
-        if($params && isset($params['manager']) && (int)$params['manager']){
-            $data_params['date_from'] = $params['date_from'];
-            $data_params['date_to'] = $params['date_to'];
-            
-            if(!Yii::$app->user->identity->isSeller(true) && isset($params['manager'])){
-                $data_params['manager'] = (int)$params['manager'];
-            }else{
-                $data_params['manager'] = Yii::$app->user->id;
-            }
-            
-            $manager = User::findOne($data_params['manager']);
-            
-            //$expenses = $manager->getExpenses($data_params['date_from'],$data_params['date_to']);
-            //$payments = $manager->getPayments($data_params['date_from'],$data_params['date_to']);
-            
-            $sverka = $manager->getPaymentsAndExpenses($data_params['date_from'],$data_params['date_to']);
-
-        }else{
-            $data_params['date_from'] = date("d.m.Y",time() - (86400 * 61));
-            $data_params['date_to'] = date("d.m.Y",time());
-        }
-        return $this->render('sverka', [
-            "sverka"=>$sverka,
-            "manager"=>$manager,
-            "data_params"=>$data_params,
-            //"payments"=>$payments,
-            //"expenses"=>$expenses,
-        ]);
-    }
-
-
+    
 
     public function actionExpensesPeopleByKey(){
 
