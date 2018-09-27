@@ -7,7 +7,7 @@ class m130524_201465_seller_expenses extends Migration
 {       
     public $seller_expenses = '{{%seller_expenses}}';
     public $transfers_package = '{{%transfers_package}}';
-    public $sellers = '{{%sellers}}';
+    public $sellers = '{{%user}}';
 
     public function safeUp()
     {

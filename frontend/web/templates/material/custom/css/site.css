@@ -433,6 +433,7 @@ input#autotruck-date{
     padding: 4px;
     border: 1px solid #ccc;
     width: 100%;
+    z-index: 2;
     border-radius: 4px;
     box-shadow: 0px 0px 2px -1px;
     -webkit-box-shadow: 0px 0px 2px -1px;

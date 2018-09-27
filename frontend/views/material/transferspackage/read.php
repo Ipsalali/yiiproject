@@ -2,50 +2,41 @@
 
 use yii\helpers\Html;
 use yii\helpers\Url;
-use yii\bootstrap\Modal;
+use frontend\bootstrap4\Modal;
 use yii\bootstrap\ActiveForm;
 use common\models\Currency;
 
 $this->title = $model->name;
 
+$this->params['breadcrumbs'][] = ['label'=>"Список переводов",'url'=>Url::to(['transferspackage/index'])];
+$this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="row">
-	<div class="col-xs-4">
-		<h3>
-			<?php echo $this->title?>
-		</h3>
-	</div>
-	<div class="col-xs-8">
-		<div class="pull-right btn-group" style="margin-top: 20px;">
-		    <?php echo Html::a('Редактировать', array('transferspackage/create','id'=>$model->id), array('class' => 'btn btn-primary')); ?>
-		</div>
-	</div>
-</div>
 
-<div class="row">
-	<div class="col-xs-12 panel panel-primary">
-		<div class="panel-heading">
-			<div class="row">
-				<div class="col-xs-6">
-				  	<?php echo Html::encode($model->name)?> №<?php echo $model->id?>
-				</div>
-				<div class="col-xs-6" style="text-align:right;padding-right:20px;">
-				  	<span>Дата: <?php echo date("d.m.Y",strtotime($model->date))?></span>
-				</div>
+<div class="card">
+	<div class="card-header card-header-primary">
+		<div class="row">
+			<div class="col">
+				<h3>
+					<?php echo $this->title?>
+				</h3>
+			</div>
+			<div class="col text-right">
+				<span>Дата: <?php echo date("d.m.Y",strtotime($model->date))?></span>
 			</div>
 		</div>
-		<div class="col-xs-12" style="padding-top: 25px;">
-			<div class="row">
-				<div class="col-xs-3">
+	</div>
+	<div class="card-body">
+		<div class="row">
+				<div class="col-3">
 					<p>Статус: <?php echo Html::encode($model->statusTitle)?> </p>
 					<p>Дата изменения статуса: <?php echo date("d.m.Y",strtotime($model->status_date))?></p>
 				</div>
-				<div class="col-xs-2">
+				<div class="col-2">
 					<?php echo Html::a("Изменить статус",['transferspackage/change-status','id'=>$model->id],['id'=>'btnChangeStatus','class'=>'btn btn-success'])?>
 					<?php echo Html::a("История изменений статуса",['transferspackage/story-status','id'=>$model->id],['id'=>'btnStoryStatus','class'=>'btn btn-success'])?>
 				</div>
 				
-				<div class="col-xs-3">
+				<div class="col-3">
 					<?php 
 						$files = explode("|", $model->files);
 						if(count($files) && (count($files) > 1 || $files[0] != "" && $files[0] != " ")){
@@ -58,180 +49,186 @@ $this->title = $model->name;
 						}
 					?>
 				</div>
-			</div>
-			<div class="row">
-				<div class="col-xs-3">
-					<p>Комментарий:</p>
-					<p><?php echo Html::encode(nl2br($model->comment))?></p>
-				</div>
+		</div>
+		<div class="row">
+			<div class="col-3">
+				<p>Комментарий:</p>
+				<p><?php echo Html::encode(nl2br($model->comment))?></p>
 			</div>
 		</div>
-	</div>
-	
-	<div class="col-xs-12">
-	    
-	    <div class="row">
-	        <div class="col-xs-12 panel panel-default">
-	            <div class="panel-head">
-	                <ul class="nav nav-tabs">
-  						<li class="active"><a data-toggle="tab" href="#transfers">Услуги</a></li>
-                        <li><a data-toggle="tab" href="#expenses">Расходы</a></li>
-				    </ul>
-	            </div>
-	            
-	            <div class="panel-body">
-	                <div class="tab-content">
-	                    <div id="transfers" class="tab-pane fade in active">
-	                        <table class='table table-bordered table-collapsed table-hovered'>
-                    	        <tr>
-                    	            <th>#</th>
-                    	            <th>Клиент</th>
-                    	            <th>Наименование</th>
-                    	            <th>Валюта</th>
-                    	            <th>Курс</th>
-                    	            <th>Сумма</th>
-                    	            <th>Сумма руб.</th>
-                    	            <th>Комментарий</th>
-                    	            <th>Журнал</th>
-                    	        </tr>
-                    	        <?php 
-                    	            $transfers = $model->transfers;
-                    	            if(is_array($transfers)){
-                    	            	$comSumUs = $comSumEu = $comSumRu = 0;
-                    	                foreach ($transfers as $k=>$t) {
-                    	                	
-                    	                	$comSumUs += $t['currency'] == Currency::C_DOLLAR ? $t['sum'] : 0;
-                    	                	$comSumEu += $t['currency'] == Currency::C_EURO ? $t['sum'] : 0;
-                    	                	$comSumRu += $t['sum_ru'];
-                    	                    ?>
-                    	                    <tr>
-                        	                    <td><?php echo Html::encode($k+1);?></td>
-                                            	<td>
-                                            		<?php echo Html::encode($t['client_id'] ? $t->client->name : "не указан");?>
-                                            	</td>
-                                            	<td>
-                                            		<?php echo Html::encode($t['name']);?>
-                                            	</td>
-                                            	<td>
-                                            		<?php echo Html::encode(Currency::getCurrencyTitle($t['currency']));?>
-                                            	</td>
-                                            	<td>
-                                            		<?php echo Html::encode($t['course']);?>
-                                            	</td>
-                                            	<td>
-                                            		<?php echo Html::encode($t['sum']);?>
-                                            	</td>
-                                            	<td>
-                                            		<?php echo Html::encode($t['sum_ru']);?>
-                                            	</td>
-                                            	<td>
-                                            		<?php echo Html::encode($t['comment']);?>
-                                            	</td>
-                                            	<td style="text-align: center;">
-                                            		<?php echo Html::a("Журнал",['transferspackage/transfer-story','id'=>$t['id']],['class'=>'btnTransferStory'])?>
-                                            	</td>
-                    	                    </tr>
-                    	                    <?php
-                    	                }
-                    	                ?>
+		<div class="row" style="margin-bottom: 20px;">
+			<div class="col-12">
+				<?php echo Html::a('Редактировать', array('transferspackage/form','id'=>$model->id), array('class' => 'btn btn-default')); ?>
 
-                    	                <tr style="font-weight: bold;">
-                    	                	<td colspan="5">Итого</td>
-                    	                	<td><?php 
-                    	                			echo $comSumUs." ".Currency::getCurrencyTitle(Currency::C_DOLLAR)." - ",$comSumEu." ".Currency::getCurrencyTitle(Currency::C_EURO);
-                    	                		?>
-                    	                	</td>
-                    	                	<td><?php echo $comSumRu;?></td>
-                    	                	<td colspan="2"></td>
-                    	                </tr>
-                    	                <?php
-                    	            }
-                    	        
-                    	        ?>
-                    	    </table>
-	                    </div>
-	                    
-	                    
-	                    <div id="expenses" class="tab-pane fade in">
-	                        <table class='table table-bordered table-collapsed table-hovered'>
-                    	        <tr>
-                    	            <th>#</th>
-                    	            <th>Дата</th>
-                    	            <th>Поставщик</th>
-                    	            <th>Валюта</th>
-                    	            <th>Курс</th>
-                    	            <th>Сумма</th>
-                    	            <th>Сумма Руб</th>
-                    	            <th>Комментарий</th>
-                    	            <th>Журнал</th>
-                    	        </tr>
-                    	        <?php 
-                    	            $expenses= $model->SellerExpenses;
-                    	            if(is_array($expenses)){
-                    	            	$comSumUs = $comSumEu = $comSumRu = 0;
-                    	                foreach ($expenses as $k=>$t) {
-                    	                		$comSumUs += $t['currency'] == Currency::C_DOLLAR ? $t['sum'] : 0;
-                    	                		$comSumEu += $t['currency'] == Currency::C_EURO ? $t['sum'] : 0;
-                    	                		$comSumRu += $t['sum_ru'];
+				<?php //echo Html::a("Журнал редактирования перевода",['transferspackage/transferspackage-story','id'=>$model->id],['id'=>'btnAutotruckStory','class'=>'btn btn-success']);?>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-12">
+		        <div class="card-header card-header-primary">
+					<div class="nav-tabs-navigation">
+						<ul class="nav nav-tabs" role='tablist'>
+	  						<li class="nav-item"><a class='nav-link active' data-toggle="tab" href="#transfers">Услуги</a></li>
+	  						<li class="nav-item"><a class='nav-link' data-toggle="tab" href="#expenses">Расходы</a></li>
+						</ul>
+					</div>
+				</div>
+		            
+		        <div class="card-body">
+		            <div class="tab-content">
+		                <div id="transfers" class="tab-pane active">
+		                    <table class='table table-sm table-bordered table-collapsed table-hovered'>
+	                    	    <thead>
+	                    	        <tr>
+	                    	            <th>#</th>
+	                    	            <th>Клиент</th>
+	                    	            <th>Наименование</th>
+	                    	            <th>Валюта</th>
+	                    	            <th>Курс</th>
+	                    	            <th>Сумма</th>
+	                    	            <th>Сумма руб.</th>
+	                    	            <th>Комментарий</th>
+	                    	            <th>Журнал</th>
+	                    	        </tr>
+	                    	    </thead>
+	                    	    <tbody>
+	                    	        <?php 
+	                    	            $transfers = $model->transfers;
+	                    	            if(is_array($transfers)){
+	                    	            	$comSumUs = $comSumEu = $comSumRu = 0;
+	                    	                foreach ($transfers as $k=>$t) {
+	                    	                	
+	                    	                	$comSumUs += $t['currency'] == Currency::C_DOLLAR ? $t['sum'] : 0;
+	                    	                	$comSumEu += $t['currency'] == Currency::C_EURO ? $t['sum'] : 0;
+	                    	                	$comSumRu += $t['sum_ru'];
+	                    	                    ?>
+	                    	                    <tr>
+	                        	                    <td><?php echo Html::encode($k+1);?></td>
+	                                            	<td>
+	                                            		<?php echo Html::encode($t['client_id'] ? $t->client->name : "не указан");?>
+	                                            	</td>
+	                                            	<td>
+	                                            		<?php echo Html::encode($t['name']);?>
+	                                            	</td>
+	                                            	<td>
+	                                            		<?php echo Html::encode(Currency::getCurrencyTitle($t['currency']));?>
+	                                            	</td>
+	                                            	<td>
+	                                            		<?php echo Html::encode($t['course']);?>
+	                                            	</td>
+	                                            	<td>
+	                                            		<?php echo Html::encode($t['sum']);?>
+	                                            	</td>
+	                                            	<td>
+	                                            		<?php echo Html::encode($t['sum_ru']);?>
+	                                            	</td>
+	                                            	<td>
+	                                            		<?php echo Html::encode($t['comment']);?>
+	                                            	</td>
+	                                            	<td style="text-align: center;">
+	                                            		<?php echo Html::a("Журнал",['transferspackage/transfer-story','id'=>$t['id']],['class'=>'btnTransferStory'])?>
+	                                            	</td>
+	                    	                    </tr>
+	                    	                    <?php
+	                    	                }
+	                    	                ?>
 
-                    	                    ?>
-                    	                    <tr>
-                        	                    <td><?php echo Html::encode($k+1);?></td>
-                                            	<td>
-                                            		<?php echo date("d.m.Y",strtotime($t->date));?>
-                                            	</td>
-                                            	<td>
-                                            		<?php echo Html::encode($t->seller_id? $t->seller->name : "не указан");?>
-                                            	</td>
-                                            	<td>
-                                            		<?php echo Html::encode(Currency::getCurrencyTitle($t->currency));?>
-                                            	</td>
-                                            	<td>
-                                            		<?php echo Html::encode($t->course);?>
-                                            	</td>
-                                            	<td>
-                                            		<?php echo Html::encode($t->sum);?>
-                                            	</td>
-                                            	<td>
-                                            		<?php echo Html::encode($t->sum_ru);?>
-                                            	</td>
-                                            	<td>
-                                            		<?php echo Html::encode($t->comment);?>
-                                            	</td>
-                                            	<td style="text-align: center;">
-                                            		<?php echo Html::a("Журнал",['transferspackage/expenses-story','id'=>$t->id],['class'=>'btnExpensesStory'])?>
-                                            	</td>
-                    	                    </tr>
-                    	                    <?php
-                    	                }
-                    	                ?>
+	                    	                <tr style="font-weight: bold;">
+	                    	                	<td colspan="5">Итого</td>
+	                    	                	<td><?php 
+	                    	                			echo $comSumUs." ".Currency::getCurrencyTitle(Currency::C_DOLLAR)." - ",$comSumEu." ".Currency::getCurrencyTitle(Currency::C_EURO);
+	                    	                		?>
+	                    	                	</td>
+	                    	                	<td><?php echo $comSumRu;?></td>
+	                    	                	<td colspan="2"></td>
+	                    	                </tr>
+	                    	                <?php
+	                    	            }
+	                    	        
+	                    	        ?>
+	                    	    </tbody>
+	                    	</table>
+		                </div>
+		                    
+		                    
+		                <div id="expenses" class="tab-pane fade in">
+		                    <table class='table table-sm table-bordered table-collapsed table-hovered'>
+	                    	    <thead>  
+	                    	        <tr>
+	                    	            <th>#</th>
+	                    	            <th>Дата</th>
+	                    	            <th>Поставщик</th>
+	                    	            <th>Валюта</th>
+	                    	            <th>Курс</th>
+	                    	            <th>Сумма</th>
+	                    	            <th>Сумма Руб</th>
+	                    	            <th>Комментарий</th>
+	                    	            <th>Журнал</th>
+	                    	        </tr>
+	                    	    </thead>
+	                    	    <tbody>
+	                    	        <?php 
+	                    	            $expenses= $model->SellerExpenses;
+	                    	            if(is_array($expenses)){
+	                    	            	$comSumUs = $comSumEu = $comSumRu = 0;
+	                    	                foreach ($expenses as $k=>$t) {
+	                    	                		$comSumUs += $t['currency'] == Currency::C_DOLLAR ? $t['sum'] : 0;
+	                    	                		$comSumEu += $t['currency'] == Currency::C_EURO ? $t['sum'] : 0;
+	                    	                		$comSumRu += $t['sum_ru'];
 
-                    	                <tr style="font-weight: bold;">
-                    	                	<td colspan="5">Итого</td>
-                    	                	<td><?php 
-                    	                			echo $comSumUs." ".Currency::getCurrencyTitle(Currency::C_DOLLAR)." - ",$comSumEu." ".Currency::getCurrencyTitle(Currency::C_EURO);
-                    	                		?>
-                    	                	</td>
-                    	                	<td><?php echo $comSumRu;?></td>
-                    	                	<td colspan="2"></td>
-                    	                </tr>
-                    	                <?php
-                    	            }
-                    	        
-                    	        ?>
-                    	    </table>
-	                    </div>
-	                    
-	                </div>
-	            </div>
-	            
+	                    	                    ?>
+	                    	                    <tr>
+	                        	                    <td><?php echo Html::encode($k+1);?></td>
+	                                            	<td>
+	                                            		<?php echo date("d.m.Y",strtotime($t->date));?>
+	                                            	</td>
+	                                            	<td>
+	                                            		<?php echo Html::encode($t->seller_id? $t->seller->name : "не указан");?>
+	                                            	</td>
+	                                            	<td>
+	                                            		<?php echo Html::encode(Currency::getCurrencyTitle($t->currency));?>
+	                                            	</td>
+	                                            	<td>
+	                                            		<?php echo Html::encode($t->course);?>
+	                                            	</td>
+	                                            	<td>
+	                                            		<?php echo Html::encode($t->sum);?>
+	                                            	</td>
+	                                            	<td>
+	                                            		<?php echo Html::encode($t->sum_ru);?>
+	                                            	</td>
+	                                            	<td>
+	                                            		<?php echo Html::encode($t->comment);?>
+	                                            	</td>
+	                                            	<td style="text-align: center;">
+	                                            		<?php echo Html::a("Журнал",['transferspackage/expenses-story','id'=>$t->id],['class'=>'btnExpensesStory'])?>
+	                                            	</td>
+	                    	                    </tr>
+	                    	                    <?php
+	                    	                }
+	                    	                ?>
+
+	                    	                <tr style="font-weight: bold;">
+	                    	                	<td colspan="5">Итого</td>
+	                    	                	<td><?php 
+	                    	                			echo $comSumUs." ".Currency::getCurrencyTitle(Currency::C_DOLLAR)." - ",$comSumEu." ".Currency::getCurrencyTitle(Currency::C_EURO);
+	                    	                		?>
+	                    	                	</td>
+	                    	                	<td><?php echo $comSumRu;?></td>
+	                    	                	<td colspan="2"></td>
+	                    	                </tr>
+	                    	                <?php
+	                    	            }
+	                    	        
+	                    	        ?>
+	                    	        </tbody>
+	                    	</table>
+		                </div>
+		            </div>
+		        </div>
 	        </div>
 	    </div>
-	    
-	    
 	</div>
-	
-	
 </div>
 <?php 
 
@@ -271,7 +268,7 @@ JS;
 $this->registerJs($script);
 
 	Modal::begin([
-		'header'=>"<h4>Файлы</h4>",
+		'header'=>"Файлы",
 		'id'=>'modalFiles',
 		'size'=>'modal-lg'
 	]);
@@ -279,14 +276,14 @@ $this->registerJs($script);
 
 
 	Modal::begin([
-		'header'=>"<h4>Изменение статуса</h4>",
+		'header'=>"Изменение статуса",
 		'id'=>'modalChangeStatus',
 		'size'=>'modal-lg'
 	]);
 	Modal::end();
 
 	Modal::begin([
-		'header'=>"<h4>История статуса</h4>",
+		'header'=>"История статуса",
 		'id'=>'modalStoryStatus',
 		'size'=>'modal-lg'
 	]);
@@ -294,7 +291,7 @@ $this->registerJs($script);
 
 
 	Modal::begin([
-		'header'=>"<h4>Журнал услуги</h4>",
+		'header'=>"Журнал услуги",
 		'id'=>'modalTransferStory',
 		'size'=>'modal-all'
 	]);
@@ -302,7 +299,7 @@ $this->registerJs($script);
 
 
 	Modal::begin([
-		'header'=>"<h4>Журнал расхода</h4>",
+		'header'=>"Журнал расхода",
 		'id'=>'modalExpensesStory',
 		'size'=>'modal-all'
 	]);

@@ -31,7 +31,7 @@ $packages = TypePackaging::find()->all();
 <div class="row">
 	<div class="col-12">
 		<div class="card">
-			<div class="card-header card-header-info">
+			<div class="card-header card-header-primary">
 				<div class="row">
 					<div class="col-6">
 						<h3><?php echo $autotruck->name?> №<?php echo $autotruck->id?></h3>
@@ -126,10 +126,10 @@ $packages = TypePackaging::find()->all();
 					</div>
 				</div>
 
-				<div class="card-header card-header-tabs card-header-info">
+				<div class="card-header card-header-tabs card-header-primary">
 					<div class="nav-tabs-navigation">
 						<ul class="nav nav-tabs" role='tablist'>
-  							<li class="nav-item active"><a class='nav-link' data-toggle="tab" href="#apps">Наименования</a></li>
+  							<li class="nav-item active"><a class='nav-link active' data-toggle="tab" href="#apps">Наименования</a></li>
 
 							<?php if($userCanRoleexpenses){?>
   								<li class="nav-item"><a class='nav-link' data-toggle="tab" href="#expenses">Расходы</a></li>

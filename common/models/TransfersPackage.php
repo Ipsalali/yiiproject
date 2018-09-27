@@ -76,6 +76,25 @@ class TransfersPackage extends ActiveRecordVersionable
 	}
 
 
+    public function load($data, $formName = null){
+        $this->tempFiles = $this->files;
+
+        if(parent::load($data, $formName)){
+
+            if(is_array($this->files)){
+
+                $this->files = $this->tempFiles;
+            }
+            
+            return true;
+        }
+
+        return false;
+    }
+
+
+    
+
 	/**
      * Returns the static model of the specified AR class.
      * @param string $className active record class name.

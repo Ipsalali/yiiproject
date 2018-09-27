@@ -15,7 +15,7 @@ use yii\bootstrap\ActiveForm;
 	if($story == null || !count($story)){
 ?>
 	<div class="row">
-		<div class="col-xs-12">
+		<div class="col-12">
 			<div class="alert alert-warning">
 				История не обнаружена
 			</div>
@@ -26,7 +26,7 @@ use yii\bootstrap\ActiveForm;
 
 ?>
 		<div class="row">
-			<div class="col-xs-12">
+			<div class="col-12">
 				<p>Действующий статус: <?php echo $model->getStatusTitle();?>
 					<span>
 						(<?php echo date("d.m.Y",strtotime($model['status_date']));?>)

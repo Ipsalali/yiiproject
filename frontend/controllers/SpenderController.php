@@ -45,19 +45,16 @@ class SpenderController extends Controller{
 
     	if(Yii::$app->request->isAjax){
     		\Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-	    	$post = Yii::$app->request->post();
+	    	$params = Yii::$app->request->post();
             
-
-	    	if(isset($post['Spender']) && count($post['Spender'])){
+	    	if(isset($params['Spender']) && count($params['Spender'])){
 	    		$Spender = new Spender;
-
-	    		if($Spender->load($post) && $Spender->save() && $Spender->sendLetter()){
-	    			//Yii::$app->session->setFlash("SpenderSaved");
+                
+	    		if($Spender->load($params) && $Spender->save() && $Spender->sendLetter()){
 	    			return ['result'=>1];
 	    		}
 	    	}else{
 	    		return ['result'=>0];
-	    		//Yii::$app->session->setFlash("SpenderError");
 	    	}
     	}else{
     		return Yii::$app->response->redirect(['spender/index']);
@@ -69,13 +66,13 @@ class SpenderController extends Controller{
     public function actionGetClient(){
         if(Yii::$app->request->isAjax){
 
-            $post = Yii::$app->request->post();
+            $params = Yii::$app->request->get();
 
             $answer = array();
 
-            if($post['key']){
+            if($params['key']){
             
-                $key = trim(strip_tags($post['key']));
+                $key = trim(strip_tags($params['key']));
 
                 $clients = Client::searchByKey($key);
                 if(is_array($clients) && count($clients)){
@@ -93,6 +90,8 @@ class SpenderController extends Controller{
             \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
             
             return $answer;
+        }else{
+            return Yii::$app->response->redirect(['spender/index']);
         }
     }
 	

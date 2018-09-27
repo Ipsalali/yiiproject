@@ -2,45 +2,41 @@
 use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
-use kartik\date\DatePicker;
+use frontend\bootstrap4\GridView;
 use common\models\Currency;
 
-$this->title = "Переводы";
+$this->title = "Список переводов";
+
+$this->params['breadcrumbs'][]=$this->title;
 ?>
-<div class="row">
-	<div class="col-xs-4">
-		<h3>
-			<?php echo $this->title?>
-		</h3>
-	</div>
-	<div class="col-xs-8">
-		<div class="pull-right btn-group" style="margin-top: 20px;">
-		    <?php echo Html::a('Создать', array('transferspackage/create'), array('class' => 'btn btn-primary')); ?>
-		</div>
-	</div>
-</div>
-<div class="row">
-    <div class="col-xs-12">
-        <?php 
+<div class="card">
+    <div class="card-header card-header-primary">
+        <div class="row">
+            <div class="col">
+                <h3>
+                    <?php echo $this->title?>
+                </h3>
+            </div>
+            <div class="col text-right">
+                <div class="btn-group">
+                    <?php echo Html::a('Создать', ['transferspackage/form'], ['class' => 'btn btn-primary']); ?>
+                </div>
+            </div>
+        </div>
+    </div>
 
-        $layout = <<< HTML
-    {input1}<br>
-    {input2}
-    <span class="input-group-addon kv-date-remove">
-        <i class="glyphicon glyphicon-remove"></i>
-    </span>
-HTML;
+    <div class="card-body">    
+    <?php 
 
-        echo \yii\grid\GridView::widget([
+        echo GridView::widget([
                 'dataProvider' => $dataProvider,
                 'filterModel' => $modelFilters,
                 'formatter' => ['class' => 'yii\i18n\Formatter','nullDisplay' => ''],
-                'tableOptions'=>['class'=>'table table-striped table-bordered table-hover as_index'],
+                'tableOptions'=>['class'=>'table table-sm table-striped table-bordered table-hover as_index'],
                 'showFooter'=>true,
                 'columns'=>[
                     [
-                        'class'=>'yii\grid\SerialColumn',
-                        //'footer'=>'Итого'
+                        'class'=>'yii\grid\SerialColumn'
                     ],
                     [
                         'attribute'=>"date",
@@ -48,22 +44,7 @@ HTML;
                             return Html::a(date("d.m.Y",strtotime($c->date)),["transferspackage/read","id"=>$c->id]);
                         },
                         "format"=>"html",
-                        'filter'=>DatePicker::widget([
-							'model'=>$modelFilters,
-							'language'=>'ru',
-							'attribute'=>'date_from',
-							'attribute2'=>'date_to',
-							'options' => ['placeholder' => 'Начальная дата'],
-							'options2' => ['placeholder' => 'Конечная дата'],
-							'type' => DatePicker::TYPE_RANGE,
-							'separator'=>" по ",
-							'layout'=>$layout,
-							'pluginOptions'=>[
-								'autoclose'=>true,
-								
-        						'format' => 'dd.mm.yyyy'
-    						]
-						]),
+                        'filter'=>Html::input("date",'TransferspackageFilter[date_from]',$modelFilters->date_from ? date("Y-m-d",strtotime($modelFilters->date_from)) : null,['class'=>'form-control']) . Html::input("date",'TransferspackageFilter[date_to]',$modelFilters->date_to ? date("Y-m-d",strtotime($modelFilters->date_to)) : null,['class'=>'form-control']),
                     ],
                     [
                         'attribute'=>"name",

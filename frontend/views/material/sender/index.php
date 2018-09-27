@@ -2,68 +2,56 @@
 use yii\helpers\Html; 
 use yii\helpers\Url;
 use yii\bootstrap\ActiveForm;
-use yii\grid\GridView;
+use frontend\bootstrap4\GridView;
 
-$this->title = "Отправитель";
+$this->title = "Список отправителей";
+$this->params['breadcrumbs'][]=$this->title;
 ?>
 
-<div class="row" style="margin-top: 20px;">
-    <div class="col-xs-12">
-        
-
-    <?php if(Yii::$app->session->hasFlash('StatusDeletedError')): ?>
-    <div class="alert alert-error">
-        There was an error deleting your post!
-    </div>
-    <?php endif; ?>
-     
-    <?php if(Yii::$app->session->hasFlash('StatusDeleted')): ?>
-    <div class="alert alert-success">
-        Your post has successfully been deleted!
-    </div>
-    <?php endif; ?>
-
-    <div class="status_create_page">
+<div class="card">
     <?php $form = ActiveForm::begin(['id' => 'country_create','action'=>Url::to(['sender/create'])]); ?>
+    <div class="card-header card-header-primary">
         <div class="row">
-            <div class="col-xs-6">
-                <h3>Новый отправитель:</h3>
-            </div>
+                <div class="col">
+                    <h3 class="card-title">Новый отправитель:</h3>
+                </div>
+                <div class="col text-right">
+                    <?php echo Html::submitButton('Сохранить',['class' => 'btn btn-primary', 'name' => 'country-create-button']); ?>
+                </div>
         </div>
+    </div>
+    <div class="card-body">
         <div class="row">
-            <div class="col-xs-3">
+            <div class="col-3">
                 <?php echo $form->field($model, 'name')->textInput(); ?>
             </div>
-            <div class="col-xs-3">
+            <div class="col-3">
                 <?php echo $form->field($model, 'phone')->textInput(); ?>
             </div>
-            <div class="col-xs-3">
+            <div class="col-3">
                 <?php echo $form->field($model, 'email')->textInput(); ?>
             </div>
-            <div class="col-xs-3" style="padding-top:25px">
-                <?php echo Html::submitButton('Сохранить',['class' => 'btn btn-primary', 'name' => 'country-create-button']); ?>
-            </div>
-            
         </div>
-        
-    <?php ActiveForm::end(); ?>
     </div>
-
-
-    </div>
+    <?php ActiveForm::end(); ?> 
 </div>
 
-<div class="row">
-    <div class="col-xs-12">
-        <?php 
 
-        echo \yii\grid\GridView::widget([
-                'dataProvider' => $dataProvider,
-                'filterModel' => $modelFilters,
-                'formatter' => ['class' => 'yii\i18n\Formatter','nullDisplay' => ''],
-                'tableOptions'=>['class'=>'table table-striped table-bordered table-hover as_index'],
-                'showFooter'=>true,
-                'columns'=>[
+<div class="card">
+    <div class="card-header card-header-primary">
+        <h3 class="card-title">Список отправителей</h3>
+    </div>
+
+
+    <div class="card-body">
+    <?php 
+        echo GridView::widget([
+            'dataProvider' => $dataProvider,
+            'filterModel' => $modelFilters,
+            'formatter' => ['class' => 'yii\i18n\Formatter','nullDisplay' => ''],
+            'tableOptions'=>['class'=>'table table-sm table-striped table-bordered table-hover as_index'],
+            'showFooter'=>true,
+            'columns'=>[
                     [
                         'class'=>'yii\grid\SerialColumn',
                         //'footer'=>'Итого'
@@ -102,6 +90,5 @@ $this->title = "Отправитель";
                 ]
             ]);
 
-        ?>
-    </div>
+    ?>
 </div>

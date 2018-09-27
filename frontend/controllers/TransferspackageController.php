@@ -29,7 +29,7 @@ class TransferspackageController extends Controller{
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['index', 'error','create','read','show-files','download','unlinkfile','change-status','story-status','get-row-service','get-row-expenses','delete','remove-transfer-ajax','remove-expenses-ajax','transfer-story','expenses-story'],
+                        'actions' => ['index', 'error','form','read','show-files','download','unlinkfile','change-status','story-status','get-row-service','get-row-expenses','delete','remove-transfer-ajax','remove-expenses-ajax','transfer-story','expenses-story'],
                         'allow' => true,
                         'roles' => ['transferspackage'],
                     ],
@@ -50,7 +50,7 @@ class TransferspackageController extends Controller{
 
 
 
-	public function actionCreate($id = null){
+	public function actionForm($id = null){
 		
 		$post = Yii::$app->request->post();
 		
@@ -79,20 +79,24 @@ class TransferspackageController extends Controller{
 
 		if(isset($post['TransfersPackage'])){
 
-			if(isset($model->id)){
-					$model->tempFiles = $model->files;
-			}
+			// if(isset($model->id)){
+			// 	$model->tempFiles = $model->files;
+			// }
 
 			if($model->load($post) && $model->validate()){
 
-				$model->files = UploadedFile::getInstances($model, 'files');
-				if ($model->files) {
-					if($fName = $model->uploadFile()){
-						$model->files = $fName;
-					}else{
-						Yii::$app->session->setFlash("warning",'Файлы не удалось загрузить на сервер!');
-					}
-	            }
+				if(isset($_FILES['TransfersPackage']['name']['files'][0]) && $_FILES['TransfersPackage']['name']['files'][0]){
+					$model->tempFiles = $model->file;
+					$model->files = UploadedFile::getInstances($model, 'files');
+					
+					if ($model->files) {
+						if($fName = $model->uploadFile()){
+							$model->files = $fName;
+						}else{
+							Yii::$app->session->setFlash("warning",'Файлы не удалось загрузить на сервер!');
+						}
+		            }
+	        	}
 
 	            $typeAction = isset($model->id) && $model->id  ? 2 : 4;
 	            
@@ -312,6 +316,7 @@ class TransferspackageController extends Controller{
 	public function actionRemoveTransferAjax(){
 
 		if(Yii::$app->request->isAjax){
+			Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 
 			$get = Yii::$app->request->get();
 
@@ -322,7 +327,7 @@ class TransferspackageController extends Controller{
 				$id = (int)$get['id'];
 
 				$t = Transfer::findOne($id);
-				if($t){
+				if(isset($t->id)){
 					$answer['result']  = $t->delete();
 				}else{
 					$answer['error']['text'] = 'not found transfer';
@@ -331,9 +336,11 @@ class TransferspackageController extends Controller{
 				$answer['result'] = 0;
 			}
 		
-			\Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+			
 			
 			return $answer;
+		}else{
+			return $this->redirect(['transferspackage/index']);
 		}
 	}
 	
@@ -352,7 +359,7 @@ class TransferspackageController extends Controller{
 				$id = (int)$get['id'];
 
 				$t = SellerExpenses::findOne($id);
-				if($t){
+				if(isset($t->id)){
 					$answer['result']  = $t->delete();
 				}else{
 					$answer['error']['text'] = 'not found expenses';
@@ -364,6 +371,8 @@ class TransferspackageController extends Controller{
 			\Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 			
 			return $answer;
+		}else{
+			return $this->redirect(['transferspackage/index']);
 		}
 	}
 

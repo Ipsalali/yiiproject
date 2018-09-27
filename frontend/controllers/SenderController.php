@@ -41,6 +41,7 @@ class SenderController extends Controller{
 
         $modelFilters = new SendersSearch;
         $dataProvider = $modelFilters->search(Yii::$app->request->queryParams);
+        
         return $this->render('index',array('dataProvider'=>$dataProvider,'modelFilters'=>$modelFilters,'model'=>$model));
     }
 
@@ -57,7 +58,7 @@ class SenderController extends Controller{
             } 
         }
 
-        return $this->render('create',array('model'=>$model));
+        return $this->render('form',array('model'=>$model));
     }
 
 
@@ -96,10 +97,9 @@ class SenderController extends Controller{
                return Yii::$app->response->redirect(array('sender/index'));
         }
 
-        return $this->render('create', array(
+        return $this->render('form', array(
             'model' => $model
         ));
-
     }
 
 

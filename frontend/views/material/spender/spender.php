@@ -13,93 +13,84 @@ use mihaildev\elfinder\ElFinder;
 use common\models\ClientCategory;
 
 $this->title = 'Рассылка';
+$this->params['breadcrumbs'][]=$this->title;
 ?>
-<div class="row">
-        <div class="col-xs-6">
-            <h2>Рассылка</h2>
-        </div>
-</div>
 
-<?php if(Yii::$app->session->hasFlash('SpenderSaved')): ?>
-<div class="alert alert-success">
-    Письмо отправлено.
-</div>
-<?php endif; ?>
-
-<?php if(Yii::$app->session->hasFlash('SpenderError')): ?>
-<div class="alert alert-danger">
-    Письмо не удалось отправить.
-</div>
-<?php endif; ?>
-
-<?php $form = ActiveForm::begin(['id' => 'spender_letter','action'=>Url::to(['spender/send'])]); ?>
-<div class="row">
-    
-    <div class="col-xs-6">
-    <?php echo $form->field($spender, 'theme')->textInput(); ?>
-    
-     <?php
-        echo $form->field($spender, 'body')->widget(CKEditor::className(),[
-            'editorOptions' => ElFinder::ckeditorOptions(['elfinder'],[
-            'preset' => 'full', //разработанны стандартные настройки basic, standard, full данную возможность не обязательно использовать
-            'inline' => false, //по умолчанию false
-               ]),
-    ]);
-    ?>
+<div class="card">
+    <div class="card-header card-header-primary">
+        <h2 class="card-title"><?php echo $this->title;?></h2>
     </div>
-    <div class="col-xs-6">
+    <div class="card-body">
+        <?php $form = ActiveForm::begin(['id' => 'spender_letter','action'=>Url::to(['spender/send'])]); ?>
         <div class="row">
-            <div class="col-xs-12">
-                <div class="ignored_clients">
-                    <label>Исключенные:</label>
+            <div class="col-6">
+            <?php echo $form->field($spender, 'theme')->textInput(); ?>
+                
+                <?php
+                    echo $form->field($spender, 'body')->widget(CKEditor::className(),[
+                        'editorOptions' => ElFinder::ckeditorOptions(['elfinder'],[
+                        'preset' => 'full', //разработанны стандартные настройки basic, standard, full данную возможность не обязательно использовать
+                        'inline' => false, //по умолчанию false
+                           ]),
+                    ]);
+                ?>
+            </div>
+            <div class="col-6">
+                <div class="row">
+                    <div class="col-2">
+                        <div class="ignored_clients">
+                            <label>Исключенные:</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6 ignor_block">
+                        <input type="hidden" name="ignore_values" id="ignore_values">
+                        <label for="input_ignore_list" class="control-label">Введите имя клиента</label>
+                        <input type="text" name="input_ignore_list" id="input_ignore_list" class="form-control">
+                        <ul id="ignor_list">
+                            
+                        </ul>
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 15px;">
+                    <div class="col-6 category_select">
+                        <label>Выберите категорию клиентов:</label>
+                        <?php echo Html::checkboxList("category",null,ArrayHelper::map(ClientCategory::find()->all(),'cc_id','cc_title'),[])?>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 block_send-letter-button">
+                        <?php echo Html::submitButton('Отправить рассылку',['class' => 'btn btn-success send-letter-button', 'name' => 'send-letter-button']); ?>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12 spender_result">
+                        
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-xs-6 ignor_block">
-                <input type="hidden" name="ignore_values" id="ignore_values">
-                <label for="input_ignore_list" class="control-label">Введите имя клиента</label>
-                <input type="text" name="input_ignore_list" id="input_ignore_list" class="form-control">
-                <ul id="ignor_list">
-                    
-                </ul>
-            </div>
-        </div>
-        <div class="row" style="margin-top: 15px;">
-            <div class="col-xs-6 category_select">
-                <label>Выберите категорию клиентов:</label>
-                <?php echo Html::checkboxList("category",null,ArrayHelper::map(ClientCategory::find()->all(),'cc_id','cc_title'),[])?>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-xs-12 block_send-letter-button">
-                <?php echo Html::submitButton('Отправить рассылку',['class' => 'btn btn-success send-letter-button', 'name' => 'send-letter-button','data-confirm'=>'Вы точно хотите отправить?']); ?>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-xs-12 spender_result">
-                
-            </div>
-        </div>
-        
-
+        <?php ActiveForm::end(); ?>
     </div>
 </div>
-<?php ActiveForm::end(); ?>
+
+
+
 <?php
 
 $script = <<<JS
+
     $("#input_ignore_list").keyup(function(){
         var v = $(this).val();
         if(v.length > 2){
             $.ajax({
                 url:"index.php?r=spender/get-client",
-                type:"POST",
+                type:"GET",
                 data:"key="+v,
                 dataType:"json",
                 success:function(json){
-                    console.log(json);
                     if(json.result && json.hasOwnProperty("client") && json.client.length>0){
                         var count_cl = json.client.length;
                         var html = "";
@@ -153,10 +144,9 @@ $script = <<<JS
     var remove_ignore_value = function(val){
         var values = $("#ignore_values").val();
         var arr_v = values.length? values.split(","):[];
-        console.log(val);
+        
         var id = parseInt(val.data("id")).toString();
-        console.log(arr_v);
-        console.log(id);
+        
         var index = arr_v.indexOf(id);
         if(index >= 0){
             arr_v.splice(index, 1);
@@ -188,6 +178,10 @@ $script = <<<JS
 
         if(!sended){
             
+            if(!confirm("Подтвердите рассылку!")){
+                return;
+            }
+
             $.ajax({
                 url:action,
                 type:"POST",
@@ -208,7 +202,6 @@ $script = <<<JS
                     }
                 },
                 error:function(msg){
-                    console.log(msg);
                     $(".spender_result").html($("<label/>").addClass("error").text("Возникла ошибка!!!"));
                 },
                 complete:function(){

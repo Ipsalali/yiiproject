@@ -7,7 +7,7 @@ use yii\helpers\ArrayHelper;
 ?>
 
 <div class="row">
-	<div class="col-xs-12">
+	<div class="col-12">
 	<?php $form = ActiveForm::begin(['id'=>'changeStatus']);?>
 		<?php 
 			echo $form->field($model,'status')->dropDownList(ArrayHelper::map($model->getStatuses(),'id','title'),['prompt'=>'Статус']);

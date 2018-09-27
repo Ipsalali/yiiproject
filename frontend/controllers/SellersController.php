@@ -61,7 +61,7 @@ class SellersController extends Controller{
                     Yii::$app->authManager->assign($seller, $user_id);
                 }else{
                     Yii::$app->session->setFlash("warning","Поставщик не добавлен");
-                    return $this->render('create',array('model'=>$model));
+                    return $this->render('form',array('model'=>$model));
                 }
                 
                 Yii::$app->session->setFlash("success","Поставщик добавлен");
@@ -69,7 +69,7 @@ class SellersController extends Controller{
             } 
         }
 
-        return $this->render('create',array('model'=>$model));
+        return $this->render('form',array('model'=>$model));
     }
 
 
@@ -130,7 +130,7 @@ class SellersController extends Controller{
             
         }
 
-        return $this->render('create', array(
+        return $this->render('form', array(
             'model' => $model
         ));
 

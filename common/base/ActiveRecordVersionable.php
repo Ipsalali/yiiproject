@@ -209,8 +209,9 @@ class ActiveRecordVersionable extends ActiveRecord implements Versionable{
     	$n = $this->getAttributes();
         
         $changed = array_diff_assoc($o, $n);
-
+        
     	if(parent::update($runValidation,$attributeNames)){
+            
     		if($saveVersion && count($changed)){
 
     			$defA = $this->getStoryAttributes();
@@ -221,7 +222,9 @@ class ActiveRecordVersionable extends ActiveRecord implements Versionable{
 	    		}
 	    	}
     		return true;
-    	}
+    	}else{
+
+        }
     	
     	return true;
     }
@@ -327,10 +330,10 @@ class ActiveRecordVersionable extends ActiveRecord implements Versionable{
     			return parent::delete();
     		}
     	}else{
-    		
+
     		self::$defaultStoryAttributes['type_action']=3;
-    		$this->isDeleted = true;
-    		return $this->save(true);
+    		$this->isDeleted = 1;
+    		return $this->save(true,false);
     	}
     }
 

@@ -11,33 +11,38 @@ $sellers = Seller::getSellers();
 $clients = Client::find()->All();
 
 $this->title = isset($model->id)? "Перевод: ".$model->name : "Новый перевод";
+$this->params['breadcrumbs'][] = ['label'=>"Список заявок",'url'=>Url::to(['transferspackage/index'])];
+if(isset($model->id)){
+    $this->params['breadcrumbs'][] = ['label'=>$model->name,'url'=>Url::to(['transferspackage/read','id'=>$model->id])];
+}
+$this->params['breadcrumbs'][]=$this->title;
 ?>
+
+
 <div class="row">
-	<div class="col-xs-12">
-
+	<div class="col-12">
 		<?php $form = ActiveForm::begin(['id'=>'tranfer_form','options' => ['enctype' => 'multipart/form-data']]); ?>
-		<div class="row">
-			<div class="col-xs-4">
-				<h3>
-					<?php echo Html::encode($this->title)?>
-				</h3>
-			</div>
-			<div class="col-xs-8">
-				<div class="pull-right btn-group" style="margin-top: 20px;">
-				    <?php echo Html::submitButton('Сохранить', array('class' => 'btn btn-primary')); ?>
-				    <?php echo isset($model->id) ? Html::a('Подробнее',['transferspackage/read','id'=>$model->id], array('class' => 'btn btn-success')) : null?>
-				</div>
-			</div>
-		</div>
-
-		<div class="row">
-			<div class="col-xs-12">
-				<div class="row">
-					<div class="col-xs-4">
+        <div class="card">
+            <div class="card-header card-header-primary">
+                <div class="row">
+                    <div class="col">
+                        <h3 class="card-title"><?php echo Html::encode($this->title)?></h3>
+                    </div>
+                    <div class="col text-right">
+                        <div class="btn-group">
+                            <?php echo Html::submitButton('Сохранить', array('class'=>'btn btn-primary')); ?>
+                            <?php echo isset($model->id) ? Html::a('Подробнее',['transferspackage/read','id'=>$model->id], ['class' => 'btn btn-success']) : null; ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+					<div class="col-4">
 					<?php echo $form->field($model,'name')->textInput(); ?>
 					</div>
 
-					<div class="col-xs-2">
+					<div class="col-2">
 						<?php echo $form->field($model,'date')->widget(\yii\jui\DatePicker::classname(),['language' => 'ru','dateFormat'=>'dd-MM-yyyy',"options"=>array("class"=>"form-control",)]); ?>
 					</div>
 					
@@ -46,53 +51,55 @@ $this->title = isset($model->id)? "Перевод: ".$model->name : "Новый 
 					<?php 
 						if(!isset($model->id)){
 					?>
-						<div class="col-xs-1">
+						<div class="col-1">
 							<?php 
 								echo $form->field($model,'status')->dropDownList(ArrayHelper::map($model->getStatuses(),'id','title'),['prompt'=>'Статус']);
 							?>
 						</div>
-						<div class="col-xs-1">
+						<div class="col-1">
 							<?php echo $form->field($model,'status_date')->widget(\yii\jui\DatePicker::classname(),['language' => 'ru','dateFormat'=>'dd-MM-yyyy',"options"=>array("class"=>"form-control")]); ?>
 						</div>
 					<?php }else{
 					    echo Html::hiddenInput("package_id",$model->id);
 					} ?>
 
-					<div class="col-xs-3">
+					<div class="col-3">
 						<?php echo $form->field($model,'files[]')->fileInput(['multiple' => true]);?>
 					</div>
 
-					<div class="col-xs-3">
+					<div class="col-3">
 						<?php echo $form->field($model,'comment')->textarea();?>
 					</div>
 				</div>
-			</div>
-		</div>
-
-		<div class="row">
-			<div class="col-xs-12">
+		  
+		        <div class="card-header card-header-tabs card-header-primary">
+                    <div class="nav-tabs-navigation">
+                        <div class="nav-tabs-wrapper">
+                            <ul class="nav nav-tabs" role="tablist">
+                                <li class="nav-item active"><a class='nav-link active' data-toggle="tab" href="#transfers">Услуги</a></li>
+                                 <li class="nav-item"><a class='nav-link' data-toggle="tab" href="#expenses">Расходы</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
 			    
-			    <ul class="nav nav-tabs">
-		  			<li class="active"><a data-toggle="tab" href="#transfers">Наименования</a></li>
-		  			<li><a data-toggle="tab" href="#expenses">Расходы</a></li>
-				</ul>
-			    
+                <div class="card-body">
+                    
+                
 			    <div class="tab-content">
-			        <div id="transfers" class="tab-pane fade in active">
+			        <div id="transfers" class="tab-pane  active">
         				
-        				<div class="panel panel-default">
-        				    <div class="panel-heading">
-        				        Информация об услугах
+        				    <div class="card-header">
+        				        <h3 class="card-title">Информация об услугах</h3>
         				        <div class="row">
-        				            <div class='col-xs-12'>
+        				            <div class='col-2'>
                 					    <?php echo Html::a("Добавить услугу",['transferspackage/get-row-service'],['class'=>'btn btn-primary','id'=>'btnAddRowServise'])?>
         				            </div>
                 				</div>
         				    </div>
         				
-            				<div class="panel-body">
-            				    <div id="services_table_block">
-                					<table id="services_table" class="table table-bordered table-collapsed table-hovered">
+            				<div class="card-body">
+                				<table id="services_table" class="table table-sm table-bordered table-collapsed table-hovered">
                 						<thead>
                 							<th>#</th>
                 							<th>Клиент</th>
@@ -180,9 +187,9 @@ $this->title = isset($model->id)? "Перевод: ".$model->name : "Новый 
                                                             		<?php 
                                                             		    
                                                             		    if($id)
-                                                            		        echo Html::a("X",['transferspackage/remove-transfer-ajax','id'=>$id],['class'=>'btn btn-danger removeRowFromBd']);
+                                                            		        echo Html::a("<i class=\"material-icons\">close</i>",['transferspackage/remove-transfer-ajax','id'=>$id],['class'=>'btn btn-danger btn-sm btn-round removeRowFromBd']);
                                                             		    else
-                                                            		        echo Html::a("X",null,['class'=>'btn btn-danger removeRow','data-confirm'=>'Подтвердите свои дейсвтия']);
+                                                            		        echo Html::a("<i class=\"material-icons\">close</i>",null,['class'=>'btn btn-danger btn-sm btn-round removeRow']);
                                                             		
                                                             		?>
                                                             	</td>
@@ -191,29 +198,27 @@ $this->title = isset($model->id)? "Перевод: ".$model->name : "Новый 
                 									}
                 								}
                 							?>
-                						</tbody>
-                					</table>
-                				</div>
-            				</div>
-        				</div>
-    				</div>
+                					</tbody>
+                			</table>
+                		</div>
+            		</div>
+        				
+    				
     				
     				<!-- Tab 2 -->
     				<div id="expenses" class="tab-pane fade in">
     				    
-    				    <div class="panel panel-default">
-        				    <div class="panel-heading">
-        				        Информация о расходах
+        				    <div class="card-header">
+        				        <h3 class="card-title">Информация о расходах</h3>
         				        <div class="row">
-        				            <div class='col-xs-12'>
+        				            <div class='col-12'>
                 					    <?php echo Html::a("Добавить расход",['transferspackage/get-row-expenses'],['class'=>'btn btn-primary','id'=>'btnAddRowExpenses'])?>
         				            </div>
                 				</div>
         				    </div>
         				
-            				<div class="panel-body">
-            				    <div id="expenses_table_block">
-                					<table id="expenses_table" class="table table-bordered table-collapsed table-hovered">
+            				<div class="card-body">
+                					<table id="expenses_table" class="table table-sm table-bordered table-collapsed table-hovered">
                 						<thead>
                 							<th>#</th>
                 							<th>Дата</th>
@@ -298,27 +303,26 @@ $this->title = isset($model->id)? "Перевод: ".$model->name : "Новый 
                                                             		<?php 
                                                             		    
                                                             		    if($id)
-                                                            		        echo Html::a("X",['transferspackage/remove-expenses-ajax','id'=>$id],['class'=>'btn btn-danger removeRowFromBd']);
+                                                            		        echo Html::a("<i class=\"material-icons\">close</i>",['transferspackage/remove-expenses-ajax','id'=>$id],['class'=>'btn btn-danger btn-sm btn-round removeRowFromBd']);
                                                             		    else
-                                                            		        echo Html::a("X",null,['class'=>'btn btn-danger removeRow','data-confirm'=>'Подтвердите свои дейсвтия']);
+                                                            		        echo Html::a("<i class=\"material-icons\">close</i>",null,['class'=>'btn btn-danger btn-sm btn-round removeRow']);
                                                             		
                                                             		?>
                                                             	</td>
                 										   </tr>
-                										<?php
-                									}
-                								}
-                							?>
-                						</tbody>
-                					</table>
-                				</div>
-            				</div>
-        				</div>
-    				</div>
-				</div>
-			</div>
-		</div>
-
+                									   <?php
+                								    }
+                							    }
+                						    ?>
+                				        </tbody>
+                        			</table>
+                        		</div>
+                    		</div>
+                		
+        			</div>
+        		</div>
+            </div>
+        </div>
 		<?php ActiveForm::end();?>
 	</div>
 </div>
@@ -328,17 +332,7 @@ $this->title = isset($model->id)? "Перевод: ".$model->name : "Новый 
 
 $script = <<<JS
 	
-	//Смена валюты
-	// $("#transferspackage-currency").change(function(){
-	// 	if($(this).val()){
-	// 		var op = $(this).find("option[value="+$(this).val()+"]");
-	// 		if(op.length){
-	// 			$("#th_sum_span").html(op.html());
-	// 		}else{
-	// 			$("#th_sum_span").html("");
-	// 		}
-	// 	}
-	// });
+	
 
 
 	var send_getRowService = 0;
@@ -414,7 +408,7 @@ $script = <<<JS
 		if(action && !send_remove){
 			$.ajax({
 				url:action,
-				type:"POST",
+				type:"GET",
 				dataType:"json",
 				beforeSend:function(){
 					send_remove = 1;
@@ -423,7 +417,7 @@ $script = <<<JS
 					console.log(msg);
 				},
 				success:function(json){
-					if(json.hasOwnProperty("result") && parseInt(json.result) && row.length){
+					if(json.hasOwnProperty("result") && json.result && row.length){
 						row.remove();
 					}
 				},

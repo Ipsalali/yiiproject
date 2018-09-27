@@ -11,7 +11,7 @@ use yii\bootstrap\ActiveForm;
 	if($model == null || $model->files == ""){
 ?>
 	<div class="row">
-		<div class="col-xs-12">
+		<div class="col-12">
 			<div class="alert alert-warning">
 				Файлы не обнаружены!
 			</div>
@@ -23,7 +23,7 @@ use yii\bootstrap\ActiveForm;
 		$files = explode("|", $model->files);
 ?>
 		<div class="row">
-			<div class="col-xs-12">
+			<div class="col-12">
 				<ul>
 				<?php
 					foreach ($files as $key => $file) {

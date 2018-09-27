@@ -24,7 +24,7 @@ class TransferspackageFilter extends TransfersPackage
     public function rules()
     {
         return [
-            [['name','date_from','date_to','status','currency'],'safe']
+            [['name','date_from','date_to','status'],'safe']
         ];
     }
 
@@ -75,9 +75,7 @@ class TransferspackageFilter extends TransfersPackage
             $query->andWhere(["<=","`date`",date("Y-m-d H:i:s",strtotime($this->date_to))]);
         }
         
-        if($this->currency){
-            $query->andWhere(['currency'=>$this->currency]);
-        }
+        
         
         if($this->status){
             $query->andWhere(['status'=>$this->status]);

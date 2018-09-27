@@ -92,8 +92,6 @@ class Transfer extends ActiveRecordVersionable
 
 
 
-
-
     public function getHistory(){
         if(!$this->id) return false;
 

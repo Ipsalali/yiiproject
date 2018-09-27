@@ -28,6 +28,12 @@ $expManagers = User::getSellers();
 $newModel = !isset($autotruck->id);
 
 $this->title = $newModel ? "Новая заявка" : "Заявка:".$autotruck->name;
+
+$this->params['breadcrumbs'][] = ['label'=>"Список заявок",'url'=>Url::to(['autotruck/index'])];
+if(isset($autotruck->id)){
+	$this->params['breadcrumbs'][] = ['label'=>$autotruck->name,'url'=>Url::to(['autotruck/read','id'=>$autotruck->id])];
+}
+$this->params['breadcrumbs'][]=$this->title;
 ?>
 
 	<div class="row">
@@ -35,7 +41,7 @@ $this->title = $newModel ? "Новая заявка" : "Заявка:".$autotruc
 		<div class="col-12">
 			<div id="autotruck_tab_<?php echo $autotruck->id?>" class="autotruck_block">
 				  <div class="card">
-				  	<div class="card-header card-header-info">
+				  	<div class="card-header card-header-primary">
 				  		<h3 class="card-title"><?php echo $this->title ?></h3>
 				  	</div>
 				  	<div class="card-body">
@@ -43,7 +49,7 @@ $this->title = $newModel ? "Новая заявка" : "Заявка:".$autotruc
 				  	
 				  		<div class="row">
 				  			<div class="col">
-				  				<?php echo Html::submitButton('Сохранить заявку',['id'=>'submit_update','class' => 'btn btn-info float-right', 'name' => 'autotruck-update-button']); ?>
+				  				<?php echo Html::submitButton('Сохранить заявку',['id'=>'submit_update','class' => 'btn btn-primary float-right', 'name' => 'autotruck-update-button']); ?>
 					  			<?php 
 					  				if($autotruck->id){
 					  					echo Html::a('Отменить редактирование', array('autotruck/read','id' => $autotruck->id), array('class' => 'btn btn-error float-right'));
@@ -134,11 +140,11 @@ $this->title = $newModel ? "Новая заявка" : "Заявка:".$autotruc
     				</div>
 				  	
 				  	<?php if(Yii::$app->user->can($roleexpenses)){?>
-				  	<div class="card-header card-header-tabs card-header-info">
+				  	<div class="card-header card-header-tabs card-header-primary">
 				  		<div class="nav-tabs-navigation">
 					  		<div class="nav-tabs-wrapper">
 					  			<ul class="nav nav-tabs" role="tablist">
-					  				<li class="nav-item"><a class='nav-link active' data-toggle="tab" href="#apps">Наименования</a></li>
+					  				<li class="nav-item active"><a class='nav-link active' data-toggle="tab" href="#apps">Наименования</a></li>
 					  				<li class="nav-item"><a class='nav-link' data-toggle="tab" href="#expenses">Расходы</a></li>
 								</ul>
 					  		</div>
@@ -152,8 +158,8 @@ $this->title = $newModel ? "Новая заявка" : "Заявка:".$autotruc
 		    					<h3>Информация о наименованиях и услугах</h3>
 		    					<div class="row">
 									<div class="col-12 autotruck_btns">
-										<a class="add_app_item btn btn-info" href="<?php echo Url::to(['autotruck/get-row-app']);?>" id='add_app_item' data-type="0">Добавить наименование</a>
-										<a class="add_app_item btn btn-info" href="<?php echo Url::to(['autotruck/get-row-app']);?>" id="add_service_item"  data-type="1">Добавить услугу</a>
+										<a class="add_app_item btn btn-primary" href="<?php echo Url::to(['autotruck/get-row-app']);?>" id='add_app_item' data-type="0">Добавить наименование</a>
+										<a class="add_app_item btn btn-primary" href="<?php echo Url::to(['autotruck/get-row-app']);?>" id="add_service_item"  data-type="1">Добавить услугу</a>
 									</div>
 								</div>
 		    				</div>
@@ -275,9 +281,9 @@ $this->title = $newModel ? "Новая заявка" : "Заявка:".$autotruc
 													<td>
 													<?php 
                                                         if($id){
-                                                            echo Html::a("X",['autotruck/removeappajax','id'=>$id],['class'=>'btn btn-danger remove_exists_app','data-id'=>$id]);
+                                                            echo Html::a("<i class=\"material-icons\">close</i>",['autotruck/removeappajax','id'=>$id],['class'=>'btn btn-danger btn-sm btn-round remove_exists_app','data-id'=>$id]);
                                                         }else{
-                                                            echo Html::a("X",null,['class'=>'btn btn-danger remove_app','data-confirm'=>'Подтвердите свои дейсвтия']);
+                                                            echo Html::a("<i class=\"material-icons\">close</i>",null,['class'=>'btn btn-danger btn-sm btn-round remove_app','data-confirm'=>'Подтвердите свои дейсвтия']);
                                                         }  		
                                                      ?>
 													</td>
@@ -296,7 +302,7 @@ $this->title = $newModel ? "Новая заявка" : "Заявка:".$autotruc
 									<h3>Информация о расходах</h3>
 									<div class="row">
 										<div class="col-12 autotruck_btns">
-											<a class="btn btn-info" href="<?php echo Url::to(['autotruck/get-row-exp']);?>" id='add_expenses_item'>Добавить расход</a>
+											<a class="btn btn-primary" href="<?php echo Url::to(['autotruck/get-row-exp']);?>" id='add_expenses_item'>Добавить расход</a>
 										</div>
 									</div>
 								</div>
@@ -356,9 +362,9 @@ $this->title = $newModel ? "Новая заявка" : "Заявка:".$autotruc
 													<td>
 													<?php 
                                                         if($id)
-                                                           	echo Html::a("X",['autotruck/removeexpajax','id'=>$id],['class'=>'btn btn-danger remove_exists_exp','data-id'=>$id]);
+                                                           	echo Html::a("<i class=\"material-icons\">close</i>",['autotruck/removeexpajax','id'=>$id],['class'=>'btn btn-danger btn-sm btn-round remove_exists_exp','data-id'=>$id]);
                                                         else
-                                                            echo Html::a("X",null,['class'=>'btn btn-danger remove_exp','data-confirm'=>'Подтвердите свои дейсвтия']);
+                                                            echo Html::a("<i class=\"material-icons\">close</i>",null,['class'=>'btn btn-danger btn-sm btn-round remove_exp','data-confirm'=>'Подтвердите свои дейсвтия']);
                                                             		
                                                         ?>
 													</td>
