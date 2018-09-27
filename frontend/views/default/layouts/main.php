@@ -84,7 +84,7 @@ AppAsset::register($this);
         }elseif(Yii::$app->user->identity->role->name == "client"){
 
             if(Yii::$app->user->can("site/sverka"))
-                $menuItems[] = ['label' => 'Сверка', 'url' => ['/sverka/site']];
+                $menuItems[] = ['label' => 'Сверка', 'url' => ['/sverka/index']];
 
             if(Yii::$app->user->can("Autotruck/create"))
                 $menuItems[] = ['label' => 'Создать заявку', 'url' => ['/autotruck/create']];

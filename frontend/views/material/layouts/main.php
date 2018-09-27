@@ -3,12 +3,11 @@
 use yii\helpers\Html;
 use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
-use yii\widgets\Breadcrumbs;
+use frontend\bootstrap4\Breadcrumbs;
 use frontend\assets\AppAsset;
 use frontend\assets\MaterialAsset;
-use common\widgets\Alert;
+use frontend\widgets\Alert;
 use yii\filters\AccessControl;
-
 
 MaterialAsset::register($this);
 ?>
@@ -44,15 +43,7 @@ MaterialAsset::register($this);
           </button> -->
           <div class="collapse navbar-collapse justify-content-end">
             <?php if(!Yii::$app->user->isGuest && !Yii::$app->user->identity->isClient() && !Yii::$app->user->identity->isSeller(true)){?>
-                  <div class="row search_block">
-                      <div class="col-md-12">
-                          <input type="text" id="search" name="search" class="form-control" placeholder="Поиск" autocomplete="off" />
-                          
-                          <div class="search_result">
-                              
-                          </div>
-                      </div>
-                  </div>
+                  <?php echo $this->render("module-search",[]);?>
             <?php } ?>
 
             <?php if (!Yii::$app->user->isGuest) { ?>
@@ -78,11 +69,15 @@ MaterialAsset::register($this);
       
       <div class="content">
         <div class="container-fluid">
-            <?php 
-                echo  Breadcrumbs::widget(['links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],]); 
-            ?>
-            <?php echo Alert::widget(); ?>
-            <?php echo $content; ?>
+          <div class="row">
+            <div class="col-12">
+                <?php 
+                  echo  Breadcrumbs::widget(['links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],]); 
+                ?>
+                <?php echo Alert::widget(); ?>
+            </div>
+          </div>
+          <?php echo $content; ?>
         </div>
       </div>
 

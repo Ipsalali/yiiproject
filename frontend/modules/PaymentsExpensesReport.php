@@ -79,7 +79,7 @@ class PaymentsExpensesReport extends PaymentsExpenses
             
             $query
             ->innerJoin(['cl'=>Client::tableName()],"cl.user_id = manager_id")
-            ->andWhere(['cl.full_name'=>$this->manager_fullname]);
+            ->andWhere('cl.`full_name` LIKE "'.$this->manager_fullname.'%"');
             
         }
         

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e028a019f9640e7019818ed81f234b1a",
+    "content-hash": "ee21454d94df36109bc37225a04279b4",
     "packages": [
         {
             "name": "2amigos/yii2-date-picker-widget",
@@ -1124,21 +1124,21 @@
         },
         {
             "name": "kartik-v/yii2-grid",
-            "version": "v3.2.3",
+            "version": "v3.2.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kartik-v/yii2-grid.git",
-                "reference": "bb3a841ceee259375e07820f250ecfe7297a31bb"
+                "reference": "00def04887676e11d4796c46772cbb791d9eda0b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/yii2-grid/zipball/bb3a841ceee259375e07820f250ecfe7297a31bb",
-                "reference": "bb3a841ceee259375e07820f250ecfe7297a31bb",
+                "url": "https://api.github.com/repos/kartik-v/yii2-grid/zipball/00def04887676e11d4796c46772cbb791d9eda0b",
+                "reference": "00def04887676e11d4796c46772cbb791d9eda0b",
                 "shasum": ""
             },
             "require": {
                 "kartik-v/yii2-dialog": "~1.0",
-                "kartik-v/yii2-krajee-base": ">=1.9"
+                "kartik-v/yii2-krajee-base": ">=1.9.8"
             },
             "suggest": {
                 "kartik-v/yii2-mpdf": "For exporting grids to PDF"
@@ -1173,23 +1173,24 @@
                 "widget",
                 "yii2"
             ],
-            "time": "2018-09-22T07:44:31+00:00"
+            "time": "2018-09-27T03:38:40+00:00"
         },
         {
             "name": "kartik-v/yii2-helpers",
-            "version": "v1.3.6",
+            "version": "v1.3.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kartik-v/yii2-helpers.git",
-                "reference": "0b9d5f17464df9f68e249ed4411f9f1381927b83"
+                "reference": "48ded4252cbf406c39cce49550cab3bb6f317a8f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/yii2-helpers/zipball/0b9d5f17464df9f68e249ed4411f9f1381927b83",
-                "reference": "0b9d5f17464df9f68e249ed4411f9f1381927b83",
+                "url": "https://api.github.com/repos/kartik-v/yii2-helpers/zipball/48ded4252cbf406c39cce49550cab3bb6f317a8f",
+                "reference": "48ded4252cbf406c39cce49550cab3bb6f317a8f",
                 "shasum": ""
             },
             "require": {
+                "kartik-v/yii2-krajee-base": ">=1.9",
                 "yiisoft/yii2-bootstrap": "*"
             },
             "type": "yii2-extension",
@@ -1200,7 +1201,7 @@
             },
             "autoload": {
                 "psr-4": {
-                    "kartik\\helpers\\": ""
+                    "kartik\\helpers\\": "src"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -1224,20 +1225,20 @@
                 "yii",
                 "yii2"
             ],
-            "time": "2016-11-26T06:03:52+00:00"
+            "time": "2018-09-26T13:58:42+00:00"
         },
         {
             "name": "kartik-v/yii2-krajee-base",
-            "version": "v1.9.6",
+            "version": "v1.9.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kartik-v/yii2-krajee-base.git",
-                "reference": "fe4324fca887e3219afb71ee394d6880ccc1812a"
+                "reference": "3ed7366a3a85f80e5dde158906ac72de7d804710"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/yii2-krajee-base/zipball/fe4324fca887e3219afb71ee394d6880ccc1812a",
-                "reference": "fe4324fca887e3219afb71ee394d6880ccc1812a",
+                "url": "https://api.github.com/repos/kartik-v/yii2-krajee-base/zipball/3ed7366a3a85f80e5dde158906ac72de7d804710",
+                "reference": "3ed7366a3a85f80e5dde158906ac72de7d804710",
                 "shasum": ""
             },
             "require": {
@@ -1275,7 +1276,7 @@
                 "widget",
                 "yii2"
             ],
-            "time": "2018-09-22T07:37:15+00:00"
+            "time": "2018-09-27T03:29:34+00:00"
         },
         {
             "name": "kartik-v/yii2-mpdf",
@@ -1383,20 +1384,20 @@
         },
         {
             "name": "kartik-v/yii2-widget-activeform",
-            "version": "v1.5.4",
+            "version": "v1.5.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kartik-v/yii2-widget-activeform.git",
-                "reference": "9460f27248a3f481097168234c70a0c7a0559cfc"
+                "reference": "742049717b254ff49ee7d13fb64ff41fd36f6895"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/yii2-widget-activeform/zipball/9460f27248a3f481097168234c70a0c7a0559cfc",
-                "reference": "9460f27248a3f481097168234c70a0c7a0559cfc",
+                "url": "https://api.github.com/repos/kartik-v/yii2-widget-activeform/zipball/742049717b254ff49ee7d13fb64ff41fd36f6895",
+                "reference": "742049717b254ff49ee7d13fb64ff41fd36f6895",
                 "shasum": ""
             },
             "require": {
-                "kartik-v/yii2-krajee-base": ">=1.9"
+                "kartik-v/yii2-krajee-base": ">=1.9.8"
             },
             "type": "yii2-extension",
             "extra": {
@@ -1431,7 +1432,7 @@
                 "widget",
                 "yii2"
             ],
-            "time": "2018-09-22T07:40:06+00:00"
+            "time": "2018-09-27T03:42:42+00:00"
         },
         {
             "name": "kartik-v/yii2-widget-datepicker",
@@ -2182,60 +2183,6 @@
                 "simple-cache"
             ],
             "time": "2017-10-23T01:57:42+00:00"
-        },
-        {
-            "name": "ramosisw/yii2-material-dashboard",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/ramosisw/yii2-material-dashboard.git",
-                "reference": "1677f564129f71d64f7749d95b3f3ad40886e859"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/ramosisw/yii2-material-dashboard/zipball/1677f564129f71d64f7749d95b3f3ad40886e859",
-                "reference": "1677f564129f71d64f7749d95b3f3ad40886e859",
-                "shasum": ""
-            },
-            "require": {
-                "yiisoft/yii2": "2.*",
-                "yiisoft/yii2-bootstrap": "2.*"
-            },
-            "type": "yii2-extension",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.0.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "ramosisw\\CImaterial\\": ""
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Julio C. Ramos",
-                    "email": "ramosisw@gmail.com"
-                }
-            ],
-            "description": "Material dashboard backend theme asset bundle for Yii 2.0 Framework",
-            "keywords": [
-                "admin",
-                "asset",
-                "backend",
-                "css",
-                "dashboard",
-                "extension",
-                "less",
-                "material",
-                "theme",
-                "yii2"
-            ],
-            "time": "2018-06-14T14:37:58+00:00"
         },
         {
             "name": "scotthuangzl/yii2-export2excel",
@@ -3075,8 +3022,7 @@
     "stability-flags": {
         "scotthuangzl/yii2-export2excel": 20,
         "kartik-v/yii2-date-range": 20,
-        "kartik-v/yii2-widget-datepicker": 20,
-        "ramosisw/yii2-material-dashboard": 20
+        "kartik-v/yii2-widget-datepicker": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

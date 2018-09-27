@@ -2,52 +2,41 @@
 
 
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
 use yii\bootstrap\ActiveForm;
-use yii\grid\GridView;
+use frontend\bootstrap4\GridView;
 use yii\data\ActiveDataProvider;
-use kartik\date\DatePicker;
-use kartik\daterange\DateRangePicker;
-use yii\helpers\Url;
+
 use frontend\models\PaymentsExpenses;
 use common\models\Organisation;
 use common\widgets\autocomplete\AutoComplete;
-
 use frontend\modules\PaymentsExpensesReport;
+
 $this->title = "Отчет по организациям";
+$this->params['breadcrumbs'][]=$this->title;
 
 $managers = $PaymentsExpensesReport->getManagers();
-
 $managersAutocompleteByFullName = array_map(function($a){
 	$fn = $a['full_name'];
 	return ['value'=>$fn,'label'=>$fn];
 }, $managers);
 
 ?>
-
-<div class="row">
-	<div class="col-xs-12">
-		<h3>Отчет по организациям</h3>
+<div class="card">
+	<div class="card-header card-header-primary">
+		<h3 class="card-title">Отчет по организациям</h3>
 	</div>
-</div>
-
+	<div class="card-body">
+		
 	<?php 
-
-	$layout = <<< HTML
-    {input1}<br>
-    {input2}
-    <span class="input-group-addon kv-date-remove">
-        <i class="glyphicon glyphicon-remove"></i>
-    </span>
-HTML;
-
-	echo GridView::widget([
+		echo GridView::widget([
 			'id' => 'gridSessions',
 			'dataProvider'=>$dataProvider,
 			'filterModel'=>$PaymentsExpensesReport,
 			'formatter' => ['class' => 'yii\i18n\Formatter','nullDisplay' => ''],
 			'tableOptions' => [
-            	'id'=>'sessions','class'=>'table table-striped table-bordered'
+            	'id'=>'sessions','class'=>'table table-sm table-striped table-bordered'
         	],
         	'summary'=>'',
         	'rowOptions'=>function($model){
@@ -72,24 +61,8 @@ HTML;
                             return date("d.m.Y",strtotime($a->date));
                         },
 					'format'=>'raw',
-					'filter'=>DatePicker::widget([
-							'model'=>$PaymentsExpensesReport,
-							'language'=>'ru',
-							'attribute'=>'date_from',
-							'attribute2'=>'date_to',
-							'options' => ['placeholder' => 'c'],
-							'options2' => ['placeholder' => 'по'],
-							'type' => DatePicker::TYPE_RANGE,
-							'separator'=>" по ",
-							'layout'=>$layout,
-							'pluginOptions'=>[
-								'autoclose'=>true,
-								
-        						'format' => 'dd.mm.yyyy'
-    						]
-						])
+					'filter'=>Html::input("date",'PaymentsExpensesReport[date_from]',$PaymentsExpensesReport->date_from ? date("Y-m-d",strtotime($PaymentsExpensesReport->date_from)) : null,['class'=>'form-control']) . Html::input("date",'PaymentsExpensesReport[date_to]',$PaymentsExpensesReport->date_to ? date("Y-m-d",strtotime($PaymentsExpensesReport->date_to)) : null,['class'=>'form-control']),
 				],
-			
 			[
 				'attribute'=>'organisation',
 				'format'=>'raw',
@@ -98,31 +71,6 @@ HTML;
 				},
 				'filter'=>Html::activeDropDownList($PaymentsExpensesReport,'organisation',ArrayHelper::map(Organisation::find()->all(),'id','org_name'),['class'=>'form-control','prompt'=>'Выберите организацию'])
 			],
-			//[
-			//	'attribute'=>'sum',
-			//	'label'=>'Сумма $',
-			//	'format'=>'raw',
-			//	'value'=>function($m){
-			//		
-			//		$sum = null;
-			//		if($m->sum_cash > 0 || $m->sum_card > 0){
-			//			
-			//			if($m->sum > 0 && (int)$m->toreport == 1){
-			//				$sum = $m->sum;
-			//			}
-            //
-			//		}else{
-			//			$sum = $m->sum;	
-			//		}
-            //
-			//		//$sum = $m->sum_cash > 0 || $m->sum_card > 0 ? null : $m->sum;
-			//		PaymentsExpensesReport::$common_sum += $sum;
-			//		return $sum;
-			//		//return $m->org->payment == Organisation::PAY_CASH ? $m->sum : $m->sum_card ;
-			//	},
-			//	
-			//	'footerOptions'=>['class'=>'ft_sum','id'=>'total_sum']
-			//],
 			[
     			'attribute'=>'sum_search',
     			'label'=>'Сумма',
@@ -158,41 +106,11 @@ HTML;
     			},
     			'footerOptions'=>['class'=>'ft_sum','id'=>'total_sum']
 			],
-			//[
-			//	'attribute'=>'sum_cash',
-			//	'label'=>'Наличные(руб)',
-			//	'format'=>'raw',
-			//	'value'=>function($m){
-			//		
-			//		$sum_cash = null;
-
-			//		if($m->sum_cash > 0 && ((int)$m->toreport == 0 || (int)$m->toreport == 2)){
-			//			$sum_cash = $m->sum_cash;
-			//		}
-			//		
-			//		PaymentsExpensesReport::$common_sum_cash += $sum_cash;
-			//		
-//
-//					return $sum_cash;
-//				
-//				},
-//				
-//				'footerOptions'=>['class'=>'ft_sum_cash','id'=>'total_sum_cash']
-//			],
 			[
 				'attribute'=>'toreport',
 				'label'=>'Отчет по',
 				'format'=>'raw',
 				'value'=>function($m){
-					
-					//$sum_card = null;
-
-					//if($m->sum_card > 0 && ((int)$m->toreport == 0 || (int)$m->toreport == 3)){
-					//	$sum_card = $m->sum_card;
-					//}
-					
-					//PaymentsExpensesReport::$common_sum_card += $sum_card;
-					//return $sum_card;
 					$t = "";
 					if((int)$m['toreport'] == 1){
 					    $t = "Сумма ($)";
@@ -265,11 +183,8 @@ HTML;
 		
 		<script type="text/javascript">
 			$(function(){
-
-			//	$("#total_sum_card").text(<?php echo PaymentsExpensesReport::$common_sum_card;?>);
-			$("#total_sum").text(<?php echo PaymentsExpensesReport::$common_sum;?>);
-			//	$("#total_sum_cash").text(<?php echo PaymentsExpensesReport::$common_sum_cash;?>);
-
+				$("#total_sum").text(<?php echo PaymentsExpensesReport::$common_sum;?>);
 			});
 		</script>
 	</div>
+</div>

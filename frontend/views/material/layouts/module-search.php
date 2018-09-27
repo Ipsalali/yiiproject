@@ -1,4 +1,12 @@
-$(function(){
+<div class="row search_block">
+    <div class="col-md-12">
+        <input type="text" id="search" name="search" class="form-control" placeholder="Поиск" autocomplete="off" />
+        <div class="search_result"></div>
+    </div>
+</div>
+<?php
+
+$script = <<<JS
 
 	$("#search").focusin(function(){
 		$(this).trigger("keyup");
@@ -41,7 +49,10 @@ $(function(){
 	})
 
 	$('#search').focusout(function(){
-		setTimeout(function(){$(".search_result").css("display","none")},800);
+		setTimeout(function(){ $(".search_result").css("display","none"); },800);
   	});
+JS;
 
-})
+
+$this->registerJs($script);
+?>

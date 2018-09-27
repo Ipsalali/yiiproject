@@ -76,38 +76,8 @@ class AutotruckSearch extends Autotruck
         }
 
         if($this->implements_state){
-
-            $subquery = new Query;
-            $subquery->select("id")->from("autotruck");
-            $subsql1 = "(SELECT COUNT(DISTINCT cp.id) FROM app a 
-                    INNER JOIN customer_payment cp ON a.client = cp.client_id
-                    INNER JOIN payment_state ps  ON ps.id = cp.payment_state_id
-                    WHERE a.autotruck_id = autotruck.id AND ps.end_state = 1 AND cp.autotruck_id = autotruck.id)";
-
-            //Количество клиентов в заявке
-            $subsql2 = "(SELECT COUNT(DISTINCT c.id) FROM app a
-                INNER JOIN client c ON a.client = c.id
-                WHERE a.autotruck_id = autotruck.id)";
-
-            if(PaymentStateFilter::getDefaultState()->id == $this->implements_state){
-                $subquery->where("{$subsql1} != {$subsql2}");
-                
-                
-                //Если не существуют наименования без клиентов в заявке
-                $query->andWhere("NOT EXISTS (SELECT a.id FROM app a WHERE a.autotruck_id = autotruck.id AND a.client = 0)");
-                $query->andFilterWhere(["id"=>$subquery]);
-
-            }elseif(PaymentStateFilter::getEndState()->id == $this->implements_state){
-               
-              
-               $subquery->where("{$subsql1} = {$subsql2}");
-              
-               
-               //Если не существуют наименования без клиентов в заявке
-               $query->andWhere("NOT EXISTS (SELECT a.id FROM app a WHERE a.autotruck_id = autotruck.id AND a.client = 0)");
-
-                $query->andFilterWhere(["id"=>$subquery]);
-            }elseif($this->implements_state == PaymentStateFilter::STATE_NONE){
+            
+            if($this->implements_state == PaymentStateFilter::STATE_NONE){
                 
                 //Если существуют наименования без клиентов в заявке(т.е нереализованные)
                 $query->andWhere("EXISTS (SELECT a.id FROM app a WHERE a.autotruck_id = autotruck.id AND a.client =0)");
@@ -117,8 +87,6 @@ class AutotruckSearch extends Autotruck
                 $query->andWhere("EXISTS (SELECT a.id FROM app a WHERE a.autotruck_id = autotruck.id AND a.out_stock=0)");
                 $this->status = 3;
             }
-
-            
         }
         
         // Если ошибок нет, фильтруем по цене

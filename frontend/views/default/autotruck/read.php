@@ -171,8 +171,8 @@ $packages = TypePackaging::find()->all();
 							</ul>
 							<div class="tab-content">
 								<div id="apps" class="tab-pane fade in active">
-										<div class="table autotruck_apps">
-											<table class="table table-striped table-hover table-bordered">
+										<div class="table">
+											<table class="table table-sm table-striped table-hover table-bordered">
 											<tbody>
 												<tr>
 													<th>№   
@@ -375,6 +375,7 @@ JS;
 	            								echo GridView::widget([
 	            										'dataProvider' => $dataProvider,
 	            										'summary'=>"",
+	            										'tableOptions'=>['class'=>'table table-sm table-striped table-bordered table-hover'],
 	            										'columns'=>[
 	            											['class'=>'yii\grid\SerialColumn'],
 	            											[

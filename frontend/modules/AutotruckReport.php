@@ -53,29 +53,6 @@ class AutotruckReport extends Autotruck
     public function search($params)
     {   
 
-        // $user = \Yii::$app->user->identity;
-        // $u_countries = \yii\helpers\ArrayHelper::map($user->accessCountry,'country_id','country_id');
-        // // Создаём запрос на получение продуктов вместе категориями
-        // $query = Autotruck::find()->where(["in",'country',$u_countries]);
-        // $query->orderBy(['date' => SORT_DESC]);
-        
-        
-
-        
-
-        
-
-        // /**
-        //  * Создаём DataProvider, указываем ему запрос, настраиваем пагинацию
-        //  */
-        // $dataProvider = new ActiveDataProvider([
-        //     'query' => $query,
-        //     'pagination' => new Pagination([
-        //             'pageSize' => $this->page_size
-        //         ])
-        // ]);
-        
-        
         
         $sqlCondition = " WHERE ap.`isDeleted`=0";
         if($this->load($params) && $this->validate()){
@@ -92,7 +69,7 @@ class AutotruckReport extends Autotruck
             }
 
             if($this->name){
-                 $cs[] = "atr.`name` like '".$this->name."%'";
+                 $cs[] = 'atr.`name` like "'.$this->name.'%"';
             }
 
             if($this->country){
@@ -101,7 +78,7 @@ class AutotruckReport extends Autotruck
 
 
             if(count($cs)){
-                $sqlCondition = " ".implode(" AND ", $cs)." ";
+                $sqlCondition = " WHERE ".implode(" AND ", $cs)." ";
             }
         }
 

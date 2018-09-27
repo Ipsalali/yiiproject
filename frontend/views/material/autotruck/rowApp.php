@@ -66,6 +66,6 @@ $type_class = (!$type)? "type_app":"type_service";
 		<?php echo Html::textInput($class."[comment]",null,['class'=>'app_comment form-control']);?>
 	</td>
 	<td>
-		<?php echo Html::a("X",null,['class'=>'btn btn-danger remove_app','data-confirm'=>'Подтвердите свои дейсвтия']);?>
+		<?php echo Html::button("<i class=\"material-icons\">close</i>",["rel"=>"tooltip",'class'=>'btn btn-danger btn-sm btn-round remove_app','data-confirm'=>'Подтвердите свои дейсвтия']);?>
 	</td>
 </tr>

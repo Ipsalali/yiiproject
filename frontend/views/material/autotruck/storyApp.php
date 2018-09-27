@@ -5,8 +5,6 @@ use yii\helpers\Url;
 
 use yii\bootstrap\ActiveForm;
 
-
-
 ?>
 
 <?php 
@@ -15,7 +13,7 @@ use yii\bootstrap\ActiveForm;
 	if($stories == null || !count($stories)){
 ?>
 	<div class="row">
-		<div class="col-xs-12">
+		<div class="col-12">
 			<div class="alert alert-warning">
 				Журнал пуст!
 			</div>
@@ -26,9 +24,10 @@ use yii\bootstrap\ActiveForm;
 
 ?>
 		<div class="row">
-			<div class="col-xs-12">
-				<table class="table table-bordered table-hovered table-collapsed">
-					<tr>
+			<div class="col-12">
+				<table class="table table-sm table-bordered">
+					<thead>
+						<tr>
 								<th>№</th>
 								<th><?php echo $model->getAttributeLabel("client")?></th>
 								<th><?php echo $model->getAttributeLabel("weight")?></th>
@@ -46,7 +45,9 @@ use yii\bootstrap\ActiveForm;
 								<th>Действие</th>
 								<th>Автор действия</th>
 								<th>Время действия</th>
-							</tr>
+						</tr>
+					</thead>
+					<tbody>
 							<?php
 								foreach ($stories as $key => $s) {
 									?>
@@ -78,6 +79,7 @@ use yii\bootstrap\ActiveForm;
 									<?php
 								}
 							?>
+					</tbody>
 				</table>
 			</div>
 		</div>

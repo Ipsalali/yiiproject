@@ -29,7 +29,7 @@ form {
   background: $bmd-form-control-bg-repeat-y $bmd-form-control-bg-position;
   background-size: $bmd-form-control-bg-size;
   border: 0;
-  height: 36px;
+  //height: 36px;
   transition: background 0s ease-out;
   padding-left: 0;
   padding-right: 0;
@@ -149,9 +149,9 @@ form {
     }
   [class^='bmd-label'],
   [class*=' bmd-label'] {
-    position: absolute;
-    pointer-events: none;
-    transition: 0.3s ease all;
+    //position: absolute;
+    //pointer-events: none;
+    //transition: 0.3s ease all;
 
     // hint to browser for optimization
     &.bmd-label-floating {
@@ -223,8 +223,8 @@ select {
   &,
   &.form-control {
     // Use vendor prefixes as `appearance` isn't part of the CSS spec. OSX doesn't obey the border-radius: 0 without this.
-    -moz-appearance: none;
-    -webkit-appearance: none;
+    //-moz-appearance: none;
+    //-webkit-appearance: none;
   }
 }
 

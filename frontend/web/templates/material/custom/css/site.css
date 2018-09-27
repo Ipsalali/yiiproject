@@ -17,7 +17,6 @@ body {
 .date_status_block{
     position: relative;
     display: inline-block;
-        margin: 25px 12px 0px;
 }
 
 .field-app-status{
@@ -32,7 +31,7 @@ body {
     background-position:0px 0px;
     background-size:100% 100%;
     display: block;
-        width: 32px;
+    width: 48px;
     height: 48px;
 }
 
@@ -40,8 +39,8 @@ body {
 .date_status_block input{
     border:none;
     outline:none;
-    width: 32px;
-    height: 32px;
+        width: 26px;
+    height: 36px;
 }
 
 .date_status_block input::-webkit-datetime-edit { display:none; }
@@ -230,137 +229,18 @@ li.app_status{
     color:#4e4d4d;
 }
 
-.app_info{
-    /*width: 355px;*/
-}
-
-.app_client{
-    width: 150px;
-}
-
-.right_content{
-        width: 79%;
-    float: left;
-    margin-left: 10px;
-    padding: 10px;
-}
-
-.left_bar_head:after{
-    clear: both;
-    display: block;
-    content: "";
-}
 
 
-.left_bar_head{
-
-}
-
-.left_bar_head .new_app{
-    float: left;
-}
-
-.left_bar_head .filter_app{
-    float: right;
-}
-
-
-.autotrUcks_list .grid-view{
-    margin-top: 10px;
-}
-
-
-.autotrUcks_list .grid-view .summary{
-    display: none;
-}
-
-
-.autotruck_data{
-    padding:10px;
-}
-
-
-#app_table td{
-    padding: 2px !important;
-}
-
-.form-actions{
-    margin-top: 10px;
-}
-
-#autotruck_and_app:after{
-    clear:both;
-    content: "";
-    display: block;
-}
-
-
-.app_blocks .panel-heading{
-    padding: 5px 2px 5px 10px; 
-}
-
-.app_blocks .panel-heading h4{
-    margin:0px;
-}
-
-.app_blocks .panel-heading h4 a{
-    color:#fff;
-}
-.app_blocks .panel-heading p{
-    margin:0px;
-}
-
-.panel-body.autotruck_info p{
-    margin:0px;
-}
-
-.search_result{
-    height: 80vh;
-    overflow: scroll;
-    clear: both;
-}
-
-.td_client_name{
-    width: 330px;
-}
-
-.td_client_category{
-    width: 80px;
-}
-
-select#client_category_id{
-    width: 55px;
-}
-
-.app_weigth{
-    width: 80px;
-}
-.app_rate{
-   /*width: 30px;*/
-}
-
-.field-autotruck-date > label{
-    display: block;
-}
 
 input#autotruck-date{
     width:170px; 
 }
 
-.autotruck_btns{
-    margin-bottom: 10px;
-}
 
-#add_app_item{
-}
 
 .change_status_info{
     color:#f00;
     font-size: 12px;
-}
-
-.td_client_manager{
-    width: 150px;
 }
 
 
@@ -531,60 +411,7 @@ input#autotruck-date{
 }
 
 
-.table_update{
-        white-space: normal;
-    font-size: 12px;
-    table-layout: fixed;
-    
-}
 
-.table_update th{
-    white-space: normal !important;
-    word-wrap: break-word;
-}
-.table_update th,.table_update td{
-    padding: 3px !important;
-}
-
-.table_update .form-control{
-    border:none;
-    padding:3px;
-    font-size: 12px;
-    height: 20px;
-}
-
-.table_update .btn{
-    padding: 0px 6px;
-    font-size: 10px;
-}
-
-.panel-primary{
-    border:none;
-}
-
-
-nav .container{
-    width: 100% !important;
-    padding: 0px 25px;
-}
-
-.as_index{
-        font-size: 12px;
-    white-space: nowrap;
-}
-
-.as_index thead .form-control,.as_index thead select{
-    font-size: 11px;
-    height: 26px;
-    padding: 1px;
-    border-radius: 1px;
-    border-color: rgb(185, 185, 185);
-}
-
-.as_index tbody td{
-    font-size: 12px;
-        padding: 4px !important;
-}
 
 .table-hover > tbody > tr:hover {
     background-color: rgba(34, 68, 189, 0.22);
@@ -780,4 +607,12 @@ p.dropdown-toggle::after{
 
 .login-card{
     margin-top: 25%;
+}
+
+
+
+.modal-all{
+    max-width: 100% !important;
+    width: 100% !important;
+    margin-left: 8px;
 }

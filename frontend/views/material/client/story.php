@@ -15,7 +15,7 @@ use yii\bootstrap\ActiveForm;
 	if($stories == null || !count($stories)){
 ?>
 	<div class="row">
-		<div class="col-xs-12">
+		<div class="col-12">
 			<div class="alert alert-warning">
 				Журнал пуст!
 			</div>
@@ -26,8 +26,8 @@ use yii\bootstrap\ActiveForm;
 
 ?>
 		<div class="row">
-			<div class="col-xs-12">
-				<table class="table table-bordered table-hovered table-collapsed">
+			<div class="col-12">
+				<table class="table table-sm table-bordered table-hovered table-collapsed">
 					<tr>
 								<th>№</th>
 								<th><?php echo $model->getAttributeLabel("name")?></th>

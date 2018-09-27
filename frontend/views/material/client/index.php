@@ -10,45 +10,36 @@ use yii\helpers\Arrayhelper;
 use yii\helpers\Url;
 use frontend\modules\ClientSearch;
 
-$this->title = "Клиенты";
+$this->title = "Список клиентов";
+$this->params['breadcrumbs'][]=$this->title;
 
 $client_cats = ClientCategory::find()->asArray()->all();
 $managers = User::getManagers();
 
 ?>
- 
-<?php if(Yii::$app->session->hasFlash('ClientDeletedError')): ?>
-<div class="alert alert-error">
-    There was an error deleting your post!
-</div>
-<?php endif; ?>
- 
-<?php if(Yii::$app->session->hasFlash('ClientDeleted')): ?>
-<div class="alert alert-success">
-    Your post has successfully been deleted!
-</div>
-<?php endif; ?>
 
-<div class="clearfix"></div>
-<div class="main">
-<div class="row">
-        <div class="col-xs-6 autotruck_head">
-            <div class="autotruck_title">
-                <h1>Список клиентов</h1>
+<div class="card">
+    <div class="card-header card-header-primary">
+        <div class="row">
+            <div class="col-4">
+                <h1 class="card-title">Список клиентов</h1>
             </div>
-            <div class="new_autotruck">
-                <?php echo Html::a('Добавить клиента', array('client/create'), array('class' => 'btn btn-primary')); ?>
+            <div class="col-2 offset-6 text-right">
+                <?php echo Html::a('Добавить клиента', ['client/create'], ['class' => 'btn btn-primary']); ?>
             </div>
-            
         </div>
     </div>
+
+    <div class="card-body">
+        
+    
 <?php 
 
 echo \yii\grid\GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $clientSearch,
         'formatter' => ['class' => 'yii\i18n\Formatter','nullDisplay' => ''],
-        'tableOptions'=>['class'=>'table table-striped table-bordered table-hover as_index'],
+        'tableOptions'=>['class'=>'table table-sm table-striped table-bordered table-hover'],
         'showFooter'=>true,
         'columns'=>[
             [
@@ -73,15 +64,6 @@ echo \yii\grid\GridView::widget([
                 'value'=>"category_title",
                 'filter'=>Html::activeDropDownList($clientSearch,'client_category_id',Arrayhelper::map($client_cats,'cc_id','cc_title'),['class'=>'form-control','prompt'=>'Выберите категорию'])
             ],
-            // [
-            //     'attribute'=>'ipay',
-            //     'value'=>function($c){
-            //         $p = $c->getIpay();
-            //         return "<span style='color:".$p->color."'>".$p->title."<span>";
-            //     },
-            //     'format'=>'raw',
-            //     'filter'=>Html::activeDropDownList($clientSearch,'ipay',Arrayhelper::map(PaymentState::find()->where("`default_value` = '1' OR `end_state` = '1'")->asArray()->all(),'id','title'),['class'=>'form-control','prompt'=>'Статус платежа'])
-            // ],
             [
                 "format"=>'raw',
                 'label'=>'Сверка',
@@ -122,10 +104,8 @@ echo \yii\grid\GridView::widget([
 ?>
     <script type="text/javascript">
             $(function(){
-
                 $("#ft_total_sverka").text(<?php echo ClientSearch::$total_sverka;?>+" $");
-                
-
             });
         </script>
+    </div>
 </div>

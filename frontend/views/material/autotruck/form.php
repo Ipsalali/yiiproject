@@ -73,13 +73,13 @@ $this->title = $newModel ? "Новая заявка" : "Заявка:".$autotruc
 						</div>
 						<div class="row">
 							<div class="col-3">
-    							<div class="status">
-    								<div style="float:left;">
+    							<div class="row status">
+    								<div class="col-6">
 										<?php 
 											echo $form->field($autotruck,'status',['inputOptions'=>['name'=>'Autotruck[status]',"data-current"=>$autotruck->status,"class"=>"change_status form-control"]])->dropDownList(ArrayHelper::map($list_status,'id','title'),['prompt'=>'Выберите статус']);
 										?>
 									</div>
-									<div class="date_status_block" >
+									<div class="col-6 date_status_block">
 										<?php 
 											$activeStatusTrace = $autotruck->activeStatusTrace;
 											$trace_date = $activeStatusTrace && isset($activeStatusTrace->trace_date) ? $activeStatusTrace->trace_date : date('Y-m-d');
@@ -88,9 +88,8 @@ $this->title = $newModel ? "Новая заявка" : "Заявка:".$autotruc
 										<input type="text" id="date_status" name="Autotruck[date_status]"  value="<?php echo $trace_date?>">
 										
 									</div>
-									<div class="clear"></div>
-									<label class="change_status_info"></label>
 								</div>
+								<label class="change_status_info"></label>
 								<ul>
 									<?php
 										
@@ -159,7 +158,7 @@ $this->title = $newModel ? "Новая заявка" : "Заявка:".$autotruc
 								</div>
 		    				</div>
 								<div class="card-body">
-										<table id="app_table" class="table table-striped table-hover table-bordered table_update">
+										<table id="app_table" class="table table-sm table-striped table-hover table-bordered table_update">
 											<tbody>
 												<tr>
 													<th style='width: 2%;'>№</th>
@@ -302,7 +301,7 @@ $this->title = $newModel ? "Новая заявка" : "Заявка:".$autotruc
 									</div>
 								</div>
 								<div class="card-body">
-									<table id="exp_table" class="table table-striped table-hover table-bordered table-condensed">
+									<table id="exp_table" class="table table-sm table-striped table-hover table-bordered table-condensed">
 										<tr>
 											<th>№</th>
 											<th>Дата</th>
@@ -382,6 +381,136 @@ $this->title = $newModel ? "Новая заявка" : "Заявка:".$autotruc
 <?php
 
 $script = <<<JS
+
+	
+	$("#date_status").datepicker();
+	
+
+	$(".date_status_block input").click(function(){
+		$(".date_status_block input::-webkit-calendar-picker-indicator").trigger("click");
+	});
+
+
+	$(".date_for_status_create").change(function(){
+        $(this).attr("data-change",1);
+        $(".change_status_info").text("");
+    });
+
+
+	//Отправляем данные на сервер если только статус изменен и изменена дата
+    $("#autotruck_and_app_update").submit(function(event){
+        var current = $(".change_status").data("current");
+        var selected = $(".change_status").val();
+        var new_time = $("#date_status").val();
+        var current_time = $("#date_status").siblings("label").data("current");
+        
+        
+        if(selected != current && new_time == current_time){
+            $(".change_status_info").text("Изменился статус, выберите дату!");
+            event.preventDefault();
+        }else{
+            $(".change_status_info").text("");
+        }
+    });
+
+    //Изменение статуса
+    $(".change_status").change(function(){
+        var current = $(this).data("current");
+        var selected = $(this).find("option:selected").val();
+        var new_time = $("#date_status").val();
+        var current_time = $("#date_status").siblings("label").data("current");
+        if(selected != current && new_time == current_time){
+            $(".date_status_block").trigger("click");
+            $(".change_status_info").text("Изменился статус, выберите дату!");
+        }else{
+            $(".change_status_info").text("");
+        }
+    });
+
+
+
+    $("#date_status").change(function(){
+        var current_time = $(this).siblings("label").data("current");
+        var new_time = $(this).val();
+        var current = $(".change_status").data("current");
+        var selected = $(".change_status").val();
+        if(new_time != current_time){
+            $(".change_status_info").text("");
+        }else if(selected != current){
+            $(".change_status_info").text("Изменился статус, выберите дату!");
+        }   
+    });
+
+    //Вычисляем сумму всех наименовании заявки после изменения курса
+    $("body").on("keyup",".compute_course",function(event){
+
+    	var course =  parseFloat($(this).val());
+    	$(".app_row").each(function(e){
+    		var parent_row = $(this);
+    		var rate =  parseFloat(parent_row.find(".compute_rate").val());
+    		var weight =  parent_row.hasClass("type_service")? 1 :parseFloat(parent_row.find(".compute_weight").val());
+
+    		var s_ru = course* rate * weight;
+            var s_usa = rate * weight;
+    		if(course >=0 && weight > 0){
+    			parent_row.find(".summa").text(s_ru.toFixed(2)+" руб");
+                parent_row.find(".summa_usa").find("input.summa_us").val(s_usa.toFixed(2)+" $");
+    		}else{
+    			parent_row.find(".summa").text("");
+                parent_row.find(".summa_usa").find("input.summa_us").val("");
+    		}
+    	});
+    	
+    });
+
+
+    $("body").on("keyup",".summa_usa input.summa_us",function(event){
+
+        var summa_us =  parseFloat($(this).val());
+        var parent_row = $(this).parents(".app_row");
+        var course =  parseFloat($(".compute_course").val());
+        var rate =  parent_row.find(".compute_rate");
+        var weight =  parent_row.hasClass("type_service")? 1 :parseFloat(parent_row.find(".compute_weight").val());
+
+        var rate_vl = summa_us/weight;
+        var s_ru = course* rate_vl * weight;
+        if(summa_us >0 && weight > 0){
+            parent_row.find(".summa").text(s_ru.toFixed(2)+" руб");
+            rate.val(rate_vl.toFixed(2));
+        }else{
+            parent_row.find(".summa").text("");
+            rate.val(0);
+        }
+        
+    });
+
+    //Вычисляем сумму при изсенении веса и ставки наименования
+    $("body").on("keyup",".compute_rate,.compute_weight",function(event){
+    	var parent_row = $(this).parents(".app_row");
+    	var course =  parseFloat($(".compute_course").val());
+    	var rate =  parseFloat(parent_row.find(".compute_rate").val());
+    	var weight =  parent_row.hasClass("type_service")? 1 :parseFloat(parent_row.find(".compute_weight").val());
+
+    	var s_ru = course* rate * weight;
+        var s_usa = rate * weight;
+    	
+        console.log(rate);
+        if(course >=0 && weight > 0){
+    		parent_row.find(".summa").text(s_ru.toFixed(2)+" руб");
+            parent_row.find(".summa_usa").find("input.summa_us").val(s_usa.toFixed(2)+" $");
+    	}else{
+    		parent_row.find(".summa").text("");
+            parent_row.find(".summa_usa").find("input.summa_us").val("");
+    	}
+    });
+
+
+    //Запрет ввода букв для вычисляемых полей; разрешаем точку код 46
+	$("body").on("keypress",".compute_sum",function(key) {
+        if((key.charCode < 48 || key.charCode > 57) && key.charCode != 46 && key.charCode != 45) return false;
+    });
+    
+
 	$(".add_app_item").click(function(event){
 		
 		event.preventDefault();

@@ -1,49 +1,34 @@
 <?php 
 
 use yii\helpers\Html;
-use yii\helpers\ArrayHelper;
-use yii\grid\GridView;
-use yii\data\ActiveDataProvider;
-use kartik\date\DatePicker;
-use kartik\daterange\DateRangePicker;
-use frontend\models\Autotruck;
 use yii\helpers\Url;
+use yii\helpers\ArrayHelper;
+use frontend\bootstrap4\GridView;
+use yii\data\ActiveDataProvider;
+use frontend\models\Autotruck;
+use frontend\modules\AutotruckReport;
 use common\models\SupplierCountry;
 use common\models\Status;
-use frontend\modules\AutotruckReport;
 
 $this->title = "Отчет";
+$this->params['breadcrumbs'][]=$this->title;
 
 $user = \Yii::$app->user->identity;
 ?>
 
-<div class="autotrucks">
-	<div class="row">
-		<div class="col-xs-12">
-			<h2>Отчет</h2>
-		</div>
+<div class="card">
+	<div class="card-header card-header-primary">
+		<h1 class="card-title">Отчет</h1>
 	</div>
-	<div class="row">
-		<div class="col-xs-12">
+	<div class="card-body">
 	<?php 
-
-
-	$layout = <<< HTML
-    {input1}<br>
-    {input2}
-    <span class="input-group-addon kv-date-remove">
-        <i class="glyphicon glyphicon-remove"></i>
-    </span>
-HTML;
-
-
-	echo GridView::widget([
+		echo GridView::widget([
 			'dataProvider'=>$dataProvider,
 			'filterModel'=>$autotruckReport,
 			'summary'=>'',
 			'formatter' => ['class' => 'yii\i18n\Formatter','nullDisplay' => ''],
 			'showFooter'=>true,
-			'tableOptions'=>['class'=>'table table-striped table-bordered table-hover ali_table'],
+			'tableOptions'=>['class'=>'table table-sm table-striped table-bordered table-hover ali_table'],
 			'columns'=>[
 				['class'=>'yii\grid\SerialColumn','footer'=>'Итого'],
 				[
@@ -53,33 +38,11 @@ HTML;
 						return Html::a(Html::encode(date("d.m.Y",strtotime($a['date']))), Url::to(['autotruck/read', 'id' => $a['id']]));
 					},
 					'format'=>'raw',
-					'filter'=>DatePicker::widget([
-							'model'=>$autotruckReport,
-							'language'=>'ru',
-							'attribute'=>'date_from',
-							'attribute2'=>'date_to',
-							'options' => ['placeholder' => 'Начальная дата'],
-							'options2' => ['placeholder' => 'Конечная дата'],
-							'type' => DatePicker::TYPE_RANGE,
-							'separator'=>" по ",
-							'layout'=>$layout,
-							'pluginOptions'=>[
-								'autoclose'=>true,
-								
-        						'format' => 'dd.mm.yyyy'
-    						]
-						]),
-						'contentOptions'=>['class'=>'td_date'],
-					    'headerOptions'=>['class'=>'th_date']
+					'filter'=>Html::input("date",'AutotruckReport[date_from]',$autotruckReport->date_from ? date("Y-m-d",strtotime($autotruckReport->date_from)) : null,['class'=>'form-control']) . Html::input("date",'AutotruckReport[date_to]',$autotruckReport->date_to ? date("Y-m-d",strtotime($autotruckReport->date_to)) : null,['class'=>'form-control']),
+
+					'contentOptions'=>['class'=>'td_date'],
+					   'headerOptions'=>['class'=>'th_date']
 				],
-				// [
-				// 	'attribute'=>'date',
-				// 	'label'=>'Дата',
-				// 	'value'=>function($a){
-				// 		return Html::a(Html::encode(date("d.m.Y",strtotime($a['date']))), Url::to(['autotruck/read', 'id' => $a['id']]));
-				// 	},
-				// 	'format'=>'html',
-				// ],
 				[
 					'attribute'=>'name',
 					'label'=>'Инвойс',
@@ -169,7 +132,5 @@ HTML;
 
 			});
 		</script>
-		</div>
-	   </div>
+	</div>
 </div>
-<div class="clearfix"></div>

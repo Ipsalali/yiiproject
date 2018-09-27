@@ -125,7 +125,7 @@ $active_route = $this->context->route;
             </li>
 
             <?php  if(Yii::$app->user->can("site/sverka")){ ?>
-              <li class="nav-item <?php echo $active_route == 'site/sverka' ? 'active' : '';?>">
+              <li class="nav-item <?php echo $active_route == 'sverka/index' ? 'active' : '';?>">
                   <a class="nav-link" href="<?php echo Url::to(['/sverka/index']);?>">
                     <i class="material-icons">content_paste</i>
                     <p>Сверка</p>

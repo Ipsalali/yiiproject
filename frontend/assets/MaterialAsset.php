@@ -39,9 +39,6 @@ class MaterialAsset extends AssetBundle
         'js/material-dashboard.min.js',
 
         // custom
-        'custom/js/search.js',
-        'custom/js/jquery.flot.js',
-        'custom/js/jquery.flot.categories.js',
         'custom/js/jquery-ui.min.js',
         'custom/js/main.js'
     ];
