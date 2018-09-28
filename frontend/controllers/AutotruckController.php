@@ -84,7 +84,7 @@ class AutotruckController extends Controller{
 		$autotruckSearch = new AutotruckSearch;
 		$dataProvider = $autotruckSearch->search(Yii::$app->request->queryParams);
 		
-		
+
 		return $this->render('index',array('autotruckSearch'=>$autotruckSearch,'dataProvider'=>$dataProvider));
 	}
 
@@ -101,12 +101,10 @@ class AutotruckController extends Controller{
 		}elseif(isset($post['autotruck_id']) && (int)$post['autotruck_id']){
 		    
 		    $autotruck = Autotruck::findOne((int)$post['autotruck_id']);
-
 			if(!isset($autotruck->id))
 				throw new HttpException(404,'Заявка не найдена!');
 				
 		}else{
-
 			$autotruck = new Autotruck();
 			$autotruck->scenario = Autotruck::SCENARIO_CREATE;
 		}

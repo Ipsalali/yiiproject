@@ -88,7 +88,7 @@ class Alert extends BaseWidget
     {
         echo "\n" . $this->renderBodyEnd();
         echo "\n" . Html::endTag('div');
-
+        
         $this->registerPlugin('alert');
     }
 

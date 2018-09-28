@@ -6,7 +6,8 @@ use yii\bootstrap\NavBar;
 use frontend\bootstrap4\Breadcrumbs;
 use frontend\assets\AppAsset;
 use frontend\assets\MaterialAsset;
-use frontend\widgets\Alert;
+// use frontend\widgets\Alert;
+use frontend\bootstrap4\AlertJS as Alert;
 use yii\filters\AccessControl;
 
 MaterialAsset::register($this);
