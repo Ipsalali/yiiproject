@@ -38,8 +38,10 @@ $btn-active-box-shadow:          none !default; // inset 0 3px 5px rgba(0,0,0,.1
 
 //
 $btn-primary-color:              #fff !default;
-$btn-primary-bg:                 $brand-primary !default;
-$btn-primary-border-color:             $btn-primary-bg !default;
+//$btn-primary-bg:               $brand-primary !default;
+//$btn-primary-border-color:     $btn-primary-bg !default;
+$btn-primary-bg:                 $brand-warning !default;
+$btn-primary-border-color:       $btn-primary-bg !default;
 //
 $btn-secondary-color:            $gray-dark !default;
 $btn-secondary-bg:               $body-bg !default; // #fff
