@@ -394,20 +394,16 @@ $this->params['breadcrumbs'][]=$this->title;
 
 $script = <<<JS
 
-	
 	$("#date_status").datepicker();
 	
-
 	$(".date_status_block input").click(function(){
 		$(".date_status_block input::-webkit-calendar-picker-indicator").trigger("click");
 	});
-
 
 	$(".date_for_status_create").change(function(){
         $(this).attr("data-change",1);
         $(".change_status_info").text("");
     });
-
 
 	//Отправляем данные на сервер если только статус изменен и изменена дата
     $("#autotruck_and_app_update").submit(function(event){
@@ -648,11 +644,17 @@ $script = <<<JS
 			var id = parseInt($(this).data("id"));
 			var r_rw = $(this).parents('.app_row');
 			var href = $(this).attr("href");
+
+			var csrf_param = $('meta[name="csrf-param"]').attr('content');
+			var csrf_token = $('meta[name="csrf-token"]').attr('content');
+			var dataForm = {id:id};
+			dataForm[csrf_param] = csrf_token;
+
 			if(id  && window.confirm('Вы действительно хотите удалить выделенный объект?')){
 				$.ajax({
 					url:href,
 					type:"POST",
-					data:'id='+id,
+					data:dataForm,
 					datetype:'json',
 					beforeSend:function(){
 						console.log('before');
@@ -683,11 +685,17 @@ $script = <<<JS
 			var id = parseInt($(this).data("id"));
 			var r_rw = $(this).parents('.exp_row');
 			var href = $(this).attr("href");
+
+			var csrf_param = $('meta[name="csrf-param"]').attr('content');
+			var csrf_token = $('meta[name="csrf-token"]').attr('content');
+			var dataForm = {id:id};
+			dataForm[csrf_param] = csrf_token;
+			
 			if(id && window.confirm('Вы действительно хотите удалить выделенный объект?')){
 				$.ajax({
 					url:href,
 					type:"POST",
-					data:'id='+id,
+					data:dataForm,
 					datetype:'json',
 					beforeSend:function(){
 						console.log('before');

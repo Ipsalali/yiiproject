@@ -318,13 +318,13 @@ class TransferspackageController extends Controller{
 		if(Yii::$app->request->isAjax){
 			Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 
-			$get = Yii::$app->request->get();
-
+			$params = Yii::$app->request->post();
+			
 			$answer = array();
 
-			if((int)$get['id']){
+			if((int)$params['id']){
 			
-				$id = (int)$get['id'];
+				$id = (int)$params['id'];
 
 				$t = Transfer::findOne($id);
 				if(isset($t->id)){
@@ -350,13 +350,13 @@ class TransferspackageController extends Controller{
 
 		if(Yii::$app->request->isAjax){
 
-			$get = Yii::$app->request->get();
+			$params = Yii::$app->request->post();
 
 			$answer = array();
 
-			if((int)$get['id']){
+			if((int)$params['id']){
 			
-				$id = (int)$get['id'];
+				$id = (int)$params['id'];
 
 				$t = SellerExpenses::findOne($id);
 				if(isset($t->id)){

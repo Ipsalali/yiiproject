@@ -187,7 +187,7 @@ $this->params['breadcrumbs'][]=$this->title;
                                                             		<?php 
                                                             		    
                                                             		    if($id)
-                                                            		        echo Html::a("<i class=\"material-icons\">close</i>",['transferspackage/remove-transfer-ajax','id'=>$id],['class'=>'btn btn-danger btn-sm btn-round removeRowFromBd']);
+                                                            		        echo Html::a("<i class=\"material-icons\">close</i>",['transferspackage/remove-transfer-ajax'],['class'=>'btn btn-danger btn-sm btn-round removeRowFromBd','data-id'=>$id]);
                                                             		    else
                                                             		        echo Html::a("<i class=\"material-icons\">close</i>",null,['class'=>'btn btn-danger btn-sm btn-round removeRow']);
                                                             		
@@ -303,7 +303,7 @@ $this->params['breadcrumbs'][]=$this->title;
                                                             		<?php 
                                                             		    
                                                             		    if($id)
-                                                            		        echo Html::a("<i class=\"material-icons\">close</i>",['transferspackage/remove-expenses-ajax','id'=>$id],['class'=>'btn btn-danger btn-sm btn-round removeRowFromBd']);
+                                                            		        echo Html::a("<i class=\"material-icons\">close</i>",['transferspackage/remove-expenses-ajax'],['class'=>'btn btn-danger btn-sm btn-round removeRowFromBd','data-id'=>$id]);
                                                             		    else
                                                             		        echo Html::a("<i class=\"material-icons\">close</i>",null,['class'=>'btn btn-danger btn-sm btn-round removeRow']);
                                                             		
@@ -405,10 +405,17 @@ $script = <<<JS
 		var action = $(this).attr("href");
 		var row = $(this).parents("tr.bdrow"); 
 		
-		if(action && !send_remove){
+        var id = parseInt($(this).data("id")); 
+        var csrf_param = $('meta[name="csrf-param"]').attr('content');
+        var csrf_token = $('meta[name="csrf-token"]').attr('content');
+        var dataForm = {id:id};
+        dataForm[csrf_param] = csrf_token;
+		
+        if(action && !send_remove){
 			$.ajax({
 				url:action,
-				type:"GET",
+				type:"POST",
+                data:dataForm,
 				dataType:"json",
 				beforeSend:function(){
 					send_remove = 1;
