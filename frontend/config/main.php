@@ -31,7 +31,7 @@ return [
         'view'=>[
             'theme'=>[
                 'pathMap' => [
-                    '@app/views' => '@app/views/material',
+                    '@app/views' => '@app/views/material-white',
                 ],
             ]
             

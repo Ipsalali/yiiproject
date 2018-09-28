@@ -1,0 +1,624 @@
+html,
+body {
+    height: 100%;
+}
+
+
+
+.error-summary {
+    color: #a94442;
+    background: #fdf7f7;
+    border-left: 3px solid #eed3d7;
+    padding: 10px 20px;
+    margin: 0 0 15px 0;
+}
+
+
+.date_status_block{
+    position: relative;
+    display: inline-block;
+}
+
+.field-app-status{
+   display: inline-block;
+   width: 100px;
+}
+
+.date_status_block label{
+    position: absolute;
+    left: 0px;
+     background-image: url(../images/icon/cal.png);
+    background-position:0px 0px;
+    background-size:100% 100%;
+    display: block;
+    width: 48px;
+    height: 48px;
+}
+
+
+.date_status_block input{
+    border:none;
+    outline:none;
+        width: 26px;
+    height: 36px;
+}
+
+.date_status_block input::-webkit-datetime-edit { display:none; }
+.date_status_block input::-webkit-datetime-edit-fields-wrapper { display:none; }
+.date_status_block input::-webkit-datetime-edit-text { display:none; }
+.date_status_block input::-webkit-datetime-edit-month-field { display:none; }
+.date_status_block input::-webkit-datetime-edit-day-field { display:none; }
+.date_status_block input::-webkit-datetime-edit-year-field { display:none; }
+.date_status_block input::-webkit-inner-spin-button { display: none; }
+.date_status_block input::-webkit-calendar-picker-indicator {
+    background: #fff; 
+    margin:0px; 
+    padding:0px; 
+    width:30px;
+    height:30px;
+    cursor:pointer;
+    -webkit-appearance: none !important;
+    opacity: 0;
+    display:block;
+    position:absolute;
+    left:0px;
+}
+
+.date_status_block input::-webkit-calendar-picker-indicator:before {
+    background-image: url(../images/icon/cal_16.png);
+    background-position:0px 0px;
+    background-size:100% 100%;
+    box-shadow: 0 1px 1px rgba(0,0,0,0.1);
+    border-radius: 24px;
+    content: '';
+    display: block;
+    height: 16px;
+/*    left: -2px;
+    position: absolute;
+    top: -5px;*/
+    width: 16px;
+    z-index: -1;
+}
+
+.date_status_block input::-webkit-calendar-picker-indicator:hover {
+
+}
+.date_status_block input:focus {
+
+}
+
+.status_td{
+    width: 150px;
+}
+
+.status_td:after{
+    clear:both;
+}
+
+.autotruck_apps .form-group{
+    margin-bottom: 0px;
+}
+
+.gen{
+    margin-left: 5px;
+}
+
+
+li.active_status{
+    color:#3ca03c;
+    text-decoration: underline;
+}
+
+li.app_status{
+    font-size: 13px;
+}
+
+.post_block{
+    margin: 50px 100px 10px;
+}
+
+.post_block ul{
+    padding: 0px 0px 0px 0px;
+}
+
+.post_block ul li{
+    list-style-type: decimal;
+    margin: 0px 0px 5px 0px;
+}
+
+.post_block ul li a{
+    color:#000;
+    font-family: arial;
+    font-size: 15px;
+}
+
+.check{
+    color:#fff;
+    position: relative;
+    line-height: normal;
+    padding-left: 20px;
+}
+
+.check:before{
+    content: "\e025";
+    font-family: 'Glyphicons Halflings';
+    display: block;
+    position: absolute;
+    left: 2px;
+}
+
+
+.top:after{
+    display: block;
+    content: "";
+    clear: both;
+}
+
+.search_block{
+    width: 30%;
+}
+.search_block small{
+    color:#fff;
+}
+
+
+
+
+.search_result{
+    display: none;
+    background: rgba(230, 230, 230, 0.96);
+    color: #000;
+}
+
+.results{
+    padding: 5px;
+}
+
+.results > div{
+    margin: 10px 0px;
+}
+
+.results > div > h4{
+   margin: 0px;
+    font-size: 13px;
+    font-weight: bold;
+    text-transform: capitalize;
+    font-family: arial;
+    padding: 0px;
+}
+
+.results > div > ul{
+    margin: 0px;
+    padding: 0px;
+    border: 1px solid rgba(0, 8, 56, 0.1);
+    border-radius: 2px; 
+    display: block;
+}
+
+.results > div > ul li{
+    border-bottom: 1px solid rgba(0, 8, 56, 0.1);
+    list-style: none;
+    padding-left:10px;
+    padding-top: 2px; 
+}
+
+.results > div > ul li:last-child{
+    border-bottom:none; 
+}
+
+
+.results > div > ul > li > div{
+    
+}
+
+.results .autotruck_name{
+    margin: 0px;
+    padding: 0px;
+}
+
+.results .autotruck_name a{
+    text-decoration: underline;
+    font-family: arial;
+    font-size: 13px;
+    font-weight: bold;
+    color: #000;
+}
+
+.results small{
+    display: block;
+    color:#4e4d4d;
+}
+
+
+
+
+input#autotruck-date{
+    width:170px; 
+}
+
+
+
+.change_status_info{
+    color:#f00;
+    font-size: 12px;
+}
+
+
+.icon-edit{
+    background: #337ab7;
+    width: 30px;
+    height: 30px;
+    display: block;
+    float: left;
+    text-align: center;
+    color: #fff;
+    border-radius: 3px;
+    margin-right: 3px;
+}
+
+.icon-edit span{
+    position: relative;
+    top: 8px;
+}
+
+.icon-edit:hover{
+    background-color: #1d5c92;
+    color:#FFF;
+}
+
+.icon-edit span:hover{
+    color:#FFF;
+}
+
+.client_manager{
+    position: relative;
+}
+
+.main:after{
+    clear: both;
+    content: "";
+    display: block;
+}
+
+@media screen and (max-width:1275px){
+    .left_bar_head .new_app{
+        float: inherit !important;
+    }
+    .filter_app{
+        float: inherit !important;
+        clear: both;
+        margin-top: 10px;
+    }
+
+    .autotrUcks_list .grid-view table tr td{
+        font-size: 12px;
+    }
+
+    .left_bar{
+        min-width: 230px !important;
+    }
+
+    .right_content{
+        min-width: 909px;
+    }
+
+    .main{
+        min-width: 1170px !important;
+    }
+}
+
+.field-customerpayment-autotruck_id,.field-customerpayment-client_id{
+    margin-top: 0px !important;
+    margin-bottom: 0px !important;
+}
+
+
+.new_app{
+    margin-bottom: 10px;
+}
+
+
+.autotruck_head{}
+
+
+.autotruck_head:after{
+    clear: both;
+    display: block;
+    content: "";
+}
+
+.autotruck_title{
+    float: left;
+}
+
+.new_autotruck{
+    margin-top: 32px;
+    margin-left: 20px;
+    float: left;
+}
+
+.new_autotruck a{
+    height: 21px;
+    border-radius: 2px;
+    font-size: 12px;
+    line-height: normal;
+    padding: 3px 13px;
+    text-transform: lowercase;
+    font-family: arial;
+}
+
+
+.wrap:after{
+    clear: both;
+    content: "";
+    display: block;
+}
+
+.payment-state-select{
+    margin-top: 25px;
+}
+
+.logout_block{
+    position: fixed;
+    right: 0px;
+    top: 0px;
+    z-index: 1031;
+}
+
+.logout_block a{
+    color: #fff;
+    background: #515ea7;
+    text-transform: uppercase;
+    padding: 17px;
+    line-height: 51px;
+    letter-spacing: 2px;
+}
+
+.navbar-brand {
+    padding: 15px 10px 0px 0px !important;
+    font-size: 30px !important;
+    color: #ffffff !important;
+}
+
+
+.autotruck_apps table th,#table_pay th{
+    white-space: nowrap;
+    padding: 0px;
+    font-size: 13px;
+}
+
+.autotruck_apps table td,#table_pay td{
+    padding: 0px !important;
+    font-size: 13px;
+}
+
+.app_out_stock{
+    display: block;
+    width: 16px;
+    height: 16px;
+}
+
+.app_out_stock.ok{
+    background-image: url(../images/ok.png);
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    float: right;
+}
+
+#table_pay .btn{
+    padding: 2px 4px !important;
+    font-size: 10px !important;
+}
+
+
+
+
+.table-hover > tbody > tr:hover {
+    background-color: rgba(34, 68, 189, 0.22);
+}
+
+.client_phone_column{
+    white-space: normal;
+}
+
+
+.ignor_block{
+    position: relative;
+}
+#ignor_list{
+    display: none;
+    position: absolute;
+    background: #fff;
+    margin: 7px 0px;
+    padding: 4px;
+    border: 1px solid #ccc;
+    width: 100%;
+    z-index: 2;
+    border-radius: 4px;
+    box-shadow: 0px 0px 2px -1px;
+    -webkit-box-shadow: 0px 0px 2px -1px;
+}
+
+    #ignor_list li{
+        cursor: pointer;
+        list-style: none;
+        padding: 4px;
+    }
+
+    #ignor_list li:hover{
+        background:#b3b8d6;
+    }
+
+
+.ignored_clients{
+    margin-bottom: 40px;
+}
+
+    .ignored_clients label{
+        font-size: 20px;
+    }
+
+    .ignored_item{
+        display: inline-block;
+        font-size: 13px;
+        color: #305bd8;
+        font-weight: bold;
+        margin-right: 10px;
+    }
+
+        .remove_ignore{
+            cursor: pointer;
+            color: #f00;
+            font-size: 16px;
+        }
+
+
+.block_send-letter-button{
+    margin-top: 150px;
+    text-align: center;
+}
+
+.block_send-letter-button button{
+    font-size: 30px;
+    padding: 20px 60px;
+}
+
+.load_block{
+    display: none;
+    position: absolute;
+    top:0px;
+    left: 0px;
+    z-index: 1000;
+    background: rgba(0,0,0,0);
+    width: 100%;
+    height: 100%;
+}
+
+    .load_gif{
+        position: relative;
+        margin: 200px auto;
+        display: table;
+    }
+
+    .load_gif img{
+
+    }
+
+
+.spender_result{
+    margin: 30px 0px 0px;
+    text-align: center;
+}
+
+    .spender_result .ok{
+        color:#0e8c0e;
+    }
+
+    .spender_result .error{
+        color:#d20f28;
+    }
+    
+    
+.navbar-toggle{
+    float:inherit !important;
+}
+
+
+.app_rate{
+    max-width:100px;
+}
+
+table th.app_info{
+    width:32%;
+}
+
+table th.app_place{
+    width: 4%;
+}
+
+table th.app_sumus{
+    width: 4%;
+}
+
+table th.app_sumru{
+    width: 4%;
+}
+
+table th.app_package{
+    width: 6%;
+}
+
+@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+
+}
+
+
+
+
+#autocomplete_block{
+
+}
+
+    #manager_data_key{
+
+    }
+
+    .autocomplete_data{
+        position: absolute;
+        display: none;
+        height: 300px;
+        min-width: 300px;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+        padding: 5px;
+        z-index: 1000;
+        background: #fff;
+    }
+
+        #autocomplete_items{
+            position: absolute;
+            z-index: 199;
+            height: 285px;
+            min-width: 300px;
+            overflow-y: scroll;
+            overflow-x: hidden;
+            margin: 0px;
+            padding: 0px;
+            background: #fff;
+        }
+
+            #autocomplete_items li{
+                list-style: none;
+                cursor: pointer;
+            }
+
+            #autocomplete_items li:hover{
+                background-color: #ccc;
+            }
+            
+
+p.dropdown-toggle::after{
+    position: absolute;
+    right: 0px;
+    top: 32%;
+}
+
+.nav.nav-second-level{
+    display: none;
+}
+
+.login-card{
+    margin-top: 25%;
+}
+
+
+
+.modal-all{
+    max-width: 100% !important;
+    width: 100% !important;
+    margin-left: 8px;
+}
+
+.ui-datepicker.ui-widget.ui-widget-content{
+z-index: 2000 !important;
+}
