@@ -86,7 +86,7 @@ class TransferspackageController extends Controller{
 			if($model->load($post) && $model->validate()){
 
 				if(isset($_FILES['TransfersPackage']['name']['files'][0]) && $_FILES['TransfersPackage']['name']['files'][0]){
-					$model->tempFiles = $model->file;
+					$model->tempFiles = $model->files;
 					$model->files = UploadedFile::getInstances($model, 'files');
 					
 					if ($model->files) {

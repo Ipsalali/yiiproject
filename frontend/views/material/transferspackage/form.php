@@ -51,12 +51,12 @@ $this->params['breadcrumbs'][]=$this->title;
 					<?php 
 						if(!isset($model->id)){
 					?>
-						<div class="col-1">
+						<div class="col-2">
 							<?php 
 								echo $form->field($model,'status')->dropDownList(ArrayHelper::map($model->getStatuses(),'id','title'),['prompt'=>'Статус']);
 							?>
 						</div>
-						<div class="col-1">
+						<div class="col-2">
 							<?php echo $form->field($model,'status_date')->widget(\yii\jui\DatePicker::classname(),['language' => 'ru','dateFormat'=>'dd-MM-yyyy',"options"=>array("class"=>"form-control")]); ?>
 						</div>
 					<?php }else{

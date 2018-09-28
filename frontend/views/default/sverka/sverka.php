@@ -17,6 +17,7 @@ $this->title = "Сверка";
 $canAddPaymentsManager = Yii::$app->user->can("sverka/addpaymentsmanager");
 $canRemovePayAjax = Yii::$app->user->can("sverka/removepayajax");
 $canRemoveExpensesAutotruck = Yii::$app->user->can("autotruck/update");
+$canReadAutotruck = Yii::$app->user->can("autotruck/read");
 ?>
 
 <div>
@@ -267,10 +268,19 @@ HTML;
 					<tr class="<?php echo ($sv['type'])? "pay_row":"exp_row"; ?>">
 						<td><?php echo ++$key;?></td>
 						<td class="td_input_date" data-update="<?php echo $model instanceof PaymentsExpenses ? 1 : 0?>">
-							<?php if($model instanceof ExpensesManager){
-									echo Html::a($model->autotruck->name."&nbsp".date("d.m.Y",strtotime($sv['date'])),array("autotruck/read",'id'=>$model->autotruck_id),array("target"=>"_blank"));
+							<?php 
+								if($model instanceof ExpensesManager){
+									$aut_title = $model->autotruck->name."&nbsp".date("d.m.Y",strtotime($sv['date']));
+									if($canReadAutotruck)
+										echo Html::a($aut_title,array("autotruck/read",'id'=>$model->autotruck_id),array("target"=>"_blank"));
+									else
+										echo $aut_title;
 								}elseif($model instanceof Autotruck){
-									echo Html::a($model->name."&nbsp".date("d.m.Y",strtotime($sv['date'])),['autotruck/read','id'=>$model->id],['target'=>'_blank']);
+									$aut_title = $model->name."&nbsp".date("d.m.Y",strtotime($sv['date']));
+									if($canReadAutotruck)
+										echo Html::a($aut_title,['autotruck/read','id'=>$model->id],['target'=>'_blank']);
+									else
+										echo $aut_title;
 								}else{
 									echo date("d.m.Y",strtotime($sv['date']));
 								} 

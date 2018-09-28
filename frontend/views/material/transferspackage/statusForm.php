@@ -13,8 +13,9 @@ use yii\helpers\ArrayHelper;
 			echo $form->field($model,'status')->dropDownList(ArrayHelper::map($model->getStatuses(),'id','title'),['prompt'=>'Статус']);
 		?>
 		<?php 
-			echo $form->field($model,'status_date')->widget(\yii\jui\DatePicker::classname(),['language' => 'ru','dateFormat'=>'dd-MM-yyyy',"options"=>array("class"=>"form-control")]); 
+			echo $form->field($model,'status_date')->input("date",['language' => 'ru','dateFormat'=>'dd-MM-yyyy',"options"=>array("class"=>"form-control")]); 
 		?>
+		
 		<?php
 			echo Html::submitButton("Изменить",['class'=>"btn btn-success"])
 		?>			

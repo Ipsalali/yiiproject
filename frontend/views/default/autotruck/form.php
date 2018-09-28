@@ -14,7 +14,8 @@ use common\models\Client;
 
 $roleexpenses = 'autotruck/addexpenses';
 $user = \Yii::$app->user->identity;
-$userIsClientExtended = \Yii::$app->user->can("clientExtended");
+$userIsClientExtended = \Yii::$app->user->can("clientextended");
+$canReadAutotruck = Yii::$app->user->can("autotruck/read");
 
 $list_status = Status::find()->orderBy(['sort'=>SORT_ASC])->all();
 $countries = $userIsClientExtended ? SupplierCountry::find()->all() : $user->countries;
@@ -51,7 +52,7 @@ $this->title = $newModel ? "Новая заявка" : "Заявка:".$autotruc
 				  		<div class="form-actions">
 				  			<?php echo Html::submitButton('Сохранить заявку',['id'=>'submit_update','class' => 'btn btn-primary pull-right', 'name' => 'autotruck-update-button']); ?>
 				  			<?php 
-				  				if($autotruck->id){
+				  				if($canReadAutotruck && $autotruck->id){
 				  					echo Html::a('Отменить редактирование', array('autotruck/read','id' => $autotruck->id), array('class' => 'btn btn-error pull-right'));
 				  					echo Html::hiddenInput("autotruck_id",$autotruck->id);
 				  				}  

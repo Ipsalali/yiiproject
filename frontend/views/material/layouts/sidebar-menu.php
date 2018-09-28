@@ -120,7 +120,7 @@ $active_route = $this->context->route;
             <li class="nav-item  <?php echo $active_route == 'client/profile' ? 'active' : '';?>">
                 <a class="nav-link" href="<?php echo Url::to(['/client/profile']);?>">
                   <i class="material-icons">person</i>
-                  <p>Профиль</p>
+                  <p>Личный кабинет</p>
                 </a>
             </li>
 
@@ -134,8 +134,8 @@ $active_route = $this->context->route;
             <?php } ?>
 
             <?php  if(Yii::$app->user->can("autotruck/create")){ ?>
-              <li class="nav-item <?php echo $active_route == 'autotruck/create' ? 'active' : '';?>">
-                  <a class="nav-link" href="<?php echo Url::to(['/autotruck/create']);?>">
+              <li class="nav-item <?php echo $active_route == 'autotruck/form' ? 'active' : '';?>">
+                  <a class="nav-link" href="<?php echo Url::to(['/autotruck/form']);?>">
                     <i class="material-icons">dashboard</i>
                     <p>Создать заявку</p>
                   </a>

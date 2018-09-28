@@ -7,6 +7,7 @@ use common\models\TypePackaging;
 $this->title = "TEDTRANS";
 $user = Yii::$app->user->identity;
 $packages = TypePackaging::find()->all();
+$canFormAutotruck = Yii::$app->user->can("autotruck/create");
 ?>
 
 <div class="client_page">
@@ -66,7 +67,7 @@ $packages = TypePackaging::find()->all();
 				  				    <?php echo $autotruck->name; ?>
 				  				    &nbsp&nbsp&nbsp
 				  					<?php 
-				  						echo ($user->id === $autotruck->creator) ? html::a("Редактировать",array("autotruck/form","id"=>$autotruck->id)) : "";
+				  						echo ($user->id === $autotruck->creator && $canFormAutotruck) ? html::a("Редактировать",array("autotruck/form","id"=>$autotruck->id)) : "";
 				  					?>
 				  				</h4>
 				  			</div>

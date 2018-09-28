@@ -87,7 +87,7 @@ AppAsset::register($this);
                 $menuItems[] = ['label' => 'Сверка', 'url' => ['/sverka/index']];
 
             if(Yii::$app->user->can("Autotruck/create"))
-                $menuItems[] = ['label' => 'Создать заявку', 'url' => ['/autotruck/create']];
+                $menuItems[] = ['label' => 'Создать заявку', 'url' => ['/autotruck/form']];
 
             $menuItems[] = ['label' => 'Профиль', 'url' => ['/client/profile']];
 

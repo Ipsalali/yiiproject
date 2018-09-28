@@ -210,7 +210,7 @@ class AutotruckController extends Controller{
 		                    } catch (Exception $e) {}
 		                }
 
-		                if(Yii::$app->user->can("clientExtended")){
+		                if(Yii::$app->user->can("clientextended")){
 							return Yii::$app->response->redirect(["client/profile"]);
 						}else{
 							if(!$id)
@@ -569,7 +569,7 @@ class AutotruckController extends Controller{
 			}
 
 			
-			if(Yii::$app->user->can("clientExtended")){
+			if(Yii::$app->user->can("clientextended")){
 				return Yii::$app->response->redirect(array("client/profile"));
 			}else{
 				return Yii::$app->response->redirect(['autotruck/read', 'id' => $autotruck->id]);

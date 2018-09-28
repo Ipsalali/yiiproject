@@ -11,7 +11,7 @@ $this->title = 'Вход';
 ?>
 
 <div class="row">
-    <div class="col-md-4 offset-md-4 align-self-center">
+    <div class="col-md-6 offset-md-3 align-self-center">
         <div class="login-card card card-default">
             <div class="card-header">
                 <h3 class="card-title"><?php echo $this->title; ?></h3>

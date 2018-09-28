@@ -17,7 +17,8 @@ class ClientSearch extends Client
      */
 
     public $page_size = 0;
-
+    public $user_email;
+    
     public static $total_sverka = 0;
 
     /**
@@ -27,6 +28,7 @@ class ClientSearch extends Client
     public function rules()
     {
         return [
+            [['name','phone','user_email'],'string'],
             [['manager','client_category_id','ipay'],'integer']
         ];
     }
@@ -55,6 +57,15 @@ class ClientSearch extends Client
 
             if($this->manager)
                 array_push($conditions, "`manager` = {$this->manager}");
+
+            if($this->name)
+                array_push($conditions, "`name` LIKE '{$this->name}%'");
+
+            if($this->user_email)
+                array_push($conditions, "`user_email` LIKE '{$this->user_email}%'");
+
+            if($this->phone)
+                array_push($conditions, "`phone` LIKE '{$this->phone}%'");
 
             if($this->client_category_id)
                 array_push($conditions, "`client_category_id` = {$this->client_category_id}");

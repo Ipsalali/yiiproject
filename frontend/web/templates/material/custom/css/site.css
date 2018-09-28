@@ -564,14 +564,15 @@ table th.app_package{
     }
 
     .autocomplete_data{
-    position: absolute;
-    display: none;
-    height: 300px;
-    min-width: 300px;
-    border: 1px solid #ccc;
-    border-radius: 3px;
-    padding: 5px;
-    z-index: 1000;
+        position: absolute;
+        display: none;
+        height: 300px;
+        min-width: 300px;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+        padding: 5px;
+        z-index: 1000;
+        background: #fff;
     }
 
         #autocomplete_items{
@@ -616,4 +617,8 @@ p.dropdown-toggle::after{
     max-width: 100% !important;
     width: 100% !important;
     margin-left: 8px;
+}
+
+.ui-datepicker.ui-widget.ui-widget-content{
+z-index: 2000 !important;
 }

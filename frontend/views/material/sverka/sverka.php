@@ -3,7 +3,6 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 use common\helper\ArrayHelper;
-use kartik\date\DatePicker;
 use yii\bootstrap\ActiveForm;
 use common\models\User;
 use frontend\models\Autotruck;
@@ -13,51 +12,33 @@ use yii\helpers\StringHelper;
 use common\models\Organisation;
 
 $this->title = "Сверка";
+$this->params['breadcrumbs'][]=$this->title;
 
 $canAddPaymentsManager = Yii::$app->user->can("sverka/addpaymentsmanager");
 $canRemovePayAjax = Yii::$app->user->can("sverka/removepayajax");
 $canRemoveExpensesAutotruck = Yii::$app->user->can("autotruck/update");
+$canReadAutotruck = Yii::$app->user->can("autotruck/read");
 ?>
 
-<div>
-	<div class="row">
-		<div class="col-xs-4">
-			<h3>Отчет "Сверка"</h3>
-		</div>
-		<div class="col-xs-4">
-			
-		</div>
+<div class="card">
+	<div class="card-header card-header-primary">
+		<h3 class="card-title"><?php echo $this->title;?></h3>
 	</div>
-	<div class="row">
+	<div class="card-body">
 		<?php $form = ActiveForm::begin(['id'=>'sverka','action'=>["sverka/index"],'method'=>'GET']); ?>
-		<div class="col-xs-4">
+		<div class="row" style="margin-bottom: 30px;">
+			<div class="col-4">
+				<div class="row">
+					<div class="col">
+						<?php echo Html::input('date','date_from',(!$data_params['date_from']) ? date("d-m-Y",time() - (86400 * 61)) : $data_params['date_from'],['class'=>'form-control']);?>
+					</div>
+					<div class="col">
+						<?php echo Html::input('date','date_to',(!$data_params['date_to']) ? date("Y-m-d",time()) : $data_params['date_to'],['class'=>'form-control']);?>
+					</div>
+				</div>
+			</div>
 
-			<?php
-				$layout = <<< HTML
-    				{input1}
-    				{separator}
-    				{input2}
-HTML;
-				echo DatePicker::widget([
-							'name' => 'date_from',
-							'name2' => 'date_to',
-							'value'=> (!$data_params['date_from']) ? date("d.m.Y",time() - (86400 * 61)) : $data_params['date_from'],
-							'value2'=> (!$data_params['date_to']) ? date("d.m.Y",time()) : $data_params['date_to'],
-							'language'=>'ru',
-							'options' => ['placeholder' => 'Начальная дата'],
-							'options2' => ['placeholder' => 'Конечная дата'],
-							'type' => DatePicker::TYPE_RANGE,
-							'separator'=>" по ",
-							'layout'=>$layout,
-							'pluginOptions'=>[
-								'autoclose'=>true,
-        						'format' => 'dd.mm.yyyy',
-        						'todayHighlight' => true
-    						]
-				]);
-			?>
-		</div>
-		<?php if(!Yii::$app->user->identity->isSeller(true)  && !Yii::$app->user->can("sverka_seer") && !Yii::$app->user->can("client")){ 
+			<?php if(!Yii::$app->user->identity->isSeller(true)  && !Yii::$app->user->can("sverka_seer") && !Yii::$app->user->can("client")){
 
 				if(isset($manager->id)){
 					if($manager->name){
@@ -73,434 +54,418 @@ HTML;
 					$val = "";
 				}
 			?>
-    		<div class="col-xs-4">
-    			<div id="autocomplete_block" class="">
-    				<input type="hidden" name="manager" value="<?php echo $manager->id?>" id="input_manager">
-    				<input type="text" name="manager_data_key" autocomplete="off" value="<?php echo $val; ?>" class="form-control" id="manager_autocomplete">
-    				<div class="autocomplete_data" data-block="0">
-    					<ul id="autocomplete_items">
-    						<?php
-    							if(is_array($expensesPeople) && count($expensesPeople)){
-    								foreach ($expensesPeople as $key => $value) {
-    									?>
-    										<li data-id="<?php echo $value->id?>"> <?php echo $value->name." - ".$value->email?> </li>
-    									<?php
-    								}
-    							}
-    						?>
-    					</ul>
-    				</div>
-    			</div>
-    			<script type="text/javascript">
-    				$(function(){
+	    	<div class="col-4">
+	    		<div id="autocomplete_block" class="">
+	    			<input type="hidden" name="manager" value="<?php echo $manager->id?>" id="input_manager">
+	    			<input type="text" name="manager_data_key" autocomplete="off" value="<?php echo $val; ?>" class="form-control" id="manager_autocomplete">
+	    			<div class="autocomplete_data" data-block="0">
+	    				<ul id="autocomplete_items">
+	    					<?php
+	    						if(is_array($expensesPeople) && count($expensesPeople)){
+	    							foreach ($expensesPeople as $key => $value) {
+	    									?>
+	    								<li data-id="<?php echo $value->id?>">
+	    									<?php echo $value->name." - ".$value->email?>
+	    								</li>
+	    					<?php
+	    							}
+	    						}
+	    					?>
+	    				</ul>
+	    			</div>
+	    		</div>
+	    		<script type="text/javascript">
+	    			$(function(){
 
-    					$("#manager_autocomplete").focusin(function(){
-    						$(".autocomplete_data").show(100);
-    					});
+	    				$("#manager_autocomplete").focusin(function(){
+	    					$(".autocomplete_data").show(100);
+	    				});
 
-    					$("#manager_autocomplete").focusout(function(e){
-    						if(!parseInt($(".autocomplete_data").attr("data-block")))
-    							$(".autocomplete_data").hide(100);
-    						
-    					});
+	    				$("#manager_autocomplete").focusout(function(e){
+	    					if(!parseInt($(".autocomplete_data").attr("data-block")))
+	    						$(".autocomplete_data").hide(100);
+	    						
+	    				});
 
-    					$("#manager_autocomplete").keyup(function(){
-    						var val = $(this).val();
+	    				$("#manager_autocomplete").keyup(function(){
+	    					var val = $(this).val();
 
-    						if(val.length < 2) return;
+	    					if(val.length < 2) return;
 
-    						var action = "<?php echo Url::to(['sverka/expenses-people-by-key'])?>";
+	    					var action = "<?php echo Url::to(['sverka/expenses-people-by-key'])?>";
 
-    						$.ajax({
-    							url:action,
-    							type:"POST",
-    							data:"key="+val,
-    							dataType:"json",
-    							before:function(){},
-    							success:function(json){
-    								if(json.hasOwnProperty("managers")){
-    									var managers = json.managers;
-    									if(managers.length){
-    										var html = "";
-    										$.each(managers,function(i,item){
-    											var name = item.email;
-    											
-    											if(item.name){
-    												name= item.name;
-    											}else if(item.username){
-    												name = item.username;
-    											}
-    											
-    											html += "<li data-id='"+item.id+"'>" + name + "</li>";
-    										})
+	    						$.ajax({
+	    							url:action,
+	    							type:"GET",
+	    							data:"key="+val,
+	    							dataType:"json",
+	    							before:function(){},
+	    							success:function(json){
+	    								if(json.hasOwnProperty("managers")){
+	    									var managers = json.managers;
+	    									if(managers.length){
+	    										var html = "";
+	    										$.each(managers,function(i,item){
+	    											var name = item.email;
+	    											
+	    											if(item.name){
+	    												name= item.name;
+	    											}else if(item.username){
+	    												name = item.username;
+	    											}
+	    											
+	    											html += "<li data-id='"+item.id+"'>" + name + "</li>";
+	    										})
 
-    										$("#autocomplete_items").html(html);
-    									}
-    								}
-    							},
-    							error:function(e){
-    								console.log(e);
-    							},
-    							complete:function(){}
-    						})
-    					});
-
-
-
-    					$("#autocomplete_items").hover(function(){
-    						$(".autocomplete_data").attr("data-block",1);
-    					},function(){
-    						$(".autocomplete_data").attr("data-block",0);
-    					});
+	    										$("#autocomplete_items").html(html);
+	    									}
+	    								}
+	    							},
+	    							error:function(e){
+	    								console.log(e);
+	    							},
+	    							complete:function(){}
+	    						})
+	    				});
 
 
 
-    					$("#autocomplete_items").on("click","li",function(){
-    						var id = parseInt($(this).attr("data-id"));
-    						$("#input_manager").val(id);
+	    				$("#autocomplete_items").hover(function(){
+	    					$(".autocomplete_data").attr("data-block",1);
+	    				},function(){
+	    					$(".autocomplete_data").attr("data-block",0);
+	    				});
 
-    						$("#manager_autocomplete").val($(this).text());
-    						$(".autocomplete_data").attr("data-block",0);
-    						$(".autocomplete_data").hide(100);
-    					})
 
-    					
-    				})
-    			</script>
-    		</div>
-		<?php }else{
-		    ?>
-		        <input type="hidden" name='manager' value='<?php echo Yii::$app->user->identity->id; ?>'>
-		    <?php
-		}?>
 
-		<div class="col-xs-4">
-			<input type="submit" class="btn btn-primary" value="Найти">
+	    				$("#autocomplete_items").on("click","li",function(){
+	    					var id = parseInt($(this).attr("data-id"));
+	    					$("#input_manager").val(id);
+
+	    					$("#manager_autocomplete").val($(this).text().trim());
+	    					$(".autocomplete_data").attr("data-block",0);
+	    					$(".autocomplete_data").hide(100);
+	    				})
+
+	    					
+	    			});
+	    		</script>
+	    	</div>
+			<?php }else{
+			    ?>
+			       <input type="hidden" name='manager' value='<?php echo Yii::$app->user->identity->id; ?>'>
+			    <?php
+			}?>
+			<div class="col-3">
+				<input type="submit" class="btn btn-primary" value="Найти">
+			</div>
 		</div>
 		<?php Activeform::end(); ?>
-	</div>
-
-	<div class="tabs"  style="margin-top: 50px;">
-		<ul class="nav nav-tabs">
-  			<li class="active"><a data-toggle="tab" href="#sverka_app">Доставки</a></li>
-  			<!-- <li><a data-toggle="tab" href="#sverka_transfer">Переводы</a></li> -->
-		</ul>
-	</div>
-
-<div class="tab-content">
-	<div id="sverka_app" class="tab-pane fade in active">
-	<?php if(count($sverka)){ ?>
-	<div class="row">
-		<div class="col-xs-12">
-			<h4>
-			<?php if(!Yii::$app->user->identity->isSeller(true) && !Yii::$app->user->can("sverka_seer") && !Yii::$app->user->can("client")){?>
-			Расходы 
-				<?php if($manager->name) {
-					echo $manager->name;
-				}else{
-					$cl = $manager->client;
-					if(isset($cl->id)){
-						echo $cl->name;
-					}else{
-						echo $manager->username;
-					}
-				}
-				?> от <?php echo date("d.m.y",strtotime($data_params['date_from']))?> по <?php echo date("d.m.y",strtotime($data_params['date_to']))?>
-			    
-			<?php }else{ ?> 
-				Ваши расходы  от <?php echo date("d.m.y",strtotime($data_params['date_from']))?> по <?php echo date("d.m.y",strtotime($data_params['date_to']))?>
-			<?php } ?>
-			&nbsp&nbspСумма расходов за указанный период: <span id="common_sum_expenses_by_period"></span>&nbsp$</h4>
-			
-			<?php 
-			    if(!Yii::$app->user->identity->isSeller(true) && !Yii::$app->user->can("sverka_seer") && !Yii::$app->user->can("client")){
-			    //Показываем только для менеджера
-			?>
-			    <p>Оплата по безналу: <?php echo $card_percent;?> % &nbsp&nbsp&nbsp&nbsp Средний курс: <?php echo $average_course?></p>
-			<?php } ?>
-		</div>
-	</div>
-
-	<?php if($canAddPaymentsManager){ ?>
-	<div class="row">
-		<div class="col-xs-3">
-			<button id="add_pay" class="btn btn-success">Добавить оплату</button>
-		</div>
-	</div>
-	<?php } ?>
-	<div class="row">
-		<div class="col-xs-12">
-		<?php $form = ActiveForm::begin(['id'=>'addPaymentsManager','action'=>["sverka/addpaymentsmanager"]])?>
-			
-			<table class="table table-bordered table-hover" style="text-align: center;" id="table_pay">
-				<tr>
-					<th>#</th>
-					<th>Дата</th>
-					<th class="th_sum">Сумма $</th>
-					
-					<!-- <th>Наличные($)</th> -->
-					<th class="th_group">Сумма (руб)</th>
-					<th class="th_group">Сумма Б/Н (руб)</th>
-					<th class="th_group th_payment">Оплата</th>
-					<th class="th_course">Курс</th>
-					<th>Организация</th>
-					<th style="width: 150px;">В отчет</th>
-					<th>Комментарий</th>
-					<th>Действие</th>
-				</tr>
-
-
-				<?php  $com=0; $cExpens = 0; foreach ($sverka as $key => $sv) { 
-						if((int)$sv['type'] == 1){
-							$model = PaymentsExpenses::findOne($sv['id']);
-						}elseif((int)$sv['type'] == 2){
-							$model = Autotruck::findOne($sv['id']);
-						}elseif(!(int)$sv['type']){
-							$model = ExpensesManager::findOne($sv['id']);
-						}
-					
-						//Новый изменения
-						$cExpens += ((int)$sv['type'] == 1) ? 0 : $sv['sum'];
-
-						$classType = (int)$sv['type'] == 1 ? "type_negative" : "type_positive";
-					?>
-					<tr class="<?php echo ($sv['type'])? "pay_row":"exp_row"; ?>">
-						<td><?php echo ++$key;?></td>
-						<td class="td_input_date" data-update="<?php echo $model instanceof PaymentsExpenses ? 1 : 0?>">
-							<?php if($model instanceof ExpensesManager){
-									echo Html::a($model->autotruck->name."&nbsp".date("d.m.Y",strtotime($sv['date'])),array("autotruck/read",'id'=>$model->autotruck_id),array("target"=>"_blank"));
-								}elseif($model instanceof Autotruck){
-									echo Html::a($model->name."&nbsp".date("d.m.Y",strtotime($sv['date'])),['autotruck/read','id'=>$model->id],['target'=>'_blank']);
-								}else{
-									echo date("d.m.Y",strtotime($sv['date']));
-								} 
-							?>
-						</td>
-						<td class='td_input_sum <?php echo $classType?>'><?php 
-								
-								
-								if((int)$sv['type'] == 1){
-								    
-								    
-								    //Для старых записей у которых нет сум руб и сум без нла и нет курса
-								    if(!(int)$sv['course'] && isset($sv['sum_cash']) && !(int)$sv['sum_cash'] && isset($sv['sum_card']) && !(int)$sv['sum_card']){
-								        
-								        echo "-".$sv['sum'];
-								        
-								    }elseif(!(int)$sv['toreport'] || !(int)$sv['course']){
-								   
-								        echo "-".$sv['sum'];
-								    }
-								    
-								}else{
-								    echo "+".$sv['sum'];
-								}
-								
-							?>
-						</td>
-
-						<td class='td_input_sum_cash'>
-							<?php 
-								if($sv['type'] == 1){
-
-									//Наличные руб
-									//if($sv['toreport'] == 2){
-									//	$z =   "-";
-										//echo $sv['sum_cash'] > 0 ? $z.$sv['sum_cash'] : $sv['sum_cash'];
-									//}
-								}elseif($sv['type'] == 2){
-									echo "+".$sv['sum_cash'];
-								}
-							?>
-						</td>
-
-						<td class='td_input_sum_card'>
-							<?php 
-								if($sv['type'] == 1){
-									
-									//безнал
-									//if($sv['toreport'] == 3){
-									//	$z =   "-";
-									//	//echo $sv['sum_card'] > 0 ? $z.$sv['sum_card'] : $sv['sum_card'];
-									//}
-
-								}elseif($sv['type'] == 2){
-									echo "+".$sv['sum_card'];
-								}
-							?>
-						</td>
-
-						<td class="td_payment">
-							<?php 
-							    
-							    if($sv['type'] == 1){
-							        // Сумма в $
-    								if($sv['toreport'] == 1){
-    								    echo  "-".$sv['sum'];
-    								}elseif($sv['toreport'] == 2){
-    								    echo  "-".$sv['sum_cash'];
-    								}elseif($sv['toreport'] == 3){
-    								    echo  "-".$sv['sum_card'];
-    								}
-							    }
-								
-								
-							?>
-						</td>
-						<td class="td_input_course">
-							<?php 
-								//отображаем курс для оплат только
-								echo $sv['type'] == 1 ? $sv['course'] : "";
-							?>
-						</td>
-						
-						<td class="td_select_org" data-exist_org="<?php echo $model instanceof PaymentsExpenses ? 1 : 0;?>" data-org-val="<?php echo $model instanceof PaymentsExpenses ? $model->organisation : 0;?>">
-							<?php
-								if($model instanceof PaymentsExpenses && $model->organisation){
-									echo $model->org->org_name;
-								?>
-
-								<?php
-								}
-							?>
-						</td>
-
-						<td class="td_select_report"  data-report-val="<?php echo $sv['toreport']?>">
-							<?php 
-								$sv_report = "";
-								switch ($sv['toreport']) {
-									case 1:
-										$sv_report = "Сумма $";
-										break;
-									case 2:
-										$sv_report = "Сумма (руб).";
-										break;
-									case 3:
-										$sv_report = "Сумма Б/Н (руб).";
-										break;
-									
-									default:
-										$sv_report = "";
-										break;
-								}
-
-							echo $sv_report; ?>
-						</td>
-
-						<td class="td_input_comment"><?php echo $sv['comment']; ?></td>
-						<td>
-							<?php 
-								if((int)$sv['type'] != 2){
-									$action = ($sv['type']) ? "sverka/removepayajax":"autotruck/removeexpajax";
-									$canAction = ($sv['type']) ? $canRemovePayAjax : $canRemoveExpensesAutotruck ;
-							?>   
-							    <?php if($canAddPaymentsManager){ ?>
-								    <a class="btn btn-primary sverka_update_btn" data-state="0" data-id="<?php echo $sv['id']?>" data-model="<?php echo StringHelper::basename(get_class($model));?>"><i class="glyphicon glyphicon-pencil"></i></a>
-							    <?php } ?>
-							    
-							    <?php if($canAction){?>
-								    <button type="submit" data-action="<?php echo $action?>" data-id="<?php echo $sv['id']?>" class="btn btn-danger remove_exists_payexp">X</button>
-							    <?php } ?>
-							    
-							<?php } ?>
-						</td>
-					</tr>
-				<?php  
-						if(!$sv['type']){
-							$com += $sv['sum']; 
-						}elseif((int)$sv['type'] == 1){
-							$com -= $sv['sum']; 
-						}elseif((int)$sv['type'] == 2){
-							$com -= $sv['sum']; 
-						}
-					} ?>
-					
-				
-				<!-- <tr>
-					<td colspan="2"><strong>Сумма расходов за указанный период</small></strong></td>
-					<td colspan="8"><strong><?php echo $cExpens;?></strong> $</td>
-				</tr> -->
-				<script type="text/javascript">
-					$(function(){
-						var common_sum_expenses_by_period = <?php echo $cExpens;?>;
-						$("#common_sum_expenses_by_period").text(common_sum_expenses_by_period);
-					});
-				</script>
-
-				<tr id="foot_row">
-					<td colspan="2"><strong>Итого <small>(Все расходы и оплаты в системе)</small></strong></td>
-					<td colspan="1" style="text-align: left;"><strong>&nbsp<?php echo sprintf("%.2f",$totalSverka['sum'] ); ?> $</strong></td>
-					<td colspan="1" style="text-align: left;"><strong>&nbsp<?php echo sprintf("%.2f",$totalSverka['sum_cash'] ); ?> Руб.</strong></td>
-					<td colspan="7" style="text-align: left;"><strong>&nbsp<?php echo sprintf("%.2f",$totalSverka['sum_card'] ); ?> б/н Руб.</strong></td>
-				</tr>
-			</table>
-			<div class="row">
-				<div class="col-xs-12" style="margin-bottom: 10px; text-align: right;">
-					<button id="submit_addPaymentsManager" style="display: none;" class="btn btn-primary">Сохранить</button>
-				</div>
+		<?php if(0){?>
+		<div class="card-header card-header-tabs card-header-primary">
+			<div class="nav-tabs-navigation">
+				<ul class="nav nav-tabs" role='tablist'>
+  					<li class="nav-item">
+  						<a class='nav-link active' data-toggle="tab" href="#sverka_app">Доставки</a>
+  					</li>
+  					<!-- <li class="nav-item"><a class='nav-link' data-toggle="tab" href="#sverka_transfer">Переводы</a></li> -->
+				</ul>
 			</div>
-			<?php ActiveForm::end();?>
 		</div>
-		
+		<?php } ?>
+
+		<div class="card-body">
+			<div class="tab-content">
+				<div id="sverka_app" class="tab-pane active">
+				<?php if(count($sverka)){ ?>
+					<div class="row">
+						<div class="col-12">
+							<h4>
+							<?php if(!Yii::$app->user->identity->isSeller(true) && !Yii::$app->user->can("sverka_seer") && !Yii::$app->user->can("client")){?>
+							Расходы 
+								<?php if($manager->name) {
+									echo $manager->name;
+								}else{
+									$cl = $manager->client;
+									if(isset($cl->id)){
+										echo $cl->name;
+									}else{
+										echo $manager->username;
+									}
+								}
+								?> от <?php echo date("d.m.y",strtotime($data_params['date_from']))?> по <?php echo date("d.m.y",strtotime($data_params['date_to']))?>
+							    
+							<?php }else{ ?> 
+								Ваши расходы  от <?php echo date("d.m.y",strtotime($data_params['date_from']))?> по <?php echo date("d.m.y",strtotime($data_params['date_to']))?>
+							<?php } ?>
+							&nbsp&nbspСумма расходов за указанный период: <span id="common_sum_expenses_by_period"></span>&nbsp$</h4>
+							
+							<?php 
+							    if(!Yii::$app->user->identity->isSeller(true) && !Yii::$app->user->can("sverka_seer") && !Yii::$app->user->can("client")){
+							    //Показываем только для менеджера
+							?>
+							    <p>Оплата по безналу: <?php echo $card_percent;?> % &nbsp&nbsp&nbsp&nbsp Средний курс: <?php echo $average_course?></p>
+							<?php } ?>
+						</div>
+					</div>
+
+					<?php if($canAddPaymentsManager){ ?>
+					<div class="row">
+						<div class="col-3">
+								<button id="add_pay" class="btn btn-success">Добавить оплату</button>
+						</div>
+					</div>
+					<?php } ?>
+					<div class="row">
+						<div class="col-12">
+							<?php $form = ActiveForm::begin(['id'=>'addPaymentsManager','action'=>["sverka/addpaymentsmanager"]])?>
+							<table class="table table-sm table-bordered table-hover" id="table_pay">
+								<thead>
+									<tr>
+										<th>#</th>
+										<th>Дата</th>
+										<th class="th_sum">Сумма $</th>
+										<th class="th_group">Сумма (руб)</th>
+										<th class="th_group">Сумма Б/Н (руб)</th>
+										<th class="th_group th_payment">Оплата</th>
+										<th class="th_course">Курс</th>
+										<th>Организация</th>
+										<th style="width: 150px;">В отчет</th>
+										<th>Комментарий</th>
+										<th>Действие</th>
+									</tr>
+								</thead>
+
+								<tbody>
+									<?php  $com=0; $cExpens = 0; foreach ($sverka as $key => $sv) { 
+										if((int)$sv['type'] == 1){
+											$model = PaymentsExpenses::findOne($sv['id']);
+										}elseif((int)$sv['type'] == 2){
+											$model = Autotruck::findOne($sv['id']);
+										}elseif(!(int)$sv['type']){
+											$model = ExpensesManager::findOne($sv['id']);
+										}
+									
+										//Новый изменения
+										$cExpens += ((int)$sv['type'] == 1) ? 0 : $sv['sum'];
+										$classType = (int)$sv['type'] == 1 ? "type_negative" : "type_positive";
+									?>
+									<tr class="<?php echo ($sv['type'])? "pay_row":"exp_row"; ?>">
+										<td><?php echo ++$key;?></td>
+										<td class="td_input_date" data-date_formatted='<?php echo date("Y-m-d",strtotime($sv['date']))?>' data-update="<?php echo $model instanceof PaymentsExpenses ? 1 : 0?>">
+											<?php if($model instanceof ExpensesManager){
+													$aut_title = $model->autotruck->name."&nbsp".date("d.m.Y",strtotime($sv['date']));
+													if($canReadAutotruck)
+														echo Html::a($aut_title,array("autotruck/read",'id'=>$model->autotruck_id),array("target"=>"_blank"));
+													else
+														echo $aut_title;
+												}elseif($model instanceof Autotruck){
+													$aut_title = $model->name."&nbsp".date("d.m.Y",strtotime($sv['date']));
+													if($canReadAutotruck)
+														echo Html::a($aut_title,['autotruck/read','id'=>$model->id],['target'=>'_blank']);
+													else
+														echo $aut_title;
+												}else{
+													echo date("d.m.Y",strtotime($sv['date']));
+												} 
+											?>
+										</td>
+										<td class='td_input_sum <?php echo $classType?>'><?php 
+												
+												if((int)$sv['type'] == 1){
+												    //Для старых записей у которых нет сум руб и сум без нла и нет курса
+												    if(!(int)$sv['course'] && isset($sv['sum_cash']) && !(int)$sv['sum_cash'] && isset($sv['sum_card']) && !(int)$sv['sum_card']){
+												        
+												        echo "-".$sv['sum'];
+												        
+												    }elseif(!(int)$sv['toreport'] || !(int)$sv['course']){
+												   
+												        echo "-".$sv['sum'];
+												    }
+												}else{
+												    echo "+".$sv['sum'];
+												}
+												
+											?>
+										</td>
+
+										<td class='td_input_sum_cash'>
+											<?php 
+												if($sv['type'] == 1){
+													//Наличные руб
+													//if($sv['toreport'] == 2){
+													//	$z =   "-";
+														//echo $sv['sum_cash'] > 0 ? $z.$sv['sum_cash'] : $sv['sum_cash'];
+													//}
+												}elseif($sv['type'] == 2){
+													echo "+".$sv['sum_cash'];
+												}
+											?>
+										</td>
+
+										<td class='td_input_sum_card'>
+											<?php 
+												if($sv['type'] == 1){
+													//безнал
+													//if($sv['toreport'] == 3){
+													//	$z =   "-";
+													//	//echo $sv['sum_card'] > 0 ? $z.$sv['sum_card'] : $sv['sum_card'];
+													//}
+												}elseif($sv['type'] == 2){
+													echo "+".$sv['sum_card'];
+												}
+											?>
+										</td>
+
+										<td class="td_payment">
+											<?php 
+											    
+											    if($sv['type'] == 1){
+											        // Сумма в $
+				    								if($sv['toreport'] == 1){
+				    								    echo  "-".$sv['sum'];
+				    								}elseif($sv['toreport'] == 2){
+				    								    echo  "-".$sv['sum_cash'];
+				    								}elseif($sv['toreport'] == 3){
+				    								    echo  "-".$sv['sum_card'];
+				    								}
+											    }
+												
+												
+											?>
+										</td>
+										<td class="td_input_course">
+											<?php 
+												//отображаем курс для оплат только
+												echo $sv['type'] == 1 ? $sv['course'] : "";
+											?>
+										</td>
+										
+										<td class="td_select_org" data-exist_org="<?php echo $model instanceof PaymentsExpenses ? 1 : 0;?>" data-org-val="<?php echo $model instanceof PaymentsExpenses ? $model->organisation : 0;?>">
+											<?php
+												if($model instanceof PaymentsExpenses && $model->organisation){
+													echo $model->org->org_name;
+												?>
+
+												<?php
+												}
+											?>
+										</td>
+
+										<td class="td_select_report"  data-report-val="<?php echo $sv['toreport']?>">
+											<?php 
+												$sv_report = "";
+												switch ($sv['toreport']) {
+													case 1:
+														$sv_report = "Сумма $";
+														break;
+													case 2:
+														$sv_report = "Сумма (руб).";
+														break;
+													case 3:
+														$sv_report = "Сумма Б/Н (руб).";
+														break;
+													
+													default:
+														$sv_report = "";
+														break;
+												}
+
+											echo $sv_report; ?>
+										</td>
+
+										<td class="td_input_comment"><?php echo $sv['comment']; ?></td>
+										<td>
+											<?php 
+												if((int)$sv['type'] != 2){
+													$action = ($sv['type']) ? "sverka/removepayajax":"autotruck/removeexpajax";
+													$canAction = ($sv['type']) ? $canRemovePayAjax : $canRemoveExpensesAutotruck ;
+											?>   
+											    <?php if($canAddPaymentsManager){ ?>
+												    <a class="btn btn-primary btn-link btn-sm sverka_update_btn" data-state="0" data-id="<?php echo $sv['id']?>" data-model="<?php echo StringHelper::basename(get_class($model));?>">
+												    	<i class="material-icons">edit</i>
+												    </a>
+											    <?php } ?>
+											    
+											    <?php if($canAction){?>
+												    <button type="submit" data-action="<?php echo $action?>" data-id="<?php echo $sv['id']?>" class="btn btn-danger btn-link btn-sm remove_exists_payexp">
+												    	<i class="material-icons">close</i>
+												    </button>
+											    <?php } ?>
+											    
+											<?php } ?>
+										</td>
+									</tr>
+									<?php  
+										if(!$sv['type']){
+											$com += $sv['sum']; 
+										}elseif((int)$sv['type'] == 1){
+											$com -= $sv['sum']; 
+										}elseif((int)$sv['type'] == 2){
+											$com -= $sv['sum']; 
+										}
+									} ?>
+									<script type="text/javascript">
+										$(function(){
+											var common_sum_expenses_by_period = <?php echo $cExpens;?>;
+											$("#common_sum_expenses_by_period").text(common_sum_expenses_by_period);
+										});
+									</script>
+
+									<tr id="foot_row">
+										<td colspan="2"><strong>Итого <small>(Все расходы и оплаты в системе)</small></strong></td>
+										<td colspan="1" style="text-align: left;"><strong>&nbsp<?php echo sprintf("%.2f",$totalSverka['sum'] ); ?> $</strong></td>
+										<td colspan="1" style="text-align: left;"><strong>&nbsp<?php echo sprintf("%.2f",$totalSverka['sum_cash'] ); ?> Руб.</strong></td>
+										<td colspan="7" style="text-align: left;"><strong>&nbsp<?php echo sprintf("%.2f",$totalSverka['sum_card'] ); ?> б/н Руб.</strong></td>
+									</tr>
+								</tbody>
+							</table>
+							<div class="row">
+								<div class="col-12 text-right" style="margin-bottom: 10px;">
+									<button id="submit_addPaymentsManager" style="display: none;" class="btn btn-primary">Сохранить</button>
+								</div>
+							</div>
+							<?php ActiveForm::end();?>
+						</div>
+					</div>
+					<?php }elseif($manager->id){ ?>
+					<div class="row">
+			    		<?php if(!Yii::$app->user->identity->isSeller(true) && !Yii::$app->user->can("sverka_seer") && !Yii::$app->user->can("client")){?>
+			    			<div class="col-12">
+			    				<h4>У <?php echo $manager->name ?$manager->name:"Не указано имя (".$manager->username.")"?>  нет расходов по периоду от <?php echo date("d.m.y",strtotime($data_params['date_from']))?> по <?php echo date("d.m.y",strtotime($data_params['date_to']))?></h4>
+			    			</div>
+			    		<?php }else{?> 
+			    			<div class="col-12">
+			    				<h4>У вас нет расходов на период от <?php echo date("d.m.y",strtotime($data_params['date_from']))?> по <?php echo date("d.m.y",strtotime($data_params['date_to']))?></h4>
+			    			</div>
+			    		<?php } ?>
+				    </div>
+					<?php } ?>
+				</div>
+
+			<!-- <div id="sverka_transfer" class="tab-pane"> -->
+				<?php 
+					/*echo $this->render("sverka_transfer_client",[
+						"manager"=>$manager,
+						'orgs'=>$orgs,
+						"sellers"=>$sellers,
+			            "data_params"=>$data_params,
+			            'client'=>$client,
+						'sverka'=>$clientSverkaByTransfer
+					]);*/
+				?>
+			<!-- </div> -->
+
+			</div>
+		</div>
 	</div>
-	<?php }elseif($manager->id){ ?>
-		<div class="row">
-    		<?php if(!Yii::$app->user->identity->isSeller(true) && !Yii::$app->user->can("sverka_seer") && !Yii::$app->user->can("client")){?>
-    			<div class="col-xs-12">
-    				<h4>У <?php echo $manager->name ?$manager->name:"Не указано имя (".$manager->username.")"?>  нет расходов по периоду от <?php echo date("d.m.y",strtotime($data_params['date_from']))?> по <?php echo date("d.m.y",strtotime($data_params['date_to']))?></h4>
-    			</div>
-    		<?php }else{?> 
-    			<div class="col-xs-12">
-    				<h4>У вас нет расходов на период от <?php echo date("d.m.y",strtotime($data_params['date_from']))?> по <?php echo date("d.m.y",strtotime($data_params['date_to']))?></h4>
-    			</div>
-    		<?php } ?>
-	    </div>
-	<?php } ?>
-</div>
-<!-- <div id="sverka_transfer" class="tab-pane fade in"> -->
-	<?php 
-		/*echo $this->render("sverka_transfer_client",[
-			"manager"=>$manager,
-			'orgs'=>$orgs,
-			"sellers"=>$sellers,
-            "data_params"=>$data_params,
-            'client'=>$client,
-			'sverka'=>$clientSverkaByTransfer
-		]);*/
-	?>
-<!-- </div> -->
-</div>
 </div>
 
 <?php if(count($sverka) && $manager->id){?>
 <input type='hidden' name="card_percent" id="card_percent" value="<?php echo $card_percent?>" />
 <script type="text/javascript">
 	$(function(){
-        
-        var display_pay_input = function(select){
-            
-            if(select){
-                var id = parseInt(select.val());
-                var tr = select.parents("tr");
-                var sum_cash = tr.find(".td_input_sum_cash input").attr("readonly",true);
-                var sum_card = tr.find(".td_input_sum_card input").attr("readonly",true);
-                var pay = tr.find(".td_payment input").attr("readonly",true);
-                
-                if(id == 1){
-                    pay.attr("readonly",false);
-                }else if(id == 2){
-                    sum_cash.attr("readonly",false);
-                }else if(id == 3){
-                    sum_card.attr("readonly",false);
-                }
-                
-            }
-        }
-        //Определяем какой вид оплаты отображаем
-        $("body").on("change",".td_select_report select",function(){
-           //display_pay_input($(this));
-        });
-        
+
 		//Расчет платежей при изменении суммы $
 		$("body").on("keyup",".td_payment input",function(){
 
@@ -610,7 +575,7 @@ HTML;
 			var tmpTd = "<td class='tmpTd'></td>";
 
 			ntr += "<td></td>"+ntd_sum_cash+ntd_sum_card+ntd_info+ntd_course+ntd_org+ntd_report+ntd_comment;
-			ntr += "<td><a class='btn btn-danger remove_pay'>X</a></td>";
+			ntr += "<td><a class='btn btn-danger btn-link btn-sm remove_pay'><i class=\"material-icons\">close</i></a></td>";
 
 			ntr += '</tr>';
 
@@ -726,39 +691,45 @@ HTML;
 				});
 			}
 		});
+
+
 		//Удаление наименовании
 		$("#table_pay").on("click",".remove_exists_payexp",function(event){
 			
 			event.preventDefault();
+			
 			var id = parseInt($(this).data("id"));
+			
 			var action = $(this).data("action");
-			var dataForm = "id="+id;
+			
+			var dataForm = {id:id};
 			var r_rw = $(this).parents('tr');
+
+			var csrf_param = $('meta[name="csrf-param"]').attr('content');
+			var csrf_token = $('meta[name="csrf-token"]').attr('content');
+			
+			dataForm[csrf_param] = csrf_token;
 
 			if(id && action && window.confirm('Вы действительно хотите удалить выделенный объект?')){
 				$.ajax({
 					url:"index.php?r="+action,
 					type:"POST",
 					data: dataForm,
-					datetype:'json',
+					dateType:'json',
 					beforeSend:function(){
-						console.log('before');
 					},
 					success:function(json){
 						if(json['error']){
 							alert(json['error']['text']);
 						}else{
-							
 							location = window.location.href;
 							r_rw.remove();
 						}
 					},
 					error:function(msg){
-						console.log(msg.StatusText);
-						console.log(msg.responsive);
+						console.log(msg);
 					},
 					complete:function(){
-						console.log('complete');
 					}
 				});
 			}
@@ -783,18 +754,12 @@ HTML;
 			var td_select_report = $(this).parent().siblings(".td_select_report");
 			
 			if(model && id && !state){
+				//Генерируем форму редактирования
 				$this.parents("tr").addClass("tr_form_actived");
+				var this_row_html = $this.parents("tr").html();
+				$this.parents("tr").attr("old-content",this_row_html);
 				$this.attr("data-state",1);
 				
-				$this.attr("data-old_sum",td_input_payment.text());
-				
-				$this.attr("data-old_sum_course",td_input_payment_course.text());
-				$this.attr("data-old_sum_cash",td_input_sum_cash.text());
-				$this.attr("data-old_sum_card",td_input_sum_card.text());
-
-				$this.attr("data-old_comment",td_input_comment.text());
-				
-			
 				var input_sum = "<input type='text' name='"+model+"["+id+"][sum]' value='"+Math.abs(td_input_payment.text())+"' class='form-control'><input type='hidden' name='"+model+"["+id+"][id]' value='"+id+"'>";
 
 				var input_course = "<input type='text' name='"+model+"["+id+"][course]' value='"+Math.abs(td_input_payment_course.text())+"' class='form-control'><input type='hidden' name='"+model+"["+id+"][id]' value='"+id+"'>";
@@ -806,8 +771,6 @@ HTML;
 
 				//Редакт. орг если это оплата
 				if(parseInt(td_select_org.attr("data-exist_org"))){
-
-					$this.attr("data-old_org",td_select_org.text());
 
 					var	ntd_org = '<select name="'+model+'['+id+'][organisation]" class=\'form-control\'>';
 					ntd_org +='<option value="">Выберите организацию</option>';
@@ -822,8 +785,7 @@ HTML;
 
 				if(parseInt(td_select_report.attr("data-report-val"))){
 
-					$this.attr("data-old-report-val",td_select_report.text());
-
+					
 					var	ntd_report = '<select name="'+model+'['+id+'][toreport]" class=\'form-control\'>';
 						ntd_report += "<option value='1'>Сумма $</option>";
 						ntd_report += "<option value='2'>Наличные(руб.)</option>";
@@ -839,9 +801,10 @@ HTML;
 
 				//Редакт дату если это оплата
 				if(parseInt(td_input_date.attr("data-update"))){
-					$this.attr("data-old_date",td_input_date.text());
-
-					var input_date = '<input type="date" class="form-control" name="'+model+'['+id+'][date]" value="'+td_input_date.text().trim()+'">';
+					
+					var old_date_formatted_value = td_input_date.attr("data-date_formatted");
+					
+					var input_date = '<input type="date" class="form-control" name="'+model+'['+id+'][date]" value="'+old_date_formatted_value+'">';
 
 					td_input_date.html(input_date);
 				}
@@ -854,42 +817,16 @@ HTML;
 
 				td_input_comment.html(input_com);
 				
-				//if(td_select_report.find("select").length){
-				    //display_pay_input(td_select_report.find("select"));
-				//}
-				
-				$this.find("i").removeClass("glyphicon-pencil");
-				$this.find("i").addClass("glyphicon-resize-small");
+				$this.find("i.material-icons").html("close");
 				$("#submit_addPaymentsManager").show();
 			}else{
+				//Отмена редактирования
 				$this.parents("tr").removeClass("tr_form_actived");
-				
-				var old_sum = $this.attr("data-old_sum");
-				var old_sum_course = $this.attr("data-old_sum_course");
-				var old_sum_cash = $this.attr("data-old_sum_cash");
-				var old_sum_card = $this.attr("data-old_sum_card");
-				
-				var old_com = $this.attr("data-old_comment");
-				var old_org = $this.attr("data-old_org");
-				var old_report = $this.attr("data-old-report-val");
-				var old_date = $this.attr("data-old_date");
 				$this.attr("data-state",0);
+				var old_content_html = $this.parents("tr").attr("old-content");
+				$this.parents("tr").html(old_content_html);
 
-				td_input_payment.html(old_sum);
-				td_input_sum_card.html(old_sum_card);
-				
-				td_input_payment_course.html(old_sum_course);
-				
-				td_input_sum_cash.html(old_sum_cash);
-
-				td_input_comment.html(old_com);
-
-				td_select_report.html(old_report);
-				td_select_org.html(old_org);
-				td_input_date.html(old_date);
-
-				$this.find("i").addClass("glyphicon-pencil");
-				$this.find("i").removeClass("glyphicon-resize-small");
+				$this.find("i.material-icons").html("edit");
 				if(!$(".tr_form_actived").length && !$(".new_row").length){
 					$("#submit_addPaymentsManager").hide();
 				}

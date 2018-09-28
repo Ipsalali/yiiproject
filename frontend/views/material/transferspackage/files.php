@@ -37,7 +37,7 @@ use yii\bootstrap\ActiveForm;
 									echo Html::a($file,['transferspackage/download','id'=>$model->id,'file'=>$file],['target'=>'_blank']);
 								?>
 								<span>
-								<?php echo Html::a("X",['transferspackage/unlinkfile','id'=>$model->id,'file'=>$file],['data-confirm'=>'Подтвердите удаление файла']);
+								<?php echo Html::a("<i class=\"material-icons\">close</i>",['transferspackage/unlinkfile','id'=>$model->id,'file'=>$file],['data-confirm'=>'Подтвердите удаление файла','class'=>'btn btn-danger btn-radius btn-sm']);
 								?>
 								</span>
 							</li>

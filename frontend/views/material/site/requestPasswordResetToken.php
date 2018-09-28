@@ -10,7 +10,7 @@ use yii\bootstrap\ActiveForm;
 $this->title = 'Запрос на восстановление пароля';
 ?>
 <div class="row">
-    <div class="col-md-6 offset-md-3 align-self-center">
+    <div class="col-md-8 offset-md-2 align-self-center">
         <div class="login-card card card-default">
             <div class="card-header">
                 <h1 class="card-title"><?php echo Html::encode($this->title) ?></h1>

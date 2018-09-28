@@ -34,6 +34,7 @@ class DbManager extends yDbManager{
             return false;
         }
 
+        $permissionName = strtolower($permissionName);
         $this->loadFromCache();
         if ($this->items !== null) {
             return $this->checkAccessFromCache($userId, $permissionName, $params, $assignments);

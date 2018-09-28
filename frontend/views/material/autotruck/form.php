@@ -13,11 +13,14 @@ use common\models\TypePackaging;
 use common\models\Client;
 
 $roleexpenses = 'autotruck/addexpenses';
+
 $user = \Yii::$app->user->identity;
-$userIsClientExtended = \Yii::$app->user->can("clientExtended");
+$userIsClientExtended = Yii::$app->user->can("clientExtended");
+$canReadAutotruck = Yii::$app->user->can("autotruck/read");
 
 $list_status = Status::find()->orderBy(['sort'=>SORT_ASC])->all();
 $countries = $userIsClientExtended ? SupplierCountry::find()->all() : $user->countries;
+
 
 $packages = TypePackaging::find()->all();
 $senders = Sender::find()->orderBy(['name'=>'DESC'])->all();
@@ -29,10 +32,13 @@ $newModel = !isset($autotruck->id);
 
 $this->title = $newModel ? "Новая заявка" : "Заявка:".$autotruck->name;
 
-$this->params['breadcrumbs'][] = ['label'=>"Список заявок",'url'=>Url::to(['autotruck/index'])];
-if(isset($autotruck->id)){
-	$this->params['breadcrumbs'][] = ['label'=>$autotruck->name,'url'=>Url::to(['autotruck/read','id'=>$autotruck->id])];
+if($canReadAutotruck){
+	$this->params['breadcrumbs'][] = ['label'=>"Список заявок",'url'=>Url::to(['autotruck/index'])];
+	if(isset($autotruck->id)){
+		$this->params['breadcrumbs'][] = ['label'=>$autotruck->name,'url'=>Url::to(['autotruck/read','id'=>$autotruck->id])];
+	}
 }
+
 $this->params['breadcrumbs'][]=$this->title;
 ?>
 
@@ -51,7 +57,7 @@ $this->params['breadcrumbs'][]=$this->title;
 				  			<div class="col">
 				  				<?php echo Html::submitButton('Сохранить заявку',['id'=>'submit_update','class' => 'btn btn-primary float-right', 'name' => 'autotruck-update-button']); ?>
 					  			<?php 
-					  				if($autotruck->id){
+					  				if($canReadAutotruck && $autotruck->id){
 					  					echo Html::a('Отменить редактирование', array('autotruck/read','id' => $autotruck->id), array('class' => 'btn btn-error float-right'));
 					  					echo Html::hiddenInput("autotruck_id",$autotruck->id);
 					  				}  

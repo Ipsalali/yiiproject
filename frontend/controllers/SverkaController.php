@@ -74,6 +74,8 @@ class SverkaController extends Controller
         ];
     }
 
+
+
     /**
      * @inheritdoc
      */
@@ -128,8 +130,8 @@ class SverkaController extends Controller
 
 
         }else{
-            $data_params['date_from'] = date("d.m.Y",time() - (86400 * 61));
-            $data_params['date_to'] = date("d.m.Y",time());
+            $data_params['date_from'] = date("Y-m-d",time() - (86400 * 61));
+            $data_params['date_to'] = date("Y-m-d",time());
         }
 
         $orgs = Organisation::find()->all();
@@ -346,18 +348,19 @@ class SverkaController extends Controller
 
     public function actionRemovepayajax(){
         if(Yii::$app->request->isAjax){
-
-            $post = Yii::$app->request->post();
+            Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+            
+            $params = Yii::$app->request->post();
 
             $answer = array();
 
-            if($post['id']){
+            if($params['id']){
             
-                $id = (int)$post['id'];
+                $id = (int)$params['id'];
 
                 $exp = PaymentsExpenses::findOne($id);
                 if($exp){
-                    $answer['result'] = (int)$post['id'];
+                    $answer['result'] = (int)$params['id'];
                     
                     //Опасно удалять
                     $exp->delete();
@@ -374,9 +377,11 @@ class SverkaController extends Controller
                 $answer['result'] = 0;
             }
         
-            \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+            
             
             return $answer;
+        }else{
+            return $this->redirect(['sverka/index']);
         }
     }
 

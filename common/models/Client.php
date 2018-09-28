@@ -57,7 +57,8 @@ class Client extends ActiveRecordVersionable
                 }
             }],
             [['payment_clearing'],'double'],
-            [['organisation_pay_id','payment_clearing','user_id','manager','organisation_pay_id','client_category_id'],'default','value'=>0]
+            [['organisation_pay_id','user_id','manager','client_category_id'],'default','value'=>null],
+            [['payment_clearing'],'default','value'=>0]
         ];
 	}
 

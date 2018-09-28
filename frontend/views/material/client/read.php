@@ -42,51 +42,51 @@ $autotruckCountries = SupplierCountry::getIndexedArray();
 			</div>
 			<div class="card-body">
 				<div class="row">
-			 		<div class="col-7">
+			 		<div class="col-12">
 			 			<div class="row">
 							<div class="col-6">
-								<h4>Название</h4>
+								<h4><strong>Название:</strong></h4>
 								<p>
 									<?php echo Html::encode($client->full_name); ?>
 								</p>
 							</div>
 							<div class="col-3">
-								<h4>Email</h4>
+								<h4><strong>Email:</strong></h4>
 								<p><?php echo Html::encode(isset($clientUser->email) && $clientUser->email ? $clientUser->email :"E-mail не указан"); ?></p>
 							</div>
 							<div class="col-3">
-								<h4>Телефон</h4>
+								<h4><strong>Телефон:</strong></h4>
 								<p><?php echo Html::encode(($client->phone)?$client->phone:"Телефон не указан"); ?></p>
 							</div>
 						</div>
 						<div class="row">
-							<div class="col-4">
-								<h4>Ответственный:</h4>
+							<div class="col-6">
+								<h4><strong>Ответственный:</strong></h4>
 								<p><?php echo Html::encode(($clientManager)? $clientManager->name: "Не закреплен к менеджеру."); ?></p>
 							</div>
-							<div class="col-4">
-								<h4>Договор:</h4>
+							<div class="col-3">
+								<h4><strong>Договор:</strong></h4>
 								<p><?php echo Html::encode($client->contract_number); ?></p>
 							</div>
-							<div class="col-4">
-								<h4>Оплата по безналу:</h4>
+							<div class="col-3">
+								<h4><strong>Оплата по безналу:</strong></h4>
 								<p><?php echo Html::encode($client->payment_clearing); ?> %</p>
 							</div>
 						</div>
 						<div class="row">
-							<div class="col-8">
-								<h4>Описание:</h4>
+							<div class="col-6">
+								<h4><strong>Описание:</strong></h4>
 								<p><?php echo Html::encode(($client->description)?$client->description:"Нет описания"); ?></p>
 							</div>
-							<div class="col-4">
-								<h4>Организация:</h4>
+							<div class="col-3">
+								<h4><strong>Организация:</strong></h4>
 								<p><?php echo Html::encode(($client->organisation_pay_id) ? $client->organisation->org_name:"Не привязан."); ?></p>
 							</div>
 						</div>
 
 						<div class="row">
 							<div class="col">
-								<p>Задолженность: <?php echo $client->user->getManagerSverka();?> $</p>
+								<p><strong>Задолженность:</strong> <?php echo $client->user->getManagerSverka();?> $</p>
 							</div>
 						</div>
 					</div>
