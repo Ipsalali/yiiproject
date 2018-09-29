@@ -202,7 +202,7 @@ class SiteController extends Controller
         $model = new PasswordResetRequestForm();
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             if ($model->sendEmail()) {
-                Yii::$app->session->setFlash('success', 'Ссылка для восстановления пароля отправлена на ваш электронный адрес. Не забудьте проверить папку "спам".');
+                Yii::$app->session->setFlash('success', 'Ссылка для восстановления пароля отправлена на ваш электронный адрес. Не забудьте проверить папку \"спам\".');
 
                 return $this->goHome();
             } else {
