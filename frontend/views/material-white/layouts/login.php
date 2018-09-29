@@ -5,12 +5,12 @@ use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use frontend\assets\AppAsset;
-use frontend\assets\MaterialAsset;
+use frontend\assets\MaterialWhiteAsset;
 use common\widgets\Alert;
 use yii\filters\AccessControl;
 
 
-MaterialAsset::register($this);
+MaterialWhiteAsset::register($this);
 ?>
 <?php $this->beginPage(); ?>
 <!DOCTYPE html>
