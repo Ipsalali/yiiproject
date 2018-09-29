@@ -13,11 +13,11 @@ class m180919_140145_big_data extends Migration
         'autotruck_notification',
     ];
 
-    public $file_frefix = 'webali_tcrm_table_';
+    public $file_frefix = 'webali_crmted_table_';
 
     public function safeUp()
     {   
-        //return true;
+        return true;
         if($this->tables && is_array($this->tables)){
             try {
                 foreach ($this->tables as $table) {
@@ -35,7 +35,7 @@ class m180919_140145_big_data extends Migration
      */
     public function safeDown()
     {
-        //return true;
+        return true;
         if($this->tables && is_array($this->tables)){
             $tables = array_reverse($this->tables);
             foreach ($tables as $table) {

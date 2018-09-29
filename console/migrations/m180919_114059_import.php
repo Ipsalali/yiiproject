@@ -44,9 +44,12 @@ class m180919_114059_import extends Migration
         'payment_client_by_transfer_history',
         'auth_assignment',
         'auth_item_child',
+        'app',
+        'app_history',
+        'autotruck_notification'
     ];
 
-    public $file_frefix = 'webali_tcrm_table_';
+    public $file_frefix = 'webali_crmted_table_';
 
     public function safeUp()
     {   
