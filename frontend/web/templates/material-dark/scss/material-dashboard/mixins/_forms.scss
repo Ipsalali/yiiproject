@@ -62,6 +62,7 @@
   }
 }
 
+ 
 
 @mixin bmd-form-color($label-color, $label-color-focus, $border-color, $line-color) {
   [class^='bmd-label'],
@@ -79,7 +80,7 @@
       ),
       linear-gradient(
         to top,
-        $line-color 1px,
+        #fff 1px,
         fade-out($line-color, 1) 1px
       );
     $underline-background-image-invalid: linear-gradient(
@@ -239,7 +240,7 @@
   .form-control,
   label,
   input::placeholder {
-    line-height: $variant-line-height + 0.1;
+    line-height: $variant-line-height + 0.4;
   }
 
   label{
