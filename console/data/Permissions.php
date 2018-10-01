@@ -36,6 +36,7 @@ class Permissions{
 			'sverka/removepayajax'=> 'Удаление оплаты из сверки по доставкам',
 			'sverka/save-client-payment-transfer'=> 'Добавление оплаты в сверке по переводам',
 			'transferspackage'=> 'Раздел переводы',
+			'import/index'=>'Раздел импорта'
 		);
 	}
 }
