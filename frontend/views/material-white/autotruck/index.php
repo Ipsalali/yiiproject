@@ -18,6 +18,12 @@ $user = \Yii::$app->user->identity;
 
 $this->title = "Список заявок";
 $this->params['breadcrumbs'][]=$this->title;
+
+$statuses = Status::find()->asArray()->all();
+$statusesIndexed = ArrayHelper::map($statuses,'id','title');
+$countries = $user->countries;
+$countriesIndexed = ArrayHelper::map($countries,'id','country');
+$PaymentStateFilter = PaymentStateFilter::getFilters();
 ?>
 
 <div class="card">
@@ -79,19 +85,22 @@ $this->params['breadcrumbs'][]=$this->title;
 							'contentOptions'=>['class'=>'td_cweigh'],
 							'headerOptions'=>['class'=>'th_date']
 		            	],
-						
 						[
 							'attribute'=>"status",
-							'value'=>'activeStatus.title',
-							'filter'=>Html::activeDropDownList($autotruckSearch,'status',ArrayHelper::map(Status::find()->asArray()->all(),'id','title'),['class'=>'form-control','prompt'=>'Выберите статус'])
+							'value'=>function($m) use($statusesIndexed){
+								return array_key_exists($m->status,$statusesIndexed) ? $statusesIndexed[$m->status] : "Не найден";
+							},
+							'filter'=>Html::activeDropDownList($autotruckSearch,'status',ArrayHelper::map($statuses,'id','title'),['class'=>'form-control','prompt'=>'Выберите статус'])
 						    ,
 							'contentOptions'=>['class'=>'td_status'],
 							'headerOptions'=>['class'=>'th_status']
 						],
 						[
 							'attribute'=>'country',
-							'value'=>'supplierCountry.country',
-							'filter'=>Html::activeDropDownList($autotruckSearch,'country',ArrayHelper::map($user->countries,'id','country'),['class'=>'form-control','prompt'=>'Выберите cтрану'])
+							'value'=>function($m)use($countriesIndexed){
+								return array_key_exists($m->country,$countriesIndexed) ? $countriesIndexed[$m->country] : "Не найден";
+							},
+							'filter'=>Html::activeDropDownList($autotruckSearch,'country',ArrayHelper::map($countries,'id','country'),['class'=>'form-control','prompt'=>'Выберите cтрану'])
 						    ,
 						    'contentOptions'=>['class'=>'td_country'],
 							'headerOptions'=>['class'=>'th_country']
@@ -102,7 +111,7 @@ $this->params['breadcrumbs'][]=$this->title;
 			                    return null;
 			                },
 			                'format'=>'raw',
-			                'filter'=>Html::activeDropDownList($autotruckSearch,'implements_state',Arrayhelper::map(PaymentStateFilter::getFilters(),'id','title'),['class'=>'form-control','prompt'=>'Статус платежа']),
+			                'filter'=>Html::activeDropDownList($autotruckSearch,'implements_state',Arrayhelper::map($PaymentStateFilter,'id','title'),['class'=>'form-control','prompt'=>'Статус платежа']),
 			                
 							'contentOptions'=>['class'=>'td_implements_state'],
 							'headerOptions'=>['class'=>'th_implements_state']

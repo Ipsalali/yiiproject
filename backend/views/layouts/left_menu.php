@@ -76,12 +76,6 @@ use yii\helpers\{Html,Url};
                                         <?php echo Yii::t('site', 'Страны поставок')?>
                                     </a>  
                                 </li>
-
-                                <li>
-                                    <a href="<?php echo Url::to(['/paymentstate/index'])?>"><i class="fa fa-table fa-fw"></i> 
-                                        <?php echo Yii::t('site', 'Статус оплаты')?>
-                                    </a>  
-                                </li>
                                 <li>
                                     <a href="<?php echo Url::to(['/typepackaging/index'])?>"><i class="fa fa-table fa-fw"></i> 
                                         <?php echo Yii::t('site', 'Тип упаковки')?>
