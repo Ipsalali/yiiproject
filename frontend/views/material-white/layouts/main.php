@@ -19,7 +19,6 @@ MaterialWhiteAsset::register($this);
     <link rel="apple-touch-icon" sizes="76x76" href="templates/material-white/img/apple-icon.png">
     <link rel="icon" type="image/png" href="templates/material-white/img/favicon.png">
     <meta charset="<?php echo Yii::$app->charset; ?>">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
     <?php echo Html::csrfMetaTags(); ?>
     <title><?php echo Html::encode($this->title); ?></title>
     <?php $this->head(); ?>
