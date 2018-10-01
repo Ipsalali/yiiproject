@@ -82,7 +82,7 @@ JS;
                     align:"right"
                   }
                 });
-            }
+            };
 JS;
     }
 
