@@ -26,6 +26,9 @@ $this->params['breadcrumbs'][] = ['label'=>"Список заявок",'url'=>Ur
 $this->params['breadcrumbs'][] = $this->title;
 
 $packages = TypePackaging::find()->all();
+$packagesIndexed = ArrayHelper::map($packages,'id','title');
+
+$appCountPlace = $autotruck->appCountPlace;
 ?>
 <?php if($autotruck){?>
 <div class="row">
@@ -94,7 +97,7 @@ $packages = TypePackaging::find()->all();
 							?>
 						</div>
 						<div>
-							<p>Итого кол-во мест: <?php echo $autotruck->appCountPlace?></p>
+							<p>Итого кол-во мест: <?php echo $appCountPlace;?></p>
 							<?php
 								if(is_array($packages)){
 									foreach ($packages as $key => $package) {
@@ -147,7 +150,7 @@ $packages = TypePackaging::find()->all();
 										<tr>
 											<th>№   
 												<?php 
-															$autotruckApps = $autotruck->getApps();
+															$autotruckApps = $autotruck->getAppsArray();
 															$c = ($autotruck->getCountOutStockApp() == count($autotruckApps)) ? 1 : 0;
 
 															echo Html::checkbox('out_stock_all',$c,['id'=>'out_stock_all','value'=>$autotruck->id]);
@@ -173,37 +176,37 @@ $packages = TypePackaging::find()->all();
 													<td>
 													<?php echo $key+1?>
 													<?php 
-														echo Html::checkbox('out_stock[]',$app->out_stock,['value'=>$app->id,'class'=>'out_stock_item']);
+														echo Html::checkbox('out_stock[]',$app['out_stock'],['value'=>$app['id'],'class'=>'out_stock_item']);
 													?>
 													</td>
 													<td>
 													<?php 
-														echo $app->client ? Html::a($app->buyer->name,['client/read','id'=>$app->client],array('target'=>'_blank')) : "";
+														echo $app['client'] ? Html::a($app['client_name'],['client/read','id'=>$app['client']],array('target'=>'_blank')) : "";
 													?>		
 													</td>
 													
 													<?php 
-														if(!$app->type){
+														if(!$app['type']){
 														?>
 															<td>
-																<?php echo $app->sender 
-																			? $app->senderObject->name 
+																<?php echo $app['sender'] 
+																			? $app['sender_name'] 
 																			: "Не указан"; 
 																?>
 															</td>
-														    <td><?php echo $app->info?></td>
-															<td><?php echo $app->count_place ?></td>
+														    <td><?php echo $app['info']?></td>
+															<td><?php echo $app['count_place'] ?></td>
 														
 															<td>
 																<?php 
-																	echo $app->package ? $app->typePackaging->title : "Не указан"; 
+																	echo $app['package'] && array_key_exists($app['package'], $packagesIndexed) ? $packagesIndexed[$app['package']] : "Не указан"; 
 																?>		
 															</td>
 														<?php	
 														}else{
 															?>
 															<td></td>
-															<td><?php echo $app->info?></td>
+															<td><?php echo $app['info']?></td>
 															<td colspan="2"></td>
 															<?php
 														}
@@ -211,33 +214,33 @@ $packages = TypePackaging::find()->all();
 													
 													
 													
-													<td><?php echo $app->type ? '': $app->weight?></td>
-													<td><?php echo $app->rate?></td>
-													<td><?php echo $app->summa_us; ?> $</td>
+													<td><?php echo $app['type'] ? '': $app['weight']?></td>
+													<td><?php echo $app['rate']?></td>
+													<td><?php echo $app['summa_us']; ?> $</td>
 													<td>
 														<?php 
-															$rate_vl = $app->weight > 0 ? $app->summa_us/$app->weight : 0;
-															$sum_ru = $app->weight * $rate_vl * $autotruck->course;
+															$rate_vl = $app['weight'] > 0 ? $app['summa_us']/$app['weight'] : 0;
+															$sum_ru = $app['weight'] * $rate_vl * $autotruck->course;
 
-															echo $app->type ? round($app->rate*$autotruck->course,2) : round($sum_ru,2);
+															echo $app['type'] ? round($app['rate']*$autotruck->course,2) : round($sum_ru,2);
 														?> 
 
 														руб
 													</td>
 													
-													<td><?php echo $app->comment?></td>
-													<td style="text-align: center;"><?php echo Html::a("Журнал",['autotruck/app-story','id'=>$app->id],['class'=>'btnAppStory'])?></td>
+													<td><?php echo $app['comment']?></td>
+													<td style="text-align: center;"><?php echo Html::a("Журнал",['autotruck/app-story','id'=>$app['id']],['class'=>'btnAppStory'])?></td>
 												</tr>
 										<?php 
-											$cweight += $app->type ? 0 : $app->weight; 
+											$cweight += $app['type'] ? 0 : $app['weight']; 
 
-											$total+= $app->type? round($app->rate*$autotruck->course,2) : round($app->summa_us*$autotruck->course,2);
+											$total+= $app['type']? round($app['rate']*$autotruck->course,2) : round($app['summa_us']*$autotruck->course,2);
 
-											$total_us+=$app->summa_us;
+											$total_us+=$app['summa_us'];
 										 }?>
 											<tr>
 												<td colspan="4"><strong>Итого</strong></td>
-												<td colspan="2"><strong><?php echo $autotruck->appCountPlace?></strong></td>
+												<td colspan="2"><strong><?php echo $appCountPlace?></strong></td>
 												<td><strong><?php echo round($cweight,2);?> кг.</strong></td>
 												<td></td>
 												<td><strong><?php echo round($total_us,2);?> $</strong></td>

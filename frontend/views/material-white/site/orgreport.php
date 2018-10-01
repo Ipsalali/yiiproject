@@ -22,6 +22,9 @@ $managersAutocompleteByFullName = array_map(function($a){
 	return ['value'=>$fn,'label'=>$fn];
 }, $managers);
 
+
+$organisations = Organisation::find()->all();
+$organisationsIndexed = ArrayHelper::map($organisations,'id','org_name');
 ?>
 <div class="card">
 	<div class="card-header card-header-primary">
@@ -66,10 +69,10 @@ $managersAutocompleteByFullName = array_map(function($a){
 			[
 				'attribute'=>'organisation',
 				'format'=>'raw',
-				'value'=>function($m){
-					return $m->organisation ? $m->org->org_name : "Не указан";
+				'value'=>function($m) use($organisationsIndexed){
+					return $m->organisation && array_key_exists($m->organisation, $organisationsIndexed)? $organisationsIndexed[$m->organisation] : "Не указан";
 				},
-				'filter'=>Html::activeDropDownList($PaymentsExpensesReport,'organisation',ArrayHelper::map(Organisation::find()->all(),'id','org_name'),['class'=>'form-control','prompt'=>'Выберите организацию'])
+				'filter'=>Html::activeDropDownList($PaymentsExpensesReport,'organisation',$organisationsIndexed,['class'=>'form-control','prompt'=>'Выберите организацию'])
 			],
 			[
     			'attribute'=>'sum_search',

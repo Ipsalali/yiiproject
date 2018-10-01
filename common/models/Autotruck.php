@@ -9,6 +9,7 @@ use yii\db\Query;
 
 use common\models\Status;
 use common\models\Client;
+use common\models\Sender;
 use common\models\User;
 use common\models\SupplierCountry;
 use common\base\ActiveRecordVersionable;
@@ -195,6 +196,20 @@ class Autotruck extends ActiveRecordVersionable
         if(!$this->id) return array();
 
         return App::find()->where('autotruck_id='.$this->id)->andWhere(['isDeleted'=>0])->all();
+    }
+
+
+    public function getAppsArray(){
+        if(!$this->id) return array();
+
+        return (new Query)->
+                            select(['a.*','cl.name as client_name','s.name as sender_name'])->
+                            from(['a'=>App::tableName()])->
+                            leftJoin(['cl'=>Client::tableName()],' cl.id = a.client')->
+                            leftJoin(['s'=>Sender::tableName()],' s.id = a.sender')->
+                            where('autotruck_id='.$this->id)->
+                            andWhere(['a.isDeleted'=>0])->
+                            all();
     }
 
 
