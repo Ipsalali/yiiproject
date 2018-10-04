@@ -101,7 +101,6 @@ use yii\helpers\{Html,Url};
                             </li>
                         <?php } ?>
                     <?php } ?>
-                        
                     </ul>
                 </div>
             </div>

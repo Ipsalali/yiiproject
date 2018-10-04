@@ -3,6 +3,9 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\bootstrap\ActiveForm;
+use moonland\phpexcel\Excel;
+
+
 
 $this->title = "Импорт";
 ?>
@@ -19,6 +22,29 @@ $this->title = "Импорт";
   						<h3>Заявки из Excel</h3>
   					</div>
   				</div>
+          <div class="row">
+            <div class="col-xs-4">
+              <?php $form =  ActiveForm::begin(['id'=>'formAutotruckImport']);?>
+              <?php echo $form->field($autotruckImport,'file')->fileInput();?>
+              <?php echo Html::submitInput("Загрузить");?>
+              <?php ActiveForm::end();?>
+            </div>
+          </div>
+          <?php if(isset($autotruckImport->id)){ ?>
+            <div class="row">
+              <div class="col-xs-12">
+                <?php if(!$autotruckImport->fileBinary){ ?>
+                    <h3>Файл отсутствует</h3>
+                  
+                  <?php }else{ 
+
+                    $autotruckImport->FileConvertArray();
+                  ?>
+
+                <?php } ?>
+              </div>
+            </div>
+          <?php } ?>
   			</div>
 
 
