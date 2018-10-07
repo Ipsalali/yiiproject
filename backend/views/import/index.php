@@ -7,6 +7,7 @@ use yii\bootstrap\ActiveForm;
 use moonland\phpexcel\Excel;
 use common\models\SupplierCountry;
 use common\models\Status;
+use common\models\Sender;
 
 $countries = SupplierCountry::find()->all();
 $countriesIndexed = ArrayHelper::map($countries,'id','country');
