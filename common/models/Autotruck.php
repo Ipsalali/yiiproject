@@ -59,7 +59,7 @@ class Autotruck extends ActiveRecordVersionable
 	public function rules(){
 		return [
             // name, email, subject and body are required
-            [['name'], 'required','message'=>'Обязательное поле'],
+            [['name','country'], 'required','message'=>'Обязательное поле'],
             [['name','invoice','decor','gtd','auto_name','auto_number','description'],'filter','filter'=>function($v){
                 return trim(strip_tags($v));
             }],
@@ -71,7 +71,8 @@ class Autotruck extends ActiveRecordVersionable
                 return $v ? date('Y-m-d',strtotime($v)):date("Y-m-d");
             }],
             [['status','country'],'integer'],
-            [['status','country'],'default','value'=>null],
+            [['status','country','import_source'],'default','value'=>null],
+            ['imported','default','value'=>0],
             [['file'], 'file', 'skipOnEmpty' => true,'checkExtensionByMimeType'=>false, 'extensions' => 'xls,xlsx,doc,docx,pdf,jpeg,jpg,png','maxFiles'=>20],
             ['creator','default','value'=>\Yii::$app->user->identity->id,'on'=>self::SCENARIO_CREATE]
         ];

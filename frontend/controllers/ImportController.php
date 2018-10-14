@@ -1,15 +1,13 @@
 <?php
-namespace backend\controllers;
+namespace frontend\controllers;
 
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\UploadedFile;
 use yii\filters\VerbFilter;
-
-use backend\modules\UserSearch;
-use backend\models\{Autotruck};
-
+use yii\web\HttpException;
+use common\models\{Autotruck};
 use common\models\User;
 use common\models\AutotruckImport;
 
@@ -27,9 +25,9 @@ class ImportController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['index','save-autotruck'],
+                        'actions' => ['index','open','save-autotruck'],
                         'allow' => true,
-                        'roles' => ['@'],
+                        'roles' => ['import/index'],
                     ]
                 ],
             ],
@@ -89,7 +87,7 @@ class ImportController extends Controller
 
             if($autotruckImport->load($post) && $autotruckImport->save()){
                 Yii::$app->session->setFlash("success",'Файл загружен');
-                return $this->redirect(['import/index','id'=>$autotruckImport->id]);
+                return $this->redirect(['import/open','id'=>$autotruckImport->id]);
             }else{
                 foreach ($autotruckImport->getErrors() as $attribute => $errors) {
                     $msg = is_array($errors) ? implode("\n", $errors) : $errors;
@@ -100,6 +98,25 @@ class ImportController extends Controller
 
         return $this->render('index',['autotruckImport'=>$autotruckImport]);
     }
+
+
+
+
+
+
+    public function actionOpen($id = null)
+    {   
+        if(!$id)
+            throw new HttpException(404,"Файл импорта не найден!");
+        
+        $autotruckImport =  AutotruckImport::findOne($id);
+        if(!isset($autotruckImport->id))
+            throw new HttpException(404,"Файл импорта не найден!");
+        
+
+        return $this->render('open',['autotruckImport'=>$autotruckImport]);
+    }
+
 
 
 
@@ -138,7 +155,7 @@ class ImportController extends Controller
                         $autotruck->imported = 1;
                         $autotruck->save();
                     }elseif(is_array($res) && count($res)){
-                        Yii::$app->session->setFlash("danger",'Наименования не сохранены, не правильный формат данных!');
+                        Yii::$app->session->setFlash("error",'Наименования не сохранены, не правильный формат данных!');
                         return $this->render('importErrors',['errorApps'=>$res,'autotruck'=>$autotruck]);
                     }elseif($res === 2){
                         Yii::$app->session->setFlash("warning",'Не удалось добавить наименования, при добавлении некоторых наименований и услуг, произошла ошибка!');
@@ -151,7 +168,7 @@ class ImportController extends Controller
             }
             
             
-            return $this->redirect(['import/index','id'=>(int)$post['Autotruck']['import_source']]); 
+            return $this->redirect(['import/open','id'=>(int)$post['Autotruck']['import_source']]); 
             
         }else{
             

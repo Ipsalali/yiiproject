@@ -23,7 +23,7 @@ class m130524_201453_autotruck extends Migration
               `number` int(11) NOT NULL,
               `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
               `description` text NOT NULL,
-              `status` int(11) NOT NULL,
+              `status` int(11) DEFAULT NULL,
               `course` double NOT NULL DEFAULT '0',
               `country` int(11) DEFAULT NULL,
               `file` text,
@@ -32,6 +32,8 @@ class m130524_201453_autotruck extends Migration
               `gtd` varchar(255) NOT NULL,
               `decor` varchar(255) NOT NULL DEFAULT '',
               `creator` int(11) NULL,
+              `imported` tinyint(1) NOT NULL DEFAULT 0,
+              `import_source` int(11) DEFAULT NULL,
               PRIMARY KEY (`id`),
 
               CONSTRAINT `fk-autotruck-status` FOREIGN KEY (`status`) REFERENCES {$this->app_status} (`id`) ON DELETE CASCADE ON UPDATE CASCADE,

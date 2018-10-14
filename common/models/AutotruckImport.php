@@ -3,6 +3,7 @@
 namespace common\models;
 
 use yii\db\ActiveRecord;
+use yii\db\Query;
 use common\helper\ExcelAutotruckParser;
 
 class AutotruckImport extends ActiveRecord{
@@ -54,6 +55,11 @@ class AutotruckImport extends ActiveRecord{
     	if(!$this->fileBinary) return [];
 
     	return ExcelAutotruckParser::parse($this);
+    }
 
+
+
+    public static function getAllWithOutFile(){
+    	return (new Query())->select(['id','name'])->from(self::tableName())->where(['isDeleted'=>0])->orderBy(['created_at'=>SORT_DESC])->all();
     }
 }

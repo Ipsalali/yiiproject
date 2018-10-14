@@ -251,6 +251,10 @@ class SiteController extends Controller
 
 
 
+
+
+
+
     public function actionSearch(){
 
 
@@ -258,9 +262,8 @@ class SiteController extends Controller
             Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
             $get = Yii::$app->request->get();
 
-            $answer = array();
-
-            if($get['keywords']){
+            
+            if(isset($get['keywords'])){
 
                 $keywords = trim(strip_tags($get['keywords']));
                 
@@ -299,6 +302,14 @@ class SiteController extends Controller
     }
 
 
+
+
+
+
+
+
+
+
     
 
     public function actionExpensesPeopleByKey(){
@@ -315,6 +326,14 @@ class SiteController extends Controller
         }
         return ['result'=>1,'managers'=>$expM];
     }
+
+
+
+
+
+
+
+
 
 
     public function actionAddpaymentsmanager(){

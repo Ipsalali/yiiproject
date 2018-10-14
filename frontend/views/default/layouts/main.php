@@ -79,6 +79,9 @@ AppAsset::register($this);
             if(Yii::$app->user->can("sellers"))
                 $menuItems[] = ['label' => 'Поставщики', 'url' => ['/sellers/index']];
 
+            if(Yii::$app->user->can("import/index"))
+                $menuItems[] = ['label' => 'Импорт', 'url' => ['/import/index']];
+
 
             
         }elseif(Yii::$app->user->identity->role->name == "client"){

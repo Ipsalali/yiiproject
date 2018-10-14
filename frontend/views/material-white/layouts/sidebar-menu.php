@@ -116,6 +116,16 @@ $active_route = $this->context->route;
                     </a>
                 </li>
             <?php } ?>
+
+            <?php  if(Yii::$app->user->can("import/index")){ ?>
+              <li class="nav-item <?php echo $active_route == 'import/index' ? 'active' : '';?>">
+                  <a class="nav-link" href="<?php echo Url::to(['/import/index']);?>">
+                    <i class="material-icons">dashboard</i>
+                    <p>Импорт</p>
+                  </a>
+              </li>
+            <?php } ?>
+            
           <?php }elseif(Yii::$app->user->identity->role->name == "client"){ ?>
             <li class="nav-item  <?php echo $active_route == 'client/profile' ? 'active' : '';?>">
                 <a class="nav-link" href="<?php echo Url::to(['/client/profile']);?>">

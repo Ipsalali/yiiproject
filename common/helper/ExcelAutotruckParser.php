@@ -14,7 +14,7 @@ class ExcelAutotruckParser{
 
 	public static function parse(AutotruckImport $file){
 
-        $fileName = Yii::getAlias("@backend")."/tmp/aut_".$file->id.".".$file->extension;
+        $fileName = Yii::getAlias("@common")."/tmp/aut_".$file->id.".".$file->extension;
         $f = fopen($fileName, "w");
         fwrite($f,$file->fileBinary);
         fclose($f);
@@ -66,7 +66,8 @@ class ExcelAutotruckParser{
 		for ($char="A"; $char <= $highestDataColumn; $char++) {
 			$coord = $char."1";
 			$title = $sheet->getCell($coord)->getValue();
-			
+			$title = trim(strip_tags($title));
+			$title = mb_strtolower($title);
 			if($title == "" || empty($title)){
 				$titlesWithEmpty[] = $title;
 			}else{

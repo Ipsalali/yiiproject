@@ -1,5 +1,4 @@
 <?php
-
 use yii\helpers\Html;
 use common\helper\ArrayHelper;
 use yii\helpers\Url;
@@ -17,61 +16,25 @@ $countriesIndexed = ArrayHelper::map($countries,'id','country');
 $statuses = Status::find()->all();
 $statusesIndexed = ArrayHelper::map($statuses,'id','title');
 
-
 $senders = Sender::find()->all();
 $sendersIndexed = ArrayHelper::map($senders,'id','name');
 
 $sendersNamed = array_map(function($m){return mb_strtolower($m);},$sendersIndexed);
 
-$importedAutotrucks = isset($autotruckImport->id) ? Autotruck::find()->where(['imported'=>1,'import_source'=>$autotruckImport->id])->all() : [];
+$importedAutotrucks=isset($autotruckImport->id)?Autotruck::find()->where(['imported'=>1,'import_source'=>$autotruckImport->id])->all():[];
 
 $namesAutotrucks = count($importedAutotrucks) ? ArrayHelper::map($importedAutotrucks,'name','id') : [];
 
-
-
-$this->title = "Импорт";
+$this->title = "Импорт ".$autotruckImport->name;
+$this->params['breadcrumbs'][] = ['link'=>['import/index'],'label'=>'Импорт'];
+$this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="row">
-	<div class="col-xs-12">
-		<ul class="nav nav-tabs">
-  			<li class="active"><a data-toggle="tab" href="#excel" aria-expanded="true">Заявки</a></li>
-			<li class=""><a data-toggle="tab" href="#googlesheet" aria-expanded="false">Google таблицы</a></li>
-  		</ul>
-  		<div class="tab-content">
-  			<div id="excel" class="tab-pane fade active in">
-  				<div class="row">
-  					<div class="col-xs-12">
-  						<h3>Заявки из Excel</h3>
-  					</div>
-  				</div>
-          <div class="row">
-            <div class="col-xs-4">
-              <?php $form =  ActiveForm::begin(['id'=>'formAutotruckImport']);?>
-              <?php echo $form->field($autotruckImport,'file')->fileInput();?>
-              <?php echo Html::submitInput("Загрузить");?>
-              <?php ActiveForm::end();?>
-            </div>
-            <?php if(!isset($autotruckImport->id)){?>
-            <div class="col-xs-5">
-              <div class="importStories">
-                <h4>Ранее загруженные файлы для импорта:</h4>
-                <ul>
-                <?php
-                  $imports = AutotruckImport::getAllWithOutFile();
-                  foreach ($imports as $key => $import) {
-                    ?>
-                    <li><?php echo Html::a($import['name'],['import/index','id'=>$import['id']]);?></li>
-                    <?php
-                  }
-                ?>
-                </ul>
-              </div>
-            </div>
-            <?php } ?>
-          </div>
-          <?php if(isset($autotruckImport->id)){ ?>
-            <div class="row">
-              <div class="col-xs-12">
+
+<div class="card">
+	<div class="card-header card-header-primary">
+		<h2><?php echo $this->title;?></h2>
+	</div>
+	<div class="card-body">
                 <?php if(!$autotruckImport->fileBinary){ ?>
                     <h3>Файл отсутствует</h3>
                   
@@ -80,25 +43,30 @@ $this->title = "Импорт";
                     if(is_array($parsedData)){
                       $sheetNames = array_keys($parsedData);
                   ?>
+                  <h3>Листы:</h3>
                   <div class="row">
-                    <div class="col-xs-12">
-                      <ul class="nav nav-tabs">
-                      <?php foreach ($sheetNames as $i => $sheetName) { ?>
-                          <li class="<?php echo $i == 0 ? "active" : "";?>">
-                            <a data-toggle="tab" href="#sheet_<?php echo $i;?>"><?php echo Html::encode($sheetName)?></a>
-                          </li>
-                      <?php } ?>
-                      </ul>
+                    <div class="col-12" style="margin-top: 25px;">
+                      <div class="card-header card-header-primary">
+                        <div class="nav-tabs-navigation">
+                          <ul class="nav nav-tabs" role='tablist'>
+                          <?php foreach ($sheetNames as $i => $sheetName) { ?>
+                              <li class="nav-item">
+                                <a class='nav-link <?php echo $i == 0 ? "active" : "";?>' data-toggle="tab" href="#sheet_<?php echo $i;?>"><?php echo Html::encode($sheetName)?></a>
+                              </li>
+                          <?php } ?>
+                          </ul>
+                        </div>
+                      </div>
                       <div class="tab-content">
                         <?php $i = 0; foreach ($parsedData as $sheetName => $sheet) { 
                             $titles = array_shift($sheet);
                         ?>
-                          <div id="sheet_<?php echo $i;?>" class="tab-pane fade in <?php echo $i == 0 ? "active" : "";?>">
+                          <div id="sheet_<?php echo $i;?>" class="tab-pane <?php echo $i == 0 ? "active" : "";?>">
                             <?php 
                              if(array_key_exists($sheetName, $namesAutotrucks)){
                             ?>
                               <div class="row">
-                                <div class="col-xs-5">
+                                <div class="col-5">
                                   <h3><?php echo "'".$sheetName."' импортирован!"?></h3>
                                   <?php echo Html::a("Посмотреть",null,['class'=>'btn btn-success']);?>
                                 </div>
@@ -112,36 +80,35 @@ $this->title = "Импорт";
                             ?>
                             
                             <div class="row">
-                              <div class="col-xs-4">
+                              <div class="col">
                                 <h3><?php echo Html::encode($sheetName);?></h3>
                               </div>
-                              <div class="col-xs-4 col-xs-offset-4 text-right">
+                              <div class="col text-right">
                                 <?php echo Html::submitButton("Сохранить",['class'=>'btn btn-success','style'=>'margin-top:20px;']);?>
                                 <?php echo Html::hiddenInput('Autotruck[import_source]',$autotruckImport->id);?>
-                                <?php //echo Html::hiddenInput('Autotruck[imported]',1);?>
                               </div>
                             </div>
 
                             <div class="row">
-                              <div class="col-xs-12">
+                              <div class="col-12">
                                 <div class="row">
-                                    <div class="col-xs-2">
+                                    <div class="col-2">
                                       <?php echo $form->field($model,'date')->input("date",["class"=>"form-control"]);?>
                                     </div>
-                                    <div class="col-xs-3">
+                                    <div class="col-3">
                                       <?php echo $form->field($model,'name')->input("text",['class'=>'form-control']);?>
                                     </div>
-                                    <div class="col-xs-1">
+                                    <div class="col-1">
                                       <?php echo $form->field($model,'course')->input("number",['class'=>'form-control compute_sum compute_course']); ?>
                                     </div>
-                                    <div  class="col-xs-2">
+                                    <div  class="col-2">
                                       <?php echo $form->field($model,'country')->dropDownList($countriesIndexed,['prompt'=>'Выберите страну','class'=>'form-control']);?>
                                     </div>
                                 </div>
                                 <div class="row">
-                                  <div class="col-xs-5">
+                                  <div class="col-5">
                                     <div class="row">
-                                      <div  class="col-xs-5">
+                                      <div  class="col-5">
                                         <?php echo $form->field($model,'status')->dropDownList($statusesIndexed,['prompt'=>'Выберите статус','class'=>'form-control']);?>
                                       </div>
                                       <!-- <div  class="col-xs-6">
@@ -150,14 +117,14 @@ $this->title = "Импорт";
                                       </div> -->
                                     </div>
                                   </div>
-                                  <div class="col-xs-7">
+                                  <div class="col-7">
                                     <?php echo $form->field($model,'description')->textarea(['class'=>'form-control']);?>
                                   </div>
                                 </div>
                               </div>
                             </div>
                             <div class="row">
-                              <div class="col-xs-12">
+                              <div class="col-12">
                                 <table class="table table-condensed">
                                   <thead>
                                     <tr>
@@ -231,32 +198,3 @@ $this->title = "Импорт";
                 ?>
               </div>
             </div>
-          <?php } ?>
-  			</div>
-
-
-  			<div id="googlesheet" class="tab-pane fade in">
-  				<div class="row">
-  					<div class="col-xs-12">
-  						<h3>Google таблицы</h3>
-  					</div>
-  				</div>
-  			</div>
-  		</div>
-	</div>
-</div>
-
-<?php 
-
-$js = <<<JS
-    $("body").on("click",".btn-remove-row",function(event){
-      if(confirm("Подтвердите удаление!")){
-        var row = $(this).parents("tr");
-        if(row.length)
-          row.remove();
-      }
-    });
-JS;
-
-$this->registerJs($js);
-?>

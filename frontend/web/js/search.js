@@ -13,7 +13,7 @@ $(function(){
 	 	
     	$.ajax({
       		url: 'index.php?r=site/search',
-      		type:"POST",
+      		type:"GET",
       		data:'keywords=' +  $(this).val(),
       		dataType: 'json',
       		before_send:function(){},     

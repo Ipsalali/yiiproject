@@ -31,7 +31,7 @@ $packages = TypePackaging::find()->all();
 <div class="base_content">
 	<div class="row">
 		<div class="col-xs-12">
-			<h1>Заявка: <?=$autotruck->name?></h1>
+			<h1>Заявка: <?php echo $autotruck->name?></h1>
 			 
 		</div>
 	</div>
@@ -92,7 +92,6 @@ $packages = TypePackaging::find()->all();
 									<p>Статус:</p>
 									<ul>
 										<?php
-											$autotruck->activeStatus->title;
 											$story = $autotruck->traceStory;
 											if(is_array($story)){
 												foreach ($story as $key => $s) { 
