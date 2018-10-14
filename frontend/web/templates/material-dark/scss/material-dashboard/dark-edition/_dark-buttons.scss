@@ -36,4 +36,8 @@
   &.btn-twitter {
     @include bmd-raised-button-variant($white, $social-twitter, $social-twitter);
   }
+
+  &.btn-dark {
+    @include bmd-raised-button-variant($white, $dark-background, $dark-background);
+  }
 }

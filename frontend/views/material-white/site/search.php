@@ -34,6 +34,7 @@ use common\models\Client;
 		<ul>
 			<?php foreach ($autotrucks as $key => $a) { 
 					$autotruck = Autotruck::findOne($a['id']);
+					if(!isset($autotruck->id)) continue;
 				?>
 				<li>
 					<div>
@@ -41,7 +42,7 @@ use common\models\Client;
 							<?php echo Html::a(Html::encode($autotruck->name), array('autotruck/read','id'=>$autotruck->id),array("target"=>"_blank")); ?>
 						</p>
 						<small>Дата: <?php echo date("d.m.y",strtotime(Html::encode($autotruck->date))); ?></small>
-						<small>Статус: <?php echo $autotruck->status ? Html::encode($autotruck->activeStatus->title) : ""; ?></small>
+						<small>Статус: <?php echo isset($activeStatus->id) ? Html::encode($autotruck->activeStatus->title) : ""; ?></small>
 					</div>
 				</li>
 			<?php }?>

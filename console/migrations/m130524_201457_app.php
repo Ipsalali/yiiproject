@@ -32,6 +32,7 @@ class m130524_201457_app extends Migration
               `sender` int(11) DEFAULT NULL,
               `count_place` int(11) DEFAULT NULL,
               `package` int(11) DEFAULT NULL,
+              `imported` tinyint(1) NOT NULL DEFAULT 0,
               PRIMARY KEY (`id`),
 
               CONSTRAINT `fk-app-client` FOREIGN KEY (`client`) REFERENCES {$this->client} (`id`) ON DELETE SET NULL ON UPDATE CASCADE,

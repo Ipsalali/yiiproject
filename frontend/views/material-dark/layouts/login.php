@@ -3,14 +3,14 @@
 use yii\helpers\Html;
 use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
-use yii\widgets\Breadcrumbs;
+use frontend\bootstrap4\Breadcrumbs;
 use frontend\assets\AppAsset;
-use frontend\assets\MaterialAsset;
-use common\widgets\Alert;
+use frontend\assets\MaterialDarkAsset;
+use frontend\bootstrap4\AlertJS as Alert;
 use yii\filters\AccessControl;
 
 
-MaterialAsset::register($this);
+MaterialDarkAsset::register($this);
 ?>
 <?php $this->beginPage(); ?>
 <!DOCTYPE html>

@@ -93,8 +93,14 @@ use yii\helpers\{Html,Url};
                                 <?php echo Yii::t('site', 'Настройки системы')?>
                             </a>  
                         </li>
+                        <?php if(Yii::$app->user->can("import/index")){?>
+                            <li>
+                                <a href="<?php echo Url::to(['/import/index'])?>"><i class="fa fa-wrench fa-fw"></i> 
+                                    <?php echo Yii::t('site', 'Импорт')?>
+                                </a>  
+                            </li>
+                        <?php } ?>
                     <?php } ?>
-                        
                     </ul>
                 </div>
             </div>

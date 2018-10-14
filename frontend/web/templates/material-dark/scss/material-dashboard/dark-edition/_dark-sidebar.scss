@@ -15,6 +15,18 @@
     opacity: .94;
   }
 
+  &[data-background-color="black"] .nav.nav-second-level li.active{
+
+    & a{
+      color: #fff;
+    }
+
+    & i{
+      color: #fff;
+    }
+
+  }
+
   &[data-background-color="black"] .nav li:not(.active) {
     a,
     .dropdown-menu a {

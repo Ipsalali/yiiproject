@@ -35,7 +35,7 @@ class App extends ActiveRecordVersionable
             [['rate','weight'],'number'],
 
             ['type','in','range'=>[0,1]],
-            [['type','weight'],'default','value'=>0],
+            [['type','weight','imported'],'default','value'=>0],
             [['rate','summa_us'],'filter','filter'=>function($v){return round($v,2);}]
         ];
 	}

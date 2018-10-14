@@ -65,5 +65,14 @@ class ArrayHelper extends BaseArrayHelper{
     }
 
 
+
+    public static function like($pattern, $input, $flags = 0) {
+        return array_merge(
+          array_intersect_key($input, array_flip(preg_grep($pattern, array_keys($input), $flags))),
+          preg_grep($pattern, $input, $flags)
+       );
+    }
+
+
 }
 ?>
