@@ -47,6 +47,9 @@ class Checkexcel{
 			'border-thick' =>array(
 				'borders'=>array('outline'=>array('style'=>\PHPExcel_Style_Border::BORDER_THICK,'color'=>array('rgb'=>'000000')))
 			),
+			'border-thin' =>array(
+				'borders'=>array('outline'=>array('style'=>\PHPExcel_Style_Border::BORDER_THIN,'color'=>array('rgb'=>'000000')))
+			),
 
 			'font_mini' =>array(
 				'font'=>array('size'=>12)),
@@ -224,6 +227,8 @@ class Checkexcel{
 		$this->objPHPExcel->getActiveSheet()->getStyle('J9:M12')->applyFromArray($this->styleArray);
 
 
+		$this->objPHPExcel->getActiveSheet()->getStyle('B6:M12')->applyFromArray($this->styles['border-thick']);
+
 		//Счет на оплату по договору № 57/15 от 23.07.2015
 		$contract_check = 'Счет на оплату по договору № '.$client->actualContractNumber;
 		$this->setText($contract_check,'B14',1,0,15,0,1);
@@ -282,7 +287,7 @@ class Checkexcel{
 		$objRichText->createText('Поставщик:');
 		$this->objPHPExcel->getActiveSheet()->getCell('B18')->setValue($objRichText);
 		$this->objPHPExcel->getActiveSheet()->mergeCells('B18:C18');
-		
+		$this->objPHPExcel->getActiveSheet()->getStyle('B18:C18')->applyFromArray($this->styles['border-thin']);
 
 
 
@@ -293,21 +298,45 @@ class Checkexcel{
 		$objPHPExcel->getActiveSheet()->getStyle('D18')->getAlignment()->setWrapText(true);
 		$this->objPHPExcel->getActiveSheet()->mergeCells('D18:M18');
 		$this->objPHPExcel->getActiveSheet()->getRowDimension(18)->setRowHeight(30);
+		$this->objPHPExcel->getActiveSheet()->getStyle('B18:M18')->applyFromArray($this->styles['border-thick']);
 	}
 
 
 	public function setBuyer($client){
+
+		$this->objPHPExcel->getActiveSheet()->getRowDimension(20)->setRowHeight(30);
+
 		//Покупатель
 		$objRichText = new \PHPExcel_RichText();
 		$objRichText->createText('Покупатель:');
 		$this->objPHPExcel->getActiveSheet()->getCell('B20')->setValue($objRichText);
 		$this->objPHPExcel->getActiveSheet()->mergeCells('B20:C20');
+		$this->objPHPExcel->getActiveSheet()->getStyle('B20:C20')->applyFromArray($this->styles['border-thin']);
 
+		$buyer = $client->full_name ? $client->full_name : "Не указан";
 
-		$buyer = $client->full_name? $client->full_name:"Не указан";
-		$this->setText($buyer,'D20',1);
+		
+		
+		$warning_text = $client->full_name ? " - При смене реквизитов плательщика, обязательно нужно отправить ИНН на проверку!  На почту - bill@tedtrans.com" : null;
+
+		$titleName = new \PHPExcel_RichText();
+		$style = $titleName->createTextRun($buyer);
+		$style->getFont()->setBold(true);
+		
+		if($warning_text){
+			$style2 = $titleName->createTextRun($warning_text);
+			$style2->getFont()->setBold(true);
+			$style2->getFont()->setColor( new \PHPExcel_Style_Color( \PHPExcel_Style_Color::COLOR_RED) );
+		}
+
+		$this->objPHPExcel->getActiveSheet()->getCell('D20')->setValue($titleName);
+		
+
+		
+
+		$this->objPHPExcel->getActiveSheet()->getStyle('D20')->getAlignment()->setWrapText(true);
 		$this->objPHPExcel->getActiveSheet()->mergeCells('D20:M20');
-		$this->objPHPExcel->getActiveSheet()->getStyle('D20:M20')->applyFromArray($this->styles['border-thick']);
+		$this->objPHPExcel->getActiveSheet()->getStyle('B20:M20')->applyFromArray($this->styles['border-thick']);
 	}
 
 	public function setProducts($apps,$client){
