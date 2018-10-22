@@ -11,12 +11,12 @@ use common\models\AutotruckImport;
 
 
 $this->title = "Импорт";
-$this->params['breadcrumbs'][] = $this->title;
+// $this->params['breadcrumbs'][] = $this->title;
 ?>
 
-<div class="card">
-  <div class="card-header card-header-primary">
-    <h1 class="card-title"><?php echo $this->title?></h1>
+<div class="panel">
+  <div class="panel-heading panel-header-primary">
+    <h1 class="panel-title"><?php echo $this->title?></h1>
     <div class="nav-tabs-navigation">
       <ul class="nav nav-tabs" role='tablist'>
         <li class="nav-item"><a class='nav-link active' data-toggle="tab" href="#excel" aria-expanded="true">Заявки</a></li>
@@ -24,24 +24,24 @@ $this->params['breadcrumbs'][] = $this->title;
       </ul>
     </div>
   </div>
-	<div class="card-body">
+	<div class="panel-body">
 		
   		<div class="tab-content">
   			<div id="excel" class="tab-pane active ">
   				<div class="row">
-  					<div class="col-12">
+  					<div class="col-xs-12">
   						<h3>Заявки из Excel</h3>
   					</div>
   				</div>
           <div class="row">
-            <div class="col-4">
+            <div class="col-xs-4">
               <?php $form =  ActiveForm::begin(['id'=>'formAutotruckImport']);?>
               <?php echo $form->field($autotruckImport,'file')->fileInput();?>
               <?php echo Html::submitInput("Загрузить");?>
               <?php ActiveForm::end();?>
             </div>
             
-            <div class="col-5">
+            <div class="col-xs-5">
               <div class="importStories">
                 <h4>Ранее загруженные файлы для импорта:</h4>
                 <ul>
@@ -62,7 +62,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
   			<div id="googlesheet" class="tab-pane">
   				<div class="row">
-  					<div class="col-12">
+  					<div class="col-xs-12">
   						<h3>Google таблицы</h3>
   					</div>
   				</div>
