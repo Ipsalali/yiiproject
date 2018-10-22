@@ -111,8 +111,8 @@ AppAsset::register($this);
     <?php if(!Yii::$app->user->isGuest && !Yii::$app->user->identity->isClient() && !Yii::$app->user->identity->isSeller(true)){?>
     <div class="search_block">
         <div>
-            <form action="" method="POST">
-                <input type="text" id="search" name="search" class="form-control" placeholder="Поиск" />
+            <form action="" method="POST" id="searchTopForm">
+                <input type="text" id="search" name="search" class="form-control" autocomplete="off" placeholder="Поиск" />
             </form>
             <div class="search_result">
                 <div class="results" style="display: block;">
@@ -139,6 +139,18 @@ AppAsset::register($this);
 
 <div class="clear"></div>
 
+<?php
+
+    $js = <<<JS
+
+
+        $("#searchTopForm").submit(function(event){
+            event.preventDefault();
+        })
+JS;
+
+$this->registerJs($js);
+?>
 
 <?php $this->endBody(); ?>
 </body>
