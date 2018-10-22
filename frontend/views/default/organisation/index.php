@@ -3,34 +3,33 @@ use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 use common\models\Organisation;
 
-$this->title = "Организация";
+$this->title = "Список организации";
 ?>
  
-<?php if(Yii::$app->session->hasFlash('StatusDeletedError')): ?>
-<div class="alert alert-error">
-    There was an error deleting your post!
-</div>
-<?php endif; ?>
+
  
-<?php if(Yii::$app->session->hasFlash('StatusDeleted')): ?>
-<div class="alert alert-success">
-    Your post has successfully been deleted!
-</div>
-<?php endif; ?>
+
 <div class="alert alert-success active_change" style="display: none;"></div>
-<div class="org_page">
-	<?php echo Html::a('Добавить организацию', array('organisation/create'), array('class' => 'btn btn-primary')); ?>
+<div class="row">
+    <div class="col-xs-6">
+        <h2><?php echo $this->title; ?></h2>
+    </div>
+    <div class="col-xs-6 text-right">
+        <?php echo Html::a('Добавить организацию', array('organisation/create'), array('class' => 'btn btn-primary')); ?>
+    </div>
+</div>
+<div class="row">
 
-<div class="clearfix"></div>
 
-<div class="">
+
+<div class="col-xs-12">
     <table class="table">
         <tr>
             <th>№</th>
             <th>Наименование организации</th>
             <th>Активный</th>
             <th>Приостановить</th>
-            <th>Удалить</th>
+            <!-- <th>Удалить</th> -->
         </tr>
         <?php if(count($orgs)){ ?>
             <?php foreach ($orgs as $key => $org) { 
@@ -51,12 +50,16 @@ $this->title = "Организация";
                             <input type="checkbox" name="stop_org_status" class="toStopOrg" id="toStopOrg<?php echo $org->id?>" value="<?php echo $org->id;?>" <?php echo $stoped;?>>
                         <?php ActiveForm::end();?>
                     </td>
+                    <?php if(0){?>
                     <td>
+                        
                         <?php $form = ActiveForm::begin(['action'=>['organisation/remove']]); ?>
                             <input type="hidden" name="org_id" value="<?php echo $org->id;?>">
                             <input type="submit" name="remove_org" class="remove_org" value="Удалить">
                         <?php ActiveForm::end();?>
+                        
                     </td>
+                    <?php } ?>
                 </tr>
             <?php 
 

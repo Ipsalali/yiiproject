@@ -1,6 +1,6 @@
 <?php
 
-namespace backend\controllers;
+namespace frontend\controllers;
 
 use Yii;
 use yii\filters\AccessControl;
@@ -24,7 +24,7 @@ class OrganisationController extends Controller{
                     [
                         'actions' => ['index','create','update','read','remove','toactive','stop'],
                         'allow' => true,
-                        'roles' => ['admin'],
+                        'roles' => ["site/sverka"],
                     ]
                 ],
             ]
@@ -115,7 +115,7 @@ class OrganisationController extends Controller{
         }
 
 
-        $model->delete();
+        //$model->delete();
 
         Yii::$app->session->setFlash("OrgDeleted");
        // Yii::$app->getResponse->redirect(array("status/index"));
