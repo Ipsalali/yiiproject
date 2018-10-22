@@ -91,7 +91,7 @@ $canFormAutotruck = Yii::$app->user->can("autotruck/create");
 									<h4>Статус:</h4>
 										<ul>
 											<?php
-												$autotruck->activeStatus->title;
+												
 												$story = $autotruck->traceStory;
 												if(is_array($story)){
 													foreach ($story as $s) { 

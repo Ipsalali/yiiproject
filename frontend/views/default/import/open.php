@@ -30,11 +30,11 @@ $this->params['breadcrumbs'][] = ['link'=>['import/index'],'label'=>'Импор�
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
-<div class="card">
-	<div class="card-header card-header-primary">
+<div class="panel">
+	<div class="panel-heading panel-header-primary">
 		<h2><?php echo $this->title;?></h2>
 	</div>
-	<div class="card-body">
+	<div class="panel-body">
                 <?php if(!$autotruckImport->fileBinary){ ?>
                     <h3>Файл отсутствует</h3>
                   
@@ -45,8 +45,8 @@ $this->params['breadcrumbs'][] = $this->title;
                   ?>
                   <h3>Листы:</h3>
                   <div class="row">
-                    <div class="col-12" style="margin-top: 25px;">
-                      <div class="card-header card-header-primary">
+                    <div class="col-xs-12" style="margin-top: 25px;">
+                      <div class="panel-header panel-header-primary">
                         <div class="nav-tabs-navigation">
                           <ul class="nav nav-tabs" role='tablist'>
                           <?php foreach ($sheetNames as $i => $sheetName) { ?>
@@ -66,7 +66,7 @@ $this->params['breadcrumbs'][] = $this->title;
                              if(array_key_exists($sheetName, $namesAutotrucks)){
                             ?>
                               <div class="row">
-                                <div class="col-5">
+                                <div class="col-xs-5">
                                   <h3><?php echo "'".$sheetName."' импортирован!"?></h3>
                                   <?php echo Html::a("Посмотреть",null,['class'=>'btn btn-success']);?>
                                 </div>
@@ -80,35 +80,35 @@ $this->params['breadcrumbs'][] = $this->title;
                             ?>
                             
                             <div class="row">
-                              <div class="col">
+                              <div class="col-xs-6">
                                 <h3><?php echo Html::encode($sheetName);?></h3>
                               </div>
-                              <div class="col text-right">
+                              <div class="col-xs-6 text-right">
                                 <?php echo Html::submitButton("Сохранить",['class'=>'btn btn-success','style'=>'margin-top:20px;']);?>
                                 <?php echo Html::hiddenInput('Autotruck[import_source]',$autotruckImport->id);?>
                               </div>
                             </div>
 
                             <div class="row">
-                              <div class="col-12">
+                              <div class="col-xs-12">
                                 <div class="row">
-                                    <div class="col-2">
+                                    <div class="col-xs-2">
                                       <?php echo $form->field($model,'date')->input("date",["class"=>"form-control"]);?>
                                     </div>
-                                    <div class="col-3">
+                                    <div class="col-xs-3">
                                       <?php echo $form->field($model,'name')->input("text",['class'=>'form-control']);?>
                                     </div>
-                                    <div class="col-1">
+                                    <div class="col-xs-1">
                                       <?php echo $form->field($model,'course')->input("number",['class'=>'form-control compute_sum compute_course']); ?>
                                     </div>
-                                    <div  class="col-2">
+                                    <div  class="col-xs-2">
                                       <?php echo $form->field($model,'country')->dropDownList($countriesIndexed,['prompt'=>'Выберите страну','class'=>'form-control']);?>
                                     </div>
                                 </div>
                                 <div class="row">
-                                  <div class="col-5">
+                                  <div class="col-xs-5">
                                     <div class="row">
-                                      <div  class="col-5">
+                                      <div  class="col-xs-5">
                                         <?php echo $form->field($model,'status')->dropDownList($statusesIndexed,['prompt'=>'Выберите статус','class'=>'form-control']);?>
                                       </div>
                                       <!-- <div  class="col-xs-6">
@@ -117,14 +117,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                       </div> -->
                                     </div>
                                   </div>
-                                  <div class="col-7">
+                                  <div class="col-xs-7">
                                     <?php echo $form->field($model,'description')->textarea(['class'=>'form-control']);?>
                                   </div>
                                 </div>
                               </div>
                             </div>
                             <div class="row">
-                              <div class="col-12">
+                              <div class="col-xs-12">
                                 <table class="table table-condensed">
                                   <thead>
                                     <tr>
