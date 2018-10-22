@@ -76,13 +76,19 @@ AppAsset::register($this);
             if(Yii::$app->user->can("transferspackage"))
                 $menuItems[] = ['label' => 'Переводы', 'url' => ['/transferspackage/index']];
 
+            
             if(Yii::$app->user->can("sellers"))
                 $menuItems[] = ['label' => 'Поставщики', 'url' => ['/sellers/index']];
 
+            
+            if(Yii::$app->user->can("site/sverka"))
+                $menuItems[] = ['label' => 'Организации', 'url' => ['/organisation/index']];
+
+            
             if(Yii::$app->user->can("import/index"))
                 $menuItems[] = ['label' => 'Импорт', 'url' => ['/import/index']];
 
-
+            
             
         }elseif(Yii::$app->user->identity->role->name == "client"){
 
