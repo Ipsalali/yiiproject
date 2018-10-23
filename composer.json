@@ -17,7 +17,7 @@
         "php": ">=5.7.0",
         "yiisoft/yii2": ">=2.0.15",
         "yiisoft/yii2-bootstrap": "*",
-        "yiisoft/yii2-swiftmailer": "*",
+        "yiisoft/yii2-swiftmailer": "~2.0.0",
         "mihaildev/yii2-ckeditor": "*",
         "mihaildev/yii2-elfinder": "*",
         "developeruz/yii2-db-rbac": "*",

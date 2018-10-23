@@ -440,6 +440,7 @@ class Autotruck extends ActiveRecordVersionable
     public function sendNotification(){
 
 
+
         $apps = $this->getApps();
         $client_apps = array();
         
@@ -463,13 +464,14 @@ class Autotruck extends ActiveRecordVersionable
             
             foreach ($client_apps as $key => $client) {
 
-                 $client_model = Client::findOne($client['client']);
+                $client_model = Client::findOne($client['client']);
                  
-                 $mail = count($client_model->emails) ? $client_model->emails : $client_model->user->email;
+                $mail = count($client_model->emails) ? $client_model->emails : $client_model->user->email;
                  
-
-                 $apps = $client['apps'];
-                 $from = $client_model->managerUser->email ? $client_model->managerUser->email: "info@tedrans.com";
+                $apps = $client['apps'];
+                $managerUser = $client_model->managerUser;
+                $from = (isset($managerUser->email)) && $managerUser->email ? $managerUser->email: "info@tedrans.com";
+                
 
                 if(count($apps)){
 
