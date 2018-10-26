@@ -42,8 +42,8 @@ HTML;
 				echo DatePicker::widget([
 							'name' => 'date_from',
 							'name2' => 'date_to',
-							'value'=> (!$data_params['date_from']) ? date("d.m.Y",time() - (86400 * 61)) : $data_params['date_from'],
-							'value2'=> (!$data_params['date_to']) ? date("d.m.Y",time()) : $data_params['date_to'],
+							'value'=> (!$data_params['date_from']) ? date("d.m.Y",time() - (86400 * 61)) : date("d.m.Y",strtotime($data_params['date_from'])),
+							'value2'=> (!$data_params['date_to']) ? date("d.m.Y",time()) : date("d.m.Y",strtotime($data_params['date_to'])),
 							'language'=>'ru',
 							'options' => ['placeholder' => 'Начальная дата'],
 							'options2' => ['placeholder' => 'Конечная дата'],
