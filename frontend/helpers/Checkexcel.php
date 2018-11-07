@@ -107,23 +107,31 @@ class Checkexcel{
 		}
 
 
-		$organisation = $client->organisation_pay_id ? $client->organisation : null;
-		$org = isset($organisation->id) && $organisation->id ? $organisation : Organisation::find()->where(['active'=>1])->one();
+		$org = $client->organisation_pay_id ? $client->organisation : null;
 		
-		if(!$org->id) return;
-
-		if($org->is_stoped || $org->payment == Organisation::PAY_CASH){
-
-			if($org->is_stoped)
-				$org->org_name = " ";
-
-			$org->inn = " ";
-			$org->kpp = " ";
-			$org->bank_name = " ";
-			$org->bik = " ";
-			$org->bank_check = " ";
-			$org->org_check = " ";
-		}
+        if(isset($org->id)){
+    		if($org->is_stoped || $org->payment == Organisation::PAY_CASH){
+    
+    			if($org->is_stoped)
+    				$org->org_name = " ";
+    
+    			$org->inn = " ";
+    			$org->kpp = " ";
+    			$org->bank_name = " ";
+    			$org->bik = " ";
+    			$org->bank_check = " ";
+    			$org->org_check = " ";
+    		}
+        }else{
+            $org = new Organisation();
+            $org->org_name = " ";
+            $org->inn = " ";
+    		$org->kpp = " ";
+    		$org->bank_name = " ";
+    		$org->bik = " ";
+    		$org->bank_check = " ";
+    		$org->org_check = " ";
+        }
 
 		//044525555 ПАО "ПРОМСВЯЗЬБАНК" Г. МОСКВА
 		$objRichText = new \PHPExcel_RichText();
@@ -276,10 +284,19 @@ class Checkexcel{
 
 	public function setSeller($client=""){
 
-		$organisation = $client->organisation_pay_id ? $client->organisation : null;
-		$org = isset($organisation->id) && $organisation->id ? $organisation : Organisation::find()->where(['active'=>1])->one();
+		$org = $client->organisation_pay_id ? $client->organisation : null;
 		
-		if(!$org->id) return;
+		if(!isset($org->id)){
+            $org = new Organisation();
+            $org->org_name = " ";
+            $org->inn = " ";
+    		$org->kpp = " ";
+    		$org->bank_name = " ";
+    		$org->bik = " ";
+    		$org->bank_check = " ";
+    		$org->org_check = " ";
+        }
+		
 		$objPHPExcel = $this->objPHPExcel;
 		//Поставщик
 
@@ -291,7 +308,7 @@ class Checkexcel{
 
 
 
-		$seller = $org->is_stoped ? " " : $org->org_name.", ИНН ".$org->inn.", КПП ".$org->kpp.' , '.$org->org_address;
+		$seller = !isset($org->id) || $org->is_stoped ? " " : $org->org_name.", ИНН ".$org->inn.", КПП ".$org->kpp.' , '.$org->org_address;
 		$seller = $org->payment == Organisation::PAY_CASH ? $org->org_name : $seller;
 
 		$this->setText($seller,'D18',1);
@@ -555,9 +572,8 @@ class Checkexcel{
 		$this->merge($td);
 		$this->objPHPExcel->getActiveSheet()->getStyle($td)->applyFromArray($this->border_bottom);
 
-		$organisation = $client->organisation_pay_id ? $client->organisation : null;
-		$org = isset($organisation->id) && $organisation->id ? $organisation : Organisation::find()->where(['active'=>1])->one();
-		$headman = $org->id && $org->payment == Organisation::PAY_CARD ? $org->headman : " ";
+		$org = $client->organisation_pay_id ? $client->organisation : null;
+		$headman = isset($org->id) && $org->payment == Organisation::PAY_CARD ? $org->headman : " ";
 		$startRow +=2;
 		$this->setText("Руководитель","B$startRow",1);
 		$this->merge("B$startRow:D$startRow");
