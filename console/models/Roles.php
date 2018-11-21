@@ -1,6 +1,6 @@
 <?php 
 
-namespace console\data;
+namespace console\models;
 
 class Roles{
 	

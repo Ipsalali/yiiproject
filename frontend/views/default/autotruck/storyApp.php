@@ -5,7 +5,8 @@ use yii\helpers\Url;
 
 use yii\bootstrap\ActiveForm;
 
-
+$canReadColumRate = Yii::$app->user->can("read/app/rate");
+$canReadColumSumUs = Yii::$app->user->can("read/app/sum_us");
 
 ?>
 
@@ -32,8 +33,11 @@ use yii\bootstrap\ActiveForm;
 								<th>№</th>
 								<th><?php echo $model->getAttributeLabel("client")?></th>
 								<th><?php echo $model->getAttributeLabel("weight")?></th>
+								
 								<th><?php echo $model->getAttributeLabel("rate")?></th>
+								
 								<th><?php echo $model->getAttributeLabel("summa_us")?></th>
+								
 								<th><?php echo $model->getAttributeLabel("comment")?></th>
 								<th><?php echo $model->getAttributeLabel("info")?></th>
 								<th><?php echo $model->getAttributeLabel("type")?></th>
@@ -54,8 +58,14 @@ use yii\bootstrap\ActiveForm;
 										<td><?php echo ++$key?></td>
 										<td><?php echo $s['client_name'];?></td>
 										<td><?php echo $s['weight']?></td>
-										<td><?php echo $s['rate']?></td>
-										<td><?php echo $s['summa_us']?> $</td>
+
+										
+										<td><?php echo $canReadColumRate ? $s['rate'] : "";?></td>
+										
+										
+										<td><?php echo $canReadColumSumUs ?  $s['summa_us'] . "$" : "";?> </td>
+										
+
 										<td><?php echo $s['comment']?></td>
 										<td><?php echo $s['info']?></td>
 										<td><?php echo $s['type'] == 1 ? "Услуга" : null;?></td>

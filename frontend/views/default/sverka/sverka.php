@@ -584,7 +584,7 @@ HTML;
 		});
 
 
-		var row_count = <?=count($sverka)?>;
+		var row_count = <?php echo count($sverka)?>;
 
 		var generate_exp_row = function(n){
 			var ntr = '<tr class="pay_row new_row">'+

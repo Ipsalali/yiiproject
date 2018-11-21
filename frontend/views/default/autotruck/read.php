@@ -15,6 +15,11 @@ use yii\bootstrap\Modal;
 
 $roleexpenses = 'autotruck/addexpenses';
 $userCanRoleexpenses = Yii::$app->user->can($roleexpenses);
+
+$canReadColumRate = Yii::$app->user->can("read/app/rate");
+$canReadColumSumUs = Yii::$app->user->can("read/app/sum_us");
+$canReadColumSumRu = Yii::$app->user->can("read/app/sum_ru");
+
 $expensesManager = new ExpensesManager;
 
 $AutotruckExpenses =ExpensesManager::getAutotruckExpenses($autotruck->id);
@@ -188,9 +193,19 @@ $packages = TypePackaging::find()->all();
 													<th class="app_place">Кол-во мест</th>
 													<th class="app_package">Упаковка</th>
 													<th>Вес (кг)</th>
+
+													
 													<th>Ставка ($)</th>
+													
+
+													
 													<th>Сумма ($)</th>
+													
+
+													
 													<th>Сумма (руб)</th>
+													
+
 													<th>Комментарий</th>
 													<th></th>
 												</tr>
@@ -239,9 +254,17 @@ $packages = TypePackaging::find()->all();
 													
 													
 													<td><?php echo $app->type ? '': $app->weight?></td>
-													<td><?php echo $app->rate?></td>
-													<td><?php echo $app->summa_us; ?> $</td>
+													
+													
+													<td><?php echo $canReadColumRate ? $app->rate : "";?></td>
+													
+
+													<td><?php echo $canReadColumSumUs ? $app->summa_us . "$" : ""; ?></td>
+													
+
+													
 													<td>
+														<?php if($canReadColumSumRu){?>
 														<?php 
 															$rate_vl = $app->weight > 0 ? $app->summa_us/$app->weight : 0;
 															$sum_ru = $app->weight * $rate_vl * $autotruck->course;
@@ -250,8 +273,10 @@ $packages = TypePackaging::find()->all();
 														?> 
 
 														руб
+														<?php }?>
 													</td>
 													
+
 													<td><?php echo $app->comment?></td>
 													<td style="text-align: center;"><?php echo Html::a("Журнал",['autotruck/app-story','id'=>$app->id],['class'=>'btnAppStory'])?></td>
 												</tr>
@@ -267,8 +292,8 @@ $packages = TypePackaging::find()->all();
 												<td colspan="2"><strong><?php echo $autotruck->appCountPlace?></strong></td>
 												<td><strong><?php echo round($cweight,2);?> кг.</strong></td>
 												<td></td>
-												<td><strong><?php echo round($total_us,2);?> $</strong></td>
-												<td><strong><?php echo round( $total,2);?> руб.</strong></td>
+												<td><strong><?php echo $canReadColumSumUs ? round($total_us,2) . "$" : "";?></strong></td>
+												<td><strong><?php echo $canReadColumSumRu ? round( $total,2) . "руб." : "";?></strong></td>
 												<td></td>
 												<td></td>
 											</tr>

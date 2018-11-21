@@ -1,6 +1,6 @@
 <?php 
 
-namespace console\data;
+namespace console\models;
 
 class Permissions{
 	
@@ -36,7 +36,10 @@ class Permissions{
 			'sverka/removepayajax'=> 'Удаление оплаты из сверки по доставкам',
 			'sverka/save-client-payment-transfer'=> 'Добавление оплаты в сверке по переводам',
 			'transferspackage'=> 'Раздел переводы',
-			'import/index'=>'Раздел импорта'
+			'import/index'=>'Раздел импорта',
+			'read/app/rate'=>'Просмотр колонки "ставка" в заявках',
+			'read/app/sum_us'=>'Просмотр колонки "сумма ($)" в заявках',
+			'read/app/sum_ru'=>'Просмотр колонки "сумма (руб)" в заявках'
 		);
 	}
 }

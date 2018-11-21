@@ -16,6 +16,9 @@ $roleexpenses = 'autotruck/addexpenses';
 $user = \Yii::$app->user->identity;
 $userIsClientExtended = \Yii::$app->user->can("clientextended");
 $canReadAutotruck = Yii::$app->user->can("autotruck/read");
+$canReadColumRate = Yii::$app->user->can("read/app/rate");
+$canReadColumSumUs = Yii::$app->user->can("read/app/sum_us");
+$canReadColumSumRu = Yii::$app->user->can("read/app/sum_ru");
 
 $list_status = Status::find()->orderBy(['sort'=>SORT_ASC])->all();
 $countries = $userIsClientExtended ? SupplierCountry::find()->all() : $user->countries;
@@ -252,21 +255,29 @@ $this->title = $newModel ? "Новая заявка" : "Заявка:".$autotruc
 													</td>
 
 													<td class='rate_td'>
-													<?php 
-														$e = array_key_exists('rate',$errors) ? $errors['rate'] : null;
-														echo Html::textInput($class."[rate]",$app['rate'],['class'=>'form-control compute_sum compute_rate']);
-														echo is_array($e) && count($e) ? $e[0] : null;
-													?>	
+														<?php if($canReadColumRate){?>
+															<?php 
+																$e = array_key_exists('rate',$errors) ? $errors['rate'] : null;
+																echo Html::textInput($class."[rate]",$app['rate'],['class'=>'form-control compute_sum compute_rate']);
+																echo is_array($e) && count($e) ? $e[0] : null;
+															?>	
+														<?php } ?>
 													</td>
 													<td class="summa_usa">
-													<?php 
-														$e = array_key_exists('summa_us',$errors) ? $errors['summa_us'] : null;
-														echo Html::textInput($class."[summa_us]",$app['summa_us'],['class'=>'form-control summa_us']);
-														echo is_array($e) && count($e) ? $e[0] : null;
-													?>	
+														<?php if($canReadColumSumUs){?>
+															<?php 
+																$e = array_key_exists('summa_us',$errors) ? $errors['summa_us'] : null;
+																echo Html::textInput($class."[summa_us]",$app['summa_us'],['class'=>'form-control summa_us']);
+																echo is_array($e) && count($e) ? $e[0] : null;
+															?>	
+														<?php } ?>
 													</td>
-													<td class="summa">
+													<td class="<?php echo $canReadColumSumRu ? 'summa': '';?>">
+														<?php if($canReadColumSumRu){?>
+
 														<?php echo !$app['type'] ? round($app['weight']*$app['rate']*$autotruck->course,2) : round($app['rate']*$autotruck->course,2) ?> руб
+
+														<?php } ?>
 													</td>
 													<td>
 													<?php 

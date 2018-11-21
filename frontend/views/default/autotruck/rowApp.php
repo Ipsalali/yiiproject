@@ -3,6 +3,10 @@ use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
 use common\models\Currency;
 
+$canReadColumRate = Yii::$app->user->can("read/app/rate");
+$canReadColumSumUs = Yii::$app->user->can("read/app/sum_us");
+$canReadColumSumRu = Yii::$app->user->can("read/app/sum_ru");
+
 $class = "App[{$n}]";
 $type_class = (!$type)? "type_app":"type_service";
 ?>
@@ -53,13 +57,17 @@ $type_class = (!$type)? "type_app":"type_service";
 
 	<!-- Ставка -->
 	<td>
-		<?php echo Html::textInput($class."[rate]",null,['class'=>'app_rate compute_sum compute_rate form-control']);?>
+		<?php if($canReadColumRate){?>
+			<?php echo Html::textInput($class."[rate]",null,['class'=>'app_rate compute_sum compute_rate form-control']);?>
+		<?php } ?>
 	</td>
 
 	<td class="summa_usa">
-		<?php echo Html::textInput($class."[summa_us]",null,['class'=>'summa_us form-control']);?>
+		<?php if($canReadColumSumUs){?>
+			<?php echo Html::textInput($class."[summa_us]",null,['class'=>'summa_us form-control']);?>
+		<?php } ?>
 	</td>
-	<td class="summa">
+	<td class="<?php echo $canReadColumSumRu ? 'summa': '';?>">
 		
 	</td>
 	<td>
