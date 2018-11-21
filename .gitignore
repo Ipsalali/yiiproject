@@ -38,7 +38,7 @@ phpunit.phar
 /backend/web/assets
 /backend/web/assets/
 
-/console/import
+/console/data
 /common/tmp
 
 .htaccess
