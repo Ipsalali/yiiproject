@@ -96,7 +96,7 @@ $autotruckCountries = SupplierCountry::getIndexedArray();
 		</div>
 		<div class="row">
 			<div class="col-xs-3">
-				<p>Задолженность: <?php echo $client->user->getManagerSverka();?> $</p>
+				<p>Задолженность: <?php echo isset($clientUser->id) ? $clientUser->getManagerSverka() : "";?> $</p>
 			</div>
 			
 		</div>

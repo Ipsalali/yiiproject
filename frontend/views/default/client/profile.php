@@ -8,6 +8,8 @@ $this->title = "TEDTRANS";
 $user = Yii::$app->user->identity;
 $packages = TypePackaging::find()->all();
 $canFormAutotruck = Yii::$app->user->can("autotruck/create");
+$manager = $client->managerUser;
+$clientUser = $client->user;
 ?>
 
 <div class="client_page">
@@ -16,18 +18,18 @@ $canFormAutotruck = Yii::$app->user->can("autotruck/create");
 	 		<div class="row">
 				<div class="col-xs-5 client_manager">
 					<h4>Ваш менеджер:</h4>
-					<?php $class=""; if($client->managerUser){ 
+					<?php $class=""; if($manager){
 						$class="manager_info";
 						?>
 						<div class="manager_info_block">
-							<?php if($client->managerUser->name){?>
-								<p><span>Имя: </span><strong><?php echo $client->managerUser->name;?></strong></p>
+							<?php if($manager->name){?>
+								<p><span>Имя: </span><strong><?php echo $manager->name;?></strong></p>
 							<?php } ?>
-							<?php if($client->managerUser->phone){?>
-								<p><span>Телефон: </span><strong><?php echo $client->managerUser->phone;?></strong></p>
+							<?php if($manager->phone){?>
+								<p><span>Телефон: </span><strong><?php echo $manager->phone;?></strong></p>
 							<?php } ?>
-							<?php if($client->managerUser->email){?>
-								<p><span>E-mail: </span><strong><?php echo $client->managerUser->email;?></strong></p>
+							<?php if($manager->email){?>
+								<p><span>E-mail: </span><strong><?php echo $manager->email;?></strong></p>
 							<?php } ?>
 							
 						</div>
@@ -42,7 +44,7 @@ $canFormAutotruck = Yii::$app->user->can("autotruck/create");
 	
 	<div class="row">
 		<div class="col-xs-12">
-			<p>Задолженность: <?php echo $client->user->getManagerSverka();?> $</p>
+			<p>Задолженность: <?php echo isset($clientUser->id) ? $clientUser->getManagerSverka() : "";?> $</p>
 		</div>		
 	</div>
 
