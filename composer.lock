@@ -204,16 +204,16 @@
         },
         {
             "name": "bower-asset/blueimp-file-upload",
-            "version": "v9.24.1",
+            "version": "v9.22.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/blueimp/jQuery-File-Upload.git",
-                "reference": "d17e60162b89810ba4096cac1549b8636b289a59"
+                "reference": "39607fdaaba0dc11ba8c116ac2968e28e796f153"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/blueimp/jQuery-File-Upload/zipball/d17e60162b89810ba4096cac1549b8636b289a59",
-                "reference": "d17e60162b89810ba4096cac1549b8636b289a59",
+                "url": "https://api.github.com/repos/blueimp/jQuery-File-Upload/zipball/39607fdaaba0dc11ba8c116ac2968e28e796f153",
+                "reference": "39607fdaaba0dc11ba8c116ac2968e28e796f153",
                 "shasum": ""
             },
             "require": {
@@ -264,7 +264,7 @@
                 "upload",
                 "widget"
             ],
-            "time": "2018-10-23T11:18:50+00:00"
+            "time": "2018-06-19T07:33:35+00:00"
         },
         {
             "name": "bower-asset/blueimp-gallery",

@@ -401,20 +401,6 @@ class Autotruck extends ActiveRecordVersionable
 
 
 
-
-
-    public function checkNotificationClient($client,$app){
-        if(!$client) return false;
-        $where = "`autotruck_id`=".$this->id." AND `status_id`=".$this->activeStatus->id." AND client_id=".$client." AND app_id=".$app;
-
-        $notification = AutotruckNotification::find()->where($where)->one();
-        return (isset($notification->nid) && $notification->nid)?false:true;
-    }
-
-
-
-
-
     public function refreshClientsSverka(){
 
         $sql = "SELECT DISTINCT c.`user_id`  
@@ -430,6 +416,21 @@ class Autotruck extends ActiveRecordVersionable
         }
 
     }
+    
+
+
+
+
+    public function checkNotificationClient($client,$app){
+        if(!$client) return false;
+        if(!$this->status) return false;
+        
+        $where = "`autotruck_id`=".$this->id." AND `status_id`=".$this->status." AND client_id=".$client." AND app_id=".$app;
+
+        $notification = AutotruckNotification::find()->where($where)->one();
+        
+        return (isset($notification->nid) && $notification->nid) ? false : true;
+    }
 
 
 
@@ -438,9 +439,9 @@ class Autotruck extends ActiveRecordVersionable
 
 
     public function sendNotification(){
-
-
-
+        
+        if(!$this->status) return false;
+        
         $apps = $this->getApps();
         $client_apps = array();
         
@@ -460,7 +461,7 @@ class Autotruck extends ActiveRecordVersionable
         $activeStatus = $this->activeStatus;
         $activeTrace =  $this->activeStatusTrace;
         $autotruck_model = $this;
-        if(count($client_apps)){
+        if(count($client_apps)  && isset($activeStatus->id)){
             
             foreach ($client_apps as $key => $client) {
 
@@ -537,7 +538,7 @@ class Autotruck extends ActiveRecordVersionable
                             
                             $not = new AutotruckNotification();
                             $not->autotruck_id = $this->id;
-                            $not->status_id = $this->activeStatus->id;
+                            $not->status_id = $this->status;
                             $not->client_id = $client_model->id;
                             $not->app_id = $app->id;
                             $not->save();

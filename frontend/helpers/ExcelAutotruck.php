@@ -263,8 +263,8 @@ class ExcelAutotruck{
 
 			//Сумма
 			$L = "L$endRow";
-			$s = $a->weight*$a->rate;
-			$s = sprintf("%.2f",$s);
+			$s = $a->summa_us;
+			//$s = sprintf("%.2f",$s);
 
 			$this->setFloat($s,$L);
 
@@ -277,7 +277,8 @@ class ExcelAutotruck{
 			}
 			$this->merge("N$endRow:P$endRow");
 
-			$total += $a->weight*$a->rate;
+			$total += $a->summa_us;//$a->weight*$a->rate;
+			
 
 			if(!$a->type){
 				$totalW += $a->weight; 
