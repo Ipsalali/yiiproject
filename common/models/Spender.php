@@ -99,6 +99,10 @@ class Spender extends ActiveRecord
             $this->date = date("Y-m-d H:i",time());
             $this->sended = self::UNSENDED;
             
+            if(!$validate){
+                $this->addError("theme",'Не найдено клиентов для рассылки');
+            }
+
             return $validate;
         }else{
             return false;
@@ -106,12 +110,9 @@ class Spender extends ActiveRecord
     }
 
 
-
-    protected function setToClients($ignore = null,$category = []){
-
-        $sql = "SELECT user.`email`,client.`id` FROM ".Client::tableName()."
+    public function getEmailsForSend($ignore = null,$category = []){
+        $sql = "SELECT user.`email`,client.`id`,client.`full_name` FROM ".Client::tableName()."
                     INNER JOIN user ON user.`id` = client.`user_id`";
-        
         
         $conditions = [];
         
@@ -129,7 +130,13 @@ class Spender extends ActiveRecord
         
         $connection = Yii::$app->getDb();
         $command = $connection->createCommand($sql);
-        $res = $command->queryAll();
+        return $command->queryAll();
+    }
+
+
+    protected function setToClients($ignore = null,$category = []){
+
+        $res = $this->getEmailsForSend($ignore,$category);
 
         $ids = [];
         $emails = [];
@@ -138,12 +145,13 @@ class Spender extends ActiveRecord
                 array_push($ids, $value['id']);
                 array_push($emails, $value['email']);
             }
+
+            $this->to_client = json_encode($ids);
+            $this->to_email = json_encode($emails);
+            return true;
         }
 
-        $this->to_client = json_encode($ids);
-        $this->to_email = json_encode($emails);
-        
-        return true;
+        return false;
     }
 
 
