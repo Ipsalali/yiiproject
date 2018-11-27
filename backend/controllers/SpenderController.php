@@ -8,6 +8,7 @@ use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\web\HttpException;
 use common\models\Spender;
+use common\helper\EmailChecker;
 
 class SpenderController extends Controller{
 
@@ -47,6 +48,9 @@ class SpenderController extends Controller{
 
         $emails = $spender->getEmailsForSend();
 
+        $res = EmailChecker::checkMethod("web-ali@yandex.ru");
+        print_r($res);
+        exit;
         return $this->render('emails',[
             'spender'=>$spender,
             'emails'=>$emails
@@ -59,13 +63,10 @@ class SpenderController extends Controller{
         if(Yii::$app->request->isAjax){
             Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 
-            $api_key = 'secret_6497a32ac5be390a97ac0a42c5f48e0b';
-            \NeverBounce\Auth::setApiKey($api_key);
-            
-            $response  = \NeverBounce\Single::check($email);
+            $v = EmailChecker::checkMethod1($email);
             
             return [
-                'success'=>$response ->is("valid"),
+                'success'=>$v === true,
                 'email'=>$email
             ];
         }else{

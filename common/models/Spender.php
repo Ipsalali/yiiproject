@@ -112,7 +112,7 @@ class Spender extends ActiveRecord
 
     public function getEmailsForSend($ignore = null,$category = []){
         $sql = "SELECT user.`email`,client.`id`,client.`full_name` FROM ".Client::tableName()."
-                    INNER JOIN user ON user.`id` = client.`user_id`";
+                    INNER JOIN user ON user.`id` = client.`user_id` WHERE user.`email` IS NOT NULL";
         
         $conditions = [];
         
@@ -125,7 +125,7 @@ class Spender extends ActiveRecord
         }
 
         if(count($conditions)){
-            $sql .= " WHERE ". implode(" and ", $conditions);
+            $sql .= " AND ". implode(" AND ", $conditions);
         }
         
         $connection = Yii::$app->getDb();
