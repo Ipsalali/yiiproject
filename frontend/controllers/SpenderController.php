@@ -80,7 +80,7 @@ class SpenderController extends Controller{
                     $answer['key'] = $key;
                     $answer['client'] = $clients;
                 }else{
-                	 $answer['result'] = 0;
+                	$answer['result'] = 0;
                     $answer['error']['text'] = 'not found clients';
                 }
             }else{

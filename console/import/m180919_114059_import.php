@@ -49,7 +49,7 @@ class m180919_114059_import extends Import
         'autotruck_notification'
     ];
 
-    public $file_frefix = 'webali_tcrm_table_';
+    public $file_frefix = 'webali_crmted_table_';
 
     public function safeUp()
     {   

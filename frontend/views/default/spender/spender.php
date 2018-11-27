@@ -95,7 +95,7 @@ $script = <<<JS
         if(v.length > 2){
             $.ajax({
                 url:"index.php?r=spender/get-client",
-                type:"POST",
+                type:"GET",
                 data:"key="+v,
                 dataType:"json",
                 success:function(json){
