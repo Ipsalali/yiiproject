@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b4d3200fc9ff92555dfeb188ddfe71d5",
+    "content-hash": "dad6bc57c402805db4a6dade753ea7a2",
     "packages": [
         {
             "name": "2amigos/yii2-date-picker-widget",
@@ -1781,6 +1781,58 @@
                 "object graph"
             ],
             "time": "2018-06-11T23:09:50+00:00"
+        },
+        {
+            "name": "neverbounce/neverbounce-php",
+            "version": "v4.1.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/NeverBounce/NeverBounceAPI-PHP.git",
+                "reference": "694ae077ed2c804d5b2806ce40dbc0ffae26e328"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/NeverBounce/NeverBounceAPI-PHP/zipball/694ae077ed2c804d5b2806ce40dbc0ffae26e328",
+                "reference": "694ae077ed2c804d5b2806ce40dbc0ffae26e328",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "ext-json": "*",
+                "php": ">=5.5.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.8"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "NeverBounce\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Ankur Pandit",
+                    "email": "ankur@neverbounce.com"
+                },
+                {
+                    "name": "Michael Mollick",
+                    "email": "mike@neverbounce.com"
+                }
+            ],
+            "description": "This package provides convenient methods to integrate the NeverBounce API into your project.",
+            "homepage": "https://neverbounce.com",
+            "keywords": [
+                "email",
+                "email validation",
+                "validation",
+                "verification"
+            ],
+            "time": "2018-09-10T14:39:20+00:00"
         },
         {
             "name": "paragonie/random_compat",
