@@ -12,6 +12,7 @@ class SignupForm extends Model
 {
     public $username;
     public $email;
+    public $phone;
     public $password;
 
     /**
@@ -20,21 +21,47 @@ class SignupForm extends Model
     public function rules()
     {
         return [
-            // ['username', 'filter', 'filter' => 'trim'],
-            // ['username', 'required'],
-            // ['username', 'unique', 'targetClass' => '\common\models\User', 'message' => 'This username has already been taken.'],
-            // ['username', 'string', 'min' => 2, 'max' => 255],
-
-            ['email', 'filter', 'filter' => 'trim'],
-            ['email', 'required'],
+            [['email','phone'], 'filter', 'filter' => 'trim'],
             ['email', 'email'],
             ['email', 'string', 'max' => 255],
-            ['email', 'unique', 'targetClass' => '\common\models\User', 'message' => 'This email address has already been taken.'],
+            ['email', 'unique', 'targetClass' => '\common\models\User', 'message' => 'Такой email уже используется'],
+            
+            ['username', 'default', 'value'=>null],
+            ['email','default','value'=>null],
+            ['phone','default','value'=>null],
 
             ['password', 'required'],
             ['password', 'string', 'min' => 6],
         ];
     }
+
+    /**
+     * @return array customized attribute labels (name=>label)
+     */
+    public function attributeLabels(){
+        return array(
+            'email'=>'E-mail',
+            'phone'=>'Номер телефона',
+            'username'=>'Имя',
+            'password'=>'Пароль'
+        );
+    }
+
+    public function load($data, $formName = null){
+
+        if(parent::load($data, $formName)){
+
+            if(!$this->phone && !$this->email){
+                $this->addError('phone',"Не заполнено обязательное поле(email или номер).");
+                return false;
+            }
+
+            return true;
+        }
+
+        return false;
+    }
+
 
     /**
      * Signs user up.
@@ -47,6 +74,7 @@ class SignupForm extends Model
             $user = new User();
             $user->username = $this->username;
             $user->email = $this->email;
+            $user->phone = $this->phone;
             $user->setPassword($this->password);
             $user->generateAuthKey();
             if ($user->save(1)) {

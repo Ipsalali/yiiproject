@@ -20,7 +20,7 @@ $this->title = 'Вход';
         <div class="col-lg-5">
             <?php $form = ActiveForm::begin(['id' => 'login-form']); ?>
 
-                <?= $form->field($model, 'email')->label("E-mail");?>
+                <?= $form->field($model, 'login')->label("Логин");?>
 
                 <?= $form->field($model, 'password')->passwordInput()->label("Пароль"); ?>
 

@@ -6,7 +6,7 @@ use common\models\ClientCategory;
 use common\models\Organisation;
 
 
-$this->title = $client->id ? $client->name : "Новый клиент";
+$this->title = isset($model->id) ? $model->name : "Новый клиент";
 
 ?>
 
@@ -18,49 +18,54 @@ $this->title = $client->id ? $client->name : "Новый клиент";
             <h3>Данные о клиенте</h3>
             <div class="row">
                 <div class="col-xs-12">
-                    <?php echo $form->field($client, 'full_name')->textInput(); ?>
+                    <?php echo $form->field($model, 'full_name')->textInput(); ?>
+                    <?php
+                        if(isset($model->id)){
+                            echo Html::hiddenInput('model_id',$model->id);
+                        }
+                    ?>
                 </div>
             </div>
 
             <div class="row">
                 <div class="col-xs-6">
-                    <?php echo $form->field($client, 'name')->textInput(); ?>
+                    <?php echo $form->field($model, 'name')->textInput(); ?>
                 </div>
                 <div class="col-xs-6">
-                    <?php echo $form->field($client, 'phone')->textInput(); ?>
+                    <?php echo $form->field($model, 'phone')->textInput(); ?>
                 </div>
             </div>
 
             <div class="row">
                 <div class="col-xs-4">
-                    <?php echo $form->field($client, 'payment_clearing')->textInput(); ?>
+                    <?php echo $form->field($model, 'payment_clearing')->textInput(); ?>
                 </div>
                 <div class="col-xs-4">
-                    <?php echo $form->field($client, 'organisation_pay_id')->dropDownList(ArrayHelper::map(Organisation::find()->all(),'id','org_name'),['prompt'=>'Выберите организацию']); ?>
+                    <?php echo $form->field($model, 'organisation_pay_id')->dropDownList(ArrayHelper::map(Organisation::find()->all(),'id','org_name'),['prompt'=>'Выберите организацию']); ?>
                 </div>
                 <div class="col-xs-4">
-                    <?php echo $form->field($client, 'contract_number')->textInput(["value"=>$client->ActualContractNumber]); ?>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-xs-12">
-                    <?php echo $form->field($client, 'description')->textInput(); ?>
+                    <?php echo $form->field($model, 'contract_number')->textInput(["value"=>$model->ActualContractNumber]); ?>
                 </div>
             </div>
 
             <div class="row">
                 <div class="col-xs-12">
-                    <?php echo $form->field($client, 'email')->textInput(); ?>
+                    <?php echo $form->field($model, 'description')->textInput(); ?>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-xs-12">
+                    <?php echo $form->field($model, 'email')->textInput(); ?>
                 </div>
             </div>
 
             <div class="row">
                 <div class="col-xs-4">
-                    <?php echo $form->field($client, 'client_category_id')->dropDownList(ArrayHelper::map(ClientCategory::find()->all(),'cc_id','cc_title'),['prompt'=>'Выберите категорию']); ?>
+                    <?php echo $form->field($model, 'client_category_id')->dropDownList(ArrayHelper::map(ClientCategory::find()->all(),'cc_id','cc_title'),['prompt'=>'Выберите категорию']); ?>
                 </div>
                 <div class="col-xs-4">
-                    <?php echo $form->field($client, 'manager')->dropDownList(ArrayHelper::map($managers,'id','username'),['prompt'=>'Выберите менеджера']); ?>
+                    <?php echo $form->field($model, 'manager')->dropDownList(ArrayHelper::map($managers,'id','username'),['prompt'=>'Выберите менеджера']); ?>
                 </div>
                 
             </div>
@@ -94,7 +99,7 @@ $this->title = $client->id ? $client->name : "Новый клиент";
                         </div>
                         <div id="user_select" class="row" style="<?php echo isset($error) && $error ? "" : "display: none;"?>">
                             <div class="col-xs-12">
-                                <?php echo $form->field($client, 'user_id')->dropDownList(ArrayHelper::map($freeUser,'id','name'),['prompt'=>'Выберите пользователя']); ?>
+                                <?php echo $form->field($model, 'user_id')->dropDownList(ArrayHelper::map($freeUser,'id','name'),['prompt'=>'Выберите пользователя']); ?>
                             </div>
                         </div>
                         <script type="text/javascript">
@@ -119,12 +124,13 @@ $this->title = $client->id ? $client->name : "Новый клиент";
                             <div class="row">
                                 <div class="col-xs-6">
                                     <?php echo $form->field($user, 'email')->textInput(); ?>
+                                    <?php echo $form->field($user, 'phone')->textInput(); ?>
                                 </div>
                             </div>
 
                             <div class="row">
                                 <div class="col-xs-6">
-                                    <?=$form->field($user, 'password')->textInput(
+                                    <?php echo $form->field($user, 'password')->textInput(
                                 array("value"=>Yii::$app->getSecurity()->generateRandomString(6))
                             ); ?>
                                 </div>
@@ -138,6 +144,7 @@ $this->title = $client->id ? $client->name : "Новый клиент";
                     <div class="row">
                         <div class="col-xs-6">
                             <?php echo $form->field($user, 'email')->textInput(); ?>
+                            <?php echo $form->field($user, 'phone')->textInput(); ?>
                         </div>
                     </div>
                 <?php } ?> 
@@ -154,7 +161,7 @@ $this->title = $client->id ? $client->name : "Новый клиент";
 <?php ActiveForm::end(); ?>
 
 <?php
-if($mode==="update"){
+if(isset($model->id)){
 
 $script = <<<JS
         $("#client-organisation_pay_id").change(function(event){
@@ -166,7 +173,7 @@ $script = <<<JS
                     url:"/index.php?r=client/get-relation",
                     type:"POST",
                     dataType:'json',
-                    data:"client_id={$client->id}"+"&org_id="+org_id,
+                    data:"client_id={$model->id}"+"&org_id="+org_id,
                     success:function(json){
                         console.log(json);
                         if(json.hasOwnProperty("value"))
@@ -174,7 +181,7 @@ $script = <<<JS
                     }
                 });
             }else{
-                $("#client-contract_number").val("{$client->contract_number}");
+                $("#client-contract_number").val("{$model->contract_number}");
             }
 
         });

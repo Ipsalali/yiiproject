@@ -25,7 +25,7 @@ class m180728_064123_journal extends Migration
             'auth_key' => $this->string()->null(),
             'password_hash' => $this->string()->null(),
             'password_reset_token' => $this->string()->null(),
-            'email' => $this->string()->notNull(),
+            'email' => $this->string()->null(),
             'status' => $this->smallInteger()->notNull()->defaultValue(10),
             'phone' => $this->string()->null(),
             'name' => $this->string()->null(),

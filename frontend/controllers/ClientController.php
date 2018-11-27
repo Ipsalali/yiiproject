@@ -38,7 +38,7 @@ class ClientController extends Controller{
                         'roles' => ['client/index'],
                     ],
                     [
-                        'actions' => ['create', 'index','get-relation'],
+                        'actions' => ['form', 'index','get-relation'],
                         'allow' => true,
                         'roles' => ['client/create'],
                     ],
@@ -48,7 +48,7 @@ class ClientController extends Controller{
                         'roles' => ['client/read'],
                     ],
                     [
-                        'actions' => ['update', 'index'],
+                        'actions' => ['form', 'index'],
                         'allow' => true,
                         'roles' => ['client/update'],
                     ],
@@ -105,14 +105,21 @@ class ClientController extends Controller{
 
 
 
-	public function actionCreate(){
-		$client = new Client;
+	public function actionForm($id = null){
+        $post = Yii::$app->request->post();
+
+        if($id || isset($post['model_id'])){
+           $id = isset($post['model_id']) ? (int)$post['model_id'] : (int)$id;
+
+           $model =  Client::findOne(['id'=>$id]);
+           if(!isset($model->id))
+                throw new \Exception("Клиент не найден!",404); 
+        }else{
+           $model = new Client(); 
+        }
 
 		$user = new SignupForm();
-
 		$managers = User::getManagers();
-
-		$post = Yii::$app->request->post();
         $error = false;
 
 		if(isset($post['Client'])){
@@ -123,16 +130,16 @@ class ClientController extends Controller{
                 }
             }
 
-
-			if($client->load($post) && !$error && $client->save(1)){
+			if($model->load($post) && !$error && $model->save(1)){
 				
+                Yii::$app->session->setFlash('success',"Данные клиента сохранены");
+
                 //Сохраняем связь между организацией и клиентом
                 $c_n = isset($post['Client']['contract_number']) ? trim(strip_tags($post['Client']['contract_number'])) : "";
 
+                ClientOrganisation::saveRelation($model,$c_n);
 
-                ClientOrganisation::saveRelation($client,$c_n);
-
-				if (!$client->user_id && $user->load($post)) {
+				if (!$model->user_id && $user->load($post)) {
 
             		if ($profile = $user->signup()) {
 
@@ -141,109 +148,51 @@ class ClientController extends Controller{
                 
                 		Yii::$app->authManager->assign($userRole, $profile->getId());
 
-                		$client->user_id = $profile->getId();
+                		$model->user_id = $profile->getId();
 
-                		$client->save(1);
+                		$model->save(1);
 
+                        Yii::$app->session->setFlash('success',"Данные профиля сохранены");
+                        return Yii::$app->response->redirect(["client/index"]);
             		}
-        		
-        		}
+        		}elseif(isset($post['User'])){
+                    $user = $model->user;
+                    if($user->load($post) && $user->save(true)){
 
-				Yii::$app->response->redirect(array("client/index"));
-			} 
+                        Yii::$app->session->setFlash('success',"Данные профиля сохранены");
+                        return Yii::$app->response->redirect(["client/index"]);
+                    }
+                    
+                    if(!isset($post['use_free_client'])){
+                        Yii::$app->session->setFlash('error',"Данные профиля не сохранены");
+                    }
+                }
 
+                
+			}else{
+                Yii::$app->session->setFlash('error',"Данные клиента не сохранены");
+            }
 		}
 
         $freeUser = User::getUnAssignedUserForClient();
-        $mode_user_create = true;
-
-		return $this->render('create',array("error"=>$error,"freeUser"=>$freeUser,"client"=>$client,"user"=>$user,"mode"=>"create",'managers'=>$managers,"mode_user_create"=>$mode_user_create));
-	}
-
-
-
-
-	public function actionUpdate($id = null){
-		if($id == null)
-			throw new HttpException(404, 'Not Found');
-
-		$Client = Client::findOne($id);
-
-		$managers = User::getManagers();
-
-        $user = new SignupForm();
-        
-		if(!isset($Client->id))
-        	throw new HttpException(404, 'Document Does Not Exist');
-		
-
-        $error = false;
-        
-        $post = Yii::$app->request->post();
-
-		if (isset($_POST['Client']))
-    	{   
-
-
-            if(isset($post['use_free_client']) && (int)$post['use_free_client']){
-                if(isset($post['Client']['user_id']) && !(int)$post['Client']['user_id']){
-                    $error = true;
-                }
-            }
-
-        	if ($Client->load($_POST) && $Client->save(1)){
-
-                $c_n = isset($_POST['Client']['contract_number']) ? trim(strip_tags($_POST['Client']['contract_number'])) : "";
-
-                
-                //Сохраняем связь между организацией и клиентом
-                ClientOrganisation::saveRelation($Client,$c_n);
-
-                
-                if (!isset($Client->user->id) && isset($post['SignupForm']) &&  $user->load($post)) {
-
-                    if ($profile = $user->signup()) {
-
-                        //Устанавливаем для пользователя роль
-                        $userRole = Yii::$app->authManager->getRole('client');
-                
-                        Yii::$app->authManager->assign($userRole, $profile->getId());
-
-                        $Client->user_id = $profile->getId();
-
-                        $Client->save(1);
-
-                    }
-                
-                }elseif(isset($_POST['User']['email']) && $_POST['User']['email']){
-                    $user = $Client->user;
-                    $user->email = trim(strip_tags($_POST['User']['email']));
-                    $user->save(true);
-                }
-        			
-            	
-
-                Yii::$app->response->redirect(array('client/read','id'=>$Client->id));
-        	}
-    	}
-
-        
-        if($Client->user){
-            $user = $Client->user;
+        if($model->user_id){
+            $user = $model->user;
             $mode_user_create = false;
         }else{
-            
             $mode_user_create = true;
         }
 
-        $freeUser = User::getUnAssignedUserForClient();
-
-    	return $this->render('create', array(
-        	"client"=>$Client,'managers'=>$managers,
-        	"mode"=>"update",'user'=>$user,"mode_user_create"=>$mode_user_create,"freeUser"=>$freeUser,"error"=>$error
-    	));
-
+		return $this->render('form',[
+            "error"=>$error,
+            "freeUser"=>$freeUser,
+            "model"=>$model,
+            "user"=>$user,
+            'managers'=>$managers,
+            "mode_user_create"=>$mode_user_create
+        ]);
 	}
+
+
 
 
 

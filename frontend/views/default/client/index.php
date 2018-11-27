@@ -17,19 +17,6 @@ $managers = User::getManagers();
 
 ?>
  
-<?php if(Yii::$app->session->hasFlash('ClientDeletedError')): ?>
-<div class="alert alert-error">
-    There was an error deleting your post!
-</div>
-<?php endif; ?>
- 
-<?php if(Yii::$app->session->hasFlash('ClientDeleted')): ?>
-<div class="alert alert-success">
-    Your post has successfully been deleted!
-</div>
-<?php endif; ?>
-
-<div class="clearfix"></div>
 <div class="main">
 <div class="row">
         <div class="col-xs-6 autotruck_head">
@@ -37,7 +24,7 @@ $managers = User::getManagers();
                 <h1>Список клиентов</h1>
             </div>
             <div class="new_autotruck">
-                <?php echo Html::a('Добавить клиента', array('client/create'), array('class' => 'btn btn-primary')); ?>
+                <?php echo Html::a('Добавить клиента', array('client/form'), array('class' => 'btn btn-primary')); ?>
             </div>
             
         </div>
@@ -102,12 +89,12 @@ echo \yii\grid\GridView::widget([
                 'filter'=>Html::activeDropDownList($clientSearch,'manager',Arrayhelper::map($managers,'id','name'),['class'=>'form-control','prompt'=>'Выберите менеджера'])
             ],
             ['class' => 'yii\grid\ActionColumn',
-                'template' => '{update}',
+                'template' => '{form}',
                 'buttons' =>
                  [
                      
-                    'update' => function ($url, $model) {
-                         return Html::a('<span class="glyphicon glyphicon-pencil"></span>', Url::to(['/client/update', 'id' => $model['id']]), [
+                    'form' => function ($url, $model) {
+                         return Html::a('<span class="glyphicon glyphicon-pencil"></span>', Url::to(['/client/form', 'id' => $model['id']]), [
                              'title' => Yii::t('yii', 'Редактировать')
                          ]); },   
                     'delete' => function ($url, $model) {

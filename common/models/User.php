@@ -58,16 +58,34 @@ class User extends ActiveRecordVersionable implements IdentityInterface, UserRba
     {
         return [
             
-            ['email', 'filter', 'filter' => 'trim'],
-            ['email', 'required'],
+            [['email','phone'], 'filter', 'filter' => 'trim'],
             ['email', 'email'],
             ['email', 'string', 'max' => 255],
             ['email', 'unique', 'targetClass' => '\common\models\User', 'message' => 'Такой email уже используется'],
             ['username', 'default', 'value'=>null],
+            ['email','default','value'=>null],
+            ['phone','default','value'=>null],
+            //['email', 'unique', 'targetClass' => '\common\models\User', 'message' => 'Такой номер телефона уже используется'],
 
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
         ];
+    }
+
+
+    public function load($data, $formName = null){
+
+        if(parent::load($data, $formName)){
+
+            if(!$this->phone && !$this->email){
+                $this->addError('phone',"Не заполнено обязательное поле(email или номер).");
+                return false;
+            }
+
+            return true;
+        }
+
+        return false;
     }
 
 
@@ -85,6 +103,22 @@ class User extends ActiveRecordVersionable implements IdentityInterface, UserRba
         ];
     }
 
+
+
+    /**
+     * @return array customized attribute labels (name=>label)
+     */
+    public function attributeLabels(){
+        return array(
+            'id'=>'Id',
+            'email'=>'E-mail',
+            'phone'=>'Номер телефона',
+            'username'=>'Имя',
+        );
+    }
+
+
+
     /**
      * @inheritdoc
      */
@@ -92,6 +126,10 @@ class User extends ActiveRecordVersionable implements IdentityInterface, UserRba
     {
         return static::findOne(['id' => $id, 'status' => self::STATUS_ACTIVE]);
     }
+
+
+   
+
 
     /**
      * @inheritdoc
@@ -113,15 +151,40 @@ class User extends ActiveRecordVersionable implements IdentityInterface, UserRba
     }
 
     /**
-     * Finds user by username
+     * Finds user by email
      *
-     * @param string $username
+     * @param string $email
      * @return static|null
      */
     public static function findByEmail($email)
     {
         return static::findOne(['email' => $email, 'status' => self::STATUS_ACTIVE]);
     }
+
+    /**
+     * Finds user by phone
+     *
+     * @param string $phone
+     * @return static|null
+     */
+    public static function findByPhone($phone)
+    {
+        return static::findOne(['phone' => $email, 'status' => self::STATUS_ACTIVE]);
+    }
+
+
+     /**
+     * Finds user by login(email or phone)
+     *
+     * @param string $username
+     * @return static|null
+     */
+    public static function findByLogin($login)
+    {   
+        return User::find()->where("phone = '{$login}' OR email = '{$login}'")->andWhere(['status' => self::STATUS_ACTIVE])->one(); 
+    }
+
+
 
     /**
      * Finds user by password reset token

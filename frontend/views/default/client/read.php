@@ -28,7 +28,7 @@ $autotruckCountries = SupplierCountry::getIndexedArray();
 		</div>
 		<div class="pull-right btn-group">
 		<?php echo Html::a("Журнал редактирования клиента",['client/client-story','id'=>$client->id],['id'=>'btnClientStory','class'=>'btn btn-success'])?>
-	    <?php echo Html::a('Редактировать', array('client/update', 'id' => $client->id), array('class' => 'btn btn-primary')); ?>
+	    <?php echo Html::a('Редактировать', array('client/form', 'id' => $client->id), array('class' => 'btn btn-primary')); ?>
 	    <?php echo Html::a('Удалить', array('client/delete', 'id' => $client->id), array('class' => 'btn btn-danger remove_check')); ?>
 		</div>
 	</div>
@@ -37,7 +37,7 @@ $autotruckCountries = SupplierCountry::getIndexedArray();
 	<div class="row">
 		<div class="col-xs-12">
 			<h2>
-				<?php echo Html::encode($client->name); ?>&nbsp(<span><?php echo Html::encode($clientCategory->cc_title); ?></span>)
+				<?php echo Html::encode($client->name); ?>&nbsp(<span><?php echo isset($clientCategory->cc_id) ? Html::encode($clientCategory->cc_title) : ""; ?></span>)
 			</h2>
 		</div>
 	</div>
