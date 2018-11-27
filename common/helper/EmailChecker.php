@@ -13,7 +13,7 @@ class EmailChecker{
 
 
 
-	public static function checkMethod1($email){
+	public static function checkHost($email){
 		
 		if(!self::validName($email)) return false;
 
@@ -28,7 +28,7 @@ class EmailChecker{
 		    
 		    if($f){
 		        fclose($f);
-		        return 0;
+		        return true;
 		    }
 		    else 
 		    	return false;
@@ -36,7 +36,7 @@ class EmailChecker{
 	}
 
 
-  	public static function checkMethod($email = ""){
+  	public static function checkEmail($email){
 	    $timeout = 10;
 
 	    if(!self::validName($email)) return false;
@@ -56,7 +56,7 @@ class EmailChecker{
 
 	    
 
-	    $port = 25;
+	    $port = 465;
 	    $localhost = $_SERVER['HTTP_HOST'];
 	    $sender = 'info@tcrm-web-ali.ru';// . $localhost;
 
@@ -106,40 +106,6 @@ class EmailChecker{
 
 	    return false;
 	}
-
-
-	public static function checkMethod3($email){
-
-		if(!self::validName($email)) return false;
-
-		$re='/.*@(.*)/';
-		preg_match($re, $email, $match);
-		$domain=$match[1];
-
-		$mx_records = dns_get_record($domain,DNS_MX);
-
-		$port = 25; //Порт работы сервера
-		if (($socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP)) < 0) {
-		    //AF_INET - семейство протоколов
-		    //SOCK_STREAM - тип сокета
-		    //SOL_TCP - протокол
-		    echo "\nSocket creating error\n";
-		}
-
-		foreach ($mx_records as $key => $mx) {
-			print_r($mx['target']);
-			// $result = socket_connect($socket, $mx['target'], $port);
-			// if ($result === false) {
-			//     echo "\nError connecting to socket\n";
-			// } else {
-			//    echo "\nSocket connected\n";
-			// }
-		}
-		
-		print_r($mx_records);
-		exit;
-	}
-
 
 
 }

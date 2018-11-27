@@ -48,9 +48,6 @@ class SpenderController extends Controller{
 
         $emails = $spender->getEmailsForSend();
 
-        $res = EmailChecker::checkMethod("web-ali@yandex.ru");
-        print_r($res);
-        exit;
         return $this->render('emails',[
             'spender'=>$spender,
             'emails'=>$emails
@@ -63,7 +60,7 @@ class SpenderController extends Controller{
         if(Yii::$app->request->isAjax){
             Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 
-            $v = EmailChecker::checkMethod1($email);
+            $v = EmailChecker::checkHost($email);
             
             return [
                 'success'=>$v === true,

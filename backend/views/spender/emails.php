@@ -31,7 +31,7 @@ $this->title = "Проверка email адресов";
 					<td><?php echo ++$key;?></td>
 					<td><?php echo $item['full_name'];?></td>
 					<td class="td-email"><?php echo $item['email'];?></td>
-					<td><?php //EmailChecker::check($item['email']); ?></td>
+					<td><?php //EmailChecker::checkHost($item['email']); ?></td>
 				</tr>
 				<?php
 					}
