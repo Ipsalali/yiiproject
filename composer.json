@@ -29,8 +29,7 @@
         "2amigos/yii2-file-upload-widget": "~1.0",
         "kartik-v/yii2-date-range": "dev-master",
         "kartik-v/yii2-widget-datepicker": "@dev",
-        "kartik-v/yii2-field-range": "*",
-        "neverbounce/neverbounce-php": "~4.1.0"
+        "kartik-v/yii2-field-range": "*"
     },
     "require-dev": {
         "yiisoft/yii2-codeception": "*",
