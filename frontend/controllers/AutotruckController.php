@@ -211,10 +211,7 @@ class AutotruckController extends Controller{
 		                if(Yii::$app->user->can("clientextended")){
 							return Yii::$app->response->redirect(["client/profile"]);
 						}else{
-							if(!$id)
-								return $this->redirect(["autotruck/index"]);
-							else
-								return $this->redirect(['autotruck/read', 'id' => $autotruck->id]);
+							return $this->redirect(['autotruck/read', 'id' => $autotruck->id]);
 						}
 	            	    
 	            	}else{

@@ -61,14 +61,14 @@ class Autotruck extends ActiveRecordVersionable
             // name, email, subject and body are required
             [['name','country'], 'required','message'=>'Обязательное поле'],
             [['name','invoice','decor','gtd','auto_name','auto_number','description'],'filter','filter'=>function($v){
-                return trim(strip_tags($v));
+                    return trim(strip_tags($v));
             }],
             ['course','number'],
             ['course','filter','filter'=>function($v){
                 return $v ? round($v,4) : 0;
             }],
             ['date','filter','filter'=>function($v){
-                return $v ? date('Y-m-d',strtotime($v)):date("Y-m-d");
+                return $v ? date('Y-m-d',strtotime($v)) : date("Y-m-d");
             }],
             [['status','country'],'integer'],
             [['status','country','import_source'],'default','value'=>null],
