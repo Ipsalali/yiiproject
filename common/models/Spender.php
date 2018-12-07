@@ -170,24 +170,11 @@ class Spender extends ActiveRecord
         Yii::$app->db->createCommand('SET SESSION wait_timeout = 28800;')->execute();
         if(is_array($emails) && count($emails)){
             foreach ($emails as $key => $email) {
-                if($email){
-                    //$email = "magomedaliev.93@mail.ru";    
+                if($email){   
                     $message->setTo($email);
                     $message->send();
-                    
-                    /*
-                    $count++;
-                    
-                    if($count >= 30){
-                        $count = 0;
-                        sleep(30);
-                    }*/
                 }
             }
-            
-            $email = "magomedaliev.93@mail.ru";
-            $message->setTo($email);
-            $message->send();
             
             $sql = "UPDATE ".self::tableName()." SET `sended`= ".self::SENDED." WHERE `id`=".$this->id;
             $connection = Yii::$app->getDb();

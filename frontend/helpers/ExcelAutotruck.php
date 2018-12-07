@@ -278,7 +278,6 @@ class ExcelAutotruck{
 			$this->merge("N$endRow:P$endRow");
 
 			$total += $a->summa_us;//$a->weight*$a->rate;
-			
 
 			if(!$a->type){
 				$totalW += $a->weight; 

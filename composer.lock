@@ -204,16 +204,16 @@
         },
         {
             "name": "bower-asset/blueimp-file-upload",
-            "version": "v9.28.0",
+            "version": "v9.22.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/blueimp/jQuery-File-Upload.git",
-                "reference": "ee54fc3f57418edc6c86532cfe124a9e2c70deed"
+                "reference": "39607fdaaba0dc11ba8c116ac2968e28e796f153"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/blueimp/jQuery-File-Upload/zipball/ee54fc3f57418edc6c86532cfe124a9e2c70deed",
-                "reference": "ee54fc3f57418edc6c86532cfe124a9e2c70deed",
+                "url": "https://api.github.com/repos/blueimp/jQuery-File-Upload/zipball/39607fdaaba0dc11ba8c116ac2968e28e796f153",
+                "reference": "39607fdaaba0dc11ba8c116ac2968e28e796f153",
                 "shasum": ""
             },
             "require": {
@@ -264,7 +264,7 @@
                 "upload",
                 "widget"
             ],
-            "time": "2018-11-12T17:45:10+00:00"
+            "time": "2018-06-19T07:33:35+00:00"
         },
         {
             "name": "bower-asset/blueimp-gallery",
@@ -284,16 +284,16 @@
         },
         {
             "name": "bower-asset/blueimp-load-image",
-            "version": "v2.20.1",
+            "version": "v2.19.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/blueimp/JavaScript-Load-Image.git",
-                "reference": "e19f53104dfb1ec19be33455e45bca959561067b"
+                "reference": "5660ef0f68a34352f4574351ab86f3ecf82240f2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/blueimp/JavaScript-Load-Image/zipball/e19f53104dfb1ec19be33455e45bca959561067b",
-                "reference": "e19f53104dfb1ec19be33455e45bca959561067b",
+                "url": "https://api.github.com/repos/blueimp/JavaScript-Load-Image/zipball/5660ef0f68a34352f4574351ab86f3ecf82240f2",
+                "reference": "5660ef0f68a34352f4574351ab86f3ecf82240f2",
                 "shasum": ""
             },
             "type": "bower-asset-library"
