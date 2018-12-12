@@ -1,0 +1,1823 @@
+2018-12-12 17:40:56 [127.0.0.1][-][-][error][yii\web\HttpException:404] yii\web\NotFoundHttpException: Страница не найдена. in D:\usr\www\tedcrm\vendor\yiisoft\yii2\web\Request.php:284
+Stack trace:
+#0 D:\usr\www\tedcrm\vendor\yiisoft\yii2\web\Application.php(82): yii\web\Request->resolve()
+#1 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Application.php(386): yii\web\Application->handleRequest(Object(yii\web\Request))
+#2 D:\usr\www\tedcrm\api\rest\index.php(18): yii\base\Application->run()
+#3 {main}
+2018-12-12 17:40:56 [127.0.0.1][-][-][info][application] $_GET = []
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = []
+
+$_SERVER = [
+    'HTTP_HOST' => 'api.tedcrm:8081'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_CACHE_CONTROL' => 'max-age=0'
+    'HTTP_UPGRADE_INSECURE_REQUESTS' => '1'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.110 Safari/537.36'
+    'HTTP_DNT' => '1'
+    'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_ACCEPT_LANGUAGE' => 'ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7'
+    'PATH' => 'C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\Program Files\\Git\\cmd;D:\\OpenServer\\OpenServer\\modules\\php\\PHP-5.5\\ext;D:\\usr\\php;C:\\ProgramData\\ComposerSetup\\bin;D:\\usr\\php73;D:\\usr\\php73\\ext;D:\\usr\\php70;D:\\usr\\php70\\ext;D:\\usr\\php\\ext;D:\\xampp\\php;E:\\ProgramFiles\\nodejs\\;D:\\OpenServer\\OpenServer\\modules\\php\\PHP-5.5;D:\\usr\\www;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => ''
+    'SERVER_SOFTWARE' => 'Apache/2.4.25 (Win64) PHP/7.2.12'
+    'SERVER_NAME' => 'api.tedcrm'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '8081'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'DOCUMENT_ROOT' => 'D:/usr/www/tedcrm/api/rest'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'D:/usr/www/tedcrm/api/rest'
+    'SERVER_ADMIN' => 'web-ali@yandex.ru'
+    'SCRIPT_FILENAME' => 'D:/usr/www/tedcrm/api/rest/index.php'
+    'REMOTE_PORT' => '7117'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => ''
+    'REQUEST_URI' => '/'
+    'SCRIPT_NAME' => '/index.php'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1544636456.381
+    'REQUEST_TIME' => 1544636456
+]
+2018-12-12 17:41:57 [127.0.0.1][-][-][error][yii\base\UnknownClassException] yii\base\UnknownClassException: Unable to find 'api\rest\controllers\ProfileController' in file: D:\usr\www\tedcrm/api/rest/controllers/ProfileController.php. Namespace missing? in D:\usr\www\tedcrm\vendor\yiisoft\yii2\BaseYii.php:296
+Stack trace:
+#0 [internal function]: yii\BaseYii::autoload('api\\rest\\contro...')
+#1 [internal function]: spl_autoload_call('api\\rest\\contro...')
+#2 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Module.php(637): class_exists('api\\rest\\contro...')
+#3 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Module.php(596): yii\base\Module->createControllerByID('profile')
+#4 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Module.php(522): yii\base\Module->createController('index')
+#5 D:\usr\www\tedcrm\vendor\yiisoft\yii2\web\Application.php(103): yii\base\Module->runAction('profile/index', Array)
+#6 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Application.php(386): yii\web\Application->handleRequest(Object(yii\web\Request))
+#7 D:\usr\www\tedcrm\api\rest\index.php(18): yii\base\Application->run()
+#8 {main}
+2018-12-12 17:41:57 [127.0.0.1][-][-][info][application] $_GET = [
+    'r' => 'profile/index'
+]
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = []
+
+$_SERVER = [
+    'HTTP_HOST' => 'api.tedcrm:8081'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_UPGRADE_INSECURE_REQUESTS' => '1'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.110 Safari/537.36'
+    'HTTP_DNT' => '1'
+    'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_ACCEPT_LANGUAGE' => 'ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7'
+    'PATH' => 'C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\Program Files\\Git\\cmd;D:\\OpenServer\\OpenServer\\modules\\php\\PHP-5.5\\ext;D:\\usr\\php;C:\\ProgramData\\ComposerSetup\\bin;D:\\usr\\php73;D:\\usr\\php73\\ext;D:\\usr\\php70;D:\\usr\\php70\\ext;D:\\usr\\php\\ext;D:\\xampp\\php;E:\\ProgramFiles\\nodejs\\;D:\\OpenServer\\OpenServer\\modules\\php\\PHP-5.5;D:\\usr\\www;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => ''
+    'SERVER_SOFTWARE' => 'Apache/2.4.25 (Win64) PHP/7.2.12'
+    'SERVER_NAME' => 'api.tedcrm'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '8081'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'DOCUMENT_ROOT' => 'D:/usr/www/tedcrm/api/rest'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'D:/usr/www/tedcrm/api/rest'
+    'SERVER_ADMIN' => 'web-ali@yandex.ru'
+    'SCRIPT_FILENAME' => 'D:/usr/www/tedcrm/api/rest/index.php'
+    'REMOTE_PORT' => '7122'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => 'r=profile/index'
+    'REQUEST_URI' => '/?r=profile/index'
+    'SCRIPT_NAME' => '/index.php'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1544636517.472
+    'REQUEST_TIME' => 1544636517
+]
+2018-12-12 17:42:12 [127.0.0.1][-][-][error][yii\base\InvalidConfigException] yii\base\InvalidConfigException: The "modelClass" property must be set. in D:\usr\www\tedcrm\vendor\yiisoft\yii2\rest\ActiveController.php:65
+Stack trace:
+#0 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\BaseObject.php(109): yii\rest\ActiveController->init()
+#1 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Controller.php(86): yii\base\BaseObject->__construct(Array)
+#2 [internal function]: yii\base\Controller->__construct('profile', Object(yii\web\Application), Array)
+#3 D:\usr\www\tedcrm\vendor\yiisoft\yii2\di\Container.php(375): ReflectionClass->newInstanceArgs(Array)
+#4 D:\usr\www\tedcrm\vendor\yiisoft\yii2\di\Container.php(156): yii\di\Container->build('api\\rest\\contro...', Array, Array)
+#5 D:\usr\www\tedcrm\vendor\yiisoft\yii2\BaseYii.php(345): yii\di\Container->get('api\\rest\\contro...', Array)
+#6 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Module.php(642): yii\BaseYii::createObject('api\\rest\\contro...', Array)
+#7 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Module.php(596): yii\base\Module->createControllerByID('profile')
+#8 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Module.php(522): yii\base\Module->createController('index')
+#9 D:\usr\www\tedcrm\vendor\yiisoft\yii2\web\Application.php(103): yii\base\Module->runAction('profile/index', Array)
+#10 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Application.php(386): yii\web\Application->handleRequest(Object(yii\web\Request))
+#11 D:\usr\www\tedcrm\api\rest\index.php(18): yii\base\Application->run()
+#12 {main}
+2018-12-12 17:42:12 [127.0.0.1][-][-][info][application] $_GET = [
+    'r' => 'profile/index'
+]
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = []
+
+$_SERVER = [
+    'HTTP_HOST' => 'api.tedcrm:8081'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_CACHE_CONTROL' => 'max-age=0'
+    'HTTP_UPGRADE_INSECURE_REQUESTS' => '1'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.110 Safari/537.36'
+    'HTTP_DNT' => '1'
+    'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_ACCEPT_LANGUAGE' => 'ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7'
+    'PATH' => 'C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\Program Files\\Git\\cmd;D:\\OpenServer\\OpenServer\\modules\\php\\PHP-5.5\\ext;D:\\usr\\php;C:\\ProgramData\\ComposerSetup\\bin;D:\\usr\\php73;D:\\usr\\php73\\ext;D:\\usr\\php70;D:\\usr\\php70\\ext;D:\\usr\\php\\ext;D:\\xampp\\php;E:\\ProgramFiles\\nodejs\\;D:\\OpenServer\\OpenServer\\modules\\php\\PHP-5.5;D:\\usr\\www;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => ''
+    'SERVER_SOFTWARE' => 'Apache/2.4.25 (Win64) PHP/7.2.12'
+    'SERVER_NAME' => 'api.tedcrm'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '8081'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'DOCUMENT_ROOT' => 'D:/usr/www/tedcrm/api/rest'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'D:/usr/www/tedcrm/api/rest'
+    'SERVER_ADMIN' => 'web-ali@yandex.ru'
+    'SCRIPT_FILENAME' => 'D:/usr/www/tedcrm/api/rest/index.php'
+    'REMOTE_PORT' => '7128'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => 'r=profile/index'
+    'REQUEST_URI' => '/?r=profile/index'
+    'SCRIPT_NAME' => '/index.php'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1544636532.58
+    'REQUEST_TIME' => 1544636532
+]
+2018-12-12 17:42:54 [127.0.0.1][-][-][error][yii\web\HttpException:401] yii\web\UnauthorizedHttpException: Your request was made with invalid credentials. in D:\usr\www\tedcrm\vendor\yiisoft\yii2\filters\auth\AuthMethod.php:93
+Stack trace:
+#0 D:\usr\www\tedcrm\vendor\yiisoft\yii2\filters\auth\AuthMethod.php(76): yii\filters\auth\AuthMethod->handleFailure(Object(yii\web\Response))
+#1 D:\usr\www\tedcrm\vendor\yiisoft\yii2\filters\auth\CompositeAuth.php(57): yii\filters\auth\AuthMethod->beforeAction(Object(yii\base\InlineAction))
+#2 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\ActionFilter.php(77): yii\filters\auth\CompositeAuth->beforeAction(Object(yii\base\InlineAction))
+#3 [internal function]: yii\base\ActionFilter->beforeFilter(Object(yii\base\ActionEvent))
+#4 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Component.php(627): call_user_func(Array, Object(yii\base\ActionEvent))
+#5 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Controller.php(274): yii\base\Component->trigger('beforeAction', Object(yii\base\ActionEvent))
+#6 D:\usr\www\tedcrm\vendor\yiisoft\yii2\web\Controller.php(164): yii\base\Controller->beforeAction(Object(yii\base\InlineAction))
+#7 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Controller.php(155): yii\web\Controller->beforeAction(Object(yii\base\InlineAction))
+#8 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Module.php(528): yii\base\Controller->runAction('index', Array)
+#9 D:\usr\www\tedcrm\vendor\yiisoft\yii2\web\Application.php(103): yii\base\Module->runAction('profile/index', Array)
+#10 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Application.php(386): yii\web\Application->handleRequest(Object(yii\web\Request))
+#11 D:\usr\www\tedcrm\api\rest\index.php(18): yii\base\Application->run()
+#12 {main}
+2018-12-12 17:42:54 [127.0.0.1][-][-][info][application] $_GET = [
+    'r' => 'profile/index'
+]
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = []
+
+$_SERVER = [
+    'HTTP_HOST' => 'api.tedcrm:8081'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_CACHE_CONTROL' => 'max-age=0'
+    'HTTP_UPGRADE_INSECURE_REQUESTS' => '1'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.110 Safari/537.36'
+    'HTTP_DNT' => '1'
+    'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_ACCEPT_LANGUAGE' => 'ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7'
+    'PATH' => 'C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\Program Files\\Git\\cmd;D:\\OpenServer\\OpenServer\\modules\\php\\PHP-5.5\\ext;D:\\usr\\php;C:\\ProgramData\\ComposerSetup\\bin;D:\\usr\\php73;D:\\usr\\php73\\ext;D:\\usr\\php70;D:\\usr\\php70\\ext;D:\\usr\\php\\ext;D:\\xampp\\php;E:\\ProgramFiles\\nodejs\\;D:\\OpenServer\\OpenServer\\modules\\php\\PHP-5.5;D:\\usr\\www;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => ''
+    'SERVER_SOFTWARE' => 'Apache/2.4.25 (Win64) PHP/7.2.12'
+    'SERVER_NAME' => 'api.tedcrm'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '8081'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'DOCUMENT_ROOT' => 'D:/usr/www/tedcrm/api/rest'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'D:/usr/www/tedcrm/api/rest'
+    'SERVER_ADMIN' => 'web-ali@yandex.ru'
+    'SCRIPT_FILENAME' => 'D:/usr/www/tedcrm/api/rest/index.php'
+    'REMOTE_PORT' => '7130'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => 'r=profile/index'
+    'REQUEST_URI' => '/?r=profile/index'
+    'SCRIPT_NAME' => '/index.php'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1544636574.481
+    'REQUEST_TIME' => 1544636574
+]
+2018-12-12 17:43:37 [127.0.0.1][-][-][error][yii\base\InvalidArgumentException] yii\base\InvalidArgumentException: Key "access_token" is not a column name and can not be used as a filter in D:\usr\www\tedcrm\vendor\yiisoft\yii2\db\ActiveRecord.php:218
+Stack trace:
+#0 D:\usr\www\tedcrm\vendor\yiisoft\yii2\db\ActiveRecord.php(190): yii\db\ActiveRecord::filterCondition(Array)
+#1 D:\usr\www\tedcrm\vendor\yiisoft\yii2\db\BaseActiveRecord.php(112): yii\db\ActiveRecord::findByCondition(Array)
+#2 D:\usr\www\tedcrm\common\models\User.php(133): yii\db\BaseActiveRecord::findOne(Array)
+#3 D:\usr\www\tedcrm\vendor\yiisoft\yii2\web\User.php(298): common\models\User::findIdentityByAccessToken('123123123123123', 'yii\\filters\\aut...')
+#4 D:\usr\www\tedcrm\vendor\yiisoft\yii2\filters\auth\QueryParamAuth.php(31): yii\web\User->loginByAccessToken('123123123123123', 'yii\\filters\\aut...')
+#5 D:\usr\www\tedcrm\vendor\yiisoft\yii2\filters\auth\CompositeAuth.php(73): yii\filters\auth\QueryParamAuth->authenticate(Object(yii\web\User), Object(yii\web\Request), Object(yii\web\Response))
+#6 D:\usr\www\tedcrm\vendor\yiisoft\yii2\filters\auth\AuthMethod.php(61): yii\filters\auth\CompositeAuth->authenticate(Object(yii\web\User), Object(yii\web\Request), Object(yii\web\Response))
+#7 D:\usr\www\tedcrm\vendor\yiisoft\yii2\filters\auth\CompositeAuth.php(57): yii\filters\auth\AuthMethod->beforeAction(Object(yii\base\InlineAction))
+#8 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\ActionFilter.php(77): yii\filters\auth\CompositeAuth->beforeAction(Object(yii\base\InlineAction))
+#9 [internal function]: yii\base\ActionFilter->beforeFilter(Object(yii\base\ActionEvent))
+#10 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Component.php(627): call_user_func(Array, Object(yii\base\ActionEvent))
+#11 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Controller.php(274): yii\base\Component->trigger('beforeAction', Object(yii\base\ActionEvent))
+#12 D:\usr\www\tedcrm\vendor\yiisoft\yii2\web\Controller.php(164): yii\base\Controller->beforeAction(Object(yii\base\InlineAction))
+#13 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Controller.php(155): yii\web\Controller->beforeAction(Object(yii\base\InlineAction))
+#14 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Module.php(528): yii\base\Controller->runAction('index', Array)
+#15 D:\usr\www\tedcrm\vendor\yiisoft\yii2\web\Application.php(103): yii\base\Module->runAction('profile/index', Array)
+#16 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Application.php(386): yii\web\Application->handleRequest(Object(yii\web\Request))
+#17 D:\usr\www\tedcrm\api\rest\index.php(18): yii\base\Application->run()
+#18 {main}
+2018-12-12 17:43:36 [127.0.0.1][-][-][info][application] $_GET = [
+    'r' => 'profile/index'
+    'access-token' => '123123123123123'
+]
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = []
+
+$_SERVER = [
+    'HTTP_HOST' => 'api.tedcrm:8081'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_UPGRADE_INSECURE_REQUESTS' => '1'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.110 Safari/537.36'
+    'HTTP_DNT' => '1'
+    'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_ACCEPT_LANGUAGE' => 'ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7'
+    'PATH' => 'C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\Program Files\\Git\\cmd;D:\\OpenServer\\OpenServer\\modules\\php\\PHP-5.5\\ext;D:\\usr\\php;C:\\ProgramData\\ComposerSetup\\bin;D:\\usr\\php73;D:\\usr\\php73\\ext;D:\\usr\\php70;D:\\usr\\php70\\ext;D:\\usr\\php\\ext;D:\\xampp\\php;E:\\ProgramFiles\\nodejs\\;D:\\OpenServer\\OpenServer\\modules\\php\\PHP-5.5;D:\\usr\\www;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => ''
+    'SERVER_SOFTWARE' => 'Apache/2.4.25 (Win64) PHP/7.2.12'
+    'SERVER_NAME' => 'api.tedcrm'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '8081'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'DOCUMENT_ROOT' => 'D:/usr/www/tedcrm/api/rest'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'D:/usr/www/tedcrm/api/rest'
+    'SERVER_ADMIN' => 'web-ali@yandex.ru'
+    'SCRIPT_FILENAME' => 'D:/usr/www/tedcrm/api/rest/index.php'
+    'REMOTE_PORT' => '7135'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => 'r=profile/index&access-token=123123123123123'
+    'REQUEST_URI' => '/?r=profile/index&access-token=123123123123123'
+    'SCRIPT_NAME' => '/index.php'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1544636616.71
+    'REQUEST_TIME' => 1544636616
+]
+2018-12-12 17:53:22 [127.0.0.1][-][-][error][yii\web\HttpException:404] yii\base\InvalidRouteException: Unable to resolve the request "". in D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Module.php:537
+Stack trace:
+#0 D:\usr\www\tedcrm\vendor\yiisoft\yii2\web\Application.php(103): yii\base\Module->runAction('', Array)
+#1 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Application.php(386): yii\web\Application->handleRequest(Object(yii\web\Request))
+#2 D:\usr\www\tedcrm\api\rest\index.php(18): yii\base\Application->run()
+#3 {main}
+
+Next yii\web\NotFoundHttpException: Страница не найдена. in D:\usr\www\tedcrm\vendor\yiisoft\yii2\web\Application.php:115
+Stack trace:
+#0 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Application.php(386): yii\web\Application->handleRequest(Object(yii\web\Request))
+#1 D:\usr\www\tedcrm\api\rest\index.php(18): yii\base\Application->run()
+#2 {main}
+2018-12-12 17:53:22 [127.0.0.1][-][-][info][application] $_GET = []
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = []
+
+$_SERVER = [
+    'HTTP_HOST' => 'api.tedcrm:8081'
+    'PATH' => 'C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\Program Files\\Git\\cmd;D:\\OpenServer\\OpenServer\\modules\\php\\PHP-5.5\\ext;D:\\usr\\php;C:\\ProgramData\\ComposerSetup\\bin;D:\\usr\\php73;D:\\usr\\php73\\ext;D:\\usr\\php70;D:\\usr\\php70\\ext;D:\\usr\\php\\ext;D:\\xampp\\php;E:\\ProgramFiles\\nodejs\\;D:\\OpenServer\\OpenServer\\modules\\php\\PHP-5.5;D:\\usr\\www;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => ''
+    'SERVER_SOFTWARE' => 'Apache/2.4.25 (Win64) PHP/7.2.12'
+    'SERVER_NAME' => 'api.tedcrm'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '8081'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'DOCUMENT_ROOT' => 'D:/usr/www/tedcrm/api/rest'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'D:/usr/www/tedcrm/api/rest'
+    'SERVER_ADMIN' => 'web-ali@yandex.ru'
+    'SCRIPT_FILENAME' => 'D:/usr/www/tedcrm/api/rest/index.php'
+    'REMOTE_PORT' => '7193'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => ''
+    'REQUEST_URI' => '/'
+    'SCRIPT_NAME' => '/index.php'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1544637202.594
+    'REQUEST_TIME' => 1544637202
+]
+2018-12-12 17:53:38 [127.0.0.1][-][-][error][yii\web\HttpException:404] yii\base\InvalidRouteException: Unable to resolve the request "". in D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Module.php:537
+Stack trace:
+#0 D:\usr\www\tedcrm\vendor\yiisoft\yii2\web\Application.php(103): yii\base\Module->runAction('', Array)
+#1 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Application.php(386): yii\web\Application->handleRequest(Object(yii\web\Request))
+#2 D:\usr\www\tedcrm\api\rest\index.php(18): yii\base\Application->run()
+#3 {main}
+
+Next yii\web\NotFoundHttpException: Страница не найдена. in D:\usr\www\tedcrm\vendor\yiisoft\yii2\web\Application.php:115
+Stack trace:
+#0 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Application.php(386): yii\web\Application->handleRequest(Object(yii\web\Request))
+#1 D:\usr\www\tedcrm\api\rest\index.php(18): yii\base\Application->run()
+#2 {main}
+2018-12-12 17:53:38 [127.0.0.1][-][-][info][application] $_GET = []
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = []
+
+$_SERVER = [
+    'HTTP_HOST' => 'api.tedcrm:8081'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_UPGRADE_INSECURE_REQUESTS' => '1'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.110 Safari/537.36'
+    'HTTP_DNT' => '1'
+    'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_ACCEPT_LANGUAGE' => 'ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7'
+    'PATH' => 'C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\Program Files\\Git\\cmd;D:\\OpenServer\\OpenServer\\modules\\php\\PHP-5.5\\ext;D:\\usr\\php;C:\\ProgramData\\ComposerSetup\\bin;D:\\usr\\php73;D:\\usr\\php73\\ext;D:\\usr\\php70;D:\\usr\\php70\\ext;D:\\usr\\php\\ext;D:\\xampp\\php;E:\\ProgramFiles\\nodejs\\;D:\\OpenServer\\OpenServer\\modules\\php\\PHP-5.5;D:\\usr\\www;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => ''
+    'SERVER_SOFTWARE' => 'Apache/2.4.25 (Win64) PHP/7.2.12'
+    'SERVER_NAME' => 'api.tedcrm'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '8081'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'DOCUMENT_ROOT' => 'D:/usr/www/tedcrm/api/rest'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'D:/usr/www/tedcrm/api/rest'
+    'SERVER_ADMIN' => 'web-ali@yandex.ru'
+    'SCRIPT_FILENAME' => 'D:/usr/www/tedcrm/api/rest/index.php'
+    'REMOTE_PORT' => '7199'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => ''
+    'REQUEST_URI' => '/'
+    'SCRIPT_NAME' => '/index.php'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1544637217.989
+    'REQUEST_TIME' => 1544637217
+]
+2018-12-12 17:53:53 [127.0.0.1][-][-][error][Error] Error: Class 'api\rest\controllers\AccessControl' not found in D:\usr\www\tedcrm\api\rest\controllers\ProfileController.php:27
+Stack trace:
+#0 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Component.php(733): api\rest\controllers\ProfileController->behaviors()
+#1 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Component.php(603): yii\base\Component->ensureBehaviors()
+#2 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Controller.php(274): yii\base\Component->trigger('beforeAction', Object(yii\base\ActionEvent))
+#3 D:\usr\www\tedcrm\vendor\yiisoft\yii2\web\Controller.php(164): yii\base\Controller->beforeAction(Object(yii\base\InlineAction))
+#4 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Controller.php(155): yii\web\Controller->beforeAction(Object(yii\base\InlineAction))
+#5 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Module.php(528): yii\base\Controller->runAction('index', Array)
+#6 D:\usr\www\tedcrm\vendor\yiisoft\yii2\web\Application.php(103): yii\base\Module->runAction('profile/index', Array)
+#7 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Application.php(386): yii\web\Application->handleRequest(Object(yii\web\Request))
+#8 D:\usr\www\tedcrm\api\rest\index.php(18): yii\base\Application->run()
+#9 {main}
+2018-12-12 17:53:53 [127.0.0.1][-][-][info][application] $_GET = [
+    'r' => 'profile/index'
+]
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = []
+
+$_SERVER = [
+    'HTTP_HOST' => 'api.tedcrm:8081'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_UPGRADE_INSECURE_REQUESTS' => '1'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.110 Safari/537.36'
+    'HTTP_DNT' => '1'
+    'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_ACCEPT_LANGUAGE' => 'ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7'
+    'PATH' => 'C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\Program Files\\Git\\cmd;D:\\OpenServer\\OpenServer\\modules\\php\\PHP-5.5\\ext;D:\\usr\\php;C:\\ProgramData\\ComposerSetup\\bin;D:\\usr\\php73;D:\\usr\\php73\\ext;D:\\usr\\php70;D:\\usr\\php70\\ext;D:\\usr\\php\\ext;D:\\xampp\\php;E:\\ProgramFiles\\nodejs\\;D:\\OpenServer\\OpenServer\\modules\\php\\PHP-5.5;D:\\usr\\www;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => ''
+    'SERVER_SOFTWARE' => 'Apache/2.4.25 (Win64) PHP/7.2.12'
+    'SERVER_NAME' => 'api.tedcrm'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '8081'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'DOCUMENT_ROOT' => 'D:/usr/www/tedcrm/api/rest'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'D:/usr/www/tedcrm/api/rest'
+    'SERVER_ADMIN' => 'web-ali@yandex.ru'
+    'SCRIPT_FILENAME' => 'D:/usr/www/tedcrm/api/rest/index.php'
+    'REMOTE_PORT' => '7201'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => 'r=profile/index'
+    'REQUEST_URI' => '/?r=profile/index'
+    'SCRIPT_NAME' => '/index.php'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1544637233.568
+    'REQUEST_TIME' => 1544637233
+]
+2018-12-12 17:54:13 [127.0.0.1][-][-][error][yii\web\HttpException:401] yii\web\UnauthorizedHttpException: Your request was made with invalid credentials. in D:\usr\www\tedcrm\vendor\yiisoft\yii2\filters\auth\AuthMethod.php:93
+Stack trace:
+#0 D:\usr\www\tedcrm\vendor\yiisoft\yii2\filters\auth\AuthMethod.php(76): yii\filters\auth\AuthMethod->handleFailure(Object(yii\web\Response))
+#1 D:\usr\www\tedcrm\vendor\yiisoft\yii2\filters\auth\CompositeAuth.php(57): yii\filters\auth\AuthMethod->beforeAction(Object(yii\base\InlineAction))
+#2 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\ActionFilter.php(77): yii\filters\auth\CompositeAuth->beforeAction(Object(yii\base\InlineAction))
+#3 [internal function]: yii\base\ActionFilter->beforeFilter(Object(yii\base\ActionEvent))
+#4 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Component.php(627): call_user_func(Array, Object(yii\base\ActionEvent))
+#5 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Controller.php(274): yii\base\Component->trigger('beforeAction', Object(yii\base\ActionEvent))
+#6 D:\usr\www\tedcrm\vendor\yiisoft\yii2\web\Controller.php(164): yii\base\Controller->beforeAction(Object(yii\base\InlineAction))
+#7 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Controller.php(155): yii\web\Controller->beforeAction(Object(yii\base\InlineAction))
+#8 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Module.php(528): yii\base\Controller->runAction('index', Array)
+#9 D:\usr\www\tedcrm\vendor\yiisoft\yii2\web\Application.php(103): yii\base\Module->runAction('profile/index', Array)
+#10 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Application.php(386): yii\web\Application->handleRequest(Object(yii\web\Request))
+#11 D:\usr\www\tedcrm\api\rest\index.php(18): yii\base\Application->run()
+#12 {main}
+2018-12-12 17:54:13 [127.0.0.1][-][-][info][application] $_GET = [
+    'r' => 'profile/index'
+]
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = []
+
+$_SERVER = [
+    'HTTP_HOST' => 'api.tedcrm:8081'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_CACHE_CONTROL' => 'max-age=0'
+    'HTTP_UPGRADE_INSECURE_REQUESTS' => '1'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.110 Safari/537.36'
+    'HTTP_DNT' => '1'
+    'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_ACCEPT_LANGUAGE' => 'ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7'
+    'PATH' => 'C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\Program Files\\Git\\cmd;D:\\OpenServer\\OpenServer\\modules\\php\\PHP-5.5\\ext;D:\\usr\\php;C:\\ProgramData\\ComposerSetup\\bin;D:\\usr\\php73;D:\\usr\\php73\\ext;D:\\usr\\php70;D:\\usr\\php70\\ext;D:\\usr\\php\\ext;D:\\xampp\\php;E:\\ProgramFiles\\nodejs\\;D:\\OpenServer\\OpenServer\\modules\\php\\PHP-5.5;D:\\usr\\www;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => ''
+    'SERVER_SOFTWARE' => 'Apache/2.4.25 (Win64) PHP/7.2.12'
+    'SERVER_NAME' => 'api.tedcrm'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '8081'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'DOCUMENT_ROOT' => 'D:/usr/www/tedcrm/api/rest'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'D:/usr/www/tedcrm/api/rest'
+    'SERVER_ADMIN' => 'web-ali@yandex.ru'
+    'SCRIPT_FILENAME' => 'D:/usr/www/tedcrm/api/rest/index.php'
+    'REMOTE_PORT' => '7206'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => 'r=profile/index'
+    'REQUEST_URI' => '/?r=profile/index'
+    'SCRIPT_NAME' => '/index.php'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1544637253.272
+    'REQUEST_TIME' => 1544637253
+]
+2018-12-12 17:58:39 [127.0.0.1][-][-][error][yii\web\HttpException:401] yii\web\UnauthorizedHttpException: Your request was made with invalid credentials. in D:\usr\www\tedcrm\vendor\yiisoft\yii2\filters\auth\AuthMethod.php:93
+Stack trace:
+#0 D:\usr\www\tedcrm\vendor\yiisoft\yii2\filters\auth\AuthMethod.php(76): yii\filters\auth\AuthMethod->handleFailure(Object(yii\web\Response))
+#1 D:\usr\www\tedcrm\vendor\yiisoft\yii2\filters\auth\CompositeAuth.php(57): yii\filters\auth\AuthMethod->beforeAction(Object(yii\base\InlineAction))
+#2 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\ActionFilter.php(77): yii\filters\auth\CompositeAuth->beforeAction(Object(yii\base\InlineAction))
+#3 [internal function]: yii\base\ActionFilter->beforeFilter(Object(yii\base\ActionEvent))
+#4 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Component.php(627): call_user_func(Array, Object(yii\base\ActionEvent))
+#5 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Controller.php(274): yii\base\Component->trigger('beforeAction', Object(yii\base\ActionEvent))
+#6 D:\usr\www\tedcrm\vendor\yiisoft\yii2\web\Controller.php(164): yii\base\Controller->beforeAction(Object(yii\base\InlineAction))
+#7 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Controller.php(155): yii\web\Controller->beforeAction(Object(yii\base\InlineAction))
+#8 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Module.php(528): yii\base\Controller->runAction('index', Array)
+#9 D:\usr\www\tedcrm\vendor\yiisoft\yii2\web\Application.php(103): yii\base\Module->runAction('profile/index', Array)
+#10 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Application.php(386): yii\web\Application->handleRequest(Object(yii\web\Request))
+#11 D:\usr\www\tedcrm\api\rest\index.php(18): yii\base\Application->run()
+#12 {main}
+2018-12-12 17:58:39 [127.0.0.1][-][-][info][application] $_GET = [
+    'r' => 'profile/index'
+]
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = []
+
+$_SERVER = [
+    'HTTP_HOST' => 'api.tedcrm:8081'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_CACHE_CONTROL' => 'max-age=0'
+    'HTTP_UPGRADE_INSECURE_REQUESTS' => '1'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.110 Safari/537.36'
+    'HTTP_DNT' => '1'
+    'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_ACCEPT_LANGUAGE' => 'ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7'
+    'PATH' => 'C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\Program Files\\Git\\cmd;D:\\OpenServer\\OpenServer\\modules\\php\\PHP-5.5\\ext;D:\\usr\\php;C:\\ProgramData\\ComposerSetup\\bin;D:\\usr\\php73;D:\\usr\\php73\\ext;D:\\usr\\php70;D:\\usr\\php70\\ext;D:\\usr\\php\\ext;D:\\xampp\\php;E:\\ProgramFiles\\nodejs\\;D:\\OpenServer\\OpenServer\\modules\\php\\PHP-5.5;D:\\usr\\www;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => ''
+    'SERVER_SOFTWARE' => 'Apache/2.4.25 (Win64) PHP/7.2.12'
+    'SERVER_NAME' => 'api.tedcrm'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '8081'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'DOCUMENT_ROOT' => 'D:/usr/www/tedcrm/api/rest'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'D:/usr/www/tedcrm/api/rest'
+    'SERVER_ADMIN' => 'web-ali@yandex.ru'
+    'SCRIPT_FILENAME' => 'D:/usr/www/tedcrm/api/rest/index.php'
+    'REMOTE_PORT' => '7230'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => 'r=profile/index'
+    'REQUEST_URI' => '/?r=profile/index'
+    'SCRIPT_NAME' => '/index.php'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1544637519.429
+    'REQUEST_TIME' => 1544637519
+]
+2018-12-12 17:58:40 [127.0.0.1][-][-][error][yii\web\HttpException:401] yii\web\UnauthorizedHttpException: Your request was made with invalid credentials. in D:\usr\www\tedcrm\vendor\yiisoft\yii2\filters\auth\AuthMethod.php:93
+Stack trace:
+#0 D:\usr\www\tedcrm\vendor\yiisoft\yii2\filters\auth\AuthMethod.php(76): yii\filters\auth\AuthMethod->handleFailure(Object(yii\web\Response))
+#1 D:\usr\www\tedcrm\vendor\yiisoft\yii2\filters\auth\CompositeAuth.php(57): yii\filters\auth\AuthMethod->beforeAction(Object(yii\base\InlineAction))
+#2 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\ActionFilter.php(77): yii\filters\auth\CompositeAuth->beforeAction(Object(yii\base\InlineAction))
+#3 [internal function]: yii\base\ActionFilter->beforeFilter(Object(yii\base\ActionEvent))
+#4 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Component.php(627): call_user_func(Array, Object(yii\base\ActionEvent))
+#5 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Controller.php(274): yii\base\Component->trigger('beforeAction', Object(yii\base\ActionEvent))
+#6 D:\usr\www\tedcrm\vendor\yiisoft\yii2\web\Controller.php(164): yii\base\Controller->beforeAction(Object(yii\base\InlineAction))
+#7 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Controller.php(155): yii\web\Controller->beforeAction(Object(yii\base\InlineAction))
+#8 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Module.php(528): yii\base\Controller->runAction('index', Array)
+#9 D:\usr\www\tedcrm\vendor\yiisoft\yii2\web\Application.php(103): yii\base\Module->runAction('profile/index', Array)
+#10 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Application.php(386): yii\web\Application->handleRequest(Object(yii\web\Request))
+#11 D:\usr\www\tedcrm\api\rest\index.php(18): yii\base\Application->run()
+#12 {main}
+2018-12-12 17:58:40 [127.0.0.1][-][-][info][application] $_GET = [
+    'r' => 'profile/index'
+]
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = []
+
+$_SERVER = [
+    'HTTP_HOST' => 'api.tedcrm:8081'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_CACHE_CONTROL' => 'max-age=0'
+    'HTTP_UPGRADE_INSECURE_REQUESTS' => '1'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.110 Safari/537.36'
+    'HTTP_DNT' => '1'
+    'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_ACCEPT_LANGUAGE' => 'ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7'
+    'PATH' => 'C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\Program Files\\Git\\cmd;D:\\OpenServer\\OpenServer\\modules\\php\\PHP-5.5\\ext;D:\\usr\\php;C:\\ProgramData\\ComposerSetup\\bin;D:\\usr\\php73;D:\\usr\\php73\\ext;D:\\usr\\php70;D:\\usr\\php70\\ext;D:\\usr\\php\\ext;D:\\xampp\\php;E:\\ProgramFiles\\nodejs\\;D:\\OpenServer\\OpenServer\\modules\\php\\PHP-5.5;D:\\usr\\www;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => ''
+    'SERVER_SOFTWARE' => 'Apache/2.4.25 (Win64) PHP/7.2.12'
+    'SERVER_NAME' => 'api.tedcrm'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '8081'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'DOCUMENT_ROOT' => 'D:/usr/www/tedcrm/api/rest'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'D:/usr/www/tedcrm/api/rest'
+    'SERVER_ADMIN' => 'web-ali@yandex.ru'
+    'SCRIPT_FILENAME' => 'D:/usr/www/tedcrm/api/rest/index.php'
+    'REMOTE_PORT' => '7230'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => 'r=profile/index'
+    'REQUEST_URI' => '/?r=profile/index'
+    'SCRIPT_NAME' => '/index.php'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1544637520.24
+    'REQUEST_TIME' => 1544637520
+]
+2018-12-12 17:59:24 [127.0.0.1][-][-][error][yii\web\HttpException:401] yii\web\UnauthorizedHttpException: Your request was made with invalid credentials. in D:\usr\www\tedcrm\vendor\yiisoft\yii2\filters\auth\AuthMethod.php:93
+Stack trace:
+#0 D:\usr\www\tedcrm\vendor\yiisoft\yii2\filters\auth\HttpHeaderAuth.php(65): yii\filters\auth\AuthMethod->handleFailure(Object(yii\web\Response))
+#1 D:\usr\www\tedcrm\vendor\yiisoft\yii2\filters\auth\CompositeAuth.php(73): yii\filters\auth\HttpHeaderAuth->authenticate(Object(yii\web\User), Object(yii\web\Request), Object(yii\web\Response))
+#2 D:\usr\www\tedcrm\vendor\yiisoft\yii2\filters\auth\AuthMethod.php(61): yii\filters\auth\CompositeAuth->authenticate(Object(yii\web\User), Object(yii\web\Request), Object(yii\web\Response))
+#3 D:\usr\www\tedcrm\vendor\yiisoft\yii2\filters\auth\CompositeAuth.php(57): yii\filters\auth\AuthMethod->beforeAction(Object(yii\base\InlineAction))
+#4 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\ActionFilter.php(77): yii\filters\auth\CompositeAuth->beforeAction(Object(yii\base\InlineAction))
+#5 [internal function]: yii\base\ActionFilter->beforeFilter(Object(yii\base\ActionEvent))
+#6 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Component.php(627): call_user_func(Array, Object(yii\base\ActionEvent))
+#7 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Controller.php(274): yii\base\Component->trigger('beforeAction', Object(yii\base\ActionEvent))
+#8 D:\usr\www\tedcrm\vendor\yiisoft\yii2\web\Controller.php(164): yii\base\Controller->beforeAction(Object(yii\base\InlineAction))
+#9 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Controller.php(155): yii\web\Controller->beforeAction(Object(yii\base\InlineAction))
+#10 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Module.php(528): yii\base\Controller->runAction('index', Array)
+#11 D:\usr\www\tedcrm\vendor\yiisoft\yii2\web\Application.php(103): yii\base\Module->runAction('profile/index', Array)
+#12 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Application.php(386): yii\web\Application->handleRequest(Object(yii\web\Request))
+#13 D:\usr\www\tedcrm\api\rest\index.php(18): yii\base\Application->run()
+#14 {main}
+2018-12-12 17:59:24 [127.0.0.1][-][-][info][application] $_GET = [
+    'r' => 'profile/index'
+]
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = []
+
+$_SERVER = [
+    'HTTP_HOST' => 'api.tedcrm:8081'
+    'PATH' => 'C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\Program Files\\Git\\cmd;D:\\OpenServer\\OpenServer\\modules\\php\\PHP-5.5\\ext;D:\\usr\\php;C:\\ProgramData\\ComposerSetup\\bin;D:\\usr\\php73;D:\\usr\\php73\\ext;D:\\usr\\php70;D:\\usr\\php70\\ext;D:\\usr\\php\\ext;D:\\xampp\\php;E:\\ProgramFiles\\nodejs\\;D:\\OpenServer\\OpenServer\\modules\\php\\PHP-5.5;D:\\usr\\www;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => ''
+    'SERVER_SOFTWARE' => 'Apache/2.4.25 (Win64) PHP/7.2.12'
+    'SERVER_NAME' => 'api.tedcrm'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '8081'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'DOCUMENT_ROOT' => 'D:/usr/www/tedcrm/api/rest'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'D:/usr/www/tedcrm/api/rest'
+    'SERVER_ADMIN' => 'web-ali@yandex.ru'
+    'SCRIPT_FILENAME' => 'D:/usr/www/tedcrm/api/rest/index.php'
+    'REMOTE_PORT' => '7236'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => 'r=profile/index'
+    'REQUEST_URI' => '/?r=profile/index'
+    'SCRIPT_NAME' => '/index.php'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1544637564.389
+    'REQUEST_TIME' => 1544637564
+]
+2018-12-12 18:20:39 [127.0.0.1][-][-][error][ParseError] ParseError: syntax error, unexpected ''allow'' (T_CONSTANT_ENCAPSED_STRING), expecting ']' in D:\usr\www\tedcrm\api\rest\controllers\ProfileController.php:36
+Stack trace:
+#0 [internal function]: yii\BaseYii::autoload('api\\rest\\contro...')
+#1 [internal function]: spl_autoload_call('api\\rest\\contro...')
+#2 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Module.php(637): class_exists('api\\rest\\contro...')
+#3 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Module.php(596): yii\base\Module->createControllerByID('profile')
+#4 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Module.php(522): yii\base\Module->createController('index')
+#5 D:\usr\www\tedcrm\vendor\yiisoft\yii2\web\Application.php(103): yii\base\Module->runAction('profile/index', Array)
+#6 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Application.php(386): yii\web\Application->handleRequest(Object(yii\web\Request))
+#7 D:\usr\www\tedcrm\api\rest\index.php(18): yii\base\Application->run()
+#8 {main}
+2018-12-12 18:20:39 [127.0.0.1][-][-][info][application] $_GET = [
+    'r' => 'profile/index'
+]
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = []
+
+$_SERVER = [
+    'HTTP_HOST' => 'api.tedcrm:8081'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_CACHE_CONTROL' => 'max-age=0'
+    'HTTP_UPGRADE_INSECURE_REQUESTS' => '1'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.110 Safari/537.36'
+    'HTTP_DNT' => '1'
+    'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_ACCEPT_LANGUAGE' => 'ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7'
+    'PATH' => 'C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\Program Files\\Git\\cmd;D:\\OpenServer\\OpenServer\\modules\\php\\PHP-5.5\\ext;D:\\usr\\php;C:\\ProgramData\\ComposerSetup\\bin;D:\\usr\\php73;D:\\usr\\php73\\ext;D:\\usr\\php70;D:\\usr\\php70\\ext;D:\\usr\\php\\ext;D:\\xampp\\php;E:\\ProgramFiles\\nodejs\\;D:\\OpenServer\\OpenServer\\modules\\php\\PHP-5.5;D:\\usr\\www;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => ''
+    'SERVER_SOFTWARE' => 'Apache/2.4.25 (Win64) PHP/7.2.12'
+    'SERVER_NAME' => 'api.tedcrm'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '8081'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'DOCUMENT_ROOT' => 'D:/usr/www/tedcrm/api/rest'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'D:/usr/www/tedcrm/api/rest'
+    'SERVER_ADMIN' => 'web-ali@yandex.ru'
+    'SCRIPT_FILENAME' => 'D:/usr/www/tedcrm/api/rest/index.php'
+    'REMOTE_PORT' => '7421'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => 'r=profile/index'
+    'REQUEST_URI' => '/?r=profile/index'
+    'SCRIPT_NAME' => '/index.php'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1544638839.407
+    'REQUEST_TIME' => 1544638839
+]
+2018-12-12 18:20:56 [127.0.0.1][-][-][error][yii\web\HttpException:401] yii\web\UnauthorizedHttpException: Your request was made with invalid credentials. in D:\usr\www\tedcrm\vendor\yiisoft\yii2\filters\auth\AuthMethod.php:93
+Stack trace:
+#0 D:\usr\www\tedcrm\vendor\yiisoft\yii2\filters\auth\AuthMethod.php(76): yii\filters\auth\AuthMethod->handleFailure(Object(yii\web\Response))
+#1 D:\usr\www\tedcrm\vendor\yiisoft\yii2\filters\auth\CompositeAuth.php(57): yii\filters\auth\AuthMethod->beforeAction(Object(yii\base\InlineAction))
+#2 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\ActionFilter.php(77): yii\filters\auth\CompositeAuth->beforeAction(Object(yii\base\InlineAction))
+#3 [internal function]: yii\base\ActionFilter->beforeFilter(Object(yii\base\ActionEvent))
+#4 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Component.php(627): call_user_func(Array, Object(yii\base\ActionEvent))
+#5 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Controller.php(274): yii\base\Component->trigger('beforeAction', Object(yii\base\ActionEvent))
+#6 D:\usr\www\tedcrm\vendor\yiisoft\yii2\web\Controller.php(164): yii\base\Controller->beforeAction(Object(yii\base\InlineAction))
+#7 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Controller.php(155): yii\web\Controller->beforeAction(Object(yii\base\InlineAction))
+#8 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Module.php(528): yii\base\Controller->runAction('index', Array)
+#9 D:\usr\www\tedcrm\vendor\yiisoft\yii2\web\Application.php(103): yii\base\Module->runAction('profile/index', Array)
+#10 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Application.php(386): yii\web\Application->handleRequest(Object(yii\web\Request))
+#11 D:\usr\www\tedcrm\api\rest\index.php(18): yii\base\Application->run()
+#12 {main}
+2018-12-12 18:20:56 [127.0.0.1][-][-][info][application] $_GET = [
+    'r' => 'profile/index'
+]
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = []
+
+$_SERVER = [
+    'HTTP_HOST' => 'api.tedcrm:8081'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_CACHE_CONTROL' => 'max-age=0'
+    'HTTP_UPGRADE_INSECURE_REQUESTS' => '1'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.110 Safari/537.36'
+    'HTTP_DNT' => '1'
+    'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_ACCEPT_LANGUAGE' => 'ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7'
+    'PATH' => 'C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\Program Files\\Git\\cmd;D:\\OpenServer\\OpenServer\\modules\\php\\PHP-5.5\\ext;D:\\usr\\php;C:\\ProgramData\\ComposerSetup\\bin;D:\\usr\\php73;D:\\usr\\php73\\ext;D:\\usr\\php70;D:\\usr\\php70\\ext;D:\\usr\\php\\ext;D:\\xampp\\php;E:\\ProgramFiles\\nodejs\\;D:\\OpenServer\\OpenServer\\modules\\php\\PHP-5.5;D:\\usr\\www;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => ''
+    'SERVER_SOFTWARE' => 'Apache/2.4.25 (Win64) PHP/7.2.12'
+    'SERVER_NAME' => 'api.tedcrm'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '8081'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'DOCUMENT_ROOT' => 'D:/usr/www/tedcrm/api/rest'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'D:/usr/www/tedcrm/api/rest'
+    'SERVER_ADMIN' => 'web-ali@yandex.ru'
+    'SCRIPT_FILENAME' => 'D:/usr/www/tedcrm/api/rest/index.php'
+    'REMOTE_PORT' => '7423'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => 'r=profile/index'
+    'REQUEST_URI' => '/?r=profile/index'
+    'SCRIPT_NAME' => '/index.php'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1544638856.46
+    'REQUEST_TIME' => 1544638856
+]
+2018-12-12 18:21:07 [127.0.0.1][-][-][error][yii\web\HttpException:401] yii\web\UnauthorizedHttpException: Your request was made with invalid credentials. in D:\usr\www\tedcrm\vendor\yiisoft\yii2\filters\auth\AuthMethod.php:93
+Stack trace:
+#0 D:\usr\www\tedcrm\vendor\yiisoft\yii2\filters\auth\AuthMethod.php(76): yii\filters\auth\AuthMethod->handleFailure(Object(yii\web\Response))
+#1 D:\usr\www\tedcrm\vendor\yiisoft\yii2\filters\auth\CompositeAuth.php(57): yii\filters\auth\AuthMethod->beforeAction(Object(yii\base\InlineAction))
+#2 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\ActionFilter.php(77): yii\filters\auth\CompositeAuth->beforeAction(Object(yii\base\InlineAction))
+#3 [internal function]: yii\base\ActionFilter->beforeFilter(Object(yii\base\ActionEvent))
+#4 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Component.php(627): call_user_func(Array, Object(yii\base\ActionEvent))
+#5 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Controller.php(274): yii\base\Component->trigger('beforeAction', Object(yii\base\ActionEvent))
+#6 D:\usr\www\tedcrm\vendor\yiisoft\yii2\web\Controller.php(164): yii\base\Controller->beforeAction(Object(yii\base\InlineAction))
+#7 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Controller.php(155): yii\web\Controller->beforeAction(Object(yii\base\InlineAction))
+#8 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Module.php(528): yii\base\Controller->runAction('auth', Array)
+#9 D:\usr\www\tedcrm\vendor\yiisoft\yii2\web\Application.php(103): yii\base\Module->runAction('profile/auth', Array)
+#10 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Application.php(386): yii\web\Application->handleRequest(Object(yii\web\Request))
+#11 D:\usr\www\tedcrm\api\rest\index.php(18): yii\base\Application->run()
+#12 {main}
+2018-12-12 18:21:07 [127.0.0.1][-][-][info][application] $_GET = [
+    'r' => 'profile/auth'
+]
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = []
+
+$_SERVER = [
+    'HTTP_HOST' => 'api.tedcrm:8081'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_UPGRADE_INSECURE_REQUESTS' => '1'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.110 Safari/537.36'
+    'HTTP_DNT' => '1'
+    'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_ACCEPT_LANGUAGE' => 'ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7'
+    'PATH' => 'C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\Program Files\\Git\\cmd;D:\\OpenServer\\OpenServer\\modules\\php\\PHP-5.5\\ext;D:\\usr\\php;C:\\ProgramData\\ComposerSetup\\bin;D:\\usr\\php73;D:\\usr\\php73\\ext;D:\\usr\\php70;D:\\usr\\php70\\ext;D:\\usr\\php\\ext;D:\\xampp\\php;E:\\ProgramFiles\\nodejs\\;D:\\OpenServer\\OpenServer\\modules\\php\\PHP-5.5;D:\\usr\\www;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => ''
+    'SERVER_SOFTWARE' => 'Apache/2.4.25 (Win64) PHP/7.2.12'
+    'SERVER_NAME' => 'api.tedcrm'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '8081'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'DOCUMENT_ROOT' => 'D:/usr/www/tedcrm/api/rest'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'D:/usr/www/tedcrm/api/rest'
+    'SERVER_ADMIN' => 'web-ali@yandex.ru'
+    'SCRIPT_FILENAME' => 'D:/usr/www/tedcrm/api/rest/index.php'
+    'REMOTE_PORT' => '7428'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => 'r=profile/auth'
+    'REQUEST_URI' => '/?r=profile/auth'
+    'SCRIPT_NAME' => '/index.php'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1544638867.754
+    'REQUEST_TIME' => 1544638867
+]
+2018-12-12 18:24:15 [127.0.0.1][-][-][error][yii\web\HttpException:401] yii\web\UnauthorizedHttpException: Your request was made with invalid credentials. in D:\usr\www\tedcrm\vendor\yiisoft\yii2\filters\auth\AuthMethod.php:93
+Stack trace:
+#0 D:\usr\www\tedcrm\vendor\yiisoft\yii2\filters\auth\QueryParamAuth.php(37): yii\filters\auth\AuthMethod->handleFailure(Object(yii\web\Response))
+#1 D:\usr\www\tedcrm\vendor\yiisoft\yii2\filters\auth\CompositeAuth.php(73): yii\filters\auth\QueryParamAuth->authenticate(Object(yii\web\User), Object(yii\web\Request), Object(yii\web\Response))
+#2 D:\usr\www\tedcrm\vendor\yiisoft\yii2\filters\auth\AuthMethod.php(61): yii\filters\auth\CompositeAuth->authenticate(Object(yii\web\User), Object(yii\web\Request), Object(yii\web\Response))
+#3 D:\usr\www\tedcrm\vendor\yiisoft\yii2\filters\auth\CompositeAuth.php(57): yii\filters\auth\AuthMethod->beforeAction(Object(yii\base\InlineAction))
+#4 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\ActionFilter.php(77): yii\filters\auth\CompositeAuth->beforeAction(Object(yii\base\InlineAction))
+#5 [internal function]: yii\base\ActionFilter->beforeFilter(Object(yii\base\ActionEvent))
+#6 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Component.php(627): call_user_func(Array, Object(yii\base\ActionEvent))
+#7 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Controller.php(274): yii\base\Component->trigger('beforeAction', Object(yii\base\ActionEvent))
+#8 D:\usr\www\tedcrm\vendor\yiisoft\yii2\web\Controller.php(164): yii\base\Controller->beforeAction(Object(yii\base\InlineAction))
+#9 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Controller.php(155): yii\web\Controller->beforeAction(Object(yii\base\InlineAction))
+#10 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Module.php(528): yii\base\Controller->runAction('index', Array)
+#11 D:\usr\www\tedcrm\vendor\yiisoft\yii2\web\Application.php(103): yii\base\Module->runAction('profile/index', Array)
+#12 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Application.php(386): yii\web\Application->handleRequest(Object(yii\web\Request))
+#13 D:\usr\www\tedcrm\api\rest\index.php(18): yii\base\Application->run()
+#14 {main}
+2018-12-12 18:24:15 [127.0.0.1][-][-][info][application] $_GET = [
+    'r' => 'profile/index'
+    'access-token' => '123123123123123'
+]
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = []
+
+$_SERVER = [
+    'HTTP_HOST' => 'api.tedcrm:8081'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_CACHE_CONTROL' => 'max-age=0'
+    'HTTP_UPGRADE_INSECURE_REQUESTS' => '1'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.110 Safari/537.36'
+    'HTTP_DNT' => '1'
+    'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_ACCEPT_LANGUAGE' => 'ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7'
+    'PATH' => 'C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\Program Files\\Git\\cmd;D:\\OpenServer\\OpenServer\\modules\\php\\PHP-5.5\\ext;D:\\usr\\php;C:\\ProgramData\\ComposerSetup\\bin;D:\\usr\\php73;D:\\usr\\php73\\ext;D:\\usr\\php70;D:\\usr\\php70\\ext;D:\\usr\\php\\ext;D:\\xampp\\php;E:\\ProgramFiles\\nodejs\\;D:\\OpenServer\\OpenServer\\modules\\php\\PHP-5.5;D:\\usr\\www;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => ''
+    'SERVER_SOFTWARE' => 'Apache/2.4.25 (Win64) PHP/7.2.12'
+    'SERVER_NAME' => 'api.tedcrm'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '8081'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'DOCUMENT_ROOT' => 'D:/usr/www/tedcrm/api/rest'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'D:/usr/www/tedcrm/api/rest'
+    'SERVER_ADMIN' => 'web-ali@yandex.ru'
+    'SCRIPT_FILENAME' => 'D:/usr/www/tedcrm/api/rest/index.php'
+    'REMOTE_PORT' => '7445'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => 'r=profile/index&access-token=123123123123123'
+    'REQUEST_URI' => '/?r=profile/index&access-token=123123123123123'
+    'SCRIPT_NAME' => '/index.php'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1544639055.149
+    'REQUEST_TIME' => 1544639055
+]
+2018-12-12 18:24:24 [127.0.0.1][-][-][error][yii\web\HttpException:401] yii\web\UnauthorizedHttpException: Your request was made with invalid credentials. in D:\usr\www\tedcrm\vendor\yiisoft\yii2\filters\auth\AuthMethod.php:93
+Stack trace:
+#0 D:\usr\www\tedcrm\vendor\yiisoft\yii2\filters\auth\AuthMethod.php(76): yii\filters\auth\AuthMethod->handleFailure(Object(yii\web\Response))
+#1 D:\usr\www\tedcrm\vendor\yiisoft\yii2\filters\auth\CompositeAuth.php(57): yii\filters\auth\AuthMethod->beforeAction(Object(yii\base\InlineAction))
+#2 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\ActionFilter.php(77): yii\filters\auth\CompositeAuth->beforeAction(Object(yii\base\InlineAction))
+#3 [internal function]: yii\base\ActionFilter->beforeFilter(Object(yii\base\ActionEvent))
+#4 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Component.php(627): call_user_func(Array, Object(yii\base\ActionEvent))
+#5 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Controller.php(274): yii\base\Component->trigger('beforeAction', Object(yii\base\ActionEvent))
+#6 D:\usr\www\tedcrm\vendor\yiisoft\yii2\web\Controller.php(164): yii\base\Controller->beforeAction(Object(yii\base\InlineAction))
+#7 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Controller.php(155): yii\web\Controller->beforeAction(Object(yii\base\InlineAction))
+#8 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Module.php(528): yii\base\Controller->runAction('auth', Array)
+#9 D:\usr\www\tedcrm\vendor\yiisoft\yii2\web\Application.php(103): yii\base\Module->runAction('profile/auth', Array)
+#10 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Application.php(386): yii\web\Application->handleRequest(Object(yii\web\Request))
+#11 D:\usr\www\tedcrm\api\rest\index.php(18): yii\base\Application->run()
+#12 {main}
+2018-12-12 18:24:24 [127.0.0.1][-][-][info][application] $_GET = [
+    'r' => 'profile/auth'
+]
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = []
+
+$_SERVER = [
+    'HTTP_HOST' => 'api.tedcrm:8081'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_UPGRADE_INSECURE_REQUESTS' => '1'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.110 Safari/537.36'
+    'HTTP_DNT' => '1'
+    'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_ACCEPT_LANGUAGE' => 'ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7'
+    'PATH' => 'C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\Program Files\\Git\\cmd;D:\\OpenServer\\OpenServer\\modules\\php\\PHP-5.5\\ext;D:\\usr\\php;C:\\ProgramData\\ComposerSetup\\bin;D:\\usr\\php73;D:\\usr\\php73\\ext;D:\\usr\\php70;D:\\usr\\php70\\ext;D:\\usr\\php\\ext;D:\\xampp\\php;E:\\ProgramFiles\\nodejs\\;D:\\OpenServer\\OpenServer\\modules\\php\\PHP-5.5;D:\\usr\\www;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => ''
+    'SERVER_SOFTWARE' => 'Apache/2.4.25 (Win64) PHP/7.2.12'
+    'SERVER_NAME' => 'api.tedcrm'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '8081'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'DOCUMENT_ROOT' => 'D:/usr/www/tedcrm/api/rest'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'D:/usr/www/tedcrm/api/rest'
+    'SERVER_ADMIN' => 'web-ali@yandex.ru'
+    'SCRIPT_FILENAME' => 'D:/usr/www/tedcrm/api/rest/index.php'
+    'REMOTE_PORT' => '7446'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => 'r=profile/auth'
+    'REQUEST_URI' => '/?r=profile/auth'
+    'SCRIPT_NAME' => '/index.php'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1544639064.081
+    'REQUEST_TIME' => 1544639064
+]
+2018-12-12 18:25:18 [127.0.0.1][-][-][error][yii\web\HttpException:401] yii\web\UnauthorizedHttpException: Your request was made with invalid credentials. in D:\usr\www\tedcrm\vendor\yiisoft\yii2\filters\auth\AuthMethod.php:93
+Stack trace:
+#0 D:\usr\www\tedcrm\vendor\yiisoft\yii2\filters\auth\AuthMethod.php(76): yii\filters\auth\AuthMethod->handleFailure(Object(yii\web\Response))
+#1 D:\usr\www\tedcrm\vendor\yiisoft\yii2\filters\auth\CompositeAuth.php(57): yii\filters\auth\AuthMethod->beforeAction(Object(yii\base\InlineAction))
+#2 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\ActionFilter.php(77): yii\filters\auth\CompositeAuth->beforeAction(Object(yii\base\InlineAction))
+#3 [internal function]: yii\base\ActionFilter->beforeFilter(Object(yii\base\ActionEvent))
+#4 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Component.php(627): call_user_func(Array, Object(yii\base\ActionEvent))
+#5 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Controller.php(274): yii\base\Component->trigger('beforeAction', Object(yii\base\ActionEvent))
+#6 D:\usr\www\tedcrm\vendor\yiisoft\yii2\web\Controller.php(164): yii\base\Controller->beforeAction(Object(yii\base\InlineAction))
+#7 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Controller.php(155): yii\web\Controller->beforeAction(Object(yii\base\InlineAction))
+#8 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Module.php(528): yii\base\Controller->runAction('auth', Array)
+#9 D:\usr\www\tedcrm\vendor\yiisoft\yii2\web\Application.php(103): yii\base\Module->runAction('profile/auth', Array)
+#10 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Application.php(386): yii\web\Application->handleRequest(Object(yii\web\Request))
+#11 D:\usr\www\tedcrm\api\rest\index.php(18): yii\base\Application->run()
+#12 {main}
+2018-12-12 18:25:18 [127.0.0.1][-][-][info][application] $_GET = [
+    'r' => 'profile/auth'
+]
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = []
+
+$_SERVER = [
+    'HTTP_HOST' => 'api.tedcrm:8081'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_CACHE_CONTROL' => 'max-age=0'
+    'HTTP_UPGRADE_INSECURE_REQUESTS' => '1'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.110 Safari/537.36'
+    'HTTP_DNT' => '1'
+    'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_ACCEPT_LANGUAGE' => 'ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7'
+    'PATH' => 'C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\Program Files\\Git\\cmd;D:\\OpenServer\\OpenServer\\modules\\php\\PHP-5.5\\ext;D:\\usr\\php;C:\\ProgramData\\ComposerSetup\\bin;D:\\usr\\php73;D:\\usr\\php73\\ext;D:\\usr\\php70;D:\\usr\\php70\\ext;D:\\usr\\php\\ext;D:\\xampp\\php;E:\\ProgramFiles\\nodejs\\;D:\\OpenServer\\OpenServer\\modules\\php\\PHP-5.5;D:\\usr\\www;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => ''
+    'SERVER_SOFTWARE' => 'Apache/2.4.25 (Win64) PHP/7.2.12'
+    'SERVER_NAME' => 'api.tedcrm'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '8081'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'DOCUMENT_ROOT' => 'D:/usr/www/tedcrm/api/rest'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'D:/usr/www/tedcrm/api/rest'
+    'SERVER_ADMIN' => 'web-ali@yandex.ru'
+    'SCRIPT_FILENAME' => 'D:/usr/www/tedcrm/api/rest/index.php'
+    'REMOTE_PORT' => '7453'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => 'r=profile/auth'
+    'REQUEST_URI' => '/?r=profile/auth'
+    'SCRIPT_NAME' => '/index.php'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1544639118.039
+    'REQUEST_TIME' => 1544639118
+]
+2018-12-12 18:25:45 [127.0.0.1][-][-][error][yii\web\HttpException:401] yii\web\UnauthorizedHttpException: Your request was made with invalid credentials. in D:\usr\www\tedcrm\vendor\yiisoft\yii2\filters\auth\AuthMethod.php:93
+Stack trace:
+#0 D:\usr\www\tedcrm\vendor\yiisoft\yii2\filters\auth\HttpBasicAuth.php(112): yii\filters\auth\AuthMethod->handleFailure(Object(yii\web\Response))
+#1 D:\usr\www\tedcrm\vendor\yiisoft\yii2\filters\auth\CompositeAuth.php(73): yii\filters\auth\HttpBasicAuth->authenticate(Object(yii\web\User), Object(yii\web\Request), Object(yii\web\Response))
+#2 D:\usr\www\tedcrm\vendor\yiisoft\yii2\filters\auth\AuthMethod.php(61): yii\filters\auth\CompositeAuth->authenticate(Object(yii\web\User), Object(yii\web\Request), Object(yii\web\Response))
+#3 D:\usr\www\tedcrm\vendor\yiisoft\yii2\filters\auth\CompositeAuth.php(57): yii\filters\auth\AuthMethod->beforeAction(Object(yii\base\InlineAction))
+#4 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\ActionFilter.php(77): yii\filters\auth\CompositeAuth->beforeAction(Object(yii\base\InlineAction))
+#5 [internal function]: yii\base\ActionFilter->beforeFilter(Object(yii\base\ActionEvent))
+#6 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Component.php(627): call_user_func(Array, Object(yii\base\ActionEvent))
+#7 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Controller.php(274): yii\base\Component->trigger('beforeAction', Object(yii\base\ActionEvent))
+#8 D:\usr\www\tedcrm\vendor\yiisoft\yii2\web\Controller.php(164): yii\base\Controller->beforeAction(Object(yii\base\InlineAction))
+#9 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Controller.php(155): yii\web\Controller->beforeAction(Object(yii\base\InlineAction))
+#10 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Module.php(528): yii\base\Controller->runAction('auth', Array)
+#11 D:\usr\www\tedcrm\vendor\yiisoft\yii2\web\Application.php(103): yii\base\Module->runAction('profile/auth', Array)
+#12 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Application.php(386): yii\web\Application->handleRequest(Object(yii\web\Request))
+#13 D:\usr\www\tedcrm\api\rest\index.php(18): yii\base\Application->run()
+#14 {main}
+2018-12-12 18:25:45 [127.0.0.1][-][-][info][application] $_GET = [
+    'r' => 'profile/auth'
+]
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = []
+
+$_SERVER = [
+    'HTTP_HOST' => 'api.tedcrm:8081'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_CACHE_CONTROL' => 'max-age=0'
+    'HTTP_UPGRADE_INSECURE_REQUESTS' => '1'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.110 Safari/537.36'
+    'HTTP_DNT' => '1'
+    'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_ACCEPT_LANGUAGE' => 'ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7'
+    'PATH' => 'C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\Program Files\\Git\\cmd;D:\\OpenServer\\OpenServer\\modules\\php\\PHP-5.5\\ext;D:\\usr\\php;C:\\ProgramData\\ComposerSetup\\bin;D:\\usr\\php73;D:\\usr\\php73\\ext;D:\\usr\\php70;D:\\usr\\php70\\ext;D:\\usr\\php\\ext;D:\\xampp\\php;E:\\ProgramFiles\\nodejs\\;D:\\OpenServer\\OpenServer\\modules\\php\\PHP-5.5;D:\\usr\\www;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => ''
+    'SERVER_SOFTWARE' => 'Apache/2.4.25 (Win64) PHP/7.2.12'
+    'SERVER_NAME' => 'api.tedcrm'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '8081'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'DOCUMENT_ROOT' => 'D:/usr/www/tedcrm/api/rest'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'D:/usr/www/tedcrm/api/rest'
+    'SERVER_ADMIN' => 'web-ali@yandex.ru'
+    'SCRIPT_FILENAME' => 'D:/usr/www/tedcrm/api/rest/index.php'
+    'REMOTE_PORT' => '7455'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => 'r=profile/auth'
+    'REQUEST_URI' => '/?r=profile/auth'
+    'SCRIPT_NAME' => '/index.php'
+    'PHP_SELF' => '/index.php'
+    'PHP_AUTH_USER' => 'web-ali@yandex.ru'
+    'PHP_AUTH_PW' => '12345qwE'
+    'REQUEST_TIME_FLOAT' => 1544639145.124
+    'REQUEST_TIME' => 1544639145
+]
+2018-12-12 18:25:47 [127.0.0.1][-][-][error][yii\web\HttpException:401] yii\web\UnauthorizedHttpException: Your request was made with invalid credentials. in D:\usr\www\tedcrm\vendor\yiisoft\yii2\filters\auth\AuthMethod.php:93
+Stack trace:
+#0 D:\usr\www\tedcrm\vendor\yiisoft\yii2\filters\auth\AuthMethod.php(76): yii\filters\auth\AuthMethod->handleFailure(Object(yii\web\Response))
+#1 D:\usr\www\tedcrm\vendor\yiisoft\yii2\filters\auth\CompositeAuth.php(57): yii\filters\auth\AuthMethod->beforeAction(Object(yii\base\InlineAction))
+#2 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\ActionFilter.php(77): yii\filters\auth\CompositeAuth->beforeAction(Object(yii\base\InlineAction))
+#3 [internal function]: yii\base\ActionFilter->beforeFilter(Object(yii\base\ActionEvent))
+#4 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Component.php(627): call_user_func(Array, Object(yii\base\ActionEvent))
+#5 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Controller.php(274): yii\base\Component->trigger('beforeAction', Object(yii\base\ActionEvent))
+#6 D:\usr\www\tedcrm\vendor\yiisoft\yii2\web\Controller.php(164): yii\base\Controller->beforeAction(Object(yii\base\InlineAction))
+#7 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Controller.php(155): yii\web\Controller->beforeAction(Object(yii\base\InlineAction))
+#8 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Module.php(528): yii\base\Controller->runAction('auth', Array)
+#9 D:\usr\www\tedcrm\vendor\yiisoft\yii2\web\Application.php(103): yii\base\Module->runAction('profile/auth', Array)
+#10 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Application.php(386): yii\web\Application->handleRequest(Object(yii\web\Request))
+#11 D:\usr\www\tedcrm\api\rest\index.php(18): yii\base\Application->run()
+#12 {main}
+2018-12-12 18:25:47 [127.0.0.1][-][-][info][application] $_GET = [
+    'r' => 'profile/auth'
+]
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = []
+
+$_SERVER = [
+    'HTTP_HOST' => 'api.tedcrm:8081'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_CACHE_CONTROL' => 'max-age=0'
+    'HTTP_UPGRADE_INSECURE_REQUESTS' => '1'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.110 Safari/537.36'
+    'HTTP_DNT' => '1'
+    'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_ACCEPT_LANGUAGE' => 'ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7'
+    'PATH' => 'C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\Program Files\\Git\\cmd;D:\\OpenServer\\OpenServer\\modules\\php\\PHP-5.5\\ext;D:\\usr\\php;C:\\ProgramData\\ComposerSetup\\bin;D:\\usr\\php73;D:\\usr\\php73\\ext;D:\\usr\\php70;D:\\usr\\php70\\ext;D:\\usr\\php\\ext;D:\\xampp\\php;E:\\ProgramFiles\\nodejs\\;D:\\OpenServer\\OpenServer\\modules\\php\\PHP-5.5;D:\\usr\\www;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => ''
+    'SERVER_SOFTWARE' => 'Apache/2.4.25 (Win64) PHP/7.2.12'
+    'SERVER_NAME' => 'api.tedcrm'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '8081'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'DOCUMENT_ROOT' => 'D:/usr/www/tedcrm/api/rest'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'D:/usr/www/tedcrm/api/rest'
+    'SERVER_ADMIN' => 'web-ali@yandex.ru'
+    'SCRIPT_FILENAME' => 'D:/usr/www/tedcrm/api/rest/index.php'
+    'REMOTE_PORT' => '7455'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => 'r=profile/auth'
+    'REQUEST_URI' => '/?r=profile/auth'
+    'SCRIPT_NAME' => '/index.php'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1544639147.604
+    'REQUEST_TIME' => 1544639147
+]
+2018-12-12 18:25:55 [127.0.0.1][-][-][error][yii\web\HttpException:401] yii\web\UnauthorizedHttpException: Your request was made with invalid credentials. in D:\usr\www\tedcrm\vendor\yiisoft\yii2\filters\auth\AuthMethod.php:93
+Stack trace:
+#0 D:\usr\www\tedcrm\vendor\yiisoft\yii2\filters\auth\AuthMethod.php(76): yii\filters\auth\AuthMethod->handleFailure(Object(yii\web\Response))
+#1 D:\usr\www\tedcrm\vendor\yiisoft\yii2\filters\auth\CompositeAuth.php(57): yii\filters\auth\AuthMethod->beforeAction(Object(yii\base\InlineAction))
+#2 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\ActionFilter.php(77): yii\filters\auth\CompositeAuth->beforeAction(Object(yii\base\InlineAction))
+#3 [internal function]: yii\base\ActionFilter->beforeFilter(Object(yii\base\ActionEvent))
+#4 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Component.php(627): call_user_func(Array, Object(yii\base\ActionEvent))
+#5 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Controller.php(274): yii\base\Component->trigger('beforeAction', Object(yii\base\ActionEvent))
+#6 D:\usr\www\tedcrm\vendor\yiisoft\yii2\web\Controller.php(164): yii\base\Controller->beforeAction(Object(yii\base\InlineAction))
+#7 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Controller.php(155): yii\web\Controller->beforeAction(Object(yii\base\InlineAction))
+#8 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Module.php(528): yii\base\Controller->runAction('auth', Array)
+#9 D:\usr\www\tedcrm\vendor\yiisoft\yii2\web\Application.php(103): yii\base\Module->runAction('profile/auth', Array)
+#10 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Application.php(386): yii\web\Application->handleRequest(Object(yii\web\Request))
+#11 D:\usr\www\tedcrm\api\rest\index.php(18): yii\base\Application->run()
+#12 {main}
+2018-12-12 18:25:55 [127.0.0.1][-][-][info][application] $_GET = [
+    'r' => 'profile/auth'
+]
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = []
+
+$_SERVER = [
+    'HTTP_HOST' => 'api.tedcrm:8081'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_CACHE_CONTROL' => 'max-age=0'
+    'HTTP_UPGRADE_INSECURE_REQUESTS' => '1'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.110 Safari/537.36'
+    'HTTP_DNT' => '1'
+    'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_ACCEPT_LANGUAGE' => 'ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7'
+    'PATH' => 'C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\Program Files\\Git\\cmd;D:\\OpenServer\\OpenServer\\modules\\php\\PHP-5.5\\ext;D:\\usr\\php;C:\\ProgramData\\ComposerSetup\\bin;D:\\usr\\php73;D:\\usr\\php73\\ext;D:\\usr\\php70;D:\\usr\\php70\\ext;D:\\usr\\php\\ext;D:\\xampp\\php;E:\\ProgramFiles\\nodejs\\;D:\\OpenServer\\OpenServer\\modules\\php\\PHP-5.5;D:\\usr\\www;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => ''
+    'SERVER_SOFTWARE' => 'Apache/2.4.25 (Win64) PHP/7.2.12'
+    'SERVER_NAME' => 'api.tedcrm'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '8081'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'DOCUMENT_ROOT' => 'D:/usr/www/tedcrm/api/rest'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'D:/usr/www/tedcrm/api/rest'
+    'SERVER_ADMIN' => 'web-ali@yandex.ru'
+    'SCRIPT_FILENAME' => 'D:/usr/www/tedcrm/api/rest/index.php'
+    'REMOTE_PORT' => '7457'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => 'r=profile/auth'
+    'REQUEST_URI' => '/?r=profile/auth'
+    'SCRIPT_NAME' => '/index.php'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1544639155.825
+    'REQUEST_TIME' => 1544639155
+]
+2018-12-12 18:25:56 [127.0.0.1][-][-][error][yii\web\HttpException:401] yii\web\UnauthorizedHttpException: Your request was made with invalid credentials. in D:\usr\www\tedcrm\vendor\yiisoft\yii2\filters\auth\AuthMethod.php:93
+Stack trace:
+#0 D:\usr\www\tedcrm\vendor\yiisoft\yii2\filters\auth\AuthMethod.php(76): yii\filters\auth\AuthMethod->handleFailure(Object(yii\web\Response))
+#1 D:\usr\www\tedcrm\vendor\yiisoft\yii2\filters\auth\CompositeAuth.php(57): yii\filters\auth\AuthMethod->beforeAction(Object(yii\base\InlineAction))
+#2 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\ActionFilter.php(77): yii\filters\auth\CompositeAuth->beforeAction(Object(yii\base\InlineAction))
+#3 [internal function]: yii\base\ActionFilter->beforeFilter(Object(yii\base\ActionEvent))
+#4 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Component.php(627): call_user_func(Array, Object(yii\base\ActionEvent))
+#5 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Controller.php(274): yii\base\Component->trigger('beforeAction', Object(yii\base\ActionEvent))
+#6 D:\usr\www\tedcrm\vendor\yiisoft\yii2\web\Controller.php(164): yii\base\Controller->beforeAction(Object(yii\base\InlineAction))
+#7 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Controller.php(155): yii\web\Controller->beforeAction(Object(yii\base\InlineAction))
+#8 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Module.php(528): yii\base\Controller->runAction('auth', Array)
+#9 D:\usr\www\tedcrm\vendor\yiisoft\yii2\web\Application.php(103): yii\base\Module->runAction('profile/auth', Array)
+#10 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Application.php(386): yii\web\Application->handleRequest(Object(yii\web\Request))
+#11 D:\usr\www\tedcrm\api\rest\index.php(18): yii\base\Application->run()
+#12 {main}
+2018-12-12 18:25:56 [127.0.0.1][-][-][info][application] $_GET = [
+    'r' => 'profile/auth'
+]
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = []
+
+$_SERVER = [
+    'HTTP_HOST' => 'api.tedcrm:8081'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_CACHE_CONTROL' => 'max-age=0'
+    'HTTP_UPGRADE_INSECURE_REQUESTS' => '1'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.110 Safari/537.36'
+    'HTTP_DNT' => '1'
+    'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_ACCEPT_LANGUAGE' => 'ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7'
+    'PATH' => 'C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\Program Files\\Git\\cmd;D:\\OpenServer\\OpenServer\\modules\\php\\PHP-5.5\\ext;D:\\usr\\php;C:\\ProgramData\\ComposerSetup\\bin;D:\\usr\\php73;D:\\usr\\php73\\ext;D:\\usr\\php70;D:\\usr\\php70\\ext;D:\\usr\\php\\ext;D:\\xampp\\php;E:\\ProgramFiles\\nodejs\\;D:\\OpenServer\\OpenServer\\modules\\php\\PHP-5.5;D:\\usr\\www;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => ''
+    'SERVER_SOFTWARE' => 'Apache/2.4.25 (Win64) PHP/7.2.12'
+    'SERVER_NAME' => 'api.tedcrm'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '8081'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'DOCUMENT_ROOT' => 'D:/usr/www/tedcrm/api/rest'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'D:/usr/www/tedcrm/api/rest'
+    'SERVER_ADMIN' => 'web-ali@yandex.ru'
+    'SCRIPT_FILENAME' => 'D:/usr/www/tedcrm/api/rest/index.php'
+    'REMOTE_PORT' => '7457'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => 'r=profile/auth'
+    'REQUEST_URI' => '/?r=profile/auth'
+    'SCRIPT_NAME' => '/index.php'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1544639156.522
+    'REQUEST_TIME' => 1544639156
+]
+2018-12-12 18:33:34 [127.0.0.1][-][-][error][ParseError] ParseError: syntax error, unexpected ';', expecting ']' in D:\usr\www\tedcrm\api\rest\controllers\ProfileController.php:26
+Stack trace:
+#0 [internal function]: yii\BaseYii::autoload('api\\rest\\contro...')
+#1 [internal function]: spl_autoload_call('api\\rest\\contro...')
+#2 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Module.php(637): class_exists('api\\rest\\contro...')
+#3 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Module.php(596): yii\base\Module->createControllerByID('profile')
+#4 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Module.php(522): yii\base\Module->createController('auth')
+#5 D:\usr\www\tedcrm\vendor\yiisoft\yii2\web\Application.php(103): yii\base\Module->runAction('profile/auth', Array)
+#6 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Application.php(386): yii\web\Application->handleRequest(Object(yii\web\Request))
+#7 D:\usr\www\tedcrm\api\rest\index.php(18): yii\base\Application->run()
+#8 {main}
+2018-12-12 18:33:34 [127.0.0.1][-][-][info][application] $_GET = [
+    'r' => 'profile/auth'
+]
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = []
+
+$_SERVER = [
+    'HTTP_HOST' => 'api.tedcrm:8081'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_CACHE_CONTROL' => 'max-age=0'
+    'HTTP_UPGRADE_INSECURE_REQUESTS' => '1'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.110 Safari/537.36'
+    'HTTP_DNT' => '1'
+    'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_ACCEPT_LANGUAGE' => 'ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7'
+    'PATH' => 'C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\Program Files\\Git\\cmd;D:\\OpenServer\\OpenServer\\modules\\php\\PHP-5.5\\ext;D:\\usr\\php;C:\\ProgramData\\ComposerSetup\\bin;D:\\usr\\php73;D:\\usr\\php73\\ext;D:\\usr\\php70;D:\\usr\\php70\\ext;D:\\usr\\php\\ext;D:\\xampp\\php;E:\\ProgramFiles\\nodejs\\;D:\\OpenServer\\OpenServer\\modules\\php\\PHP-5.5;D:\\usr\\www;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => ''
+    'SERVER_SOFTWARE' => 'Apache/2.4.25 (Win64) PHP/7.2.12'
+    'SERVER_NAME' => 'api.tedcrm'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '8081'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'DOCUMENT_ROOT' => 'D:/usr/www/tedcrm/api/rest'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'D:/usr/www/tedcrm/api/rest'
+    'SERVER_ADMIN' => 'web-ali@yandex.ru'
+    'SCRIPT_FILENAME' => 'D:/usr/www/tedcrm/api/rest/index.php'
+    'REMOTE_PORT' => '7496'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => 'r=profile/auth'
+    'REQUEST_URI' => '/?r=profile/auth'
+    'SCRIPT_NAME' => '/index.php'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1544639614.436
+    'REQUEST_TIME' => 1544639614
+]
+2018-12-12 18:33:46 [127.0.0.1][-][-][error][yii\web\HttpException:401] yii\web\UnauthorizedHttpException: Your request was made with invalid credentials. in D:\usr\www\tedcrm\vendor\yiisoft\yii2\filters\auth\AuthMethod.php:93
+Stack trace:
+#0 D:\usr\www\tedcrm\vendor\yiisoft\yii2\filters\auth\AuthMethod.php(76): yii\filters\auth\AuthMethod->handleFailure(Object(yii\web\Response))
+#1 D:\usr\www\tedcrm\vendor\yiisoft\yii2\filters\auth\CompositeAuth.php(57): yii\filters\auth\AuthMethod->beforeAction(Object(yii\base\InlineAction))
+#2 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\ActionFilter.php(77): yii\filters\auth\CompositeAuth->beforeAction(Object(yii\base\InlineAction))
+#3 [internal function]: yii\base\ActionFilter->beforeFilter(Object(yii\base\ActionEvent))
+#4 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Component.php(627): call_user_func(Array, Object(yii\base\ActionEvent))
+#5 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Controller.php(274): yii\base\Component->trigger('beforeAction', Object(yii\base\ActionEvent))
+#6 D:\usr\www\tedcrm\vendor\yiisoft\yii2\web\Controller.php(164): yii\base\Controller->beforeAction(Object(yii\base\InlineAction))
+#7 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Controller.php(155): yii\web\Controller->beforeAction(Object(yii\base\InlineAction))
+#8 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Module.php(528): yii\base\Controller->runAction('auth', Array)
+#9 D:\usr\www\tedcrm\vendor\yiisoft\yii2\web\Application.php(103): yii\base\Module->runAction('profile/auth', Array)
+#10 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Application.php(386): yii\web\Application->handleRequest(Object(yii\web\Request))
+#11 D:\usr\www\tedcrm\api\rest\index.php(18): yii\base\Application->run()
+#12 {main}
+2018-12-12 18:33:46 [127.0.0.1][-][-][info][application] $_GET = [
+    'r' => 'profile/auth'
+]
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = []
+
+$_SERVER = [
+    'HTTP_HOST' => 'api.tedcrm:8081'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_CACHE_CONTROL' => 'max-age=0'
+    'HTTP_UPGRADE_INSECURE_REQUESTS' => '1'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.110 Safari/537.36'
+    'HTTP_DNT' => '1'
+    'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_ACCEPT_LANGUAGE' => 'ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7'
+    'PATH' => 'C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\Program Files\\Git\\cmd;D:\\OpenServer\\OpenServer\\modules\\php\\PHP-5.5\\ext;D:\\usr\\php;C:\\ProgramData\\ComposerSetup\\bin;D:\\usr\\php73;D:\\usr\\php73\\ext;D:\\usr\\php70;D:\\usr\\php70\\ext;D:\\usr\\php\\ext;D:\\xampp\\php;E:\\ProgramFiles\\nodejs\\;D:\\OpenServer\\OpenServer\\modules\\php\\PHP-5.5;D:\\usr\\www;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => ''
+    'SERVER_SOFTWARE' => 'Apache/2.4.25 (Win64) PHP/7.2.12'
+    'SERVER_NAME' => 'api.tedcrm'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '8081'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'DOCUMENT_ROOT' => 'D:/usr/www/tedcrm/api/rest'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'D:/usr/www/tedcrm/api/rest'
+    'SERVER_ADMIN' => 'web-ali@yandex.ru'
+    'SCRIPT_FILENAME' => 'D:/usr/www/tedcrm/api/rest/index.php'
+    'REMOTE_PORT' => '7498'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => 'r=profile/auth'
+    'REQUEST_URI' => '/?r=profile/auth'
+    'SCRIPT_NAME' => '/index.php'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1544639626.507
+    'REQUEST_TIME' => 1544639626
+]
+2018-12-12 18:34:00 [127.0.0.1][-][-][error][yii\base\InvalidValueException] yii\base\InvalidValueException: The identity object must implement IdentityInterface. in D:\usr\www\tedcrm\vendor\yiisoft\yii2\web\User.php:226
+Stack trace:
+#0 D:\usr\www\tedcrm\vendor\yiisoft\yii2\web\User.php(638): yii\web\User->setIdentity(true)
+#1 D:\usr\www\tedcrm\vendor\yiisoft\yii2\filters\auth\HttpBasicAuth.php(104): yii\web\User->switchIdentity(true)
+#2 D:\usr\www\tedcrm\vendor\yiisoft\yii2\filters\auth\CompositeAuth.php(73): yii\filters\auth\HttpBasicAuth->authenticate(Object(yii\web\User), Object(yii\web\Request), Object(yii\web\Response))
+#3 D:\usr\www\tedcrm\vendor\yiisoft\yii2\filters\auth\AuthMethod.php(61): yii\filters\auth\CompositeAuth->authenticate(Object(yii\web\User), Object(yii\web\Request), Object(yii\web\Response))
+#4 D:\usr\www\tedcrm\vendor\yiisoft\yii2\filters\auth\CompositeAuth.php(57): yii\filters\auth\AuthMethod->beforeAction(Object(yii\base\InlineAction))
+#5 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\ActionFilter.php(77): yii\filters\auth\CompositeAuth->beforeAction(Object(yii\base\InlineAction))
+#6 [internal function]: yii\base\ActionFilter->beforeFilter(Object(yii\base\ActionEvent))
+#7 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Component.php(627): call_user_func(Array, Object(yii\base\ActionEvent))
+#8 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Controller.php(274): yii\base\Component->trigger('beforeAction', Object(yii\base\ActionEvent))
+#9 D:\usr\www\tedcrm\vendor\yiisoft\yii2\web\Controller.php(164): yii\base\Controller->beforeAction(Object(yii\base\InlineAction))
+#10 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Controller.php(155): yii\web\Controller->beforeAction(Object(yii\base\InlineAction))
+#11 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Module.php(528): yii\base\Controller->runAction('auth', Array)
+#12 D:\usr\www\tedcrm\vendor\yiisoft\yii2\web\Application.php(103): yii\base\Module->runAction('profile/auth', Array)
+#13 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Application.php(386): yii\web\Application->handleRequest(Object(yii\web\Request))
+#14 D:\usr\www\tedcrm\api\rest\index.php(18): yii\base\Application->run()
+#15 {main}
+2018-12-12 18:33:59 [127.0.0.1][-][-][info][application] $_GET = [
+    'r' => 'profile/auth'
+]
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = []
+
+$_SERVER = [
+    'HTTP_HOST' => 'api.tedcrm:8081'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_CACHE_CONTROL' => 'max-age=0'
+    'HTTP_UPGRADE_INSECURE_REQUESTS' => '1'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.110 Safari/537.36'
+    'HTTP_DNT' => '1'
+    'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_ACCEPT_LANGUAGE' => 'ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7'
+    'PATH' => 'C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\Program Files\\Git\\cmd;D:\\OpenServer\\OpenServer\\modules\\php\\PHP-5.5\\ext;D:\\usr\\php;C:\\ProgramData\\ComposerSetup\\bin;D:\\usr\\php73;D:\\usr\\php73\\ext;D:\\usr\\php70;D:\\usr\\php70\\ext;D:\\usr\\php\\ext;D:\\xampp\\php;E:\\ProgramFiles\\nodejs\\;D:\\OpenServer\\OpenServer\\modules\\php\\PHP-5.5;D:\\usr\\www;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => ''
+    'SERVER_SOFTWARE' => 'Apache/2.4.25 (Win64) PHP/7.2.12'
+    'SERVER_NAME' => 'api.tedcrm'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '8081'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'DOCUMENT_ROOT' => 'D:/usr/www/tedcrm/api/rest'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'D:/usr/www/tedcrm/api/rest'
+    'SERVER_ADMIN' => 'web-ali@yandex.ru'
+    'SCRIPT_FILENAME' => 'D:/usr/www/tedcrm/api/rest/index.php'
+    'REMOTE_PORT' => '7500'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => 'r=profile/auth'
+    'REQUEST_URI' => '/?r=profile/auth'
+    'SCRIPT_NAME' => '/index.php'
+    'PHP_SELF' => '/index.php'
+    'PHP_AUTH_USER' => 'web-ali@yandex.ru'
+    'PHP_AUTH_PW' => '12345qwE'
+    'REQUEST_TIME_FLOAT' => 1544639639.426
+    'REQUEST_TIME' => 1544639639
+]
+2018-12-12 18:34:42 [127.0.0.1][2][-][error][yii\web\HttpException:403] yii\web\ForbiddenHttpException: Вам не разрешено производить данное действие. in D:\usr\www\tedcrm\vendor\yiisoft\yii2\filters\AccessControl.php:158
+Stack trace:
+#0 D:\usr\www\tedcrm\vendor\yiisoft\yii2\filters\AccessControl.php(140): yii\filters\AccessControl->denyAccess(Object(yii\web\User))
+#1 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\ActionFilter.php(77): yii\filters\AccessControl->beforeAction(Object(yii\base\InlineAction))
+#2 [internal function]: yii\base\ActionFilter->beforeFilter(Object(yii\base\ActionEvent))
+#3 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Component.php(627): call_user_func(Array, Object(yii\base\ActionEvent))
+#4 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Controller.php(274): yii\base\Component->trigger('beforeAction', Object(yii\base\ActionEvent))
+#5 D:\usr\www\tedcrm\vendor\yiisoft\yii2\web\Controller.php(164): yii\base\Controller->beforeAction(Object(yii\base\InlineAction))
+#6 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Controller.php(155): yii\web\Controller->beforeAction(Object(yii\base\InlineAction))
+#7 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Module.php(528): yii\base\Controller->runAction('auth', Array)
+#8 D:\usr\www\tedcrm\vendor\yiisoft\yii2\web\Application.php(103): yii\base\Module->runAction('profile/auth', Array)
+#9 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Application.php(386): yii\web\Application->handleRequest(Object(yii\web\Request))
+#10 D:\usr\www\tedcrm\api\rest\index.php(18): yii\base\Application->run()
+#11 {main}
+2018-12-12 18:34:42 [127.0.0.1][2][-][info][application] $_GET = [
+    'r' => 'profile/auth'
+]
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = []
+
+$_SERVER = [
+    'HTTP_HOST' => 'api.tedcrm:8081'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_CACHE_CONTROL' => 'max-age=0'
+    'HTTP_UPGRADE_INSECURE_REQUESTS' => '1'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.110 Safari/537.36'
+    'HTTP_DNT' => '1'
+    'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_ACCEPT_LANGUAGE' => 'ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7'
+    'PATH' => 'C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\Program Files\\Git\\cmd;D:\\OpenServer\\OpenServer\\modules\\php\\PHP-5.5\\ext;D:\\usr\\php;C:\\ProgramData\\ComposerSetup\\bin;D:\\usr\\php73;D:\\usr\\php73\\ext;D:\\usr\\php70;D:\\usr\\php70\\ext;D:\\usr\\php\\ext;D:\\xampp\\php;E:\\ProgramFiles\\nodejs\\;D:\\OpenServer\\OpenServer\\modules\\php\\PHP-5.5;D:\\usr\\www;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => ''
+    'SERVER_SOFTWARE' => 'Apache/2.4.25 (Win64) PHP/7.2.12'
+    'SERVER_NAME' => 'api.tedcrm'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '8081'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'DOCUMENT_ROOT' => 'D:/usr/www/tedcrm/api/rest'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'D:/usr/www/tedcrm/api/rest'
+    'SERVER_ADMIN' => 'web-ali@yandex.ru'
+    'SCRIPT_FILENAME' => 'D:/usr/www/tedcrm/api/rest/index.php'
+    'REMOTE_PORT' => '7505'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => 'r=profile/auth'
+    'REQUEST_URI' => '/?r=profile/auth'
+    'SCRIPT_NAME' => '/index.php'
+    'PHP_SELF' => '/index.php'
+    'PHP_AUTH_USER' => 'web-ali@yandex.ru'
+    'PHP_AUTH_PW' => '12345qwE'
+    'REQUEST_TIME_FLOAT' => 1544639682.199
+    'REQUEST_TIME' => 1544639682
+]
+2018-12-12 18:35:39 [127.0.0.1][-][-][error][yii\web\HttpException:404] yii\base\InvalidRouteException: Unable to resolve the request "". in D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Module.php:537
+Stack trace:
+#0 D:\usr\www\tedcrm\vendor\yiisoft\yii2\web\Application.php(103): yii\base\Module->runAction('', Array)
+#1 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Application.php(386): yii\web\Application->handleRequest(Object(yii\web\Request))
+#2 D:\usr\www\tedcrm\api\rest\index.php(18): yii\base\Application->run()
+#3 {main}
+
+Next yii\web\NotFoundHttpException: Страница не найдена. in D:\usr\www\tedcrm\vendor\yiisoft\yii2\web\Application.php:115
+Stack trace:
+#0 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Application.php(386): yii\web\Application->handleRequest(Object(yii\web\Request))
+#1 D:\usr\www\tedcrm\api\rest\index.php(18): yii\base\Application->run()
+#2 {main}
+2018-12-12 18:35:39 [127.0.0.1][-][-][info][application] $_GET = []
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = []
+
+$_SERVER = [
+    'HTTP_HOST' => 'api.tedcrm:8081'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_UPGRADE_INSECURE_REQUESTS' => '1'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.110 Safari/537.36'
+    'HTTP_DNT' => '1'
+    'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_ACCEPT_LANGUAGE' => 'ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7'
+    'PATH' => 'C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\Program Files\\Git\\cmd;D:\\OpenServer\\OpenServer\\modules\\php\\PHP-5.5\\ext;D:\\usr\\php;C:\\ProgramData\\ComposerSetup\\bin;D:\\usr\\php73;D:\\usr\\php73\\ext;D:\\usr\\php70;D:\\usr\\php70\\ext;D:\\usr\\php\\ext;D:\\xampp\\php;E:\\ProgramFiles\\nodejs\\;D:\\OpenServer\\OpenServer\\modules\\php\\PHP-5.5;D:\\usr\\www;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => ''
+    'SERVER_SOFTWARE' => 'Apache/2.4.25 (Win64) PHP/7.2.12'
+    'SERVER_NAME' => 'api.tedcrm'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '8081'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'DOCUMENT_ROOT' => 'D:/usr/www/tedcrm/api/rest'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'D:/usr/www/tedcrm/api/rest'
+    'SERVER_ADMIN' => 'web-ali@yandex.ru'
+    'SCRIPT_FILENAME' => 'D:/usr/www/tedcrm/api/rest/index.php'
+    'REMOTE_PORT' => '7514'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => ''
+    'REQUEST_URI' => '/'
+    'SCRIPT_NAME' => '/index.php'
+    'PHP_SELF' => '/index.php'
+    'PHP_AUTH_USER' => 'web-ali@yandex.ru'
+    'PHP_AUTH_PW' => '12345qwE'
+    'REQUEST_TIME_FLOAT' => 1544639739.848
+    'REQUEST_TIME' => 1544639739
+]
+2018-12-12 18:36:07 [127.0.0.1][-][-][error][yii\web\HttpException:401] yii\web\UnauthorizedHttpException: Your request was made with invalid credentials. in D:\usr\www\tedcrm\vendor\yiisoft\yii2\filters\auth\AuthMethod.php:93
+Stack trace:
+#0 D:\usr\www\tedcrm\vendor\yiisoft\yii2\filters\auth\AuthMethod.php(76): yii\filters\auth\AuthMethod->handleFailure(Object(yii\web\Response))
+#1 D:\usr\www\tedcrm\vendor\yiisoft\yii2\filters\auth\CompositeAuth.php(57): yii\filters\auth\AuthMethod->beforeAction(Object(yii\base\InlineAction))
+#2 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\ActionFilter.php(77): yii\filters\auth\CompositeAuth->beforeAction(Object(yii\base\InlineAction))
+#3 [internal function]: yii\base\ActionFilter->beforeFilter(Object(yii\base\ActionEvent))
+#4 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Component.php(627): call_user_func(Array, Object(yii\base\ActionEvent))
+#5 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Controller.php(274): yii\base\Component->trigger('beforeAction', Object(yii\base\ActionEvent))
+#6 D:\usr\www\tedcrm\vendor\yiisoft\yii2\web\Controller.php(164): yii\base\Controller->beforeAction(Object(yii\base\InlineAction))
+#7 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Controller.php(155): yii\web\Controller->beforeAction(Object(yii\base\InlineAction))
+#8 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Module.php(528): yii\base\Controller->runAction('index', Array)
+#9 D:\usr\www\tedcrm\vendor\yiisoft\yii2\web\Application.php(103): yii\base\Module->runAction('profile/index', Array)
+#10 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Application.php(386): yii\web\Application->handleRequest(Object(yii\web\Request))
+#11 D:\usr\www\tedcrm\api\rest\index.php(18): yii\base\Application->run()
+#12 {main}
+2018-12-12 18:36:07 [127.0.0.1][-][-][info][application] $_GET = [
+    'r' => 'profile/index'
+]
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = []
+
+$_SERVER = [
+    'HTTP_HOST' => 'api.tedcrm:8081'
+    'PATH' => 'C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\Program Files\\Git\\cmd;D:\\OpenServer\\OpenServer\\modules\\php\\PHP-5.5\\ext;D:\\usr\\php;C:\\ProgramData\\ComposerSetup\\bin;D:\\usr\\php73;D:\\usr\\php73\\ext;D:\\usr\\php70;D:\\usr\\php70\\ext;D:\\usr\\php\\ext;D:\\xampp\\php;E:\\ProgramFiles\\nodejs\\;D:\\OpenServer\\OpenServer\\modules\\php\\PHP-5.5;D:\\usr\\www;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => ''
+    'SERVER_SOFTWARE' => 'Apache/2.4.25 (Win64) PHP/7.2.12'
+    'SERVER_NAME' => 'api.tedcrm'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '8081'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'DOCUMENT_ROOT' => 'D:/usr/www/tedcrm/api/rest'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'D:/usr/www/tedcrm/api/rest'
+    'SERVER_ADMIN' => 'web-ali@yandex.ru'
+    'SCRIPT_FILENAME' => 'D:/usr/www/tedcrm/api/rest/index.php'
+    'REMOTE_PORT' => '7520'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => 'r=profile/index'
+    'REQUEST_URI' => '/?r=profile/index'
+    'SCRIPT_NAME' => '/index.php'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1544639767.507
+    'REQUEST_TIME' => 1544639767
+]
+2018-12-12 18:37:11 [127.0.0.1][-][-][error][yii\web\HttpException:401] yii\web\UnauthorizedHttpException: Your request was made with invalid credentials. in D:\usr\www\tedcrm\vendor\yiisoft\yii2\filters\auth\AuthMethod.php:93
+Stack trace:
+#0 D:\usr\www\tedcrm\vendor\yiisoft\yii2\filters\auth\AuthMethod.php(76): yii\filters\auth\AuthMethod->handleFailure(Object(yii\web\Response))
+#1 D:\usr\www\tedcrm\vendor\yiisoft\yii2\filters\auth\CompositeAuth.php(57): yii\filters\auth\AuthMethod->beforeAction(Object(yii\base\InlineAction))
+#2 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\ActionFilter.php(77): yii\filters\auth\CompositeAuth->beforeAction(Object(yii\base\InlineAction))
+#3 [internal function]: yii\base\ActionFilter->beforeFilter(Object(yii\base\ActionEvent))
+#4 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Component.php(627): call_user_func(Array, Object(yii\base\ActionEvent))
+#5 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Controller.php(274): yii\base\Component->trigger('beforeAction', Object(yii\base\ActionEvent))
+#6 D:\usr\www\tedcrm\vendor\yiisoft\yii2\web\Controller.php(164): yii\base\Controller->beforeAction(Object(yii\base\InlineAction))
+#7 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Controller.php(155): yii\web\Controller->beforeAction(Object(yii\base\InlineAction))
+#8 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Module.php(528): yii\base\Controller->runAction('index', Array)
+#9 D:\usr\www\tedcrm\vendor\yiisoft\yii2\web\Application.php(103): yii\base\Module->runAction('profile/index', Array)
+#10 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Application.php(386): yii\web\Application->handleRequest(Object(yii\web\Request))
+#11 D:\usr\www\tedcrm\api\rest\index.php(18): yii\base\Application->run()
+#12 {main}
+2018-12-12 18:37:11 [127.0.0.1][-][-][info][application] $_GET = [
+    'r' => 'profile/index'
+]
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = []
+
+$_SERVER = [
+    'HTTP_HOST' => 'api.tedcrm:8081'
+    'PATH' => 'C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\Program Files\\Git\\cmd;D:\\OpenServer\\OpenServer\\modules\\php\\PHP-5.5\\ext;D:\\usr\\php;C:\\ProgramData\\ComposerSetup\\bin;D:\\usr\\php73;D:\\usr\\php73\\ext;D:\\usr\\php70;D:\\usr\\php70\\ext;D:\\usr\\php\\ext;D:\\xampp\\php;E:\\ProgramFiles\\nodejs\\;D:\\OpenServer\\OpenServer\\modules\\php\\PHP-5.5;D:\\usr\\www;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => ''
+    'SERVER_SOFTWARE' => 'Apache/2.4.25 (Win64) PHP/7.2.12'
+    'SERVER_NAME' => 'api.tedcrm'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '8081'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'DOCUMENT_ROOT' => 'D:/usr/www/tedcrm/api/rest'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'D:/usr/www/tedcrm/api/rest'
+    'SERVER_ADMIN' => 'web-ali@yandex.ru'
+    'SCRIPT_FILENAME' => 'D:/usr/www/tedcrm/api/rest/index.php'
+    'REMOTE_PORT' => '7535'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => 'r=profile/index'
+    'REQUEST_URI' => '/?r=profile/index'
+    'SCRIPT_NAME' => '/index.php'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1544639831.959
+    'REQUEST_TIME' => 1544639831
+]
+2018-12-12 18:37:15 [127.0.0.1][2][-][error][Error] Error: Class 'api\rest\controllers\Yii' not found in D:\usr\www\tedcrm\api\rest\controllers\ProfileController.php:56
+Stack trace:
+#0 [internal function]: api\rest\controllers\ProfileController->actionIndex()
+#1 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\InlineAction.php(57): call_user_func_array(Array, Array)
+#2 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Controller.php(157): yii\base\InlineAction->runWithParams(Array)
+#3 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Module.php(528): yii\base\Controller->runAction('index', Array)
+#4 D:\usr\www\tedcrm\vendor\yiisoft\yii2\web\Application.php(103): yii\base\Module->runAction('profile/index', Array)
+#5 D:\usr\www\tedcrm\vendor\yiisoft\yii2\base\Application.php(386): yii\web\Application->handleRequest(Object(yii\web\Request))
+#6 D:\usr\www\tedcrm\api\rest\index.php(18): yii\base\Application->run()
+#7 {main}
+2018-12-12 18:37:14 [127.0.0.1][2][-][info][application] $_GET = [
+    'r' => 'profile/index'
+]
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = []
+
+$_SERVER = [
+    'HTTP_HOST' => 'api.tedcrm:8081'
+    'PATH' => 'C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\Program Files\\Git\\cmd;D:\\OpenServer\\OpenServer\\modules\\php\\PHP-5.5\\ext;D:\\usr\\php;C:\\ProgramData\\ComposerSetup\\bin;D:\\usr\\php73;D:\\usr\\php73\\ext;D:\\usr\\php70;D:\\usr\\php70\\ext;D:\\usr\\php\\ext;D:\\xampp\\php;E:\\ProgramFiles\\nodejs\\;D:\\OpenServer\\OpenServer\\modules\\php\\PHP-5.5;D:\\usr\\www;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => ''
+    'SERVER_SOFTWARE' => 'Apache/2.4.25 (Win64) PHP/7.2.12'
+    'SERVER_NAME' => 'api.tedcrm'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '8081'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'DOCUMENT_ROOT' => 'D:/usr/www/tedcrm/api/rest'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'D:/usr/www/tedcrm/api/rest'
+    'SERVER_ADMIN' => 'web-ali@yandex.ru'
+    'SCRIPT_FILENAME' => 'D:/usr/www/tedcrm/api/rest/index.php'
+    'REMOTE_PORT' => '7536'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => 'r=profile/index'
+    'REQUEST_URI' => '/?r=profile/index'
+    'SCRIPT_NAME' => '/index.php'
+    'PHP_SELF' => '/index.php'
+    'PHP_AUTH_USER' => 'web-ali@yandex.ru'
+    'PHP_AUTH_PW' => '12345qwE'
+    'REQUEST_TIME_FLOAT' => 1544639834.986
+    'REQUEST_TIME' => 1544639834
+]

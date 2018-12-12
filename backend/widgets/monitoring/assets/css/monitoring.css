@@ -1,0 +1,61 @@
+.monitor_manager{
+    margin: 0px;
+    padding: 0px;
+}
+
+.monitor_manager li{
+    list-style: none;
+    display: inline-block;
+    margin: 0px;
+    padding: 0px;
+}
+
+.monitor_manager li a{
+    cursor: pointer;
+    display: block;
+    margin: 0px 15px;
+    border-bottom: 1px dashed #337ab7;
+}
+
+.monitor_manager li a:hover{
+    text-decoration: none;
+    color: #7c89ce;
+    border-color: #7c89ce;
+}
+
+#monitor_target{
+    border-top: 1px solid #515ea738;
+    margin-top: 15px;
+    padding-top: 5px;
+}
+
+#monitor_target .th_id{
+  width: 50px;
+}
+
+#monitor_target .th_date_init{
+  width: 200px;
+}
+
+#monitor_target .date-range{
+
+}
+
+#monitor_target .date-range > div{
+ 	display: inline-block;
+ 	width: 150px;
+}
+
+#monitor_target .date-range > div > span{
+	display: block;
+	float: left;
+	padding-left: 5px;
+    padding-right: 19px;
+}
+
+#monitor_target .date-range > div > input{
+	display: block;
+	float: none;
+	width: 125px;
+    height: 30px;
+}
