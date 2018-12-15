@@ -19,17 +19,14 @@ class ProfileController extends Controller
 	    $behaviors['authenticator'] = [
 	        'class' => CompositeAuth::className(),
 	        'authMethods' => [
+	        	HttpBearerAuth::className(),
 	        	[
 	        		'class'=>HttpBasicAuth::className(),
 	        		'auth'=>function ($login, $password) {
 						$user = \common\models\User::findByLogin($login);
 						return $user && $user->validatePassword($password) ? $user : null;
 					}
-	        	],
-	        	// [
-	        	// 	'class'=>HttpBearerAuth::className(),
-	        	// 	'only'=>'index'
-	        	// ]
+	        	]
 	        ],
 	    ];
 
@@ -41,15 +38,12 @@ class ProfileController extends Controller
                     'allow' => true,
                     'roles' => ['@'],
                 ],
-                // [
-                // 	'actions'=>['auth'],
-                //     'allow' => true,
-                //     'roles' => ['?'],
-                // ],
             ],
         ];
 	    return $behaviors;
 	}
+
+
 
 
 	public function actionIndex(){
@@ -58,9 +52,4 @@ class ProfileController extends Controller
 		return $user;
 	}
 
-
-	// public function actionAuth(){
-
-	// 	return 'auth';
-	// }
 }

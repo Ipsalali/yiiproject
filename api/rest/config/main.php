@@ -15,14 +15,17 @@ return [
     'bootstrap' => ['log'],
     'components' => [
         'user' => [
-            'identityClass' => 'common\models\User',
-            'enableSession'=>false
+            'identityClass' => 'api\rest\models\User',
+            'enableSession'=>false,
+            'enableAutoLogin' => false
         ],
 		'request' => [
-		    'parsers' => [
-		        'application/json' => 'yii\web\JsonParser',
-		    ]
-		],
+            'cookieValidationKey' => 'H5WJcheZiDbtBSN2s-XiiaaGTvzQMlfo',
+            'parsers' => [
+                'application/json' => 'yii\web\JsonParser',
+                'application/xml' => 'yii\web\XmlParser',
+            ],
+        ],
         'response' => [
             'class'=>"yii\web\Response",
             'format' => yii\web\Response::FORMAT_JSON,
@@ -50,7 +53,7 @@ return [
 		    'enableStrictParsing' => false,
 		    'showScriptName' => false,
 		    'rules' => [
-		        'auth'=>'profile/auth',
+		        'auth'=>'auth/index',
                 'profile'=>'profile/index',
 		    ],
 		],

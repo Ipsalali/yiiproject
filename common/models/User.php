@@ -128,11 +128,9 @@ class User extends ActiveRecordVersionable implements IdentityInterface, UserRba
     }
 
    
-    public static function findIdentityByAccessToken($token, $type = null)
-    {
-        return static::findOne(['access_token' => $token]);
-    }
+    public static function findIdentityByAccessToken($toke, $type = null){
 
+    }
 
     /**
      * Finds user by username
