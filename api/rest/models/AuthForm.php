@@ -51,7 +51,13 @@ class AuthForm extends Model
             $token = new Token();
             $token->user_id = $this->getUser()->id;
             $token->generateToken(time() + 3600 * 24);
-            return $token->save() ? $token : null;
+            $this->getUser()->resetToken();
+            
+            if($token->save()){
+                return $token;
+            }
+
+            return null;
         } else {
             return null;
         }

@@ -32,10 +32,10 @@ return [
             'on beforeSend' => function ($event) {
                 $response = $event->sender;
                 if ($response->data !== null) {
-                    $response->data = [
-                        'success' => $response->isSuccessful,
-                        'data' => $response->data,
-                    ];
+                    // $response->data = [
+                    //     'success' => $response->isSuccessful,
+                    //     'data' => $response->data,
+                    // ];
                     $response->statusCode = 200;
                 }
             },
@@ -49,12 +49,14 @@ return [
             'charset' => 'UTF-8',
         ],
 		'urlManager' => [
-		    'enablePrettyUrl' => false,
+		    'enablePrettyUrl' => true,
 		    'enableStrictParsing' => false,
 		    'showScriptName' => false,
 		    'rules' => [
 		        'auth'=>'auth/index',
                 'profile'=>'profile/index',
+                'orders'=>'profile/orders',
+                'contacts'=>'resources/contacts',
 		    ],
 		],
         'log' => [

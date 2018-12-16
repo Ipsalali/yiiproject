@@ -174,7 +174,7 @@ class User extends ActiveRecordVersionable implements IdentityInterface, UserRba
      */
     public static function findByLogin($login)
     {   
-        return User::find()->where("phone = '{$login}' OR email = '{$login}'")->andWhere(['status' => self::STATUS_ACTIVE])->one(); 
+        return static::find()->where("phone = '{$login}' OR email = '{$login}'")->andWhere(['status' => self::STATUS_ACTIVE])->one(); 
     }
 
 

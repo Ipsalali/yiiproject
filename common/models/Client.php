@@ -268,7 +268,7 @@ class Client extends ActiveRecordVersionable
     public function getOwnAutotrucks(){
         if(!$this->id) return array();
 
-        return Autotruck::find()->innerJoin('app','autotruck.id = app.autotruck_id AND app.client = '.$this->id)->andWhere(['app.isDeleted'=>0,'autotruck.isDeleted'=>0])->orderBy(["autotruck.date"=>SORT_DESC])->all();
+        return Autotruck::find()->innerJoin('app','autotruck.id = app.autotruck_id AND app.client = '.$this->id)->andWhere(['app.isDeleted'=>0,'autotruck.isDeleted'=>0])->orderBy(["autotruck.date"=>SORT_DESC])->distinct()->all();
     }
 
 
@@ -298,8 +298,8 @@ class Client extends ActiveRecordVersionable
     //     return $sorted;
     // }
 
-    public function getOwnAutotrucksWithApps(){
-        $autotrucks = $this->ownAutotrucks;
+    public function getOwnAutotrucksWithApps($autotrucks = array()){
+        $autotrucks = is_array($autotrucks) && count($autotrucks) ? $autotrucks : $this->ownAutotrucks;
 
         $withApps = array();
         foreach ($autotrucks as $autotruck) {

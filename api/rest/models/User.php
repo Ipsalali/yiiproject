@@ -21,7 +21,7 @@ class User extends cUser{
             ->joinWith('tokens t')
             ->andWhere(['t.token' => $token])
             ->andWhere(['>', 't.expired_at', time()])
-            // ->andWhere(['>', 't.expired_at', time()])
+            ->andWhere(['is_active'=>1])
             ->one();
     }
 
@@ -32,6 +32,16 @@ class User extends cUser{
     public function getTokens()
     {
         return $this->hasMany(Token::className(), ['user_id' => 'id']);
+    }
+
+
+
+    public function resetToken()
+    {
+        return Yii::$app->db->createCommand()
+                ->update(Token::tableName(),['is_active'=>0],'user_id=:id')
+                ->bindValue(":id",$this->id)
+                ->execute();
     }
 
 

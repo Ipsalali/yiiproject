@@ -34,9 +34,7 @@ return [
                     '@app/views' => '@app/views/default',
                 ],
             ]
-            
         ]
-        
     ],
     'controllerMap' => [
         'elfinder' => [

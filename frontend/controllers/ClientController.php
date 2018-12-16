@@ -78,7 +78,7 @@ class ClientController extends Controller{
                         'roles' => ['client/mycheck'],
                     ],
                     [
-                    	'actions'=>['profile','index'],
+                    	'actions'=>['profile'],
                     	'allow' => true,
                         'roles' => ['client/profile'],
                     ],
@@ -498,7 +498,6 @@ class ClientController extends Controller{
 
         return $this->render('profile',["client"=>$client,'autotrucks'=>$autotrucks]);
     }
-
 
 
 

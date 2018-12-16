@@ -129,7 +129,7 @@ $clientUser = $client->user;
 											?>
 												<p>Не известная упаковка: <?php echo $autotuckPackages['none']['count']; ?></p>
 											<?php } ?>
-										?>
+										
 								    </div>
 								</div>
 							</div>

@@ -22,6 +22,7 @@ class m181212_172606_user_access_token extends Migration
             'id' => $this->primaryKey(),
             'user_id' => $this->integer()->notNull(),
             'token' => $this->string()->notNull()->unique(),
+            'is_active' => $this->boolean()->null()->defaultValue(1),
             'expired_at' => $this->integer()->notNull(),
         ], $tableOptions);
         $this->createIndex('idx-token-user_id', '{{%token}}', 'user_id');
