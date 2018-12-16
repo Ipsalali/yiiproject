@@ -3,7 +3,6 @@ namespace common\models;
 
 use Yii;
 use yii\db\{Expression,Query,Command,ActiveRecord};
-use common\base\ActiveRecord;
 
 use soapclient\methods\BaseMethod;
 

@@ -18,23 +18,13 @@ $this->title = "Список методов в API 1С";
 			<tbody>
 				<tr>
 					<td>1</td>
-					<td>Запрос остатков по бригаде</td>
-					<td><?php echo Html::a("Выполнить",['requests/exec-unloadremnant'],['btn btn-primary']);?></td>
+					<td>Выгрузка контрагента</td>
+					<td><?php echo Html::a("Выполнить",['requests/exec-loadcustomer'],['btn btn-primary']);?></td>
 				</tr>
 				<tr>
 					<td>2</td>
-					<td>Смена пароля пользователя</td>
-					<td><?php echo Html::a("Выполнить",['requests/exec-useraccountload'],['btn btn-primary']);?></td>
-				</tr>
-				<tr>
-					<td>3</td>
-					<td>Выгрузка рапорта</td>
-					<td><?php echo Html::a("Выполнить",['requests/exec-raportload'],['btn btn-primary']);?></td>
-				</tr>
-				<tr>
-					<td>4</td>
-					<td>Расчетать кв.м. сделанных работ</td>
-					<td><?php echo Html::a("Выполнить",['requests/exec-calcsquare'],['btn btn-primary']);?></td>
+					<td>Выгрузка заявки</td>
+					<td><?php echo Html::a("Выполнить",['requests/exec-createreceipts'],['btn btn-primary']);?></td>
 				</tr>
 			</tbody>
 		</table>

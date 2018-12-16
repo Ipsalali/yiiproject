@@ -121,3 +121,38 @@ a.desc:after {
 #organisation-payment > div.radio{
     margin:0px 0px 0px 0px !important;
 }
+
+.td_params_in,.td_params_out{
+    position: relative;
+}
+
+.td_params_in a,.td_params_out a{
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  text-decoration: underline;
+}
+
+.td_params_in ul,.td_params_out ul{
+    padding: 0px;
+}
+.td_params_in ul li,.td_params_out ul li{
+    list-style: none;
+}
+
+.requests{
+
+}
+
+.requests th{
+    font-size: 11px;
+    font-family: arial;
+    border: 1px solid #727375 !important;
+}
+
+.requests td{
+    padding: 5px 3px !important;
+    font-size: 12px;
+    font-family: arial;
+    border: 1px solid #727375 !important;
+}

@@ -3,7 +3,7 @@
 namespace soapclient\methods;
 
  
-class RaportLoad extends BaseMethod{
+class CreateReceipts extends BaseMethod{
 
 	protected $parameters = [];
 

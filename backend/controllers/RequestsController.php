@@ -5,13 +5,15 @@ use Yii;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
-use backend\modules\RequestSearch;
 use yii\data\ActiveDataProvider;
 use yii\data\ArrayDataProvider;
-use soapclient\methods\Useraccountload;
-use common\models\Request;
-use common\models\Raport;
 
+use common\models\Request;
+use backend\modules\RequestSearch;
+
+use soapclient\methods\LoadCustomer;
+use soapclient\methods\CreateReceipts;
+use backend\models\Autotruck;
 /**
  * Requests controller
  */
@@ -28,9 +30,9 @@ class RequestsController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['index','list','exec-all','exec-unloadremnant','exec-useraccountload','exec-raportload','exec-calcsquare','error'],
+                        'actions' => ['index','list','exec-all','exec-loadcustomer','exec-createreceipts','error'],
                         'allow' => true,
-                        'roles'=>['superadmin']
+                        'roles'=>['admin']
                     ],
                     
                 ],
@@ -85,44 +87,19 @@ class RequestsController extends Controller
     }
 
 
-    public function actionExecUseraccountload(){
+    public function actionExecLoadcustomer(){
 
 
-        try {
-            
-            $data =[
-                'guid'=>'e47d2a80-2be2-4767-953e-21f17b623987',
-                'password'=>'123456'
-            ];
-            $method = new Useraccountload($data);
+        \common\modules\ExportUser::export(Yii::$app->user->identity);
 
-            $request = new Request([
-                'request'=>get_class($method),
-                'params_in'=>json_encode($method->attributes),
-                'user_id'=>null,
-                'actor_id'=>null
-            ]);
-
-            if($request->save() && $request->send($method)){
-                      
-            }else{
-                    
-            }
-
-        }catch(\Exception $e) {
-            throw $e;
-        }
-
-        print_r($request->params_out);
-        exit;
         return $this->render('result',[]);
     }
 
 
-    public function actionExecRaportload(){
+    public function actionExecCreatereceipts(){
 
 
-        $model = Raport::findOne(['id'=>1]);
+        $model = Autotruck::findOne(['id'=>1]);
 
         if(!isset($model->id))
             throw new \Exception("Документ не найден!",404);

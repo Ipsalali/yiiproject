@@ -105,6 +105,13 @@ use yii\helpers\{Html,Url};
                                 </a>  
                             </li>
                         <?php } ?>
+                        <?php if(Yii::$app->user->can("admin")){?>
+                            <li>
+                                <a href="<?php echo Url::to(['/requests/index'])?>"><i class="fa fa-wrench fa-fw"></i> 
+                                    <?php echo Yii::t('site', 'Запросы в 1С')?>
+                                </a>  
+                            </li>
+                        <?php } ?>
                     <?php } ?>
                     </ul>
                 </div>
