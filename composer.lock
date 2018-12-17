@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b4d3200fc9ff92555dfeb188ddfe71d5",
+    "content-hash": "b9b44e14d79cb9e90ba06b7e648e7d3b",
     "packages": [
         {
             "name": "2amigos/yii2-date-picker-widget",
@@ -204,16 +204,16 @@
         },
         {
             "name": "bower-asset/blueimp-file-upload",
-            "version": "v9.22.0",
+            "version": "v9.28.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/blueimp/jQuery-File-Upload.git",
-                "reference": "39607fdaaba0dc11ba8c116ac2968e28e796f153"
+                "reference": "ee54fc3f57418edc6c86532cfe124a9e2c70deed"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/blueimp/jQuery-File-Upload/zipball/39607fdaaba0dc11ba8c116ac2968e28e796f153",
-                "reference": "39607fdaaba0dc11ba8c116ac2968e28e796f153",
+                "url": "https://api.github.com/repos/blueimp/jQuery-File-Upload/zipball/ee54fc3f57418edc6c86532cfe124a9e2c70deed",
+                "reference": "ee54fc3f57418edc6c86532cfe124a9e2c70deed",
                 "shasum": ""
             },
             "require": {
@@ -264,7 +264,7 @@
                 "upload",
                 "widget"
             ],
-            "time": "2018-06-19T07:33:35+00:00"
+            "time": "2018-11-12T17:45:10+00:00"
         },
         {
             "name": "bower-asset/blueimp-gallery",
@@ -284,16 +284,16 @@
         },
         {
             "name": "bower-asset/blueimp-load-image",
-            "version": "v2.19.0",
+            "version": "v2.20.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/blueimp/JavaScript-Load-Image.git",
-                "reference": "5660ef0f68a34352f4574351ab86f3ecf82240f2"
+                "reference": "e19f53104dfb1ec19be33455e45bca959561067b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/blueimp/JavaScript-Load-Image/zipball/5660ef0f68a34352f4574351ab86f3ecf82240f2",
-                "reference": "5660ef0f68a34352f4574351ab86f3ecf82240f2",
+                "url": "https://api.github.com/repos/blueimp/JavaScript-Load-Image/zipball/e19f53104dfb1ec19be33455e45bca959561067b",
+                "reference": "e19f53104dfb1ec19be33455e45bca959561067b",
                 "shasum": ""
             },
             "type": "bower-asset-library"
@@ -680,6 +680,44 @@
             "time": "2018-01-10T09:00:20+00:00"
         },
         {
+            "name": "duccio/apns-php",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/immobiliare/ApnsPHP.git",
+                "reference": "60bf026a2da73cb3e70f8b7b469519a27e35d8d2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/immobiliare/ApnsPHP/zipball/60bf026a2da73cb3e70f8b7b469519a27e35d8d2",
+                "reference": "60bf026a2da73cb3e70f8b7b469519a27e35d8d2",
+                "shasum": ""
+            },
+            "require": {
+                "lib-openssl": "*",
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "ApnsPHP/Autoload.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "Apple Push Notification & Feedback Provider",
+            "homepage": "https://github.com/immobiliare/ApnsPHP",
+            "keywords": [
+                "apns",
+                "apple",
+                "notification",
+                "push"
+            ],
+            "time": "2018-01-08T11:15:54+00:00"
+        },
+        {
             "name": "ezyang/htmlpurifier",
             "version": "v4.10.0",
             "source": {
@@ -893,22 +931,22 @@
         },
         {
             "name": "kartik-v/yii2-export",
-            "version": "v1.3.7",
+            "version": "v1.3.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kartik-v/yii2-export.git",
-                "reference": "e4c2fd584ef69af7abf5dd19f0e40af9bf9e961c"
+                "reference": "99f8892333e14ed1c8f60becdb5e5c9e03edc189"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/yii2-export/zipball/e4c2fd584ef69af7abf5dd19f0e40af9bf9e961c",
-                "reference": "e4c2fd584ef69af7abf5dd19f0e40af9bf9e961c",
+                "url": "https://api.github.com/repos/kartik-v/yii2-export/zipball/99f8892333e14ed1c8f60becdb5e5c9e03edc189",
+                "reference": "99f8892333e14ed1c8f60becdb5e5c9e03edc189",
                 "shasum": ""
             },
             "require": {
                 "kartik-v/yii2-dynagrid": ">=1.4.5",
-                "kartik-v/yii2-mpdf": "~1.0",
-                "phpoffice/phpspreadsheet": "~1.0"
+                "kartik-v/yii2-mpdf": ">=1.0",
+                "phpoffice/phpspreadsheet": ">=1.0"
             },
             "type": "yii2-extension",
             "extra": {
@@ -949,7 +987,7 @@
                 "xlsx",
                 "yii2"
             ],
-            "time": "2018-11-10T15:21:33+00:00"
+            "time": "2018-11-29T08:03:28+00:00"
         },
         {
             "name": "kartik-v/yii2-field-range",
@@ -1114,16 +1152,16 @@
         },
         {
             "name": "kartik-v/yii2-krajee-base",
-            "version": "v2.0.2",
+            "version": "v2.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kartik-v/yii2-krajee-base.git",
-                "reference": "e23b914399c77df45123d1ac848cf129f0d3d740"
+                "reference": "ec7fc2c5ed76ee29c939ed6fe33bab76eb25499c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/yii2-krajee-base/zipball/e23b914399c77df45123d1ac848cf129f0d3d740",
-                "reference": "e23b914399c77df45123d1ac848cf129f0d3d740",
+                "url": "https://api.github.com/repos/kartik-v/yii2-krajee-base/zipball/ec7fc2c5ed76ee29c939ed6fe33bab76eb25499c",
+                "reference": "ec7fc2c5ed76ee29c939ed6fe33bab76eb25499c",
                 "shasum": ""
             },
             "suggest": {
@@ -1162,7 +1200,7 @@
                 "widget",
                 "yii2"
             ],
-            "time": "2018-11-26T06:13:21+00:00"
+            "time": "2018-12-04T03:40:27+00:00"
         },
         {
             "name": "kartik-v/yii2-mpdf",
@@ -1672,16 +1710,16 @@
         },
         {
             "name": "mpdf/mpdf",
-            "version": "v7.1.6",
+            "version": "v7.1.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mpdf/mpdf.git",
-                "reference": "ef5d8cf2c63def40fb76fc0a9e286721cb4dffcd"
+                "reference": "ac60286a7dc5250c293afebd2bd9414e58a02466"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mpdf/mpdf/zipball/ef5d8cf2c63def40fb76fc0a9e286721cb4dffcd",
-                "reference": "ef5d8cf2c63def40fb76fc0a9e286721cb4dffcd",
+                "url": "https://api.github.com/repos/mpdf/mpdf/zipball/ac60286a7dc5250c293afebd2bd9414e58a02466",
+                "reference": "ac60286a7dc5250c293afebd2bd9414e58a02466",
                 "shasum": ""
             },
             "require": {
@@ -1689,7 +1727,7 @@
                 "ext-mbstring": "*",
                 "myclabs/deep-copy": "^1.7",
                 "paragonie/random_compat": "^1.4|^2.0|9.99.99",
-                "php": "^5.6 || ~7.0.0 || ~7.1.0 || ~7.2.0",
+                "php": "^5.6 || ~7.0.0 || ~7.1.0 || ~7.2.0 || ~7.3.0",
                 "psr/log": "^1.0",
                 "setasign/fpdi": "1.6.*"
             },
@@ -1729,14 +1767,14 @@
                     "role": "Developer (retired)"
                 }
             ],
-            "description": "A PHP class to generate PDF files from HTML with Unicode/UTF-8 and CJK support",
+            "description": "PHP library generating PDF files from UTF-8 encoded HTML",
             "homepage": "https://mpdf.github.io",
             "keywords": [
                 "pdf",
                 "php",
                 "utf-8"
             ],
-            "time": "2018-10-18T11:37:12+00:00"
+            "time": "2018-11-29T18:21:32+00:00"
         },
         {
             "name": "myclabs/deep-copy",
@@ -2177,16 +2215,16 @@
         },
         {
             "name": "studio-42/elfinder",
-            "version": "2.1.43",
+            "version": "2.1.44",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Studio-42/elFinder.git",
-                "reference": "878daf75321c5c81d1ae308298241d94b383ea62"
+                "reference": "8dadc8cb94ffb3b932b8c7af4077b548062719a6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Studio-42/elFinder/zipball/878daf75321c5c81d1ae308298241d94b383ea62",
-                "reference": "878daf75321c5c81d1ae308298241d94b383ea62",
+                "url": "https://api.github.com/repos/Studio-42/elFinder/zipball/8dadc8cb94ffb3b932b8c7af4077b548062719a6",
+                "reference": "8dadc8cb94ffb3b932b8c7af4077b548062719a6",
                 "shasum": ""
             },
             "require": {
@@ -2231,7 +2269,7 @@
             ],
             "description": "File manager for web",
             "homepage": "http://elfinder.org",
-            "time": "2018-11-24T01:37:42+00:00"
+            "time": "2018-12-15T10:55:18+00:00"
         },
         {
             "name": "swiftmailer/swiftmailer",
@@ -2856,16 +2894,16 @@
         },
         {
             "name": "yiisoft/yii2-gii",
-            "version": "2.0.7",
+            "version": "2.0.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/yiisoft/yii2-gii.git",
-                "reference": "9ec1374d0844f448d2af29c707f77c9f8d1375c8"
+                "reference": "c02adc552bcf3a0ef6f3694a9dcbf209f4885ab1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yiisoft/yii2-gii/zipball/9ec1374d0844f448d2af29c707f77c9f8d1375c8",
-                "reference": "9ec1374d0844f448d2af29c707f77c9f8d1375c8",
+                "url": "https://api.github.com/repos/yiisoft/yii2-gii/zipball/c02adc552bcf3a0ef6f3694a9dcbf209f4885ab1",
+                "reference": "c02adc552bcf3a0ef6f3694a9dcbf209f4885ab1",
                 "shasum": ""
             },
             "require": {
@@ -2878,10 +2916,6 @@
             "extra": {
                 "branch-alias": {
                     "dev-master": "2.0.x-dev"
-                },
-                "asset-installer-paths": {
-                    "npm-asset-library": "vendor/npm",
-                    "bower-asset-library": "vendor/bower"
                 }
             },
             "autoload": {
@@ -2905,7 +2939,7 @@
                 "gii",
                 "yii2"
             ],
-            "time": "2018-05-02T22:05:25+00:00"
+            "time": "2018-12-08T10:07:49+00:00"
         }
     ],
     "aliases": [],
@@ -2913,7 +2947,8 @@
     "stability-flags": {
         "scotthuangzl/yii2-export2excel": 20,
         "kartik-v/yii2-date-range": 20,
-        "kartik-v/yii2-widget-datepicker": 20
+        "kartik-v/yii2-widget-datepicker": 20,
+        "duccio/apns-php": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
