@@ -396,15 +396,17 @@ $this->title = $newModel ? "Новая заявка" : "Заявка:".$autotruc
 <?php
 
 $script = <<<JS
+	var sendReqGetRowApp = 0;
 	$(".add_app_item").click(function(event){
 		
 		event.preventDefault();
-
+        var thisBtn = $(this);
 		var table = $("#app_table");
 		var row_count = table.find("tr.app_row").length;
 		var app_type = parseInt($(this).data("type"));
 		var href = $(this).attr("href");
 		
+		if(sendReqGetRowApp) return;
 		
 		$.ajax({
 			url:href,
@@ -414,6 +416,8 @@ $script = <<<JS
 			},
 			datetype:'json',
 			beforeSend:function(){
+			    sendReqGetRowApp = 1;
+			    thisBtn.attr("disabled",true);
 			},
 			success:function(resp){
 				if(resp.hasOwnProperty("html")){
@@ -423,17 +427,22 @@ $script = <<<JS
 			error:function(msg){
 			},
 			complete:function(){
-				
+			    thisBtn.attr("disabled",false);
+			    sendReqGetRowApp = 0;
 			}
 		});
 		
 	});
-
+    
+    var sendReqGetRowExp = 0;
 	$("#add_expenses_item").click(function(event){
 		event.preventDefault();
+		if(sendReqGetRowExp) return;
+		var thisBtn = $(this);
 		var table = $("#exp_table");
 		var exp_row_c = table.find("tr.exp_row").length;
 		var href = $(this).attr("href");
+		
 		$.ajax({
 			url:href,
 			data:{
@@ -441,6 +450,8 @@ $script = <<<JS
 			},
 			datetype:'json',
 			beforeSend:function(){
+			    sendReqGetRowExp = 1;
+			    thisBtn.attr("disabled",true);
 			},
 			success:function(resp){
 				if(resp.hasOwnProperty("html")){
@@ -450,7 +461,8 @@ $script = <<<JS
 			error:function(msg){
 			},
 			complete:function(){
-				
+				sendReqGetRowExp = 0;
+				thisBtn.attr("disabled",false);
 			}
 		});
 	});
