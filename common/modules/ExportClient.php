@@ -25,7 +25,7 @@ class ExportClient{
 
             
             Yii::warning("Export client to 1C","export1C");
-            $method = new LoadCustomer($client);
+            $method = new LoadCustomer($data);
 
             $request = new Request([
                 'request'=>get_class($method),
