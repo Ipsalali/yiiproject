@@ -31,7 +31,12 @@ class ExportUser{
 
 
             Yii::warning($request->params_in,"export1C");
-            if($method->validate() && $request->send($method)){
+            if(!$method->validate()){
+                Yii::warning("Method LoadCustomer parameters has errors: ","export1C");
+                Yii::warning(json_encode($method->getErrors()),"export1C");
+            }
+
+            if($request->send($method)){
                 $params = json_decode($request->params_out,1);
                 Yii::warning("Response params: ","export1C");
                 Yii::warning($request->params_out,"export1C");
@@ -49,9 +54,6 @@ class ExportUser{
                 }else{
                     Yii::warning("Invalid response parameters","export1C");
                 }
-            }else{
-                Yii::warning("Method LoadCustomer parameters has errors: ","export1C");
-                Yii::warning(json_encode($method->getErrors()),"export1C");
             }
 
         }catch(\Exception $e) {

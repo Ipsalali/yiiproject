@@ -142,7 +142,6 @@ class Request extends ActiveRecord
     public function send(BaseMethod $method){
 
         $client = Yii::$app->webservice1C->getClient();
-        $success = false;
         try {
             ini_set('default_socket_timeout', 600);
             set_time_limit(0);
@@ -150,12 +149,6 @@ class Request extends ActiveRecord
                 $responce = Yii::$app->webservice1C->send($method);
                 Yii::warning(json_encode($responce),"api");
                 $responce = json_decode(json_encode($responce),1);
-
-                //Yii::warning($client->__getLastRequestHeaders(),"api");
-                //Yii::warning($client->__getLastRequest(),"api");
-
-                //Yii::warning($client->__getLastResponseHeaders(),"api");
-                //Yii::warning($client->__getLastResponse(),"api");
             }else{
                 $responce = [
                     'success'=>false,
@@ -167,11 +160,10 @@ class Request extends ActiveRecord
 
         } catch (\SoapFault $e) {
 
-            //Yii::warning($client->__getLastRequestHeaders(),"api");
-            Yii::warning($client->__getLastRequest(),"api");
-
-            //Yii::warning($client->__getLastResponseHeaders(),"api");
-            Yii::warning($client->__getLastResponse(),"api");
+            Yii::warning($client->__getLastRequestHeaders(),"webservice");
+            Yii::warning($client->__getLastRequest(),"webservice");
+            Yii::warning($client->__getLastResponseHeaders(),"webservice");
+            Yii::warning($client->__getLastResponse(),"webservice");
 
             $responce = [
                 'success'=>false,
@@ -194,15 +186,12 @@ class Request extends ActiveRecord
             $this->completed = 1;
             $this->completed_at = date("Y-m-d\TH:i:s",time());
             $this->params_out = json_encode($responce['return']);
-            $success = true;
         }else{
             $this->params_out = json_encode($responce);
         }
         
         
-        $this->save();
-
-        return boolval($success);
+        return $this->save();
     }
 
 }
