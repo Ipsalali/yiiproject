@@ -139,6 +139,10 @@ class ClientController extends Controller{
 
                 ClientOrganisation::saveRelation($model,$c_n);
 
+
+                //Экспорт в 1С
+                \common\modules\ExportClient::export($model);
+
 				if (!$model->user_id && $user->load($post)) {
 
             		if ($profile = $user->signup()) {
