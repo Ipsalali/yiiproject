@@ -92,7 +92,8 @@ class SClient extends Component
 
     protected function createSoapClient(){
         $wsdl = Yii::getAlias($this->wsdl);
-
+        
+        ini_set('soap.wsdl_cache_ttl', '0');
         ini_set('soap.wsdl_cache_enabled', '0');
         $this->client = new SoapClient($wsdl, $this->options);
 
