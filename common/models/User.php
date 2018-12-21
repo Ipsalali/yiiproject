@@ -62,9 +62,7 @@ class User extends ActiveRecordVersionable implements IdentityInterface, UserRba
             ['email', 'email'],
             ['email', 'string', 'max' => 255],
             ['email', 'unique', 'targetClass' => '\common\models\User', 'message' => 'Такой email уже используется'],
-            ['username', 'default', 'value'=>null],
-            ['email','default','value'=>null],
-            ['phone','default','value'=>null],
+            [['phone','username','email','guid'],'default','value'=>null],
             //['email', 'unique', 'targetClass' => '\common\models\User', 'message' => 'Такой номер телефона уже используется'],
 
             ['status', 'default', 'value' => self::STATUS_ACTIVE],

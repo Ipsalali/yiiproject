@@ -71,7 +71,7 @@ class Autotruck extends ActiveRecordVersionable
                 return $v ? date('Y-m-d',strtotime($v)) : date("Y-m-d");
             }],
             [['status','country'],'integer'],
-            [['status','country','import_source'],'default','value'=>null],
+            [['status','country','import_source','guid'],'default','value'=>null],
             ['imported','default','value'=>0],
             [['file'], 'file', 'skipOnEmpty' => true,'checkExtensionByMimeType'=>false, 'extensions' => 'xls,xlsx,doc,docx,pdf,jpeg,jpg,png','maxFiles'=>20],
             ['creator','default','value'=>\Yii::$app->user->identity->id,'on'=>self::SCENARIO_CREATE]
@@ -388,7 +388,7 @@ class Autotruck extends ActiveRecordVersionable
     public static function searchByKey($keyword){
         $query = new Query();
         
-        $user = \Yii::$app->user->identity;
+        $user = Yii::$app->user->identity;
         $u_countries = \yii\helpers\ArrayHelper::map($user->accessCountry,'country_id','country_id');
 
         $where = "`description` LIKE '%$keyword%' OR `name` LIKE '%$keyword%'";
@@ -407,7 +407,7 @@ class Autotruck extends ActiveRecordVersionable
                 FROM app as a
                 INNER JOIN client as c ON a.client = c.id
                 WHERE a.autotruck_id = {$this->id}";
-        $users = \Yii::$app->db->createCommand($sql)->queryAll();
+        $users = Yii::$app->db->createCommand($sql)->queryAll();
 
         foreach ($users as $u_id) {
             if(isset($u_id['user_id'])){

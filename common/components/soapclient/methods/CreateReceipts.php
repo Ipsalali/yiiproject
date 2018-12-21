@@ -19,7 +19,7 @@ class CreateReceipts extends BaseMethod{
 		$parameters = $this->parameters;
 
 		return [
-			'document'=>$parameters
+			'data_invoice'=>$parameters
 		];
 	}
 

@@ -11,8 +11,8 @@ class LoadCustomer extends BaseMethod{
 
 	public function rules(){
 		return [
-			[['email'],'required'],
-			[['guid','name'],'string']
+			[['name'],'required'],
+			[['guid','name','email'],'string']
 		];
 	}
 
@@ -20,7 +20,7 @@ class LoadCustomer extends BaseMethod{
 
 	public function getParameters(){
 		return [
-			'Контрагент'=>$this->attributes
+			'data_company'=>$this->attributes
 		];
 	}
 

@@ -151,8 +151,6 @@ class Request extends ActiveRecord
                 Yii::warning(json_encode($responce),"api");
                 $responce = json_decode(json_encode($responce),1);
 
-
-
                 //Yii::warning($client->__getLastRequestHeaders(),"api");
                 //Yii::warning($client->__getLastRequest(),"api");
 
@@ -195,9 +193,12 @@ class Request extends ActiveRecord
             $this->result = 1;
             $this->completed = 1;
             $this->completed_at = date("Y-m-d\TH:i:s",time());
+            $this->params_out = json_encode($responce['return']);
             $success = true;
+        }else{
+            $this->params_out = json_encode($responce);
         }
-        $this->params_out = json_encode($responce);
+        
         
         $this->save();
 

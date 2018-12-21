@@ -14,6 +14,8 @@ use backend\modules\RequestSearch;
 use soapclient\methods\LoadCustomer;
 use soapclient\methods\CreateReceipts;
 use backend\models\Autotruck;
+use common\models\ContractorExport;
+
 /**
  * Requests controller
  */
@@ -89,7 +91,6 @@ class RequestsController extends Controller
 
     public function actionExecLoadcustomer(){
 
-
         \common\modules\ExportUser::export(Yii::$app->user->identity);
 
         return $this->render('result',[]);
@@ -114,11 +115,4 @@ class RequestsController extends Controller
         return $this->redirect(['requests/index']);
     }
 
-
-    public function actionExecCalcsquare(){
-        return $this->render('result',[]);
-    }
-
-    
-   
 }
