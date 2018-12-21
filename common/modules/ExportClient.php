@@ -18,7 +18,7 @@ class ExportClient{
         Yii::warning("Call method ExportClient::export","export1C");
         try {
             $data =[
-                'guid'=>'',
+                'guid'=>$client->guid,
                 'name'=>$client->name,
                 'email'=>$client->email
             ];

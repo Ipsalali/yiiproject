@@ -15,7 +15,7 @@ class ExportUser{
         Yii::warning("Call method ExportUser::export","export1C");
 		try {
             $data =[
-                'guid'=>'',
+                'guid'=>$user->guid,
                 'name'=>$user->name,
                 'email'=>$user->email
             ];
