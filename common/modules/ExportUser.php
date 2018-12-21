@@ -51,11 +51,11 @@ class ExportUser{
                 }
             }else{
                 Yii::warning("Method LoadCustomer parameters has errors: ","export1C");
-                Yii::warning(json_encode($method),"export1C");
+                Yii::warning(json_encode($method->getErrors()),"export1C");
             }
 
         }catch(\Exception $e) {
-            Yii::warning("Method LoadCustomer parameters has errors: ","export1C");
+            Yii::warning("Method LoadCustomer throw Exception: ","export1C");
             Yii::warning($e->getMessage(),"export1C");
         }
 
