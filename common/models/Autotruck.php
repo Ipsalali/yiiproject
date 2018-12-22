@@ -78,8 +78,8 @@ class Autotruck extends ActiveRecordVersionable
             ['state', 'default', 'value' => AutotruckState::CREATED],
             ['state', 'in', 'range' => [
                     AutotruckState::CREATED, 
-                    AutotruckState::IN_CONFIRMING,
-                    AutotruckState::CONFIRMED
+                    AutotruckState::TO_EXPORT,
+                    AutotruckState::EXPORTED
                 ]
             ],
         ];
