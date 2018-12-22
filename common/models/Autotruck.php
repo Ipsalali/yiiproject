@@ -538,7 +538,10 @@ class Autotruck extends ActiveRecordVersionable
                                     
                                 }
 
-                                $message->send();
+                                if(!defined('YII_ENV_TEST') || !YII_ENV_TEST){
+                                    $message->send();
+                                }
+                                
                                    
                                }
                             }
@@ -560,7 +563,9 @@ class Autotruck extends ActiveRecordVersionable
                                 }
                             }
 
-                            $message->send();
+                            if(!defined('YII_ENV_TEST') || !YII_ENV_TEST){
+                                $message->send();
+                            }
                         }else{
                             continue;
                         }
