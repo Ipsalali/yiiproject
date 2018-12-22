@@ -20,7 +20,7 @@ class ExportAutotruck{
 			'date'=>date("Y-m-d\TH:i:s",strtotime($model['date'])),
 			'supplier_guid'=>$model['decor'],
 			'course'=>$model['course'],
-			'warehouse'=>$model['guid'],
+			'warehouse'=>$model['statusTitle'],
 			'transportnumber'=>$model['auto_number'],
 			'country'=>$model['countryName'],
 		];

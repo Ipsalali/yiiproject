@@ -201,10 +201,11 @@ class AutotruckController extends Controller{
 		                }
 
 		                //Временно реализуем перерасчет сверки
-		                if($autotruck->status && $autotruck->activeStatus->send_check){
+		                if($autotruck->needToSendCheck){
 		                    //обновление сверки
 		                    try {
 		                        $autotruck->refreshClientsSverka();
+		                        \common\modules\ExportAutotruck::export($autotruck);
 		                    } catch (Exception $e) {}
 		                }
 

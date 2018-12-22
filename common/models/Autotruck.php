@@ -39,6 +39,12 @@ class Autotruck extends ActiveRecordVersionable
     */
     public $apps;
 
+
+    /**
+    * Array 
+    */
+    protected $statusObject;
+
     /**
     * Array 
     */
@@ -163,6 +169,7 @@ class Autotruck extends ActiveRecordVersionable
     		'date'=>'Дата',
     		'description'=>'Комментарии',
             'status'=>'Статус',
+            'statusTitle'=>'Статус',
             'state'=>'Состояние',
             'stateTitle'=>'Состояние',
             'course'=>'Курс',
@@ -365,15 +372,31 @@ class Autotruck extends ActiveRecordVersionable
 
 
     public function getActiveStatus(){
-        return $this->hasOne(Status::className(),["id"=>'status']);
+
+        if($this->status && !$this->statusObject || !($this->statusObject instanceof Status)){
+            $this->statusObject = Status::findOne(['id' => $this->status]);
+        }
+        
+        return $this->statusObject;
     }
 
 
 
+    public function getStatusTitle(){
+        $status = $this->activeStatus;
+        return isset($status->id) ? $status->title : "";
+    }
+
+
+
+    public function getNeedToSendCheck(){
+        return $this->status && $this->activeStatus->send_check;
+    }
+
 
 
     public function getCreatorUser(){
-        return $this->hasOne(User::className(),["id"=>'creator']);
+        return $this->creator ? User::findOne(["id"=>$this->creator])) : null;
     }
 
 
