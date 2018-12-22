@@ -396,7 +396,7 @@ class Autotruck extends ActiveRecordVersionable
 
 
     public function getCreatorUser(){
-        return $this->creator ? User::findOne(["id"=>$this->creator])) : null;
+        return $this->creator ? User::findOne(["id"=>$this->creator]) : null;
     }
 
 
