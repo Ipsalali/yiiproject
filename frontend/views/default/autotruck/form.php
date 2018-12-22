@@ -64,7 +64,10 @@ $this->title = $newModel ? "Новая заявка" : "Заявка:".$autotruc
     				</div>
     				<div class="autotruck_data">
     					<div class="row">
-    						<div class="col-xs-4">
+    						<div class="col-xs-2">
+    							<?php echo $form->field($autotruck,'invoice')->textInput()?>
+    						</div>
+    						<div class="col-xs-2">
     							<?php echo $form->field($autotruck,'name')->textInput()?>
     						</div>
     						<div class="col-xs-2">

@@ -11,6 +11,7 @@ use yii\helpers\Url;
 use common\models\SupplierCountry;
 use common\models\Status;
 use common\models\PaymentState;
+use common\dictionaries\AutotruckState;
 use frontend\modules\PaymentStateFilter;
 
 
@@ -50,6 +51,13 @@ HTML;
 			'formatter' => ['class' => 'yii\i18n\Formatter','nullDisplay' => ''],
 			'options'=>['class'=>'main_autotruck'],
 			'tableOptions'=>['class'=>'table table-striped table-bordered table-hover as_index'],
+			'rowOptions'=>function($model){
+                    $ops = [];
+
+                    $ops['class'] = array_key_exists($model["state"], AutotruckState::$notification) ? AutotruckState::$notification[$model['state']] : "";
+
+                    return $ops;
+               },
 			'columns'=>[
 				// ['class'=>'yii\grid\SerialColumn'],
 				[
@@ -132,6 +140,13 @@ HTML;
 					'contentOptions'=>['class'=>'td_implements_state'],
 					'headerOptions'=>['class'=>'th_implements_state']
             	],
+            	[
+            		'attribute'=>"Состояние",
+            		'value'=>function($c){
+            			$v = \common\dictionaries\AutotruckState::getLabels($c['state']);
+            			return is_array($v) ? "" : $v;
+            		}
+            	]
 				// ['class'=>'yii\grid\ActionColumn']
 			]
 		])?>

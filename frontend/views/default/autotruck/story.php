@@ -30,6 +30,7 @@ use yii\bootstrap\ActiveForm;
 				<table class="table table-bordered table-hovered table-collapsed">
 					<tr>
 								<th>№</th>
+								<th><?php echo $model->getAttributeLabel("invoice")?></th>
 								<th><?php echo $model->getAttributeLabel("name")?></th>
 								<th><?php echo $model->getAttributeLabel("date")?></th>
 								<th><?php echo $model->getAttributeLabel("description")?></th>
@@ -51,6 +52,7 @@ use yii\bootstrap\ActiveForm;
 									?>
 									<tr>
 										<td><?php echo ++$key?></td>
+										<td><?php echo $s['invoice'];?></td>
 										<td><?php echo $s['name'];?></td>
 										<td><?php echo $s['date']?></td>
 										<td><?php echo $s['description']?></td>

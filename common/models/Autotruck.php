@@ -15,7 +15,7 @@ use common\models\SupplierCountry;
 use common\base\ActiveRecordVersionable;
 use common\models\App;
 use common\models\AppTrace;
-
+use common\dictionaries\AutotruckState;
 
 use frontend\helpers\Mail;
 use frontend\models\ExpensesManager;
@@ -74,7 +74,14 @@ class Autotruck extends ActiveRecordVersionable
             [['status','country','import_source','guid'],'default','value'=>null],
             ['imported','default','value'=>0],
             [['file'], 'file', 'skipOnEmpty' => true,'checkExtensionByMimeType'=>false, 'extensions' => 'xls,xlsx,doc,docx,pdf,jpeg,jpg,png','maxFiles'=>20],
-            ['creator','default','value'=>\Yii::$app->user->identity->id,'on'=>self::SCENARIO_CREATE]
+            ['creator','default','value'=>\Yii::$app->user->identity->id,'on'=>self::SCENARIO_CREATE],
+            ['state', 'default', 'value' => AutotruckState::CREATED],
+            ['state', 'in', 'range' => [
+                    AutotruckState::CREATED, 
+                    AutotruckState::IN_CONFIRMING,
+                    AutotruckState::CONFIRMED
+                ]
+            ],
         ];
 	}
 
@@ -88,6 +95,7 @@ class Autotruck extends ActiveRecordVersionable
             'date',
             'description',
             'status',
+            'state',
             'course',
             'country',
             'file',
@@ -149,12 +157,14 @@ class Autotruck extends ActiveRecordVersionable
     public function attributeLabels(){
     	return array(
     		'id'=>'Id',
-    		'name'=>'Инвойс',
-            'invoice'=>'Название',
+    		'name'=>'Название',
+            'invoice'=>'Инвойс',
     		'number'=>'Номер',
     		'date'=>'Дата',
     		'description'=>'Комментарии',
             'status'=>'Статус',
+            'state'=>'Состояние',
+            'stateTitle'=>'Состояние',
             'course'=>'Курс',
             'country'=>'Страна',
             'countryName'=>'Страна поставки',

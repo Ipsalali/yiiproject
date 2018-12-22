@@ -23,6 +23,11 @@ $this->title = "Список методов в API 1С";
 				</tr>
 				<tr>
 					<td>2</td>
+					<td>Выгрузка всех клиентов</td>
+					<td><?php echo Html::a("Выполнить",['requests/export-all-clients'],['btn btn-primary']);?></td>
+				</tr>
+				<tr>
+					<td>3</td>
 					<td>Выгрузка заявки</td>
 					<td><?php echo Html::a("Выполнить",['requests/exec-createreceipts'],['btn btn-primary']);?></td>
 				</tr>

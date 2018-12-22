@@ -14,6 +14,7 @@ use backend\modules\RequestSearch;
 use soapclient\methods\LoadCustomer;
 use soapclient\methods\CreateReceipts;
 use backend\models\Autotruck;
+use backend\models\Client;
 use common\models\ContractorExport;
 
 /**
@@ -32,7 +33,7 @@ class RequestsController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['index','list','exec-all','exec-loadcustomer','exec-createreceipts','error'],
+                        'actions' => ['index','list','exec-all','exec-loadcustomer','exec-createreceipts','export-all-clients','error'],
                         'allow' => true,
                         'roles'=>['admin']
                     ],
@@ -97,20 +98,28 @@ class RequestsController extends Controller
     }
 
 
+
+
+
     public function actionExecCreatereceipts(){
 
 
-        $model = Autotruck::findOne(['id'=>1]);
+        $model = Autotruck::find()->limit(1)->orderBy(['date'=>SORT_DESC])->one();
 
         if(!isset($model->id))
             throw new \Exception("Документ не найден!",404);
 
-        try {
-            $model->sendToConfirmation();
-        } catch (\Exception $e) {
-            
+        \common\modules\ExportAutotruck::export($model);
+        return $this->redirect(['requests/index']);
+    }
+
+    public function actionExportAllClients(){
+
+        set_time_limit(0);
+        $models = Client::find()->all();
+        foreach ($models as $key => $model) {
+            \common\modules\ExportClient::export($model);
         }
-        
 
         return $this->redirect(['requests/index']);
     }

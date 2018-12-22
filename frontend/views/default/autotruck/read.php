@@ -26,7 +26,7 @@ $AutotruckExpenses =ExpensesManager::getAutotruckExpenses($autotruck->id);
 
 $Autotrucks = Autotruck::find()->orderBy('id')->all();
 
-$this->title = $autotruck->name;
+$this->title = $autotruck['name'];
 
 $packages = TypePackaging::find()->all();
 ?>
@@ -36,8 +36,7 @@ $packages = TypePackaging::find()->all();
 <div class="base_content">
 	<div class="row">
 		<div class="col-xs-12">
-			<h1>Заявка: <?php echo $autotruck->name?></h1>
-			 
+			<h1>Заявка: <?php echo $autotruck['invoice']?></h1>
 		</div>
 	</div>
 	<?php if(Yii::$app->session->hasFlash('ExpensesManagerAddSuccess')): ?>
@@ -71,7 +70,7 @@ $packages = TypePackaging::find()->all();
 				  		<div class="panel-heading">
 				  			<div class="row">
 				  				<div class="col-xs-6">
-				  					<?=$autotruck->name?> №<?=$autotruck->id?>
+				  					<?php echo $autotruck['name'];?>
 				  				</div>
 				  				<div class="col-xs-6" style="text-align:right;padding-right:20px;">
 				  					<span>Дата: <?=date("d.m.Y",strtotime($autotruck->date))?></span>
