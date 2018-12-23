@@ -14,11 +14,16 @@ class ExportAutotruck{
 
 	public static function export(Autotruck $model){
 
-
+        $gtdDate = $model['gtdDate'];
+        if(!$gtdDate){
+            Yii::$app->session->setFlash("error","Для выгрузки заявки в 1С, поле ГТД обязателен к заполнению");
+            return false;
+        }
+        
 		$params = [
 			'guid'=>$model['guid'],
 			'invoice'=>$model['invoice'],
-			'date'=>$model['gtdDate'],
+			'date'=>$gtdDate,
 			'supplier_name'=>$model['decor'],
 			'course'=>$model['course'],
 			'warehouse'=>$model['statusTitle'],
