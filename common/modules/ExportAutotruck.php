@@ -14,10 +14,11 @@ class ExportAutotruck{
 
 	public static function export(Autotruck $model){
 
+
 		$params = [
 			'guid'=>$model['guid'],
 			'invoice'=>$model['invoice'],
-			'date'=>date("Y-m-d\TH:i:s",strtotime($model['date'])),
+			'date'=>$model['gtdDate'],
 			'supplier_name'=>$model['decor'],
 			'course'=>$model['course'],
 			'warehouse'=>$model['statusTitle'],
@@ -66,14 +67,22 @@ class ExportAutotruck{
             if($request->send($method)){
                 $responce = json_decode($request->params_out,1);
 
-                if($request->result && isset($responce['return']) && isset($responce['return']['guid']) && $responce['return']['guid'] && isset($responce['return']['number']) && $responce['return']['number']){
+                if(isset($responce['error'])){
+                	Yii::warning("Error","ExportAutotruck");
+                	Yii::warning($responce['error'],"ExportAutotruck");
+                	Yii::$app->session->setFlash("warning","Ошибка при попытке выгрузить заявку в 1С");
+                	Yii::$app->session->setFlash("error",$responce['error']);
+                }
 
-                    $model->guid = $responce['return']['guid'];
-                    $model->number = $responce['return']['number'];
+                if($request->result && isset($responce['guid']) && $responce['guid'] && isset($responce['number']) && $responce['number']){
 
-                    $model->states = AutotruckState::EXPORTED;
-                        
-                    return $this->save(1);
+                    $model->guid = $responce['guid'];
+                    $model->doc_number = $responce['number'];
+
+                    $model->state = AutotruckState::EXPORTED;
+               		
+                	Yii::$app->session->setFlash("info","Заявка выгружена в 1С");
+                    return $model->save(1);
                 }
             }
             

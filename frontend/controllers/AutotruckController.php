@@ -205,6 +205,7 @@ class AutotruckController extends Controller{
 		                    //обновление сверки
 		                    try {
 		                        $autotruck->refreshClientsSverka();
+		                        $autotruck->stateToExport();
 		                        \common\modules\ExportAutotruck::export($autotruck);
 		                    } catch (Exception $e) {}
 		                }
@@ -408,6 +409,8 @@ class AutotruckController extends Controller{
 		if($autotruck === NULL)
 			throw new HttpException(404,'Document Does Not Exist');
 
+
+		$autotruck->getGtdDate();
 		return $this->render('read',array("autotruck"=>$autotruck));
 	}
 

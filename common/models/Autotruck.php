@@ -182,6 +182,7 @@ class Autotruck extends ActiveRecordVersionable
             'auto_number'=>'Номер машины',
             'auto_name'=>'Транспорт',
             'gtd'=>'ГТД',
+            'gtdDate'=>"Дата прохождения таможни",
             'decor'=>'Оформление',
             'creator'=>'Автор'
     		);
@@ -839,5 +840,35 @@ class Autotruck extends ActiveRecordVersionable
     }
 
 
+
+    public function stateToExport(){
+        //if(!($this->state < AutotruckState::TO_EXPORT)) return false;
+
+        $this->state = AutotruckState::TO_EXPORT;
+
+        if(!$this->id) return false;
+
+        Yii::$app->db->createCommand()->update(static::tableName(),['state'=>$this->state]," id = :id")
+                        ->bindValue(":id",$this->id)
+                        ->execute();
+    }
+
+
+    public function getGtdDate(){
+        $gtd = $this->gtd ? explode("/", $this->gtd) : null;
+
+        $gtdDate = null;
+        if(is_array($gtd) && array_key_exists(1,$gtd)){
+           $gtdDate = $gtd[1];
+        }
+
+        if(strlen($gtdDate) != 6) return null;
+
+        $Y = $gtdDate[4].$gtdDate[5];
+        $m = $gtdDate[2].$gtdDate[3];
+        $d = $gtdDate[0].$gtdDate[1];
+
+        return $Y && $m && $d ? date("Y-m-d\TH:i:s",strtotime($Y."-".$m."-".$d)) : null;
+    }
     
 }

@@ -190,7 +190,7 @@ class Request extends ActiveRecord
             $this->completed_at = date("Y-m-d\TH:i:s",time());
             $this->params_out = json_encode($responce['return']);
         }else{
-            $this->params_out = json_encode($responce);
+            $this->params_out = json_encode($responce['return']);
         }
         
         
