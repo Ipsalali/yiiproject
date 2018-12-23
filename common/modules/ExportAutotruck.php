@@ -76,6 +76,7 @@ class ExportAutotruck{
                     return $this->save(1);
                 }
             }
+            
         } catch (\Exception $e) {
             Yii::warning($e->getMessage(),'api');
         }
