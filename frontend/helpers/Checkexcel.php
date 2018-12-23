@@ -614,6 +614,9 @@ class Checkexcel{
 		$objWriter = \PHPExcel_IOFactory::createWriter($this->objPHPExcel, 'Excel5');
 		$file_name = "check_".$client->id."_".date("dmy",time()).".xls";
 		$path = "files_xls/";
+		if(!file_exists($path)){
+			mkdir($path);
+		}
 		$objWriter->save("{$path}{$file_name}");
 		
 

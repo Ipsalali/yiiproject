@@ -18,7 +18,7 @@ class ExportAutotruck{
 			'guid'=>$model['guid'],
 			'invoice'=>$model['invoice'],
 			'date'=>date("Y-m-d\TH:i:s",strtotime($model['date'])),
-			'supplier_guid'=>$model['decor'],
+			'supplier_name'=>$model['decor'],
 			'course'=>$model['course'],
 			'warehouse'=>$model['statusTitle'],
 			'transportnumber'=>$model['auto_number'],

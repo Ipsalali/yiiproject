@@ -156,7 +156,10 @@ class Request extends ActiveRecord
                     'errorMessage'=>$method->getErrors()
                 ];
             }
-        
+            Yii::warning($client->__getLastRequestHeaders(),"webservice");
+            Yii::warning($client->__getLastRequest(),"webservice");
+            Yii::warning($client->__getLastResponseHeaders(),"webservice");
+            Yii::warning($client->__getLastResponse(),"webservice");
 
         } catch (\SoapFault $e) {
 
