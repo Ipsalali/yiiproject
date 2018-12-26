@@ -16,11 +16,12 @@ class ExportClient{
 	public static function export(Client $client){
 		if(!isset($client->id)) return false;
         Yii::warning("Call method ExportClient::export","export1C");
+        
         try {
             $data =[
                 'guid'=>$client->guid,
                 'name'=>$client->name,
-                'email'=>$client->email
+                'email'=>$client->userEmail
             ];
 
             

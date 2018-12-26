@@ -185,7 +185,8 @@ class Client extends ActiveRecordVersionable
 
 
     public function getUserEmail(){
-        return $this->user->email;
+        $user = $this->user;
+        return isset($user->id) && $user->id ? $user->email : null;
     }
 
 
