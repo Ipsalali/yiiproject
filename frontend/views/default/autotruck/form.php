@@ -209,7 +209,7 @@ $this->title = $newModel ? "Новая заявка" : "Заявка:".$autotruc
 
 													<td> 
 													<?php 
-														if(!$app->type){
+														if(!$app['type']){
 															$e = array_key_exists('sender',$errors) ? $errors['sender'] : null;
 															echo Html::dropDownList($class."[sender]",$app['sender'] ? $app['sender'] : null,ArrayHelper::map($senders,'id','name'),['prompt'=>'Выберите отправителя','class'=>'form-control']);
 															echo is_array($e) && count($e) ? $e[0] : null;
@@ -227,7 +227,7 @@ $this->title = $newModel ? "Новая заявка" : "Заявка:".$autotruc
 
 													<td>
 													<?php 
-														if(!$app->type){
+														if(!$app['type']){
 															$e = array_key_exists('count_place',$errors) ? $errors['count_place'] : null;
 															echo Html::textInput($class."[count_place]",$app['count_place'],['class'=>'form-control app_place']);
 															echo is_array($e) && count($e) ? $e[0] : null;
@@ -237,7 +237,7 @@ $this->title = $newModel ? "Новая заявка" : "Заявка:".$autotruc
 
 													<td> 
 														<?php 
-															if(!$app->type){
+															if(!$app['type']){
 																$e = array_key_exists('package',$errors) ? $errors['package'] : null;
 																echo Html::dropDownList($class."[package]",$app['package'] ? $app['package'] : null,ArrayHelper::map($packages,'id','title'),['prompt'=>'Выберите упаковку','class'=>'form-control']);
 																echo is_array($e) && count($e) ? $e[0] : null;
@@ -247,7 +247,7 @@ $this->title = $newModel ? "Новая заявка" : "Заявка:".$autotruc
 													
 													<td>
 													<?php 
-														if($app->type){
+														if($app['type']){
 															echo Html::hiddenInput($class."[weight]",1); 
 														}else{
 															$e = array_key_exists('package',$errors) ? $errors['package'] : null;
