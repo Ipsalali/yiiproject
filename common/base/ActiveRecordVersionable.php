@@ -2,21 +2,57 @@
 
 namespace common\base;
 
+use Yii;
 use common\modules\versionable\Versionable;
 use common\modules\versionable\VersionManager;
 use yii\db\Query;
 use yii\db\ActiveRecord;
 
 class ActiveRecordVersionable extends ActiveRecord implements Versionable{
-	
-    protected function storyActions(){
+    
+    public $enabledPostVersionId = false;
 
+    public $postVersionId;
+
+    public function rules(){
+        if(!$this->enabledPostVersionId || $this->getIsNewRecord()) return [];
+        
+        return [
+            ['postVersionId','checkPostVersionId']
+        ];
+    }
+
+
+    public function checkPostVersionId($attribute, $params){
+        
+        if (!$this->hasErrors() && $this->enabledPostVersionId && !$this->getIsNewRecord()) {
+            
+            if(!$this->postVersionId){
+                $this->addError($attribute,"Версия записи неопределена!");
+                Yii::$app->session->setFlash("error","Версия записи неопределена!");
+            }
+
+            if(!$this->version_id)
+                $current_vId=(new Query())->select(['version_id'])->from(static::tableName())->where(['id'=>$this->id])->scalar();
+            else
+                $current_vId = $this->version_id;
+
+            if((int)$current_vId != (int)$this->postVersionId){
+                $this->addError($attribute,"Попытка перезаписать новую версию записи на страую.");
+                Yii::$app->session->setFlash("error","Попытка перезаписать новую версию записи на страую.");
+            }
+
+        }
+    }
+
+    protected function storyActions(){
         return [
             1=>"create",
             2=>"update",
             3=>"delete"
         ];
     }
+
 
 	private static $defaultStoryAttributes = [
 		'type_action' => 1,
@@ -26,14 +62,9 @@ class ActiveRecordVersionable extends ActiveRecord implements Versionable{
 	];
 
 
-
-
-
-
     public function getStoryActions(){
         return $this->storyActions();
     }
-
 
 
 
@@ -41,7 +72,6 @@ class ActiveRecordVersionable extends ActiveRecord implements Versionable{
         $actions = $this->storyActions();
         return array_key_exists($code, $actions) ? $actions[$code] : "";
     }
-
 
 
     public function setStoryAttributeTypeAction($code){
@@ -53,10 +83,7 @@ class ActiveRecordVersionable extends ActiveRecord implements Versionable{
     }
 
 
-
     protected static $storyAttributes = [];
-
-
 
 
     public function setStoryAttribute($key,$value){

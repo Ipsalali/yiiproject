@@ -1,11 +1,11 @@
 <?php
 namespace common\modules\versionable;
 
-interface Versionable
-{   
+interface Versionable{   
 
     public static function versionableAttributes();
 
+    
     public  function getVersionableAttributes();
 
     /**
