@@ -49,7 +49,7 @@ return [
             'charset' => 'UTF-8',
         ],
 		'urlManager' => [
-		    'enablePrettyUrl' => false,
+		    'enablePrettyUrl' => true,
 		    'enableStrictParsing' => false,
 		    'showScriptName' => false,
 		    'rules' => [
