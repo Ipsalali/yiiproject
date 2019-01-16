@@ -435,9 +435,10 @@ class Checkexcel{
 			$course = 0;
 		}
 
-
+        
+        $nds = 20;
 		//$s = sprintf("%.2f", $a->summa_us);
-		$totalNds = sprintf("%.2f",$total/118*18);
+		$totalNds = sprintf("%.2f",$total/118*$nds);
 		//$totalNds = round($total/118*18,2);
 		
 		//$course = 65.0539;
@@ -516,13 +517,13 @@ class Checkexcel{
 
 		if($client->payment_clearing){
 			$beznal = round($total + ($total*$client->payment_clearing/100),2);
-			$bexnalNds = round($beznal/118*18,2);	
+			$bexnalNds = round($beznal/118*$nds,2);	
 		}else{
 			$beznal =  $total;
-			$bexnalNds = round($total/118*18,2);
+			$bexnalNds = round($total/118*$nds,2);
 		}
 
-		$totalNds = round($total/118*18,2);
+		$totalNds = round($total/118*$nds,2);
 
 		$startRow +=2;
 		$merge = "B$startRow:E$startRow";
@@ -614,9 +615,6 @@ class Checkexcel{
 		$objWriter = \PHPExcel_IOFactory::createWriter($this->objPHPExcel, 'Excel5');
 		$file_name = "check_".$client->id."_".date("dmy",time()).".xls";
 		$path = "files_xls/";
-		if(!file_exists($path)){
-			mkdir($path);
-		}
 		$objWriter->save("{$path}{$file_name}");
 		
 
