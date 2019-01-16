@@ -44,7 +44,7 @@ $this->title = $newModel ? "Новая заявка" : "Заявка:".$autotruc
 	<div class="row">
 	<?php if($autotruck){?>
 		<div class="col-xs-12">
-			<div id="autotruck_tab_<?=$autotruck->id?>" class="autotruck_block">
+			<div id="autotruck_tab_<?php echo $autotruck->id?>" class="autotruck_block">
 				  <div class="panel panel-primary">
 				  	<div class="panel-heading">
 				  		<?php echo $this->title;?>
@@ -57,8 +57,13 @@ $this->title = $newModel ? "Новая заявка" : "Заявка:".$autotruc
 				  			<?php 
 				  				if($canReadAutotruck && $autotruck->id){
 				  					echo Html::a('Отменить редактирование', array('autotruck/read','id' => $autotruck->id), array('class' => 'btn btn-error pull-right'));
+				  				}
+
+				  				if($autotruck->id){
 				  					echo Html::hiddenInput("autotruck_id",$autotruck->id);
-				  				}  
+				  					if($autotruck->enabledPostVersionId)
+				  						echo $form->field($autotruck,'postVersionId')->hiddenInput(['value'=>$autotruck->version_id])->label(false);
+				  				}
 				  			?>
     					</div>
     				</div>
