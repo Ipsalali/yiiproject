@@ -274,12 +274,18 @@ class Autotruck extends ActiveRecordVersionable
 
             $t['autotruck_id'] = $this->id;
             $data = ['App'=>$t];
+
+            //print_r($data);
+            // exit;
             if(!$model->load($data) || !$model->validate()){
                 array_push($errors, $model);
             }
             
             array_push($models, $model);
         }
+
+        // print_r($models[0]['postVersionId']);
+        // exit;
 
         if(!count($errors)){
 
