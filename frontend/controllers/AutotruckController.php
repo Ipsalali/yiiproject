@@ -193,7 +193,6 @@ class AutotruckController extends Controller{
 	            		}
 	            	}
 
-
 	            	if(!$error){
 
 	            		if($autotruck->status){

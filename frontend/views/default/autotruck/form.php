@@ -61,8 +61,14 @@ $this->title = $newModel ? "Новая заявка" : "Заявка:".$autotruc
 
 				  				if($autotruck->id){
 				  					echo Html::hiddenInput("autotruck_id",$autotruck->id);
-				  					if($autotruck->enabledPostVersionId)
-				  						echo $form->field($autotruck,'postVersionId')->hiddenInput(['value'=>$autotruck->version_id])->label(false);
+				  					if($autotruck->enabledPostVersionId){
+				  						if($autotruck->postVersionId){
+				  							echo $form->field($autotruck,'postVersionId')->hiddenInput(['value'=>$autotruck->postVersionId])->label(false);
+				  						}elseif($autotruck->version_id){
+				  							echo $form->field($autotruck,'postVersionId')->hiddenInput(['value'=>$autotruck->version_id])->label(false);
+				  						}
+				  						
+				  					}
 				  				}
 				  			?>
     					</div>
@@ -201,6 +207,14 @@ $this->title = $newModel ? "Новая заявка" : "Заявка:".$autotruc
 													<td>
 														<?php echo $key+1?> 
 														<?php echo $id ? Html::hiddenInput($class."[id]",$id) : "";?>
+														<?php 
+
+                											if(isset($app->postVersionId) && $app['postVersionId']){
+                												echo Html::hiddenInput($class."[postVersionId]",$app['postVersionId']);
+                											}elseif(isset($app['version_id'])){
+                												echo Html::hiddenInput($class."[postVersionId]",$app['version_id']);
+                											}
+                										?>
 														<?php echo Html::hiddenInput($class."[type]",$app['type']);?>
 													</td>
 
@@ -342,8 +356,13 @@ $this->title = $newModel ? "Новая заявка" : "Заявка:".$autotruc
 												<tr class="exp_row">
 													<td>
 														<?php echo $key+1?>
+                										<?php echo $id ?  Html::hiddenInput($class."[id]",$id) : "";?>
                 										<?php 
-                										    echo $id ?  Html::hiddenInput($class."[id]",$id) : "";
+                											if(isset($exp->postVersionId) && $exp->postVersionId){
+                												echo Html::hiddenInput($class."[postVersionId]",$exp['postVersionId']);
+                											}elseif(isset($exp['version_id'])){
+                												echo Html::hiddenInput($class."[postVersionId]",$exp['version_id']);
+                											}
                 										?>
 													</td>
 													<td>

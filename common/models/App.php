@@ -23,9 +23,14 @@ use common\base\ActiveRecordVersionable;
 class App extends ActiveRecordVersionable
 {
 
+    /**
+    * boolean 
+    */
+    public $enabledPostVersionId = true;
+
 
 	public function rules(){
-		return [
+		return array_merge(parent::rules(),[
             // name, email, subject and body are required
             [['info','autotruck_id'], 'required'],
             [['client','sender','package','count_place','autotruck_id'],'integer'],
@@ -37,7 +42,7 @@ class App extends ActiveRecordVersionable
             ['type','in','range'=>[0,1]],
             [['type','weight','imported'],'default','value'=>0],
             [['rate','summa_us'],'filter','filter'=>function($v){return round($v,2);}]
-        ];
+        ]);
 	}
 
 

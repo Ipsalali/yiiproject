@@ -20,9 +20,13 @@ use yii\db\Query;
 class ExpensesManager extends ActiveRecordVersionable
 {
 
+    /**
+    * boolean 
+    */
+    public $enabledPostVersionId = true;
 
 	public function rules(){
-		return [
+		return array_merge(parent::rules(),[
             // name, email, subject and body are required
             [['manager_id','cost','autotruck_id','date'], 'required'],
             ['cost','double'],
@@ -31,7 +35,7 @@ class ExpensesManager extends ActiveRecordVersionable
             ['comment','filter','filter'=>function($v){return trim(strip_tags($v));}],
             ['date','filter','filter'=>function($v){return $v ? date("Y-m-d",strtotime($v)) : date("Y-m-d");}],
             ['organisation','default','value'=>null]
-        ];
+        ]);
 	}
 
     
