@@ -18,11 +18,12 @@ class m181228_115219_user_current_actions extends Migration
         }
         $this->createTable('{{%user_actions}}', [
             'id' => $this->primaryKey(),
-            'table' => $this->string()->notNull(),
-            'record_id' => $this->integer()->notNull()->unique(),
+            'table_name' => $this->string()->notNull(),
+            'record_id' => $this->integer()->notNull(),
             'user_id' => $this->integer()->notNull(),
             'start_at' => $this->timestamp()->null(),
             'finish_at' => $this->timestamp()->null(),
+            'event' => $this->string()->notNull(),
             'active' => $this->smallInteger()->notNull()->defaultValue(1)
         ], $tableOptions);
         $this->createIndex('idx-user_actions-user_id', '{{%user_actions}}', 'user_id');

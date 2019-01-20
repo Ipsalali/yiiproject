@@ -24,6 +24,7 @@ use frontend\models\ExpensesManager;
 use frontend\modules\PaymentsExpensesReport;
 use common\models\Spender;
 use common\models\Sender;
+use common\models\UserAction;
 
 /**
  * Site controller
@@ -44,7 +45,7 @@ class SiteController extends Controller
                 'rules' => [
                     
                     [
-                        'actions' => ['index','search','logout'],
+                        'actions' => ['index','search','logout','register-event','remove-event'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -533,5 +534,46 @@ class SiteController extends Controller
         return $this->render('orgreport',['dataProvider'=>$dataProvider,'PaymentsExpensesReport'=>$PaymentsExpensesReport]);
     }
 
+
+
+
+    public function actionRegisterEvent(){
+
+        if(Yii::$app->request->isAjax){
+            \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+            $post = Yii::$app->request->post();
+
+            $post['user_id'] = Yii::$app->user->id;
+            
+            $action = UserAction::register($post);
+            
+            return isset($action->id) && $action->id;
+
+        }else{
+            return Yii::$app->response->redirect(['site/index']);
+        }
+        
+    }
+
+
+    public function actionRemoveEvent(){
+
+        if(Yii::$app->request->isAjax){
+            \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+            $post = Yii::$app->request->post();
+
+            $post['user_id'] = Yii::$app->user->id;
+            
+            $action = UserAction::close($post);
+            
+            return $action;
+
+        }else{
+            return Yii::$app->response->redirect(['site/index']);
+        }
+        
+    }
     
 }

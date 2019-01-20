@@ -30,14 +30,14 @@ return [
             'class'=>"yii\web\Response",
             'format' => yii\web\Response::FORMAT_JSON,
             'on beforeSend' => function ($event) {
-                $response = $event->sender;
-                if ($response->data !== null) {
-                    // $response->data = [
-                    //     'success' => $response->isSuccessful,
-                    //     'data' => $response->data,
-                    // ];
-                    $response->statusCode = 200;
-                }
+                // $response = $event->sender;
+                // if ($response->data !== null) {
+                //     // $response->data = [
+                //     //     'success' => $response->isSuccessful,
+                //     //     'data' => $response->data,
+                //     // ];
+                //     $response->statusCode = 200;
+                // }
             },
             'formatters' => [
                 'json' => [
