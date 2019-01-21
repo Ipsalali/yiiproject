@@ -12,6 +12,7 @@ use common\models\Sender;
 use common\models\TypePackaging;
 use common\models\Client;
 
+
 $roleexpenses = 'autotruck/addexpenses';
 $user = \Yii::$app->user->identity;
 $userIsClientExtended = \Yii::$app->user->can("clientextended");
@@ -630,68 +631,24 @@ $this->registerJs($script);
 ?>
 
 <?php
-	if(isset($autotruck->id) && $autotruck->id){
-		$register_url = Url::to(['site/register-event']);
-		$remove_url = Url::to(['site/remove-event']);
+	if(isset($autotruck->id) && $autotruck->id && Yii::$app->hasModule("websocket")){
+		
+		
 		$t = $autotruck::tableName();
 		$record_id = $autotruck->id;
-		$script = <<<JS
-			var params = {
-				table_name:"$t",
-				record_id:$record_id,
-			}
-			
+		$user_id = Yii::$app->user->id;
+		$redirectLocation = Url::to(['autotruck/read','id'=>$autotruck->id,'cause'=>403,'user_id'=>$user_id]);
+		$remove_url = Url::to(['websocket/worker/remove-event']);
+		$websocket = Yii::$app->getModule("websocket");
 
-			var removeEvent = function(params){
-				$.ajax({
-					url:"$remove_url",
-					type:'POST',
-					data:params,
-					dataType:'json',
-					success:function(resp){
-						console.log(resp);
-					},
-					error:function(msg){
-						console.log(msg);
-					}
-				});
-			}
-
-		function windowCloseEvent(){
-			window.onBeforeunload = function(ev){
-				removeEvent(
-					{
-						table_name:"$t",
-						record_id:$record_id,
-					}
-				);
-			}
-
-			window.onunload = function(ev){
-				removeEvent(
-					{
-						table_name:"$t",
-						record_id:$record_id,
-					}
-				);
-			}
-		}
-
-		windowCloseEvent();
-
-		$.ajax({
-				url:"$register_url",
-				type:'POST',
-				data:params,
-				dataType:'json',
-				success:function(resp){
-					console.log(resp);
-				},
-				error:function(msg){
-					console.log(msg);
-				}
-			});
-JS;
-		$this->registerJs($script);
+		echo  \WSUserActions\widgets\websocket\WebSocket::widget([
+			'host'=>$websocket->websocket_localhost.":".$websocket->websocket_port,
+			'table_name'=>$t,
+			'record_id'=>$autotruck->id,
+			'user_id'=>$user_id,
+			'event'=>'update',
+			'resetUrl'=>$remove_url,
+			'redirectLocation'=>$redirectLocation
+		]);
 	}
 ?>

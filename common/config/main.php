@@ -15,4 +15,13 @@ return [
   			'password'=>'гамзат'
   		]
     ],
+    'modules' => [
+        'websocket' => [
+            'class' => 'WSUserActions\WSWorker'
+        ],
+        // 'profiler'=>[
+        //     'class' => 'backend\modules\profiler\Profiler'
+        // ],
+        
+    ],
 ];

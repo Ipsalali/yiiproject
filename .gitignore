@@ -41,4 +41,6 @@ phpunit.phar
 /console/data
 /common/tmp
 
+/socket.log
+
 .htaccess

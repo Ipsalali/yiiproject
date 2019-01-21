@@ -109,7 +109,6 @@ class AutotruckController extends Controller{
 			$autotruck->scenario = Autotruck::SCENARIO_CREATE;
 		}
 
-		
 		$expenses = $autotruck->getExpensesManager();
 		$apps= $autotruck->getApps();
 
@@ -229,7 +228,6 @@ class AutotruckController extends Controller{
 				return $this->render('form',['autotruck'=>$autotruck,'apps'=>$apps,'expenses'=>$expenses]);
        		}
     	}
-    	
 
 		
     	return $this->render('form',[
@@ -289,115 +287,6 @@ class AutotruckController extends Controller{
 
 
 
-
-
-
-	// избавиться в будущем
-	public function actionCreate(){
-		$autotruck = new Autotruck;
-		$autotruck->scenario = Autotruck::SCENARIO_CREATE;
-		
-
-		$post = Yii::$app->request->post();
-
-		if(isset($post['Autotruck'])){
-			
-			$autotruck->load($post);
-
-			if($_FILES['Autotruck']['name']['file'][0]){
-				$autotruck->file = UploadedFile::getInstances($autotruck, 'file');
-				if($autotruck->file && $fName = $autotruck->uploadFile()){
-	                $autotruck->file = $fName;
-	            }else{
-	            	Yii::$app->session->setFlash("danger","Не удалось загрузить файл на сервер!");	
-	            }
-        	}
-
-			if($autotruck->save(1)){
-			    
-				//Добавление статуса
-				if($autotruck->id && $autotruck->status){
-					$apptrace = new AppTrace;
-					$apptrace->autotruck_id = $autotruck->id;
-					$apptrace->status_id = $autotruck->status;
-					$apptrace->traсe_first = 1;
-					$apptrace->traсe_last = 1;
-					$apptrace->prevstatus_id = 0;
-					$apptrace->trace_date  = ($post['Autotruck']['date_status'])
-									? date('Y-m-d',strtotime($post['Autotruck']['date_status'])):$autotruck->date;
-
-					$apptrace->save();		
-				}
-
-				//Добавление расхода
-				if(isset($post['ExpensesManager']) && count($post['ExpensesManager']) && $autotruck->id){
-					foreach ($post['ExpensesManager'] as $key => $item) {
-						$exp = new ExpensesManager;
-						$data['ExpensesManager'] = $item;
-						$data['ExpensesManager']['autotruck_id'] = $autotruck->id;
-						$data['ExpensesManager']['date'] = isset($item['date']) && $item['date'] ?$item['date']:$autotruck->date;
-						if($exp->load($data) && $exp->save(1)){
-							//обновление сверки
-							try {
-								User::refreshUserSverka($exp->manager_id);
-							} catch (Exception $e) {}
-						}
-					}
-				}
-
-				//Добавление наименовании
-				if(isset($post['App']) && count($post['App']) && $autotruck->id){
-					foreach ($post['App'] as $key => $item) {
-						$a = new App;
-						$data['App'] = $item;
-						$data['App']['autotruck_id']= $autotruck->id;
-						if(!$a->load($data) || !$a->save(1)){
-							Yii::$app->session->setFlash("danger",'Наименование не добавлено!');
-						}
-					}
-
-				}else{
-					if($autotruck->id){
-						return Yii::$app->response->redirect(array("autotruck/read",'id'=>$autotruck->id));
-					}
-					return Yii::$app->response->redirect(array("autotruck/create"));
-				}
-
-                if($autotruck->status){
-				    $autotruck->sendNotification();
-                }
-
-                //Временно реализуем перерасчет сверки
-		        if($autotruck->activeStatus->send_check){
-		            //обновление сверки
-		            try {
-		                $autotruck->refreshClientsSverka();
-		            } catch (Exception $e) {}
-		        }
-
-		        Yii::$app->session->setFlash("success",'Заявка сохранена');
-
-                if(Yii::$app->user->can("clientExtended")){
-					return Yii::$app->response->redirect(array("client/profile"));
-				}
-				else{
-					return Yii::$app->response->redirect(array("autotruck/index"));
-				}
-
-			}else{
-				Yii::$app->session->setFlash("danger","Ошибка при сохранении заявки!");
-				return Yii::$app->response->redirect(array("autotruck/create"));
-			} 
-		}
-
-		
-		return $this->render('create',array('autotruck'=>$autotruck));
-	}
-
-
-
-
-
 	public function actionRead($id = NULL){
 
 		if($id == null)
@@ -408,6 +297,21 @@ class AutotruckController extends Controller{
 		if($autotruck === NULL)
 			throw new HttpException(404,'Document Does Not Exist');
 
+		$get = Yii::$app->request->get();
+
+		if(isset($get['cause']) && (int)$get['cause'] == 403){
+			
+			$user_id = isset($get['user_id']) && $get['user_id'] ? (int)$get['user_id'] : 0;
+
+			if($user_id == Yii::$app->user->id){
+				$note = "Данный документ у вас уже открыт на редактирование!!!";
+			}else{
+				$u = User::findOne($user_id);
+				$note = isset($u->id) ? "В данный момент этот документ редактирует  пользователь ".$u->name."!!!" : "В данный момент этот документ редактирует другой пользователь";
+			}
+
+			Yii::$app->session->setFlash("warning",$note);
+		}
 
 		$autotruck->getGtdDate();
 		return $this->render('read',array("autotruck"=>$autotruck));

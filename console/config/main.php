@@ -23,7 +23,7 @@ return [
                     'levels' => ['info'],
                     'enableRotation'=>false,
                     'logFile'=>'@console/logs/info.log',
-                    'logVars'=>['cron']
+                    'logVars'=>['cron','socket']
                 ],
             ],
         ],
