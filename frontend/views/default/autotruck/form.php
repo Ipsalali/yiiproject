@@ -633,7 +633,6 @@ $this->registerJs($script);
 <?php
 	if(isset($autotruck->id) && $autotruck->id && Yii::$app->hasModule("websocket")){
 		
-		
 		$t = $autotruck::tableName();
 		$record_id = $autotruck->id;
 		$user_id = Yii::$app->user->id;
@@ -641,14 +640,14 @@ $this->registerJs($script);
 		$remove_url = Url::to(['websocket/worker/remove-event']);
 		$websocket = Yii::$app->getModule("websocket");
 
-		echo  \WSUserActions\widgets\websocket\WebSocket::widget([
-			'host'=>$websocket->websocket_localhost.":".$websocket->websocket_port,
-			'table_name'=>$t,
-			'record_id'=>$autotruck->id,
-			'user_id'=>$user_id,
-			'event'=>'update',
-			'resetUrl'=>$remove_url,
-			'redirectLocation'=>$redirectLocation
-		]);
+		// echo  \WSUserActions\widgets\websocket\WebSocket::widget([
+		// 	'host'=>$websocket->websocket_localhost.":".$websocket->websocket_port,
+		// 	'table_name'=>$t,
+		// 	'record_id'=>$autotruck->id,
+		// 	'user_id'=>$user_id,
+		// 	'event'=>'update',
+		// 	'resetUrl'=>$remove_url,
+		// 	'redirectLocation'=>$redirectLocation
+		// ]);
 	}
 ?>
