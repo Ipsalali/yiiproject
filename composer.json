@@ -30,7 +30,8 @@
         "kartik-v/yii2-date-range": "dev-master",
         "kartik-v/yii2-widget-datepicker": "@dev",
         "kartik-v/yii2-field-range": "*",
-        "duccio/apns-php": "dev-master"
+        "duccio/apns-php": "dev-master",
+        "workerman/workerman": "^3.5"
     },
     "require-dev": {
         "yiisoft/yii2-codeception": "*",

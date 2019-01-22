@@ -12,6 +12,7 @@ use common\models\Sender;
 use common\models\TypePackaging;
 use common\models\Client;
 
+
 $roleexpenses = 'autotruck/addexpenses';
 $user = \Yii::$app->user->identity;
 $userIsClientExtended = \Yii::$app->user->can("clientextended");
@@ -44,7 +45,7 @@ $this->title = $newModel ? "Новая заявка" : "Заявка:".$autotruc
 	<div class="row">
 	<?php if($autotruck){?>
 		<div class="col-xs-12">
-			<div id="autotruck_tab_<?=$autotruck->id?>" class="autotruck_block">
+			<div id="autotruck_tab_<?php echo $autotruck->id?>" class="autotruck_block">
 				  <div class="panel panel-primary">
 				  	<div class="panel-heading">
 				  		<?php echo $this->title;?>
@@ -57,8 +58,19 @@ $this->title = $newModel ? "Новая заявка" : "Заявка:".$autotruc
 				  			<?php 
 				  				if($canReadAutotruck && $autotruck->id){
 				  					echo Html::a('Отменить редактирование', array('autotruck/read','id' => $autotruck->id), array('class' => 'btn btn-error pull-right'));
+				  				}
+
+				  				if($autotruck->id){
 				  					echo Html::hiddenInput("autotruck_id",$autotruck->id);
-				  				}  
+				  					if($autotruck->enabledPostVersionId){
+				  						if($autotruck->postVersionId){
+				  							echo $form->field($autotruck,'postVersionId')->hiddenInput(['value'=>$autotruck->postVersionId])->label(false);
+				  						}elseif($autotruck->version_id){
+				  							echo $form->field($autotruck,'postVersionId')->hiddenInput(['value'=>$autotruck->version_id])->label(false);
+				  						}
+				  						
+				  					}
+				  				}
 				  			?>
     					</div>
     				</div>
@@ -196,6 +208,14 @@ $this->title = $newModel ? "Новая заявка" : "Заявка:".$autotruc
 													<td>
 														<?php echo $key+1?> 
 														<?php echo $id ? Html::hiddenInput($class."[id]",$id) : "";?>
+														<?php 
+
+                											if(isset($app->postVersionId) && $app['postVersionId']){
+                												echo Html::hiddenInput($class."[postVersionId]",$app['postVersionId']);
+                											}elseif(isset($app['version_id'])){
+                												echo Html::hiddenInput($class."[postVersionId]",$app['version_id']);
+                											}
+                										?>
 														<?php echo Html::hiddenInput($class."[type]",$app['type']);?>
 													</td>
 
@@ -337,8 +357,13 @@ $this->title = $newModel ? "Новая заявка" : "Заявка:".$autotruc
 												<tr class="exp_row">
 													<td>
 														<?php echo $key+1?>
+                										<?php echo $id ?  Html::hiddenInput($class."[id]",$id) : "";?>
                 										<?php 
-                										    echo $id ?  Html::hiddenInput($class."[id]",$id) : "";
+                											if(isset($exp->postVersionId) && $exp->postVersionId){
+                												echo Html::hiddenInput($class."[postVersionId]",$exp['postVersionId']);
+                											}elseif(isset($exp['version_id'])){
+                												echo Html::hiddenInput($class."[postVersionId]",$exp['version_id']);
+                											}
                 										?>
 													</td>
 													<td>
@@ -605,3 +630,25 @@ JS;
 $this->registerJs($script);
 ?>
 
+<?php
+	if(isset($autotruck->id) && $autotruck->id && Yii::$app->hasModule("websocket")){
+		
+		
+		$t = $autotruck::tableName();
+		$record_id = $autotruck->id;
+		$user_id = Yii::$app->user->id;
+		$redirectLocation = Url::to(['autotruck/read','id'=>$autotruck->id,'cause'=>403,'user_id'=>$user_id]);
+		$remove_url = Url::to(['websocket/worker/remove-event']);
+		$websocket = Yii::$app->getModule("websocket");
+
+		echo  \WSUserActions\widgets\websocket\WebSocket::widget([
+			'host'=>$websocket->websocket_localhost.":".$websocket->websocket_port,
+			'table_name'=>$t,
+			'record_id'=>$autotruck->id,
+			'user_id'=>$user_id,
+			'event'=>'update',
+			'resetUrl'=>$remove_url,
+			'redirectLocation'=>$redirectLocation
+		]);
+	}
+?>

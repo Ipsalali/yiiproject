@@ -12,8 +12,7 @@ use api\rest\models\AuthForm;
 class AuthController extends Controller
 {
     
-	protected function verbs()
-    {
+	protected function verbs(){
         return [
             'index' => ['post'],
         ];

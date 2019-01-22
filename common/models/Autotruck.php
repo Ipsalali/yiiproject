@@ -34,6 +34,13 @@ class Autotruck extends ActiveRecordVersionable
 
     public $tempFiles = null;
     
+
+    /**
+    * boolean 
+    */
+    public $enabledPostVersionId = true;
+
+
     /**
     * Array 
     */
@@ -63,7 +70,7 @@ class Autotruck extends ActiveRecordVersionable
     const SCENARIO_CREATE = "create";
 
 	public function rules(){
-		return [
+		return array_merge(parent::rules(),[
             // name, email, subject and body are required
             [['name','country'], 'required','message'=>'Обязательное поле'],
             [['name','invoice','decor','gtd','auto_name','auto_number','description'],'filter','filter'=>function($v){
@@ -88,7 +95,7 @@ class Autotruck extends ActiveRecordVersionable
                     AutotruckState::EXPORTED
                 ]
             ],
-        ];
+        ]);
 	}
 
 
@@ -267,12 +274,18 @@ class Autotruck extends ActiveRecordVersionable
 
             $t['autotruck_id'] = $this->id;
             $data = ['App'=>$t];
+
+            //print_r($data);
+            // exit;
             if(!$model->load($data) || !$model->validate()){
                 array_push($errors, $model);
             }
             
             array_push($models, $model);
         }
+
+        // print_r($models[0]['postVersionId']);
+        // exit;
 
         if(!count($errors)){
 
