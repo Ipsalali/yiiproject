@@ -61,7 +61,7 @@ class ExportClient{
             }
 
         }catch(\Exception $e) {
-            Yii::warning("Method LoadCustomer parameters has errors: ","export1C");
+            Yii::warning("Method LoadCustomer stopped by cause errors: ","export1C");
             Yii::warning($e->getMessage(),"export1C");
         }
 
