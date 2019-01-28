@@ -84,7 +84,6 @@ class AutotruckController extends Controller{
 		$autotruckSearch = new AutotruckSearch;
 		$dataProvider = $autotruckSearch->search(Yii::$app->request->queryParams);
 		
-
 		return $this->render('index',array('autotruckSearch'=>$autotruckSearch,'dataProvider'=>$dataProvider));
 	}
 

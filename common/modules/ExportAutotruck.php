@@ -31,13 +31,13 @@ class ExportAutotruck{
 			'country'=>$model['countryName'],
 		];
 
-		$params['table'] = (new Query())->select([
+		$params['table']  = (new Query())->select([
 									'client.guid as client_guid',
 									'app.count_place as count',
 									'type_packaging.title as unit',
 									'app.rate as priceforclient',
 									'app.summa_us as amountforcustomer',
-									'app.weight',
+									"(case when (type = '0') THEN weight ELSE 0 END) as weight",
 									'app.info as nomenclature_name'
 								])
 							->from("app")
@@ -46,7 +46,7 @@ class ExportAutotruck{
 							->where(['app.isDeleted'=>0,'autotruck_id'=>$model['id']])
 							->all();
 
-		try {
+		try{
 			$method = new CreateReceipts();
 			$request = new Request([
                 'request'=>get_class($method),
@@ -54,7 +54,6 @@ class ExportAutotruck{
                 'autotruck_id'=>$model['id'],
                 'actor_id'=>Yii::$app->user->id
             ]);
-
 
             $method->setParameters($params);
 
