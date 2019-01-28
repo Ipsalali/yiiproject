@@ -8,3 +8,7 @@ $this->title = 'TED';
 
     
 </div>
+
+<?php
+	echo \WSUserActions\widgets\jsworker\JsWorker::widget();
+?>

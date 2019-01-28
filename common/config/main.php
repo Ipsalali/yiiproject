@@ -11,7 +11,9 @@ return [
     ],
     'modules' => [
         'websocket' => [
-            'class' => 'WSUserActions\WSWorker'
+            'class' => 'WSUserActions\WSWorker',
+            'websocket_host'=>'websocket://127.0.0.1',
+            'websocket_port'=>18000
         ],
         // 'profiler'=>[
         //     'class' => 'backend\modules\profiler\Profiler'
