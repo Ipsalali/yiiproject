@@ -13,7 +13,7 @@ use WSUserActions\models\UserAction;
 /**
  * Worker controller
  */
-class WorkerController extends Controller
+class JsWorkerController extends Controller
 {   
 
 

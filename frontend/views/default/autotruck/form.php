@@ -637,8 +637,20 @@ $this->registerJs($script);
 		$record_id = $autotruck->id;
 		$user_id = Yii::$app->user->id;
 		$redirectLocation = Url::to(['autotruck/read','id'=>$autotruck->id,'cause'=>403,'user_id'=>$user_id]);
-		$remove_url = Url::to(['websocket/worker/remove-event']);
+		$remove_url = Url::to(['websocket/js-worker/remove-event']);
 		$websocket = Yii::$app->getModule("websocket");
+		$registerUrl = Url::to(['websocket/js-worker/register-event']);
+
+		// echo \WSUserActions\widgets\jsworker\JsWorker::widget([
+		// 	'jsPath'=>'jsworker/',
+		// 	'tableName'=>$t,
+		// 	'resourse_id'=>$autotruck->id,
+		// 	'user_id'=>$user_id,
+		// 	'event'=>'update',
+		// 	'resetUrl'=>$remove_url,
+		// 	'registerUrl'=>$registerUrl,
+		// 	'redirectLocation'=>$redirectLocation
+		// ]);
 
 		// echo  \WSUserActions\widgets\websocket\WebSocket::widget([
 		// 	'host'=>$websocket->websocket_localhost.":".$websocket->websocket_port,

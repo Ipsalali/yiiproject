@@ -1,6 +1,14 @@
 var socket = {
 	resourse : null,
 	waited : 0,
+
+	_csrf:"",
+	tableName:null,
+    resourse_id:null,
+    user_id:null,
+    event:"update",
+    registerUrl:"",
+    resetUrl:"",
 	
 	listen : function(){
 		if(!this.resourse){
@@ -23,6 +31,8 @@ var socket = {
 	
 
 	success :function(json){
+		console.log("success");
+		console.log(json);
 		this.response.json = json;
 		this.response.status = 1;
 		this.response.submit();
@@ -30,6 +40,8 @@ var socket = {
 	
 
 	error :function(msg){
+		console.log("msg");
+		console.log(msg);
 		this.response.text = msg;
 	},
 	
@@ -40,10 +52,7 @@ var socket = {
 
 
 	ping: function(){
-
-		console.log("ping");
-		postMessage({ping:"ping"});
-		// this.checkAction();
+		socket.checkAction();
 	},
 	
 	checkAction:function(){
@@ -51,12 +60,27 @@ var socket = {
 		
 		var ajax = new XMLHttpRequest();
 
-		var params = "task=checkstate&params="+JSON.stringify(chatState.params);
-		var host = "/chat/socket/";
-		var hostWithParams = host+"?"+params;
-		ajax.open("GET",hostWithParams);
+		var params = {
+			tableName:socket.tableName,
+			resourse_id:socket.resourse_id,
+			user_id:socket.user_id,
+			event:socket.event,
+			_csrf:socket._csrf
+		};
 		
+		// var strParams = JSON.stringify(params);
+
+		var strParams = "table_name="+params.tableName+"&_csrf="+params._csrf+"&record_id="+params.resourse_id
+						+"&user_id="+params.user_id+"&event="+params.event;
 		
+		var host = socket.registerUrl;
+
+		var hostWithParams = host;
+
+		ajax.open("POST",hostWithParams);
+		
+		ajax.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+		ajax.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
 		//ajax.setRequestHeader('Content-type', 'application/json; charset=utf-8');
 
 		ajax.onload = function (e) {
@@ -68,7 +92,7 @@ var socket = {
 				}
 			}else{
 				if(typeof socket.success == 'function'){
-					socket.success(JSON.parse(ajax.responseText));
+					socket.success(ajax.responseText);
 				}
 			}
 
@@ -82,18 +106,8 @@ var socket = {
 		}
 		
 		
-		ajax.send(null);
+		ajax.send(strParams);
 	},
-
-
-
-	request: {
-		data:{
-
-		}
-	},
-
-
 
 
 

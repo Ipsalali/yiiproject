@@ -1,6 +1,5 @@
 importScripts("./socket.js");
 importScripts("./controller.js");
-importScripts("./chatState.js");
 var wSocket = socket;
 
 
