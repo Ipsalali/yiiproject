@@ -140,9 +140,7 @@ class ClientController extends Controller{
                 ClientOrganisation::saveRelation($model,$c_n);
 
 
-                //Экспорт в 1С
-                \common\modules\ExportClient::export($model);
-
+                
 				if (!$model->user_id && $user->load($post)) {
 
             		if ($profile = $user->signup()) {
@@ -155,14 +153,16 @@ class ClientController extends Controller{
                 		$model->user_id = $profile->getId();
 
                 		$model->save(1);
-
+                        //Экспорт в 1С
+                        \common\modules\ExportClient::export($model);
                         Yii::$app->session->setFlash('success',"Данные профиля сохранены");
                         return Yii::$app->response->redirect(["client/index"]);
             		}
         		}elseif(isset($post['User'])){
                     $user = $model->user;
                     if($user->load($post) && $user->save(true)){
-
+                        //Экспорт в 1С
+                        \common\modules\ExportClient::export($model);
                         Yii::$app->session->setFlash('success',"Данные профиля сохранены");
                         return Yii::$app->response->redirect(["client/index"]);
                     }
