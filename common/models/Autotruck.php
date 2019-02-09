@@ -67,7 +67,9 @@ class Autotruck extends ActiveRecordVersionable
     */
     public $totalCountPlace;
 
+
     const SCENARIO_CREATE = "create";
+
 
 	public function rules(){
 		return array_merge(parent::rules(),[

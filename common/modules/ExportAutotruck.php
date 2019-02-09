@@ -14,12 +14,19 @@ class ExportAutotruck{
 
 	public static function export(Autotruck $model){
 
+        $exportDate = "2019-02-09";
+
         $gtdDate = $model['gtdDate'];
         if(!$gtdDate){
             Yii::$app->session->setFlash("error","Для выгрузки заявки в 1С, поле ГТД обязателен к заполнению");
             return false;
         }
-        
+
+        if(strtotime($gtdDate) < strtotime($exportDate)){
+            Yii::$app->session->setFlash("error","Выгружаются заявки созданные только после {$exportDate}");
+            return false; 
+        }
+
 		$params = [
 			'guid'=>$model['guid'],
 			'invoice'=>$model['invoice'],

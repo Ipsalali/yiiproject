@@ -38,8 +38,8 @@ class ActiveRecordVersionable extends ActiveRecord implements Versionable{
                 $current_vId = $this->version_id;
 
             if((int)$current_vId != (int)$this->postVersionId){
-                $this->addError($attribute,"Попытка перезаписать новую версию записи на страую.");
-                Yii::$app->session->setFlash("error","Попытка перезаписать новую версию записи на страую.");
+                $this->addError($attribute,"Попытка перезаписать новую версию записи на старую.");
+                Yii::$app->session->setFlash("error","Попытка перезаписать новую версию записи на старую.");
             }
 
         }
