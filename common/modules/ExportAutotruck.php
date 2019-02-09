@@ -23,7 +23,6 @@ class ExportAutotruck{
         }
 
         if(strtotime($gtdDate) < strtotime($exportDate)){
-            Yii::$app->session->setFlash("error","Выгружаются заявки созданные только после {$exportDate}");
             return false; 
         }
 
