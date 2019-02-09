@@ -84,8 +84,8 @@ class RequestSearch extends Request{
 
     public static function getRequestsNames(){
         return [
-            'soapclient\methods\Calcsquare'=>'Calcsquare',
-            'soapclient\methods\Useraccountload'=>'Useraccountload'
+            'soapclient\methods\CreateReceipts'=>'CreateReceipts',
+            'soapclient\methods\LoadCustomer'=>'LoadCustomer'
         ];
     }
 }
