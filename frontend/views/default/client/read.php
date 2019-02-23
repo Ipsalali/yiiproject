@@ -94,12 +94,13 @@ $autotruckCountries = SupplierCountry::getIndexedArray();
 				<?php } ?>
 		</div>
 		</div>
-		<div class="row">
+
+		<!-- <div class="row">
 			<div class="col-xs-3">
-				<p>Задолженность: <?php echo isset($clientUser->id) ? $clientUser->getManagerSverka() : "";?> $</p>
+				<p>Задолженность: <?php //echo isset($clientUser->id) ? $clientUser->getManagerSverka() : "";?> $</p>
 			</div>
-			
-		</div>
+		</div> -->
+
 		<div class="row">
 			<div class="col-xs-12">
 				<?php if($autotrucks){?>

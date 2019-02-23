@@ -14,7 +14,7 @@ class ExportAutotruck{
 
 	public static function export(Autotruck $model){
 
-        $exportDate = "2019-02-09";
+        $exportDate = "2019-02-21";
 
         $gtdDate = $model['gtdDate'];
         if(!$gtdDate){

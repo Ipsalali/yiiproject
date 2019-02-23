@@ -42,11 +42,11 @@ $clientUser = $client->user;
 		</div>
 	</div>
 	
-	<div class="row">
+	<!-- <div class="row">
 		<div class="col-xs-12">
-			<p>Задолженность: <?php echo isset($clientUser->id) ? $clientUser->getManagerSverka() : "";?> $</p>
+			<p>Задолженность: <?php //echo isset($clientUser->id) ? $clientUser->getManagerSverka() : "";?> $</p>
 		</div>		
-	</div>
+	</div> -->
 
 		
 	<div class="row">
