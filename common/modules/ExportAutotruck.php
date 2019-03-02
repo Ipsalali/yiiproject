@@ -78,7 +78,7 @@ class ExportAutotruck{
                 $responce = json_decode($request->params_out,1);
 
                 if(isset($responce['error'])){
-                	Yii::warning("Error","ExportAutotruck");
+                	Yii::warning("error","ExportAutotruck");
                 	Yii::warning($responce['error'],"ExportAutotruck");
                 	Yii::$app->session->setFlash("warning","Ошибка при попытке выгрузить заявку в 1С");
                 	Yii::$app->session->setFlash("error",$responce['error']);
@@ -97,7 +97,14 @@ class ExportAutotruck{
             }
             
         } catch (\Exception $e) {
-            Yii::warning($e->getMessage(),'api');
+            Yii::warning($e->getMessage(),'ExportAutotruck');
+            Yii::$app->session->setFlash("warning","Произошла системная ошибка при попытке выгрузить заявку в 1С");
+            Yii::$app->session->setFlash("error","Ошибка: ".$e->getMessage());
+            $request->params_out = json_encode([
+                'userError'=>'Произошла системная ошибка при попытке выгрузить заявку в 1С',
+                'error'=>$e->getMessage()
+            ]);
+            $request->save();
         }
         
         return false;

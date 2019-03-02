@@ -12,6 +12,7 @@ return [
     'language' => 'ru-RU',
     'controllerNamespace' => 'backend\controllers',
     'bootstrap' => ['log'],
+    'timeZone'=>'Europe/Moscow',
     'modules' => [ 
         'permit' => [
             'class' => 'developeruz\db_rbac\Yii2DbRbac',
