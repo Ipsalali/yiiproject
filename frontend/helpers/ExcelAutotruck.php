@@ -294,7 +294,7 @@ class ExcelAutotruck{
 		}
 		
 		//$total = 2624.33;
-		$totalNds = round($total/118*18,2);
+		$totalNds = round($total/120*20,2);
 		
 		//$course = 65.0539;
 

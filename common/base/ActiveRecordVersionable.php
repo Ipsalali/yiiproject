@@ -109,7 +109,7 @@ class ActiveRecordVersionable extends ActiveRecord implements Versionable{
     public function getStoryAttributes(){
         $attrs = array_merge(self::$defaultStoryAttributes,self::$storyAttributes);
 
-        $attrs['creator_id'] = \Yii::$app->user->isGuest ? null : \Yii::$app->user->id;
+        $attrs['creator_id'] = isset(\Yii::$app->user) && !\Yii::$app->user->isGuest ? \Yii::$app->user->id : null;
         $attrs[static::resourceKey()]=  $this->id ? $this->id : null;
         $attrs['version'] = $this->lastVersionNumber;
         $attrs['created_at'] = date("Y-m-d\TH:i:s",time());
