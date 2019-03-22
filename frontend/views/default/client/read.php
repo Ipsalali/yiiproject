@@ -250,8 +250,12 @@ $canReadColumSumRu = Yii::$app->user->can("read/app/sum_ru");
 									<td colspan="3"><strong><?php echo $autotruck->totalCountPlace; //$autotruck->getAppCountPlace($client->id)?></strong></td>
 									<td><strong><?php echo $cweight;?> кг.</strong></td>
 									<td></td>
-									<td><strong><?php echo round($total_us,2);?> $</strong></td>
-									<td><strong><?php echo round($total,2);?> руб.</strong></td>
+									<td>
+										<strong><?php echo $canReadColumSumUs ? round($total_us,2) . " $" : "";?></strong>
+									</td>
+									<td>
+										<strong><?php echo $canReadColumSumRu ? round($total,2) . " руб." : "";?></strong>
+									</td>
 									<td></td>
 								</tr>
 								</tbody>
