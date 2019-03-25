@@ -89,7 +89,7 @@ class Autotruck extends ActiveRecordVersionable
             [['status','country','import_source','guid'],'default','value'=>null],
             ['imported','default','value'=>0],
             [['file'], 'file', 'skipOnEmpty' => true,'checkExtensionByMimeType'=>false, 'extensions' => 'xls,xlsx,doc,docx,pdf,jpeg,jpg,png','maxFiles'=>20],
-            ['creator','default','value'=> isset(\Yii::$app->user) && \Yii::$app->user->identity->id : null,'on'=>self::SCENARIO_CREATE],
+            ['creator','default','value'=> isset(\Yii::$app->user) && !\Yii::$app->user->isGuest ? \Yii::$app->user->id : null,'on'=>self::SCENARIO_CREATE],
             ['state', 'default', 'value' => AutotruckState::CREATED],
             ['state', 'in', 'range' => [
                     AutotruckState::CREATED, 
