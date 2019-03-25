@@ -514,7 +514,7 @@ class Checkexcel{
 
 		if($client->payment_clearing){
 			$beznal = round($total + ($total*$client->payment_clearing/100),2);
-			$bexnalNds = round(Cost::withNDS($total),2);	
+			$bexnalNds = round(Cost::withNDS($beznal),2);	
 		}else{
 			$beznal =  $total;
 			$bexnalNds = round(Cost::withNDS($total),2);
