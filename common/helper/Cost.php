@@ -9,6 +9,6 @@ class Cost
 
 	public static function withNDS($price)
 	{
-		return $price / (100 + self::$nds) * $nds;
+		return $price / (100 + self::$nds) * self::$nds;
 	}
 }
