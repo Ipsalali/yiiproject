@@ -2,11 +2,13 @@
 
 namespace frontend\helpers;
 
+use Yii;
 use phpoffice\phpexcel\Classes\PHPExcel;
 use frontend\models\App;
 use common\models\Organisation;
 use common\models\Client;
-use Yii;
+use common\helper\Cost;
+
 
 class Checkexcel{
 
@@ -436,13 +438,8 @@ class Checkexcel{
 		}
 
         
-        $nds = 20;
-		//$s = sprintf("%.2f", $a->summa_us);
-		$totalNds = sprintf("%.2f",$total/118*$nds);
-		//$totalNds = round($total/118*18,2);
+		$totalNds = sprintf("%.2f",Cost::withNDS($total));
 		
-		//$course = 65.0539;
-		//$total = round($total,2);
 		$total = sprintf("%.2f",$total);
 		
 		$block = "B$startRow:M$endRow";
@@ -517,13 +514,13 @@ class Checkexcel{
 
 		if($client->payment_clearing){
 			$beznal = round($total + ($total*$client->payment_clearing/100),2);
-			$bexnalNds = round($beznal/118*$nds,2);	
+			$bexnalNds = round(Cost::withNDS($total),2);	
 		}else{
 			$beznal =  $total;
-			$bexnalNds = round($total/118*$nds,2);
+			$bexnalNds = round(Cost::withNDS($total),2);
 		}
 
-		$totalNds = round($total/118*$nds,2);
+		$totalNds = round(Cost::withNDS($total),2);
 
 		$startRow +=2;
 		$merge = "B$startRow:E$startRow";

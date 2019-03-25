@@ -2,13 +2,14 @@
 
 namespace frontend\helpers;
 
+use Yii;
 use phpoffice\phpexcel\Classes\PHPExcel;
 use frontend\models\App;
 use frontend\models\Autotruck;
 use common\models\Organisation;
 use common\models\Client;
-use Yii;
 use yii\helpers\Html;
+use common\helper\Cost;
 
 class ExcelAutotruck{
 
@@ -293,10 +294,8 @@ class ExcelAutotruck{
 			$course = 65.0539;
 		}
 		
-		//$total = 2624.33;
-		$totalNds = round($total/120*20,2);
+		$totalNds = round(Cost::withNDS($total),2);
 		
-		//$course = 65.0539;
 
 		$block = "B$startRow:G$endRow";
 		$this->objPHPExcel->getActiveSheet()->getStyle($block)->applyFromArray($this->styles['border-thick']);
