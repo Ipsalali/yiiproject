@@ -54,7 +54,7 @@ $this->title = $newModel ? "Новая заявка" : "Заявка:".$autotruc
 				  	<?php $form = ActiveForm::begin(['id'=>'autotruck_and_app_update','options' => ['enctype' => 'multipart/form-data'],'method'=>"post"])?>
 				  	<div class="row">
 				  		<div class="form-actions">
-				  			<?php echo Html::submitButton('Сохранить заявку',['id'=>'submit_update','class' => 'btn btn-primary pull-right', 'name' => 'autotruck-update-button']); ?>
+				  			<?php echo Html::submitButton('Сохранить заявку',['id'=>'submit_update','class' => 'btn btn-primary pull-right','style'=>'display:none','name' => 'autotruck-update-button']); ?>
 				  			<?php 
 				  				if($canReadAutotruck && $autotruck->id){
 				  					echo Html::a('Отменить редактирование', array('autotruck/read','id' => $autotruck->id), array('class' => 'btn btn-error pull-right'));
@@ -171,11 +171,20 @@ $this->title = $newModel ? "Новая заявка" : "Заявка:".$autotruc
 		    							Информация о наименованиях
 		    							<div class="row">
 											<div class="col-xs-12 autotruck_btns">
-												<a class="add_app_item btn btn-primary" href="<?php echo Url::to(['autotruck/get-row-app']);?>" id='add_app_item' data-type="0">Добавить наименование</a>
-												<a class="add_app_item btn btn-primary" href="<?php echo Url::to(['autotruck/get-row-app']);?>" id="add_service_item"  data-type="1">Добавить услугу</a>
+												<a class="add_app_item btn btn-primary" href="<?php echo Url::to(['autotruck/get-row-app']);?>" id='add_app_item' data-type="0" style='display:none'>Добавить наименование</a>
+												<a class="add_app_item btn btn-primary" href="<?php echo Url::to(['autotruck/get-row-app']);?>" id="add_service_item"  data-type="1" style='display:none'>Добавить услугу</a>
 											</div>
 										</div>
 		    							<div class="clearfix"></div>
+		    							<script type="text/javascript">
+	                                        $("#add_app_item").hide();
+	                                        $("#add_service_item").hide();
+	                                        $(window).load(function(){
+	                                            $("#add_app_item").show();
+	                                            $("#add_service_item").show();
+	                                            $("#submit_update").show();
+	                                        });
+                                    	</script>
 		    						</div>
 									<div class="panel-body autotruck_info">
 										<div class="table autotruck_apps">
